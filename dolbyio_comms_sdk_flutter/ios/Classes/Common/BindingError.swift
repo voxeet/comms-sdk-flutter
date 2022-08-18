@@ -26,6 +26,7 @@ internal enum BindingError: Error {
 	case noSpatialPosition
 	case noAudioProcessing
 	case noNoiseLevel
+    case noPermission
 }
 
 extension BindingError: LocalizedError {
@@ -80,6 +81,8 @@ extension BindingError: LocalizedError {
 			return "Audio processing was not enabled"
 		case .noNoiseLevel:
 			return "Noise level was not provided"
+        case .noPermission:
+            return "Pacticipant permission was not provided"
 		}
 	}
 }

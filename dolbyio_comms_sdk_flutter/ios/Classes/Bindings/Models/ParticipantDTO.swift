@@ -96,6 +96,17 @@ extension DTO {
             }
         }
     }
+    
+    struct ParticipantPermissions: Codable {
+        
+        let participant: VTParticipant
+        let permissions: [VTConferencePermission]
+        
+        init(participantPermission: VTParticipantPermissions) {
+            self.participant = participantPermission.participant
+            self.permissions = participantPermission.permissions
+        }
+    }
 
     struct MediaStream: Codable {
         
