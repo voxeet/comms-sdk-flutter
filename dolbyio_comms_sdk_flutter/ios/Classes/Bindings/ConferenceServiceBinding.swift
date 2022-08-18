@@ -437,32 +437,30 @@ class ConferenceServiceBinding: Binding {
         }
 	}
 
-/*
 	// MARK: - User Actions
 	
 	/// Updates the participant's conference permissions.
-	/// - Parameters:
-	///   - participantPermissions: The updated participant's permissions.
-	///   - resolve: returns on success
-	///   - reject: returns error on failure
+    /// - Parameters:
+    ///   - flutterArguments: Method arguments passed from Flutter.
+    ///   - completionHandler: Call methods on this instance when execution has finished.
 	func updatePermissions(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
 	) {
-		guard let conference = current else {
-			ModuleError.noCurrentConference.send(with: reject)
-			return
-		}
-		let permissions = VTParticipantPermissions.permissions(with: participantPermissions, conference: conference)
-		VoxeetSDK.shared.conference.updatePermissions(participantPermissions: permissions) { error in
-			guard let error = error else {
-				resolve(NSNull())
-				return
-			}
-			error.send(with: reject)
-		}
+        do {
+            let permissions = try flutterArguments.asSingle().decode(type: [DTO.ParticipantPermissions].self)
+            guard let permissions =  permissions else {
+                throw BindingError.noPermission
+            }
+            VoxeetSDK.shared.conference.updatePermissions(participantPermissions: permissions.compactMap { VTParticipantPermissions(participant: $0.participant, permissions: $0.permissions)
+            }) { error in
+                completionHandler.handleError(error)?.orSuccess()
+            }
+        } catch {
+            completionHandler.failure(error)
+        }
 	}
-	
+/*
 	// MARK: - Getters
 	
 	/// Returns information about the current conference.
@@ -800,9 +798,10 @@ extension ConferenceServiceBinding: FlutterBinding {
             setMaxVideoForwarding(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "setAudioProcessing":
             setAudioProcessing(flutterArguments: flutterArguments, completionHandler: completionHandler)
-            
         case "muteOutput":
             muteOutput(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "updatePermissions":
+            updatePermissions(flutterArguments: flutterArguments, completionHandler: completionHandler)
             
         default:
             completionHandler.methodNotImplemented()
