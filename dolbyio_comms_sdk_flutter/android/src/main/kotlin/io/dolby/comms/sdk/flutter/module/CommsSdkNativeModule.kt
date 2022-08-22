@@ -1,0 +1,66 @@
+package io.dolby.comms.sdk.flutter.module
+
+import com.voxeet.VoxeetSDK
+import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
+import io.dolby.comms.sdk.flutter.extension.error
+import io.dolby.comms.sdk.flutter.extension.launch
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancelChildren
+
+class CommsSdkNativeModule(private val scope: CoroutineScope) : NativeModule {
+
+    private lateinit var channel: MethodChannel
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        when (call.method) {
+            ::initialize.name -> initialize(call, result)
+            ::initializeToken.name -> initializeToken(call, result)
+        }
+    }
+
+    override fun onAttached(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "dolbyio_sdk_channel")
+        channel.setMethodCallHandler(this)
+    }
+
+    override fun onDetached() {
+        channel.setMethodCallHandler(null)
+        scope.coroutineContext.cancelChildren(null)
+    }
+
+    private fun initialize(call: MethodCall, result: MethodChannel.Result) = scope.launch(
+        onError = result::error,
+        onSuccess = {
+            VoxeetSDK.initialize(
+                call.argumentOrThrow("customerKey"),
+                call.argumentOrThrow<String>("customerSecret")
+            )
+            result.success(null)
+        }
+    )
+
+    private fun initializeToken(call: MethodCall, result: MethodChannel.Result) = scope.launch(
+        onError = result::error,
+        onSuccess = {
+            VoxeetSDK.initialize(call.argumentOrThrow("accessToken")) { _, callback ->
+                channel.invokeMethod("getRefreshToken", null, object : MethodChannel.Result {
+                    override fun success(result: Any?) {
+                        (result as? String)?.let { callback.ok(it) } ?: error(Throwable("Refresh token is empty"))
+                    }
+
+                    override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                        callback.error(Throwable("$errorCode: $errorMessage, $errorDetails"))
+                    }
+
+                    override fun notImplemented() {
+                        throw IllegalStateException("Method not implemented")
+                    }
+                })
+            }
+            result.success(null)
+        }
+    )
+}

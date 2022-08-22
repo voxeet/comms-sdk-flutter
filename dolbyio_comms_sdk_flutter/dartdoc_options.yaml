@@ -1,0 +1,3 @@
+dartdoc:
+  footerText: ['./documentation_assets/footer_text.txt']
+  favicon: ./documentation_assets/dolby_favicon.png

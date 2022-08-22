@@ -1,0 +1,45 @@
+name: release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  generate-doc-linux:
+    name: flutter build linux
+    runs-on: ubuntu-latest
+    env:
+      FLUTTER_VERSION: "3.0.3"
+    steps:
+      - name: Checkout repo 
+        uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 15
+          distribution: 'adopt'
+      - name: Set up Flutter version
+        uses: subosito/flutter-action@v2.4.0
+        with:
+          flutter-version: $FLUTTER_VERSION
+
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@v1.3
+
+      - name: Install dependencies
+        run: |
+         cd dolbyio_comms_sdk_flutter
+         dart pub get
+      - name: Generate dart doc
+        run: |
+         cd dolbyio_comms_sdk_flutter
+         dart doc .  
+      - name: Deploy github pages🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          force : true
+          single-commit: true
+          folder: dolbyio_comms_sdk_flutter/doc/api # The folder the action should deploy.
+

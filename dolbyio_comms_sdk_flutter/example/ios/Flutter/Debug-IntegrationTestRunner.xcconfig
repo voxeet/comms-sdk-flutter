@@ -1,0 +1,4 @@
+#include? "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"
+#include "Generated.xcconfig"
+
+SWIFT_ACTIVE_COMPILATION_CONDITIONS= $(inherited) "USE_SDK_MOCK"
