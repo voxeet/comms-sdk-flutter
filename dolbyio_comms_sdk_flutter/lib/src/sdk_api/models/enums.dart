@@ -98,17 +98,11 @@ enum CommandServiceEventNames implements EnumWithStringValue {
 ///
 /// **Note**: This enum is currently supported only on Android devices.
 enum VideoPresentationState {
-  /// The video presentation is started.
-  STARTED('started'),
-
   /// The video presentation is paused.
   PAUSED('paused'),
 
   /// The video presentation is played.
   PLAY('play'),
-
-  /// The video presentation is sought.
-  SEEK('seek'),
 
   /// The video presentation is stopped.
   STOPPED('stopped');
