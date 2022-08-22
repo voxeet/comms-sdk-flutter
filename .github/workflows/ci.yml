@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - release/*
+  pull_request:
+    branches: 
+      - main
+      - develop
+      - release/*
+
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    name: flutter build linux
+    runs-on: ubuntu-latest
+    env:
+      FLUTTER_VERSION: "3.0.3"
+    steps:
+      - name: Checkout repo 
+        uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 15
+          distribution: 'adopt'
+      - name: Set up Flutter version
+        uses: subosito/flutter-action@v2.4.0
+        with:
+          flutter-version: $FLUTTER_VERSION
+      - name: Fetch dependencies
+        run: |
+         cd dolbyio_comms_sdk_flutter
+         flutter pub get
+      - name: Run tests
+        run: |
+         cd dolbyio_comms_sdk_flutter
+         flutter test
+
+  build-macos:
+    name: flutter build macos
+    runs-on: macos-11
+    env:
+      FLUTTER_VERSION: "3.0.3"
+    steps:
+      - name: Checkout repo 
+        uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 15
+          distribution: 'adopt'
+      - name: Set up Flutter version
+        uses: subosito/flutter-action@v2.4.0
+        with:
+          flutter-version: $FLUTTER_VERSION
+      - name: Fetch dependencies
+        run: |
+         cd dolbyio_comms_sdk_flutter
+         flutter pub get
+      - name: Run tests
+        run: |
+         cd dolbyio_comms_sdk_flutter
+         flutter test
