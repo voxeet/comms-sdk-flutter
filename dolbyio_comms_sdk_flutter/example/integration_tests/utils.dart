@@ -7,6 +7,7 @@ const conferenceServiceAssertsMethodChannel = MethodChannel('IntegrationTesting.
 const recordingServiceAssertsMethodChannel = MethodChannel('IntegrationTesting.RecordingServiceAsserts');
 const commandServiceAssertsMethodChannel = MethodChannel('IntegrationTesting.CommandServiceAsserts');
 const mediaDeviceServiceAssertsMethodChannel = MethodChannel('IntegrationTesting.MediaDeviceServiceAsserts');
+const videoPresentationServiceAssertsMethodChannel = MethodChannel('IntegrationTesting.VideoPresentationServiceAsserts');
 
 void _handleNativeResult(List<dynamic> invokeMethodResult, String messagePrefix, String label) {
   if (invokeMethodResult[0] == false) {

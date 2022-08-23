@@ -28,6 +28,7 @@ import VoxeetSDK
         RecordingServiceAsserts.create()
         CommandServiceAsserts.create()
         MediaDeviceServiceAsserts.create()
+        VideoPresentationServiceAsserts.create()
 #endif
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

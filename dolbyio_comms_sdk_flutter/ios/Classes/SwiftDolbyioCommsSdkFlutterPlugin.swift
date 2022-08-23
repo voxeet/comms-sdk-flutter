@@ -17,7 +17,8 @@ public class SwiftDolbyioCommsSdkFlutterPlugin: NSObject, FlutterPlugin {
 			SessionServiceBinding(name: "session_service", registrar: registrar),
 			RecordingServiceBinding(name: "recording_service", registrar: registrar),
 			CommandServiceBinding(name: "command_service", registrar: registrar),
-			MediaDeviceServiceBinding(name: "media_device_service", registrar: registrar)
+			MediaDeviceServiceBinding(name: "media_device_service", registrar: registrar),
+			VideoPresentationServiceBinding(name: "video_presentation_service", registrar: registrar)
 		]
         
         let factory = FLVideoViewFactory(messenger: registrar.messenger())
