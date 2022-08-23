@@ -6,6 +6,7 @@ import io.dolby.comms.sdk.flutter.extension.await
 import io.dolby.comms.sdk.flutter.extension.error
 import io.dolby.comms.sdk.flutter.extension.launch
 import io.dolby.comms.sdk.flutter.mapper.VideoPresentationMapper
+import io.dolby.comms.sdk.flutter.mapper.mapToFlutter
 import io.dolby.comms.sdk.flutter.state.VideoPresentationHolder
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -116,7 +117,7 @@ class VideoPresentationServiceModule(
                 .videoPresentation()
                 .currentPresentation
                 ?.state
-                ?.let { result.success(it.name) }
+                ?.let { result.success(it.mapToFlutter()) }
                 ?: throw IllegalStateException("Could not get current presentation")
         }
     )
