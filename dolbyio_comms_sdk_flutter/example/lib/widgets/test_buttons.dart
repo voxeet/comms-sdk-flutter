@@ -1,9 +1,9 @@
-import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/file_presentation_test_buttons.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/secondary_button.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/video_presentation_test_buttons.dart';
 import 'package:flutter/material.dart';
-import '../example_app/join_conference_screen.dart';
+import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import '/widgets/file_presentation_test_buttons.dart';
+import '/widgets/secondary_button.dart';
+import '/widgets/video_presentation_test_buttons.dart';
+import '/example_app/join_screen.dart';
 import 'dialogs.dart';
 import 'dart:convert';
 
@@ -133,7 +133,7 @@ class TestButtons extends StatelessWidget {
     _dolbyioCommsSdkFlutterPlugin.conference
         .current()
         .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.leave(null))
-        .then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => JoinConferenceScreen())))
+        .then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const JoinConference(username: ''))))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
 

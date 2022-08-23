@@ -1,22 +1,22 @@
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/circular_progress_indicator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'dart:developer' as developer;
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'participant_screen_rn.dart';
-import '../widgets/text_form_field.dart';
-import '../widgets/two_color_text.dart';
-import '../widgets/dolby_title.dart';
-import '../widgets/primary_button.dart';
-import '../widgets/dialogs.dart';
-import '../permission_helper.dart';
+import 'participant_screen.dart';
+import '/widgets/text_form_field.dart';
+import '/widgets/two_color_text.dart';
+import '/widgets/dolby_title.dart';
+import '/widgets/primary_button.dart';
+import '/widgets/dialogs.dart';
+import '/widgets/circular_progress_indicator.dart';
+import '/permission_helper.dart';
+import 'dart:developer' as developer;
 
-class JoinConferenceRN extends StatelessWidget {
+class JoinConference extends StatelessWidget {
   final String username;
 
-  const JoinConferenceRN({Key? key, required this.username}) : super(key: key);
+  const JoinConference({Key? key, required this.username}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +173,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   Future navigateToParticipantScreen(BuildContext context) async {
     await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const ParticipantScreenRN())
+        MaterialPageRoute(builder: (context) => const ParticipantScreen())
     );
     setState(() => isJoining = false);
   }

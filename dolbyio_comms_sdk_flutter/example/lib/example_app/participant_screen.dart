@@ -1,442 +1,420 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer' as developer;
-import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/conference.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/spatial.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/dialogs.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
+import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import '/widgets/conference_action_icon_button.dart';
+import '/widgets/dialogs.dart';
+import '/widgets/dolby_title.dart';
+import '/widgets/test_buttons.dart';
 
-import 'join_conference_screen.dart';
+class ParticipantScreen extends StatefulWidget {
+  const ParticipantScreen({Key? key}) : super(key: key);
 
-class ParticipantScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Participant Screen'),
-          centerTitle: true,
-        ),
-        body: Stack(
-          children: <Widget>[
-            ConferenceControlsContent(),
-            DraggableScrollableSheet(
-              initialChildSize: 0.15,
-              minChildSize: 0.15,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return SingleChildScrollView(
-                  controller: scrollController,
-                  child: ConferenceControlsContent(),
-                );
-              },
-            ),
-          ],
-        ),
-      );
+  State<ParticipantScreen> createState() => _ParticipantScreenState();
 }
 
-class ConferenceContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            color: Colors.red,
-            child: SizedBox.fromSize(size: const Size.fromRadius(180)),
-          ),
-          const Text("Participant Id"),
-        ],
-      ),
-    );
-  }
+Future<void> showDialog(
+    BuildContext context, String title, String text) async {
+  await ViewDialogs.dialog(
+    context: context,
+    title: title,
+    body: text,
+  );
 }
 
-class ConferenceControlsContent extends StatelessWidget {
+class _ParticipantScreenState extends State<ParticipantScreen> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+  String participantName = '';
+  String conferenceName = '';
+  List<Participant> participants = [];
+  bool isRemoteMuted = false;
+  bool isVideoOff = false;
+  bool isMicOff = false;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 100),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            PrimaryButton(
-                widgetText: const Text('Leave'),
-                onPressed: () => leave(context)),
-            PrimaryButton(
-                widgetText: const Text('get participant'),
-                onPressed: () => getParticipant(context)),
-            PrimaryButton(
-                widgetText: const Text('get participants'),
-                onPressed: () => getParticipants(context)),
-            PrimaryButton(
-                widgetText: const Text('fetch conference'),
-                onPressed: () => fetchConference(context)),
-            PrimaryButton(
-                widgetText: const Text('current conference'),
-                onPressed: () => current(context)),
-            PrimaryButton(
-                widgetText: const Text('getAudioLevel'),
-                onPressed: () => getAudioLevel(context)),
-            PrimaryButton(
-                widgetText: const Text('isMuted'),
-                onPressed: () => isMuted(context)),
-            PrimaryButton(
-                widgetText: const Text('Mute'),
-                onPressed: () => setMute(context, true)),
-            PrimaryButton(
-                widgetText: const Text('Unmute'),
-                onPressed: () => setMute(context, false)),
-            PrimaryButton(
-                widgetText: const Text('Start audio'),
-                onPressed: () => startAudio(context)),
-            PrimaryButton(
-                widgetText: const Text('Stop audio'),
-                onPressed: () => stopAudio(context)),
-            PrimaryButton(
-                widgetText: const Text('Start video'),
-                onPressed: () => startVideo(context)),
-            PrimaryButton(
-                widgetText: const Text('Stop video'),
-                onPressed: () => stopVideo(context)),
-            PrimaryButton(
-                widgetText: const Text('Start screen share'),
-                onPressed: () => startScreenShare(context)),
-            PrimaryButton(
-                widgetText: const Text('Stop screen share'),
-                onPressed: () => stopScreenShare(context)),
-            PrimaryButton(
-                widgetText: const Text('Set my spatial position'),
-                onPressed: () => setMySpatialPosition(context)),
-            PrimaryButton(
-                widgetText: const Text('Set spatial position'),
-                onPressed: () => setSpatialPosition(context)),
-            PrimaryButton(
-                widgetText: const Text('Set spatial direction'),
-                onPressed: () => setSpatialDirection(context)),
-            PrimaryButton(
-                widgetText: const Text('Set spatial environment'),
-                onPressed: () => setSpatialEnvironment(context)),
-            PrimaryButton(
-                widgetText: const Text('getLocalStats'),
-                onPressed: () => getLocalStats(context)),
-            PrimaryButton(
-                widgetText: const Text('setMaxVideoForwarding'),
-                onPressed: () => setMaxVideoForwarding(context)),
-            PrimaryButton(
-                widgetText: const Text('setAudioProcessing'),
-                onPressed: () => setAudioProcessing(context)),
-            PrimaryButton(
-                widgetText: const Text('isSpeaking'),
-                onPressed: () => isSpeaking(context)),
-            PrimaryButton(
-                widgetText: const Text('getComfortNoiseLevel'),
-                onPressed: () => getComfortNoiseLevel(context)),
-            PrimaryButton(
-                widgetText: const Text('setComfortNoiseLevel'),
-                onPressed: () => setComfortNoiseLevel(context)),
-            PrimaryButton(
-                widgetText: const Text('isFrontCamera'),
-                onPressed: () => isFrontCamera(context)),
-            PrimaryButton(
-                widgetText: const Text('switchCamera'),
-                onPressed: () => switchCamera(context)),
-            PrimaryButton(
-                widgetText: const Text('onMessageReceived ON'),
-                onPressed: () => observeMessagesReceived(context)),
-            PrimaryButton(
-                widgetText: const Text('send'),
-                onPressed: () => send(context)),
-          ],
-        ),
-      ),
-    );
-  }
+  void initState() {
+    super.initState();
+    getCurrentConferenceName();
+    initParticipantsList();
 
-  Future<void> showDialog(
-      BuildContext context, String title, String text) async {
-    await ViewDialogs.dialog(
-      context: context,
-      title: title,
-      body: text,
-    );
-  }
+    _dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange().listen((params) {
+      initParticipantsList();
+      developer.log("onParticipantsChange");
+    });
 
-  void getParticipant(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference
-            .getParticipant(value.participants.first.id))
-        .then((value) =>
-            showDialog(context, "Success", value.toJson().toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
+    _dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange().listen((params) {
+      developer.log("onParticipantsChange2");
+    });
 
-  void getParticipants(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(value))
-        .then((value) => showDialog(context, "Success", jsonEncode(value)))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
+    _dolbyioCommsSdkFlutterPlugin.conference.onStreamsChange().listen((params) {
+      developer.log("onStreamsChange");
+    });
 
-  void fetchConference(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.fetch(value.id))
-        .then((value) =>
-            showDialog(context, "Success", value.toJson().toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
+    _dolbyioCommsSdkFlutterPlugin.conference.onStatusChange().listen((params) {
+      developer.log("onStatusChange");
+    });
 
-  void current(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) =>
-            showDialog(context, "Success", value.toJson().toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void getAudioLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference
-            .getAudioLevel(value.participants.first))
-        .then((value) => showDialog(context, "Success", value.toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void leave(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.leave(null))
-        .then((value) => Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => JoinConferenceScreen())))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void isMuted(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .isMuted()
-        .then((value) => showDialog(context, "Success", value.toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void setMute(BuildContext context, bool mute) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference
-            .mute(value.participants.first, mute))
-        .then((value) => showDialog(context, "Success", value.toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void startAudio(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.current().then((current) =>
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .startAudio(current.participants.first)
-            .then((value) => showDialog(context, "Success", "OK"))
-            .onError((error, stackTrace) =>
-                showDialog(context, "Error", error.toString())));
-  }
-
-  void stopAudio(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.current().then((current) =>
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .stopAudio(current.participants.first)
-            .then((value) => showDialog(context, "Success", "OK"))
-            .onError((error, stackTrace) =>
-                showDialog(context, "Error", error.toString())));
-  }
-
-  void startVideo(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.current().then((current) =>
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .startVideo(current.participants.first)
-            .then((value) => showDialog(context, "Success", "OK"))
-            .onError((error, stackTrace) => showDialog(
-                context, "Error", error.toString() + stackTrace.toString())));
-  }
-
-  void stopVideo(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.current().then((current) =>
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .stopVideo(current.participants.first)
-            .then((value) => showDialog(context, "Success", "OK"))
-            .onError((error, stackTrace) => showDialog(
-                context, "Error", error.toString() + stackTrace.toString())));
-  }
-
-  void startScreenShare(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((current) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.startScreenShare())
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) => showDialog(
-            context, "Error", error.toString() + stackTrace.toString()));
-  }
-
-  void stopScreenShare(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((current) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.stopScreenShare())
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) => showDialog(
-            context, "Error", error.toString() + stackTrace.toString()));
-  }
-
-  void setMySpatialPosition(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialPosition(null, SpatialPosition(1.0, 1.0, 1.0))
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void setSpatialPosition(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(value))
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference
-            .setSpatialPosition(value.first, SpatialPosition(1.0, 1.0, 1.0)))
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void setSpatialEnvironment(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialEnvironment(
-            SpatialScale(1.0, 1.0, 1.0),
-            SpatialPosition(0.0, 0.0, 1.0),
-            SpatialPosition(0.0, 1.0, 0.0),
-            SpatialPosition(1.0, 0.0, 0.0))
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void setSpatialDirection(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialDirection(SpatialDirection(1.0, 1.0, 1.0))
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void getLocalStats(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalStats()
-        .then((value) => showDialog(context, "Success", jsonEncode(value)))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void setMaxVideoForwarding(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(value))
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference
-            .setMaxVideoForwarding(4, value))
-        .then((value) => showDialog(context, "Success", jsonEncode(value)))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void setAudioProcessing(BuildContext context) {
-    var senderOptions = AudioProcessingSenderOptions()..audioProcessing = true;
-    var audioProcessingOptions = AudioProcessingOptions()..send = senderOptions;
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setAudioProcessing(audioProcessingOptions)
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void isSpeaking(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(value))
-        .then((value) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.isSpeaking(value.first))
-        .then((value) => showDialog(context, "Success", value.toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void getComfortNoiseLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.getComfortNoiseLevel()
-        .then((value) => showDialog(context, "Success", value.value))
-        .onError((error, stackTrace) =>
-          showDialog(context, "Error", error.toString()));
-  }
-
-  void setComfortNoiseLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.setComfortNoiseLevel(
-        ComfortNoiseLevel.Medium)
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-          showDialog(context, "Error", error.toString()));
-  }
-
-  void isFrontCamera(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.isFrontCamera()
-        .then((value) => showDialog(context, "Success", value.toString()))
-        .onError((error, stackTrace) =>
-        showDialog(context, "Error", error.toString()));
-  }
-
-  void switchCamera(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.switchCamera()
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-        showDialog(context, "Error", error.toString()));
-  }
-
-  void observeMessagesReceived(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.command.onMessageReceived().listen((params) {
-      showDialog(context, params.type.value, params.body.message);
+      showDialog(context, params.type.value, "Message: ${params.body.message}");
+      developer.log("onMessageReceived");
     });
   }
 
-  void send(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.command
-        .send("Test message")
-        .then((value) => showDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+        onWillPop: () async {
+          leaveConference();
+          return false;
+        },
+        child: SafeArea(
+          left: false,
+          right: false,
+          child: Scaffold(
+                body: Container(
+                  constraints: const BoxConstraints.expand(),
+                  decoration: const BoxDecoration(color: Colors.deepPurple),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK',),
+                        Expanded(
+                            child: Container(
+                                alignment: Alignment.bottomCenter,
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(12))),
+                                    child: Column(
+                                      children: [
+                                        buildConferenceName(),
+                                        buildParticipantView(),
+                                        buildButtonShowBottomModalSheet(),
+                                        buildConferenceControls(),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                      ]),
+                ),
+              ),
+        )
+    );
   }
+  
+  Widget buildConferenceName() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        conferenceName,
+        style: const TextStyle(fontSize: 20),
+      ),
+    );
+  }
+
+  Expanded buildParticipantView() {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: GridView.builder(
+            itemCount: participants.length,
+            scrollDirection: Axis.vertical,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12),
+            itemBuilder: (context, index) {
+              var participant = participants[index];
+              return Column(
+                children: [
+                  Expanded(
+                    flex: 5, 
+                    child: VideoView.forList(
+                      participant: participant, 
+                      key: ValueKey('video_view_tile_${participant.id}'),
+                      mediaStreamSelector: (streams) {
+                        MediaStream? stream;
+                        if (streams != null) {
+                          for (final s in streams) {
+                            if (s.type == MediaStreamType.Camera) {
+                              stream = s;
+                              break;
+                            }
+                          }
+                        }
+                        return stream;
+                      }
+                    )),
+                  Expanded(
+                      flex: 1,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.deepPurple,
+                            borderRadius:
+                                BorderRadius.vertical(bottom: Radius.circular(12))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12),
+                              child: Text(
+                                getParticipantName(index),
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            if (index != 0) buildRemoteParticipantOptions(index)
+                          ],
+                        ),
+                      ))
+                ],
+              );
+            }),
+      ),
+    );
+  }
+
+  Widget buildRemoteParticipantOptions(int index) {
+    return PopupMenuButton(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+        padding: const EdgeInsets.only(bottom: 4, top: 4),
+        position: PopupMenuPosition.over,
+        icon: const Icon(
+          Icons.more_vert,
+          color: Colors.white,
+        ),
+        itemBuilder: (BuildContext context) {
+          return [
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 0,
+              child: ListTile(
+                title: Text('Kick'),
+                leading: Icon(
+                  Icons.remove,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            PopupMenuItem<int>(
+              textStyle: const TextStyle(fontSize: 14, color: Colors.black),
+              value: 1,
+              child: !isRemoteMuted
+                  ? const ListTile(
+                      leading: Icon(Icons.mic, color: Colors.blue),
+                      title: Text('Mute'),
+                    )
+                  : const ListTile(
+                      leading: Icon(Icons.mic_off, color: Colors.blue),
+                      title: Text('Unmute'),
+                    ),
+            ),
+          ];
+        },
+        onSelected: (value) {
+          switch (value) {
+            case 0:
+              {
+                // TODO invoke kickParticipant() method
+                break;
+              }
+            case 1:
+              {
+                muteRemoteParticipant(index);
+                break;
+              }
+          }
+        });
+  }
+
+  Widget buildButtonShowBottomModalSheet(){
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: FloatingActionButton(
+          backgroundColor: Colors.deepPurple,
+          child: const Icon(Icons.touch_app),
+          onPressed: () =>
+              showModalBottomSheet(
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+                  context: context,
+                  builder: (context) { return FractionallySizedBox(
+                    heightFactor: 0.8,
+                    child: TestButtons(),
+                  );
+                  }
+              ),
+        ),
+      ),
+    );
+  }
+
+  Container buildConferenceControls() {
+    return Container(
+        decoration: const BoxDecoration(
+            shape: BoxShape.rectangle,
+            color: Colors.white,
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+            boxShadow: [BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 0.8)]),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ConferenceActionIconButton(
+                onPressedIcon: () {
+                  muteLocalParticipant();
+                },
+                backgroundIconColor: Colors.deepPurple,
+                iconWidget: isMicOff ? const Icon(Icons.mic_off, size: 30) : const Icon(Icons.mic, size: 30),
+              ),
+              ConferenceActionIconButton(
+                onPressedIcon: () {
+                  if (isVideoOff) {
+                    onStartVideo();
+                  } else {
+                    onStopVideo();
+                  }
+                  setState(() => isVideoOff = !isVideoOff);
+                },
+                backgroundIconColor: Colors.deepPurple,
+                iconWidget: isVideoOff ? const Icon(Icons.videocam_off) : const Icon(Icons.videocam),
+              ),
+              ConferenceActionIconButton(
+                  onPressedIcon: () {
+                    leaveConference();
+                  },
+                  iconWidget: const Icon(Icons.phone),
+                  backgroundIconColor: Colors.red),
+            ]));
+  }
+
+  String getCurrentConferenceName() {
+    _dolbyioCommsSdkFlutterPlugin.conference.current().then((conference) {
+      setState(() => conferenceName = conference.alias.toString());
+    }).onError((error, stackTrace) {
+      onError('Error during getting conference name.', error);
+    });
+    return conferenceName;
+  }
+
+  String getParticipantName(int id) {
+    participantName = participants.elementAt(id).info!.name;
+    return participantName;
+  }
+
+  List<Participant> initParticipantsList() {
+    _dolbyioCommsSdkFlutterPlugin.conference.current().then((conference) =>
+        _dolbyioCommsSdkFlutterPlugin.conference
+            .getParticipants(conference)
+            .then((participantsList) {
+          setState(
+              () => participants = checkActiveParticipants(participantsList));
+        }).onError((error, stackTrace) {
+          onError('Error during initializing participants list.', error);
+        }));
+    return participants;
+  }
+
+  List<Participant> checkActiveParticipants(
+      List<Participant> participantsList) {
+    List<Participant> activeParticipants = [];
+    for (var participant in participantsList) {
+      var participantStatus = participant.status?.name;
+      developer.log("STATUS: $participantStatus");
+      if (participantStatus == "LEFT") {
+        activeParticipants.remove(participant);
+      } else {
+        activeParticipants.add(participant);
+      }
+    }
+    return activeParticipants;
+  }
+
+  void muteRemoteParticipant(int participantIndex) {
+    if (isRemoteMuted == false) {
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .mute(participants.elementAt((participantIndex)), true)
+          .then((value) => developer.log('Remote participant has been muted'))
+          .onError((error, stackTrace) =>
+              onError('Error during mutting remote participant', error));
+      setState(() => isRemoteMuted = true);
+    } else {
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .mute(participants.elementAt(participantIndex), false)
+          .then((value) => developer.log('Remote participant has been unmuted'))
+          .onError((error, stackTrace) =>
+              onError('Error during unmutting remote participant', error));
+      setState(() => isRemoteMuted = false);
+    }
+  }
+
+  void kickParticipant() {
+    // TODO change to kick() method when it'll be implemented
+  }
+
+  void leaveConference() {
+    var leaveOptions = ConferenceLeaveOptions(false);
+    _dolbyioCommsSdkFlutterPlugin.conference.leave(leaveOptions).then((value) {
+      Navigator.of(context).pop();
+      developer.log('Conference left.');
+    }).onError((error, stackTrace) {
+      onError('Error during leaving conference.', error);
+    });
+  }
+
+  void muteLocalParticipant() {
+    if (isMicOff == false) {
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .mute(participants.first, true)
+          .then((value) => developer.log('Local participant has been muted.'))
+          .onError((error, stackTrace) => onError('', error));
+      setState(() => isMicOff = true);
+    } else {
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .mute(participants.first, false)
+          .then((value) => developer.log('Local participant has been unmuted.'))
+          .onError((error, stackTrace) => onError('', error));
+      setState(() => isMicOff = false);
+    }
+  }
+
+  void onStopVideo() {
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .stopVideo(participants.first)
+        .then((value) => developer.log('Local participant video has been stopped.'))
+        .onError((error, stackTrace) => onError('', error));
+  }
+
+  void onStartVideo() {
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .startVideo(participants.first)
+        .then((value) => developer.log('Local participant video has been started.'))
+        .onError((error, stackTrace) => onError('', error));
+  }
+
+  bool _hasAvailableStream(List<MediaStream>? streams) {
+    return streams != null &&
+        streams.isNotEmpty &&
+        streams[0].videoTracks.isNotEmpty;
+  }
+
+  void _prepareVideo(
+      VideoView videoView, Participant participant, bool isAttached) {
+    if (!isAttached) {
+      if (_hasAvailableStream(participant.streams)) {
+        var stream = participant.streams
+            ?.firstWhere((element) => element.type == MediaStreamType.Camera);
+        // videoView.attach(participant, stream);
+      }
+    } else {
+      // videoView.detach();
+    }
+  }
+}
+
+void onError(String message, Object? error) {
+  developer.log(message, error: error);
 }
