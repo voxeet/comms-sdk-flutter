@@ -300,7 +300,7 @@ class ConferenceService {
     return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.StatusUpdated]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
       final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
-      final status = ConferenceStatus.valueOf(eventMap["body"] as String);
+      final status = ConferenceStatus.valueOf(eventMap["body"] as String) ?? ConferenceStatus.DEFAULT;
       return Event(eventType, status);
     });
   }

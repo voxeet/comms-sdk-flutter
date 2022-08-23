@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               PrimaryButton(
-                  widgetText: const Text('Open example app (RN)'),
+                  widgetText: const Text('Open example app'),
                   onPressed: () {
                     Navigator.of(context).push(
                         MaterialPageRoute(builder: (context) => const LoginScreen()));

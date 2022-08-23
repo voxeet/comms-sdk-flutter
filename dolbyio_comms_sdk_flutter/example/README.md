@@ -58,7 +58,7 @@ cd dolbyio_comms_sdk_flutter/example
 flutter run
 ```
 
-4. Tap the **Open example app (RN)** button and join a conference.
+4. Tap the **Open example app** button and join a conference.
 
 [flutter_intalation]: https://docs.flutter.dev/get-started/install
 [client_access_token]: https://docs.dolby.io/communications-apis/docs/overview-developer-tools#client-access-token

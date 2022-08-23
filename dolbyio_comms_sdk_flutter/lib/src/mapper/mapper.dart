@@ -9,13 +9,13 @@ import '../sdk_api/models/streams.dart';
 
 class ConferenceMapper {
   static Conference fromMap(Map<Object?, Object?> map) {
-    var alias = map.containsKey("alias") ? map["alias"] as String : null;
+    var alias = map["alias"] as String?;
     var id = map.containsKey("id") ? map["id"] as String : null;
     var isNew = map.containsKey("isNew") ? map["isNew"] as bool : null;
     var participants =
         map.containsKey("participants") ? prepareParticipantsList(map["participants"] as List<Object?>) : List<Participant>.empty();
-    var status = map.containsKey("status") ? map["status"] as String : "DEFAULT";
-    return Conference(alias, id, isNew, participants, ConferenceStatus.valueOf(status));
+    var status = ConferenceStatus.valueOf(map["status"] as String? ?? "DEFAULT") ?? ConferenceStatus.DEFAULT;
+    return Conference(alias, id, isNew, participants, status);
   }
 
   static List<Participant> prepareParticipantsList(List<Object?> participants) {
@@ -58,9 +58,9 @@ class ParticipantInvitedMapper {
 
 class InvitationReceivedNotificationMapper {
   static InvitationReceivedNotificationData fromMap(Map<Object?, Object?> invitiationEvent) {
-    var conferenceAlias = invitiationEvent["conferenceAlias"] as String;
+    var conferenceAlias = invitiationEvent["conferenceAlias"] as String? ?? "";
     var conferenceId = invitiationEvent["conferenceId"] as String;
-    var conferenceToken = invitiationEvent["conferenceToken"] as String;
+    var conferenceToken = invitiationEvent["conferenceToken"] as String? ?? "";
     var participant = ParticipantMapper.fromMap(invitiationEvent["participant"] as Map<Object?, Object?>);
     return InvitationReceivedNotificationData(conferenceAlias, conferenceId, conferenceToken, participant);
   }
