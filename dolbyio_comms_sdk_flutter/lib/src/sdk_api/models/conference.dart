@@ -80,8 +80,8 @@ enum ConferenceStatus {
 
   const ConferenceStatus(this.name);
 
-  static ConferenceStatus valueOf(String value) {
-    return ConferenceStatus.values.firstWhere((element) => element.name == value);
+  static ConferenceStatus? valueOf(String value) {
+    return ConferenceStatus.values.firstWhereOrNull((element) => element.name == value);
   }
 }
 

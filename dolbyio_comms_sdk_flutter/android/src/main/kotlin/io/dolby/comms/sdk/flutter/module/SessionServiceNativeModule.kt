@@ -43,8 +43,8 @@ class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModu
         onSuccess = {
             val participantInfo = ParticipantInfo(
                 call.argumentOrThrow("name"),
+                call.argument("externalId"),
                 call.argument("avatarUrl"),
-                call.argument("externalId")
             )
             VoxeetSDK.session().open(participantInfo).await().let { result.success(it) }
         }

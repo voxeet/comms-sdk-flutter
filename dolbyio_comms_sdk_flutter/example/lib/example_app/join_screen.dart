@@ -57,6 +57,20 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   bool isJoining = false;
 
   @override
+  void initState() {
+    super.initState();
+    _dolbyioCommsSdkFlutterPlugin.notification.onInvitationReceived().listen((params) {
+      ViewDialogs.dialog(
+        context: context,
+        title: "Invitation received",
+        body: params.body.toJson().toString(),
+        cancelText: "Cancel",
+        result: (value) => value ? joinInvitation(params.body.conferenceId) : null,
+      );
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
@@ -169,6 +183,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     } else {
       developer.log('Cannot join to conference.');
     }
+  }
+
+  void joinInvitation(String conferenceId) {
+    _dolbyioCommsSdkFlutterPlugin.conference.fetch(conferenceId).then((value) => {
+      _dolbyioCommsSdkFlutterPlugin.conference.join(value, conferenceJoinOptions())
+          .then((value) => navigateToParticipantScreen(context))
+          .onError((error, stackTrace) => onError('Error during joining conference.', error))
+    });
   }
 
   Future navigateToParticipantScreen(BuildContext context) async {
