@@ -5,7 +5,7 @@ import '/widgets/dolby_title.dart';
 import '/widgets/input_text_field.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/text_form_field.dart';
-import 'join_conference_screen_rn.dart';
+import 'join_screen.dart';
 import 'dart:developer' as developer;
 
 class LoginScreen extends StatelessWidget {
@@ -154,7 +154,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   void navigateToJoinConference() async {
     await Navigator.of(context).push(
         MaterialPageRoute(builder: (context) =>
-            JoinConferenceRN(username: usernameTextController.text)
+            JoinConference(username: usernameTextController.text)
         )
     );
     setState(() => isLogging = false);

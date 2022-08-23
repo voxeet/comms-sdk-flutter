@@ -1,8 +1,7 @@
-import 'package:dolbyio_comms_sdk_flutter_example/example_app_rn/login_screen_rn.dart';
 import 'package:flutter/material.dart';
-import 'example_app/init_screen.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/primary_button.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import '/widgets/primary_button.dart';
+import '/example_app/login_screen.dart';
 
 void main() {
   runApp(const MaterialApp(home: MyApp()));
@@ -39,12 +38,6 @@ class _MyAppState extends State<MyApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PrimaryButton(
-                  widgetText: const Text('Open example app'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => InitScreen()));
-                  }),
               PrimaryButton(
                   widgetText: const Text('Open example app (RN)'),
                   onPressed: () {
