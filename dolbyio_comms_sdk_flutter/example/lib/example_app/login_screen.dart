@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '/widgets/circular_progress_indicator.dart';
 import '/widgets/dolby_title.dart';
 import '/widgets/input_text_field.dart';
@@ -45,16 +46,18 @@ class LoginScreenContent extends StatefulWidget {
 class _LoginScreenContentState extends State<LoginScreenContent> {
   final formKey = GlobalKey<FormState>();
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+  TextEditingController accessTokenTextController = TextEditingController();
   TextEditingController usernameTextController = TextEditingController();
   TextEditingController externalIdTextController = TextEditingController();
-  late String _sessionStatus;
-  String accessToken = '';
+  late String? _sessionStatus, _accessToken;
+  late SharedPreferences _preferences;
+  String keyAccessToken = 'access token';
   bool isSessionOpen = false, isLogging = false, isInitialized = false;
 
   @override
   void initState() {
     super.initState();
-    // accessToken = ''; // SET YOUR ACCESS TOKEN HERE
+    initSharedPreferences();
     initSessionStatus();
   }
 
@@ -87,11 +90,21 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
               children: [
                 Form(
                     key: formKey,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: InputTextFormField(
-                        labelText: 'Username',
-                        controller: usernameTextController,
-                        focusColor: Colors.deepPurple
+                    autovalidateMode: AutovalidateMode.disabled,
+                    child: Column(
+                      children: [
+                        InputTextFormField(
+                            labelText: 'Access token',
+                            controller: accessTokenTextController,
+                            focusColor: Colors.deepPurple
+                        ),
+                        const SizedBox(height: 16),
+                        InputTextFormField(
+                            labelText: 'Username',
+                            controller: usernameTextController,
+                            focusColor: Colors.deepPurple
+                        ),
+                      ],
                     )
                 ),
                 const SizedBox(height: 16),
@@ -128,10 +141,12 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   }
 
   Future<void> initializeSdk() async {
+    _accessToken = accessTokenTextController.text;
     await _dolbyioCommsSdkFlutterPlugin
-        .initializeToken(accessToken, () => getRefreshToken())
+        .initializeToken(_accessToken, () => getRefreshToken())
         .then((value) => setState(() => isInitialized = true))
         .onError((error, stackTrace) => onError('Error during initializing sdk', error));
+    _preferences.setString(keyAccessToken, _accessToken ?? '');
   }
 
   void openSession() {
@@ -161,10 +176,17 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   }
 
   Future<String?> getRefreshToken() async {
-    return accessToken;
+    return _accessToken;
   }
 
   void onError(String message, Object? error) {
     developer.log(message, error: error);
+  }
+
+  Future initSharedPreferences() async {
+    _preferences = await SharedPreferences.getInstance();
+
+    _accessToken = _preferences.getString(keyAccessToken);
+    setState(() => accessTokenTextController.text = _accessToken ?? '');
   }
 }
