@@ -304,7 +304,7 @@ void main() {
 
     var leaveOptions = ConferenceLeaveOptions(true);
 
-    await dolbyioCommsSdkFlutterPlugin.conference.leave(leaveOptions);
+    await dolbyioCommsSdkFlutterPlugin.conference.leave(options: leaveOptions);
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -320,7 +320,7 @@ void main() {
 
     leaveOptions = ConferenceLeaveOptions(false);
 
-    await dolbyioCommsSdkFlutterPlugin.conference.leave(leaveOptions);
+    await dolbyioCommsSdkFlutterPlugin.conference.leave(options: leaveOptions);
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -336,12 +336,12 @@ void main() {
   testWidgets('ConferenceService: current', (tester) async {
 
     await runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
     var conference = await dolbyioCommsSdkFlutterPlugin.conference.current();
-    
+
     expect(conference.id, "setCreateConferenceReturn_id_5");
     expect(conference.alias, "setCreateConferenceReturn_alias_5");
   });
@@ -349,9 +349,9 @@ void main() {
   testWidgets('ConferenceService: getAudioLevel', (tester) async {
 
     var participant = Participant(
-      "participant_id_5_1", 
-      ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-      ParticipantStatus.CONNECTED, 
+      "participant_id_5_1",
+      ParticipantInfo("participant_name", "avatar_url", "external_id"),
+      ParticipantStatus.CONNECTED,
       ParticipantType.LISTENER);
 
     runNative(
@@ -405,7 +405,7 @@ void main() {
   testWidgets('ConferenceService: getMaxVideoForwarding', (tester) async {
 
     runNative(
-        methodChannel: conferenceServiceAssertsMethodChannel, 
+        methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setMaxVideoForwardingReturn",
         args: { "value": 3 });
     var maxVideoForwarding = await dolbyioCommsSdkFlutterPlugin.conference.getMaxVideoForwarding();
@@ -414,7 +414,7 @@ void main() {
     await resetSDK();
 
     runNative(
-        methodChannel: conferenceServiceAssertsMethodChannel, 
+        methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setMaxVideoForwardingReturn",
         args: { "value": 5 });
     maxVideoForwarding = await dolbyioCommsSdkFlutterPlugin.conference.getMaxVideoForwarding();
@@ -424,13 +424,13 @@ void main() {
   testWidgets('ConferenceService: startAudio', (tester) async {
 
     var participant = Participant(
-        "participant_id_5_1", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_1",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -438,19 +438,19 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStartAudioConferenceArgs", 
+      assertLabel: "assertStartAudioConferenceArgs",
       expected: { "id": "participant_id_5_1"});
 
     await resetSDK();
 
     participant = Participant(
-        "participant_id_5_2", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_2",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -458,20 +458,20 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStartAudioConferenceArgs", 
+      assertLabel: "assertStartAudioConferenceArgs",
       expected: { "id": "participant_id_5_2"});
   });
 
   testWidgets('ConferenceService: stopAudio', (tester) async {
 
     var participant = Participant(
-        "participant_id_5_1", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_1",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -479,19 +479,19 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStopAudioConferenceArgs", 
+      assertLabel: "assertStopAudioConferenceArgs",
       expected: { "id": "participant_id_5_1"});
 
     await resetSDK();
 
     participant = Participant(
-        "participant_id_5_2", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_2",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -499,20 +499,20 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStopAudioConferenceArgs", 
+      assertLabel: "assertStopAudioConferenceArgs",
       expected: { "id": "participant_id_5_2"});
   });
 
   testWidgets('ConferenceService: startVideo', (tester) async {
 
     var participant = Participant(
-        "participant_id_5_1", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_1",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -520,19 +520,19 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStartVideoConferenceArgs", 
+      assertLabel: "assertStartVideoConferenceArgs",
       expected: { "id": "participant_id_5_1"});
 
     await resetSDK();
 
     participant = Participant(
-        "participant_id_5_2", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_2",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -540,20 +540,20 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStartVideoConferenceArgs", 
+      assertLabel: "assertStartVideoConferenceArgs",
       expected: { "id": "participant_id_5_2"});
   });
 
   testWidgets('ConferenceService: stopVideo', (tester) async {
 
     var participant = Participant(
-        "participant_id_5_1", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_1",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -561,19 +561,19 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStopVideoConferenceArgs", 
+      assertLabel: "assertStopVideoConferenceArgs",
       expected: { "id": "participant_id_5_1"});
 
     await resetSDK();
 
     participant = Participant(
-        "participant_id_5_2", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_2",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -581,12 +581,12 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertStopVideoConferenceArgs", 
+      assertLabel: "assertStopVideoConferenceArgs",
       expected: { "id": "participant_id_5_2"});
-  });  
+  });
 
   testWidgets('ConferenceService: replay', (tester) async {
-  
+
     await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setFetchConferenceReturn",
@@ -607,8 +607,7 @@ void main() {
 
     var replayOptions = ConferenceReplayOptions("token", 1);
 
-    await dolbyioCommsSdkFlutterPlugin.conference
-        .replay(conference, replayOptions);
+    await dolbyioCommsSdkFlutterPlugin.conference.replay(conference: conference, replayOptions: replayOptions);
 
     await expectNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -628,7 +627,7 @@ void main() {
   testWidgets('ConferenceService: getParticipant', (tester) async {
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -638,25 +637,25 @@ void main() {
     await resetSDK();
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
     participant = await dolbyioCommsSdkFlutterPlugin.conference.getParticipant("participant_id_5_2");
     expect(participant.id, "participant_id_5_2");
-  }); 
+  });
 
   testWidgets('ConferenceService: getParticipants', (tester) async {
-  
+
     var conference = Conference(
-      "setCreateConferenceReturn_alias_5", 
-      "setCreateConferenceReturn_id_5", 
-      true, 
-      [], 
+      "setCreateConferenceReturn_alias_5",
+      "setCreateConferenceReturn_id_5",
+      true,
+      [],
       ConferenceStatus.CREATED);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -668,19 +667,19 @@ void main() {
     await resetSDK();
 
     conference = Conference(
-      "setCreateConferenceReturn_alias_6", 
-      "setCreateConferenceReturn_id_6", 
-      true, 
-      [], 
+      "setCreateConferenceReturn_alias_6",
+      "setCreateConferenceReturn_id_6",
+      true,
+      [],
       ConferenceStatus.CREATED);
-      
+
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setFetchConferenceReturn",
       args: { "type": 6 });
 
@@ -706,7 +705,7 @@ void main() {
         args: {"type": 5});
 
     await dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialPosition(participant, position);
+        .setSpatialPosition(participant: participant, position: position);
 
     await expectNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -765,14 +764,14 @@ void main() {
 
   testWidgets('ConferenceService: mute', (tester) async {
     var participant = Participant(
-        "participant_id_5_1", 
-        ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-        ParticipantStatus.CONNECTED, 
+        "participant_id_5_1",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
         ParticipantType.LISTENER
         );
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -780,8 +779,8 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertMuteConferenceArgs", 
-      expected: { 
+      assertLabel: "assertMuteConferenceArgs",
+      expected: {
         "id": "participant_id_5_1",
         "isMuted": true});
   });
@@ -789,11 +788,11 @@ void main() {
   testWidgets('ConferenceService: getStatus', (tester) async {
 
     var conference = Conference(
-      "setCreateConferenceReturn_alias_5", "setCreateConferenceReturn_id_5", 
+      "setCreateConferenceReturn_alias_5", "setCreateConferenceReturn_id_5",
       true, [], ConferenceStatus.CREATING);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setFetchConferenceReturn",
       args: { "type": 5 });
 
@@ -809,11 +808,11 @@ void main() {
     await resetSDK();
 
     conference = Conference(
-      "setCreateConferenceReturn_alias_6", "setCreateConferenceReturn_id_6", 
+      "setCreateConferenceReturn_alias_6", "setCreateConferenceReturn_id_6",
       true, [], ConferenceStatus.CREATED);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setFetchConferenceReturn",
       args: { "type": 6 });
 
@@ -851,13 +850,13 @@ void main() {
 
   testWidgets('ConferenceService: isSpeaking', (tester) async {
      var participant = Participant(
-      "participant_id_5_1", 
-      ParticipantInfo("participant_name", "avatar_url", "external_id"), 
-      ParticipantStatus.CONNECTED, 
+      "participant_id_5_1",
+      ParticipantInfo("participant_name", "avatar_url", "external_id"),
+      ParticipantStatus.CONNECTED,
       ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -884,7 +883,7 @@ void main() {
           ParticipantType.USER);
 
       runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -961,8 +960,8 @@ void main() {
 
     await expectNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
-      assertLabel: "assertMuteOutputArgs", 
-      expected: { 
+      assertLabel: "assertMuteOutputArgs",
+      expected: {
         "isMuted": true});
 
     await resetSDK();
@@ -984,7 +983,7 @@ void main() {
         ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
@@ -1014,14 +1013,14 @@ void main() {
           ParticipantType.LISTENER);
 
     runNative(
-      methodChannel: conferenceServiceAssertsMethodChannel, 
+      methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
     conferencePermissions = [ConferencePermission.KICK];
     participantPermissions =
         ParticipantPermissions(participant, conferencePermissions);
-    
+
     await dolbyioCommsSdkFlutterPlugin.conference
         .updatePermissions([participantPermissions]);
 
@@ -1036,12 +1035,12 @@ void main() {
         });
 
   });
-  
+
   // Commented out because is not working yet
   // testWidgets('ConferenceService: onParticipantsChange', (tester) async {
 
   //   await runNative(
-  //     methodChannel: conferenceServiceAssertsMethodChannel, 
+  //     methodChannel: conferenceServiceAssertsMethodChannel,
   //     label: "emitParticipantUpdatedEvents",
   //     args: { });
 
