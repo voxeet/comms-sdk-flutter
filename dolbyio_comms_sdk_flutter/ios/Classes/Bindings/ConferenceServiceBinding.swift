@@ -4,29 +4,29 @@ import WebRTC
 
 // MARK: - Supported Events
 private enum EventKeys: String, CaseIterable {
-	/// Emitted when a new participant is invited to a conference or joins a conference.
-	case participantAdded = "EVENT_CONFERENCE_PARTICIPANT_ADDED"
-	/// Emitted when a participant changes VTConferenceStatus.
-	case participantUpdated = "EVENT_CONFERENCE_PARTICIPANT_UPDATED"
-	/// Emitted when the local participant"s permissions are updated.
-	case permissionsUpdated = "EVENT_CONFERENCE_PERMISSIONS_UPDATED"
-	/// Emitted when ta conference changes status.
-	case statusUpdated = "EVENT_CONFERENCE_STATUS_UPDATED"
-	/// Emitted when the SDK adds a new stream to a conference participant.
-	case streamAdded = "EVENT_CONFERENCE_STREAM_ADDED"
-	/// Emitted when a conference participant who is connected to the audio and video stream changes
-	/// the stream by enabling a microphone while using a camera or by enabling a camera while using
-	/// a microphone.
-	case streamUpdated = "EVENT_CONFERENCE_STREAM_UPDATED"
-	/// Emitted when the SDK removes a stream from a conference participant.
-	case streamRemoved = "EVENT_CONFERENCE_STREAM_REMOVED"
+    /// Emitted when a new participant is invited to a conference or joins a conference.
+    case participantAdded = "EVENT_CONFERENCE_PARTICIPANT_ADDED"
+    /// Emitted when a participant changes VTConferenceStatus.
+    case participantUpdated = "EVENT_CONFERENCE_PARTICIPANT_UPDATED"
+    /// Emitted when the local participant"s permissions are updated.
+    case permissionsUpdated = "EVENT_CONFERENCE_PERMISSIONS_UPDATED"
+    /// Emitted when ta conference changes status.
+    case statusUpdated = "EVENT_CONFERENCE_STATUS_UPDATED"
+    /// Emitted when the SDK adds a new stream to a conference participant.
+    case streamAdded = "EVENT_CONFERENCE_STREAM_ADDED"
+    /// Emitted when a conference participant who is connected to the audio and video stream changes
+    /// the stream by enabling a microphone while using a camera or by enabling a camera while using
+    /// a microphone.
+    case streamUpdated = "EVENT_CONFERENCE_STREAM_UPDATED"
+    /// Emitted when the SDK removes a stream from a conference participant.
+    case streamRemoved = "EVENT_CONFERENCE_STREAM_REMOVED"
 }
 
 class ConferenceServiceBinding: Binding {
-
-	var current: VTConference? {
-		VoxeetSDK.shared.conference.current
-	}
+    
+    var current: VTConference? {
+        VoxeetSDK.shared.conference.current
+    }
     
     override func onInit() {
         super.onInit()
@@ -44,15 +44,15 @@ class ConferenceServiceBinding: Binding {
         }
     }
     
-	// MARK: - Methods
-	/// Creates a conference.
-	/// - Parameters:
+    // MARK: - Methods
+    /// Creates a conference.
+    /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
-	func create(
+    func create(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
-	) {
+    ) {
         do {
             let options = try flutterArguments.asSingle().decode(type: DTO.ConferenceOptions.self)
             VoxeetSDK.shared.conference.create(options: options?.toSdkType()) { conference in
@@ -63,16 +63,16 @@ class ConferenceServiceBinding: Binding {
         } catch {
             completionHandler.failure(error)
         }
-	}
-	
-	/// Provides the conference object that allows joining a conference.
-	/// - Parameters:
+    }
+    
+    /// Provides the conference object that allows joining a conference.
+    /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
-	func fetch(
+    func fetch(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
-	) {
+    ) {
         do {
             let conferenceId: String = try flutterArguments.asDictionary(argKey: "conferenceId").decode()
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
@@ -81,13 +81,13 @@ class ConferenceServiceBinding: Binding {
         } catch {
             completionHandler.failure(error)
         }
-	}
-	
-	/// Joins a conference.
-	/// - Parameters:
+    }
+    
+    /// Joins a conference.
+    /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
-	func join(
+    func join(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
@@ -118,12 +118,12 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-	
-	/// Kicks the participant from a conference.
-	/// - Parameters:
+    
+    /// Kicks the participant from a conference.
+    /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
-	func kick(
+    func kick(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
@@ -139,11 +139,11 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-	
-	/// Leaves the current conference.
-	/// - Parameters:
+    
+    /// Leaves the current conference.
+    /// - Parameters:
     ///   - completionHandler: Call methods on this instance when execution has finished.
-	func leave(
+    func leave(
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         VoxeetSDK.shared.conference.leave { error in
@@ -180,8 +180,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         completionHandler.success(flutterConvertible: VoxeetSDK.shared.conference.maxVideoForwarding)
     }
-
-
+    
+    
     /// Starts audio transmission between the local client and a conference.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
@@ -265,7 +265,7 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-
+    
     /// Provides the participant with participant's id from the current conference.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
@@ -284,8 +284,8 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-
-	/// Provides the list of participants from the conference.
+    
+    /// Provides the list of participants from the conference.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
@@ -311,7 +311,7 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-
+    
     /// Mutes or unmutes the specified user.
     /// - Parameters:
     /// - flutterArguments: Method arguments passed from Flutter.
@@ -333,7 +333,7 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-
+    
     /// Provides the status of the conference.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
@@ -405,48 +405,48 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-
-	/// Replays the conference.
+    
+    /// Replays the conference.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
-	func replay(
+    func replay(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
-	) {
+    ) {
         do {
             let conference = try flutterArguments.asDictionary(argKey: "conference").decode(type: DTO.Confrence.self)
             guard let conferenceId = conference?.id else {
                 throw BindingError.noConferenceId
             }
-
+            
             let replayOptions = DTO.ReplayOptions(
                 offset: try flutterArguments.asDictionary(argKey: "offset").decode(),
                 conferenceAccessToken: try flutterArguments.asDictionary(argKey: "conferenceAccessToken").decode()
             )
-
+            
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
                 VoxeetSDK.shared.conference.replay(
                     conference: conference,
                     options: replayOptions?.toSdkType()) { error in
-                            completionHandler.handleError(error)?.orSuccess({ DTO.Confrence(conference: conference) })
+                        completionHandler.handleError(error)?.orSuccess({ DTO.Confrence(conference: conference) })
                     }
             }
         } catch {
             completionHandler.failure(error)
         }
-	}
-
-	// MARK: - User Actions
-	
-	/// Updates the participant's conference permissions.
+    }
+    
+    // MARK: - User Actions
+    
+    /// Updates the participant's conference permissions.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
-	func updatePermissions(
+    func updatePermissions(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
-	) {
+    ) {
         do {
             let permissions = try flutterArguments.asSingle().decode(type: [DTO.ParticipantPermissions].self)
             guard let permissions =  permissions else {
@@ -460,40 +460,41 @@ class ConferenceServiceBinding: Binding {
         } catch {
             completionHandler.failure(error)
         }
-	}
-/*
-	// MARK: - Getters
-	
-	/// Returns information about the current conference.
-	/// - Parameters:
-	///   - resolve: returns current conference object
-	///   - reject: returns error on failure
-	func current(
-        completionHandler: FlutterMethodCallCompletionHandler
-	) {
-		guard let conference = current else {
-			ModuleError.noCurrentConference.send(with: reject)
-			return
-		}
-		resolve(conference.toReactModel())
-	}
-	
-	/// Provides standard WebRTC statistics for the application.
-	/// - Parameters:
-	///   - resolve: returns local stats on success
-	///   - reject: returns error on failure
-	func getLocalStats(
-        completionHandler: FlutterMethodCallCompletionHandler
-	) {
-		guard let localStats = VoxeetSDK.shared.conference.localStats() else {
-			ModuleError.noLocalStats.send(with: reject)
-			return
-		}
-		resolve(localStats)
-	}
-	
-	// MARK: - Setters
-	*/
+    }
+    
+    /*
+     // MARK: - Getters
+     
+     /// Returns information about the current conference.
+     /// - Parameters:
+     ///   - resolve: returns current conference object
+     ///   - reject: returns error on failure
+     func current(
+     completionHandler: FlutterMethodCallCompletionHandler
+     ) {
+     guard let conference = current else {
+     ModuleError.noCurrentConference.send(with: reject)
+     return
+     }
+     resolve(conference.toReactModel())
+     }
+     
+     /// Provides standard WebRTC statistics for the application.
+     /// - Parameters:
+     ///   - resolve: returns local stats on success
+     ///   - reject: returns error on failure
+     func getLocalStats(
+     completionHandler: FlutterMethodCallCompletionHandler
+     ) {
+     guard let localStats = VoxeetSDK.shared.conference.localStats() else {
+     ModuleError.noLocalStats.send(with: reject)
+     return
+     }
+     resolve(localStats)
+     }
+     
+     // MARK: - Setters
+     */
     
     /// Sets the maximum number of video streams that may be transmitted to the local participant.
     /// - Parameters:
@@ -517,15 +518,15 @@ class ConferenceServiceBinding: Binding {
         }
     }
     
-	/// Mutes or unmutes output (only compatible with Dolby Voice conferences).
-	/// - Parameters:
-	///   - isMuted: <code>true</code> if user mutes output. Otherwise, <code>false</code>.
-	///   - resolve: returns on success
-	///   - reject: returns error on failure
-	func muteOutput(
+    /// Mutes or unmutes output (only compatible with Dolby Voice conferences).
+    /// - Parameters:
+    ///   - isMuted: <code>true</code> if user mutes output. Otherwise, <code>false</code>.
+    ///   - resolve: returns on success
+    ///   - reject: returns error on failure
+    func muteOutput(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
-	) {
+    ) {
         do {
             let isMuted: Bool = try flutterArguments.asDictionary(argKey: "isMuted").decode() ?? false
             VoxeetSDK.shared.conference.muteOutput(isMuted) { error in
@@ -534,9 +535,9 @@ class ConferenceServiceBinding: Binding {
         } catch {
             completionHandler.failure(error)
         }
-	}
+    }
     
-	/// Starts a screen-sharing session.
+    /// Starts a screen-sharing session.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
@@ -548,7 +549,7 @@ class ConferenceServiceBinding: Binding {
             completionHandler.handleError(error)?.orSuccess()
         }
     }
-
+    
     /// Stops a screen-sharing session.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
@@ -561,9 +562,9 @@ class ConferenceServiceBinding: Binding {
             completionHandler.handleError(error)?.orSuccess()
         }
     }
-
-	/// Sets the direction a participant is facing in space.
-	/// - Parameters:
+    
+    /// Sets the direction a participant is facing in space.
+    /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
     func setSpatialDirection(
@@ -572,15 +573,15 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let direction = try flutterArguments.asSingle().decode(type: DTO.SpatialDirection.self)
-
+            
             guard let participantObject = VoxeetSDK.shared.session.participant else {
                 throw BindingError.noCurrentParticipant
             }
-
+            
             guard let direction = direction else {
                 throw BindingError.noSpatialDirection
             }
-
+            
             VoxeetSDK.shared.conference.setSpatialDirection(participant: participantObject,
                                                             direction: direction.toSdkType()) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -588,10 +589,10 @@ class ConferenceServiceBinding: Binding {
         } catch {
             completionHandler.failure(error)
         }
-	}
-
-	/// Configures a spatial environment of an application, so the audio renderer understands which directions the application considers forward, up, and right and which units it uses for distance.
-	/// - Parameters:
+    }
+    
+    /// Configures a spatial environment of an application, so the audio renderer understands which directions the application considers forward, up, and right and which units it uses for distance.
+    /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
     func setSpatialEnvironment(
@@ -603,18 +604,18 @@ class ConferenceServiceBinding: Binding {
             let forward = try flutterArguments.asDictionary(argKey: "forward").decode(type: DTO.SpatialPosition.self)
             let up = try flutterArguments.asDictionary(argKey: "up").decode(type: DTO.SpatialPosition.self)
             let right = try flutterArguments.asDictionary(argKey: "right").decode(type: DTO.SpatialPosition.self)
-
+            
             guard let scale = scale else {
                 throw BindingError.noSpatialScale
             }
-
+            
             guard let forward = forward,
                   let up = up,
                   let right = right
             else {
                 throw BindingError.noSpatialPosition
             }
-
+            
             VoxeetSDK.shared.conference.setSpatialEnvironment(scale: scale.toSdkType(),
                                                               forward: forward.toSdkType(),
                                                               up: up.toSdkType(),
@@ -624,10 +625,10 @@ class ConferenceServiceBinding: Binding {
         } catch {
             completionHandler.failure(error)
         }
-	}
-
-	/// Sets a participant's position in space to enable the spatial audio experience during a Dolby Voice conference.
-	/// - Parameters:
+    }
+    
+    /// Sets a participant's position in space to enable the spatial audio experience during a Dolby Voice conference.
+    /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
     func setSpatialPosition(
@@ -637,15 +638,15 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asDictionary(argKey: "participant").decode(type: DTO.Participant.self)
             let position = try flutterArguments.asDictionary(argKey: "position").decode(type: DTO.SpatialPosition.self)
-
+            
             guard let participantObject = current?.findParticipant(with: participant?.id) else {
                 throw BindingError.noParticipantId(participant?.id ?? "")
             }
-
+            
             guard let position = position else {
                 throw BindingError.noSpatialPosition
             }
-
+            
             VoxeetSDK.shared.conference.setSpatialPosition(participant: participantObject,
                                                            position: position.toSdkType()) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -653,28 +654,28 @@ class ConferenceServiceBinding: Binding {
         } catch {
             completionHandler.failure(error)
         }
-	}
+    }
 }
 
 extension ConferenceServiceBinding: VTConferenceDelegate {
-	func statusUpdated(status: VTConferenceStatus) {
-//		send(
-//			event: EventKeys.statusUpdated,
-//			body: StatusDTO(
-//				status: status
-//			).toReactModel()
-//		)
-	}
-
-	func permissionsUpdated(permissions: [Int]) {
-//		send(
-//			event: EventKeys.permissionsUpdated,
-//			body: PermissionsDTO(
-//				permissions: permissions.compactMap { VTConferencePermission(rawValue: $0) }
-//			).toReactModel()
-//		)
-	}
-
+    func statusUpdated(status: VTConferenceStatus) {
+        //		send(
+        //			event: EventKeys.statusUpdated,
+        //			body: StatusDTO(
+        //				status: status
+        //			).toReactModel()
+        //		)
+    }
+    
+    func permissionsUpdated(permissions: [Int]) {
+        //		send(
+        //			event: EventKeys.permissionsUpdated,
+        //			body: PermissionsDTO(
+        //				permissions: permissions.compactMap { VTConferencePermission(rawValue: $0) }
+        //			).toReactModel()
+        //		)
+    }
+    
     func participantAdded(participant: VTParticipant) {
         do {
             try nativeEventEmitter.sendEvent(
@@ -685,7 +686,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
             fatalError("TODO: Throw error here")
         }
     }
-
+    
     func participantUpdated(participant: VTParticipant) {
         do {
             try nativeEventEmitter.sendEvent(
@@ -696,7 +697,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
             fatalError("TODO: Throw error here")
         }
     }
-
+    
     func streamAdded(participant: VTParticipant, stream: MediaStream) {
         do {
             try nativeEventEmitter.sendEvent(
@@ -710,7 +711,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
             fatalError("TODO: Throw error here")
         }
     }
-
+    
     func streamUpdated(participant: VTParticipant, stream: MediaStream) {
         do {
             try nativeEventEmitter.sendEvent(
@@ -724,7 +725,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
             fatalError("TODO: Throw error here")
         }
     }
-
+    
     func streamRemoved(participant: VTParticipant, stream: MediaStream) {
         do {
             try nativeEventEmitter.sendEvent(
@@ -807,7 +808,7 @@ extension ConferenceServiceBinding: FlutterBinding {
         default:
             completionHandler.methodNotImplemented()
         }
-
+        
     }
     
     
