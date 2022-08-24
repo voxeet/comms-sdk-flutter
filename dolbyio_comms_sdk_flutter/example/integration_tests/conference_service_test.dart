@@ -975,6 +975,67 @@ void main() {
       expected: {
         "isMuted": false});
   });
+
+  testWidgets('ConferenceService: updatePermissions', (tester) async {
+    var participant = Participant(
+        "participant_id_5_1",
+        ParticipantInfo("participant_name", "avatar_url", "external_id"),
+        ParticipantStatus.CONNECTED,
+        ParticipantType.LISTENER);
+
+    runNative(
+      methodChannel: conferenceServiceAssertsMethodChannel, 
+      label: "setCurrentConference",
+      args: { "type": 5 });
+
+    var conferencePermissions = [ConferencePermission.INVITE];
+    var participantPermissions =
+        ParticipantPermissions(participant, conferencePermissions);
+
+    await dolbyioCommsSdkFlutterPlugin.conference
+        .updatePermissions([participantPermissions]);
+
+    await expectNative(
+        methodChannel: conferenceServiceAssertsMethodChannel,
+        assertLabel: "assertUpdatePermissions",
+        expected: {
+          "updatePermissions": [{
+            "participant": {"id": "participant_id_5_1"},
+            "permissions": [0]
+          }]
+        });
+
+    await resetSDK();
+
+    participant = Participant(
+          "participant_id_5_2",
+          ParticipantInfo("participant_name", "avatar_url", "external_id"),
+          ParticipantStatus.CONNECTED,
+          ParticipantType.LISTENER);
+
+    runNative(
+      methodChannel: conferenceServiceAssertsMethodChannel, 
+      label: "setCurrentConference",
+      args: { "type": 5 });
+
+    conferencePermissions = [ConferencePermission.KICK];
+    participantPermissions =
+        ParticipantPermissions(participant, conferencePermissions);
+    
+    await dolbyioCommsSdkFlutterPlugin.conference
+        .updatePermissions([participantPermissions]);
+
+    await expectNative(
+        methodChannel: conferenceServiceAssertsMethodChannel,
+        assertLabel: "assertUpdatePermissions",
+        expected: {
+          "updatePermissions": [{
+            "participant": {"id": "participant_id_5_2"},
+            "permissions": [1]
+          }]
+        });
+
+  });
   
   // Commented out because is not working yet
   // testWidgets('ConferenceService: onParticipantsChange', (tester) async {
