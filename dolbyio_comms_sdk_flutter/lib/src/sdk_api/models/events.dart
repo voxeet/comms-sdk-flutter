@@ -5,9 +5,6 @@ import 'participant.dart';
 
 typedef FileConvertedType = FileConverted;
 
-/// The UnsubscribeFunction unsubscribes from event listeners.
-typedef UnsubscribeFunction = void Function();
-
 enum CommsAPIEventNames {
   TokenRefresh('EVENT_SDK_TOKEN_REFRESH');
 
