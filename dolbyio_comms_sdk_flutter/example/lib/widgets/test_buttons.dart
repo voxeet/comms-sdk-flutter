@@ -1,8 +1,9 @@
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/notification_test_buttons.dart';
+import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/file_presentation_test_buttons.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/secondary_button.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/video_presentation_test_buttons.dart';
-import 'package:flutter/material.dart';
 import '../example_app/join_screen.dart';
 import 'dialogs.dart';
 import 'dart:convert';
@@ -74,7 +75,11 @@ class TestButtons extends StatelessWidget {
             const SizedBox(height: 10),
             const Text("Video presentation service"),
             const SizedBox(height: 10),
-            const VideoPresentationTestButtons()
+            const VideoPresentationTestButtons(),
+            const SizedBox(height: 10),
+            const Text("Notification service"),
+            const SizedBox(height: 10),
+            const NotificationTestButtons()
           ],
         ),
       ),

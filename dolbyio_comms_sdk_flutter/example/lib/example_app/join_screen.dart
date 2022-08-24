@@ -188,7 +188,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   void joinInvitation(String conferenceId) {
     _dolbyioCommsSdkFlutterPlugin.conference.fetch(conferenceId).then((value) => {
       _dolbyioCommsSdkFlutterPlugin.conference.join(value, conferenceJoinOptions())
-          .then((value) => navigateToParticipantScreen(context))
+          .then((value) => checkJoinConferenceResult(value))
           .onError((error, stackTrace) => onError('Error during joining conference.', error))
     });
   }
