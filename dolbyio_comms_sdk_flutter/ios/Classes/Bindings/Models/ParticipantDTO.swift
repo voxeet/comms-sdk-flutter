@@ -99,12 +99,22 @@ extension DTO {
     
     struct ParticipantPermissions: Codable {
         
-        let participant: VTParticipant
-        let permissions: [VTConferencePermission]
+        let participant: Participant
+        let permissions: [ConferencePermission]
         
         init(participantPermission: VTParticipantPermissions) {
-            self.participant = participantPermission.participant
-            self.permissions = participantPermission.permissions
+            self.participant = Participant(participant: participantPermission.participant)
+            self.permissions = participantPermission.permissions.map { ConferencePermission(conferencePermision: $0) }
+        }
+        
+        func toSdkType() throws -> VTParticipantPermissions {
+            let vtParticipantPermissions = VTParticipantPermissions()
+            guard let vtParticipant = VoxeetSDK.shared.conference.current?.findParticipant(with: participant.id) else {
+                fatalError("TODO: Throw a proper error here")
+            }
+            vtParticipantPermissions.participant = vtParticipant
+            vtParticipantPermissions.permissions = permissions.map { $0.conferencePermission }
+            return vtParticipantPermissions
         }
     }
 

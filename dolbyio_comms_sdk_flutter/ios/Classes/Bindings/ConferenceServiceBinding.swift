@@ -452,8 +452,9 @@ class ConferenceServiceBinding: Binding {
             guard let permissions =  permissions else {
                 throw BindingError.noPermission
             }
-            VoxeetSDK.shared.conference.updatePermissions(participantPermissions: permissions.compactMap { VTParticipantPermissions(participant: $0.participant, permissions: $0.permissions)
-            }) { error in
+            VoxeetSDK.shared.conference.updatePermissions(
+                participantPermissions: (try permissions.map { try $0.toSdkType() })
+            ) { error in
                 completionHandler.handleError(error)?.orSuccess()
             }
         } catch {
