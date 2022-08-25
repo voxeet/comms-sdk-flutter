@@ -1,9 +1,9 @@
+import 'package:dolbyio_comms_sdk_flutter_example/example_app/participant_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'participant_screen.dart';
 import '/widgets/text_form_field.dart';
 import '/widgets/two_color_text.dart';
 import '/widgets/dolby_title.dart';
@@ -60,14 +60,39 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   void initState() {
     super.initState();
     _dolbyioCommsSdkFlutterPlugin.notification.onInvitationReceived().listen((params) {
-      ViewDialogs.dialog(
-        context: context,
-        title: "Invitation received",
-        body: params.body.toJson().toString(),
-        cancelText: "Cancel",
-        result: (value) => value ? joinInvitation(params.body.conferenceId) : null,
-      );
+      showInvitationDialog(context, params.body.toJson().toString(), params.body.conferenceId.toString());
     });
+  }
+
+  Future<void> showInvitationDialog(BuildContext context, String body, String conferenceId) async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Invitation received"),
+            actionsOverflowButtonSpacing: 20,
+            content: Text(body),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    joinInvitation(conferenceId);
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+                  child: const Text("Join")
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    declineInvitation(conferenceId);
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+                  child: const Text("Decline")
+              ),
+            ],
+          );
+        }
+    );
   }
 
   @override
@@ -188,9 +213,15 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   void joinInvitation(String conferenceId) {
     _dolbyioCommsSdkFlutterPlugin.conference.fetch(conferenceId).then((value) => {
       _dolbyioCommsSdkFlutterPlugin.conference.join(value, conferenceJoinOptions())
-          .then((value) => navigateToParticipantScreen(context))
+          .then((value) => checkJoinConferenceResult(value))
           .onError((error, stackTrace) => onError('Error during joining conference.', error))
     });
+  }
+  
+  void declineInvitation(String conferenceId) {
+    _dolbyioCommsSdkFlutterPlugin.conference.fetch(conferenceId)
+        .then((conference) => _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
+        .onError((error, stackTrace) => onError('Error during declining.', error));
   }
 
   Future navigateToParticipantScreen(BuildContext context) async {

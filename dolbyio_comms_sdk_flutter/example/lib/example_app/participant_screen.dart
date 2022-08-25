@@ -14,15 +14,6 @@ class ParticipantScreen extends StatefulWidget {
   State<ParticipantScreen> createState() => _ParticipantScreenState();
 }
 
-Future<void> showDialog(
-    BuildContext context, String title, String text) async {
-  await ViewDialogs.dialog(
-    context: context,
-    title: title,
-    body: text,
-  );
-}
-
 class _ParticipantScreenState extends State<ParticipantScreen> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   String participantName = '';
@@ -31,6 +22,15 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
   bool isRemoteMuted = false;
   bool isVideoOff = false;
   bool isMicOff = false;
+
+  Future<void> showDialog(
+      BuildContext context, String title, String text) async {
+    await ViewDialogs.dialog(
+      context: context,
+      title: title,
+      body: text,
+    );
+  }
 
   @override
   void initState() {

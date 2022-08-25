@@ -2,6 +2,7 @@ package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
 import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
+import io.dolby.comms.sdk.flutter.extension.await
 import io.dolby.comms.sdk.flutter.extension.error
 import io.dolby.comms.sdk.flutter.extension.launch
 import io.dolby.comms.sdk.flutter.mapper.ParticipantInvitedMapper
@@ -43,6 +44,7 @@ class NotificationServiceNativeModule(private val scope: CoroutineScope) : Nativ
             VoxeetSDK
                 .notification()
                 .inviteWithPermissions(conference, participants)
+                .await()
                 .also { result.success(null) }
         }
     )
@@ -56,6 +58,7 @@ class NotificationServiceNativeModule(private val scope: CoroutineScope) : Nativ
             VoxeetSDK
                 .notification()
                 .decline(conference)
+                .await()
                 .also { result.success(null) }
         }
     )
