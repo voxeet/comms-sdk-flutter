@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:dolbyio_comms_sdk_flutter/src/async/on_ready_task.dart';
 
 /// A controller for the [VideoView] that is responsible for attaching a [Participant] and a [MediaStream] to the [VideoView], detaching them, and getting information about the [VideoView] state.
 /// 
@@ -24,7 +25,7 @@ class VideoViewController {
   Future<void> attach(Participant participant, MediaStream? mediaStream) {
     final state = _state;
     if (state != null) {
-      return state._attach(participant, mediaStream);
+      return state.setMediaStreamFor(participant, mediaStream);
     }
     developer.log("VideoViewController.attach(): The VideoView has not been instantiated yet.");
     return Future.error("The VideoView has not been instantiated yet.");
@@ -123,19 +124,28 @@ class _VideoViewState extends State<VideoView> {
   }
 
   VideoViewController? _controller;
+  late OnReadyTask _readyListener;
   Participant? _participant;
   MediaStream? _mediaStream;
   StreamSubscription<dynamic>? _onStreamChangeSubscription;
   int viewNumber;
+  int? _viewId;
+  NativeViewStatus _status = NativeViewStatus.NOT_INITIALIZED;
   MethodChannel? _methodChannel;
 
   _VideoViewState()
-    : viewNumber = _getNextViewNubmer()
-    ;
+    : viewNumber = _getNextViewNubmer() {
+    _readyListener = OnReadyTask.createOnReadyTask(() =>
+    _viewId != null && _status == NativeViewStatus.CREATED
+        && _methodChannel != null && _mediaStream != null
+        , _attachedVideoWhenReady);
+  }
 
   @override
   void dispose() {
     _onStreamChangeSubscription?.cancel();
+    _status = NativeViewStatus.DISPOSED;
+    _readyListener.cancel();
     super.dispose();
   }
 
@@ -144,6 +154,7 @@ class _VideoViewState extends State<VideoView> {
     _controller = widget.videoViewController;
     _controller?._updateState(this);
     _participant = widget.participant;
+    _status = NativeViewStatus.INITIALIZED;
     _refreshSubscriptionForMediaStreamSelector();
     super.initState();
   }
@@ -157,20 +168,24 @@ class _VideoViewState extends State<VideoView> {
     final participant = _participant;
     final mediaStreamSelector = widget.mediaStreamSelector;
     if (participant != null && mediaStreamSelector != null) {
-      _mediaStream = mediaStreamSelector(participant.streams);
+      setMediaStreamFor(participant, mediaStreamSelector(participant.streams));
     }
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_readyListener.isStarted()) {
+      _readyListener.cancel();
+    }
+    _readyListener.start();
 
     if (_mediaStream == null) {
       final mediaStreamSelector = widget.mediaStreamSelector;
       final mediaStreams = _participant?.streams;
       if (mediaStreams != null && mediaStreamSelector != null) {
         setState(() {
-          _mediaStream = mediaStreamSelector(mediaStreams);
+          setMediaStreamFor(_participant, mediaStreamSelector(mediaStreams));
         });
       }
     }
@@ -193,8 +208,6 @@ class _VideoViewState extends State<VideoView> {
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-
-      _methodChannel?.invokeMethod("attach", creationParams);
 
       return PlatformViewLink(
           viewType: widget.viewType,
@@ -221,15 +234,14 @@ class _VideoViewState extends State<VideoView> {
               ..addOnPlatformViewCreatedListener( (id) {
                 params.onPlatformViewCreated(id);
                 final channel = MethodChannel("video_view_${id}_method_channel");
+                _viewId = id;
+                _status = NativeViewStatus.CREATED;
                 _methodChannel = channel;
-                channel.invokeMethod("attach", creationParams);
               })
               ..create();
           });
     }  
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-
-      _methodChannel?.invokeMethod("attach", creationParams);
 
       return UiKitView(
         key: ValueKey('UIKitView_video_view_$viewNumber'),
@@ -240,7 +252,8 @@ class _VideoViewState extends State<VideoView> {
         onPlatformViewCreated: (id) async {
           final channel = MethodChannel("video_view_${id}_method_channel");
           _methodChannel = channel;
-          await channel.invokeMethod("attach", creationParams);
+          _viewId = id;
+          _status = NativeViewStatus.CREATED;
         },
       );
     }
@@ -268,23 +281,31 @@ class _VideoViewState extends State<VideoView> {
     }
   }
 
-  Future<void> _attach(Participant participant, MediaStream? mediaStream) async {
-    final methodChannel = _methodChannel;
-      if (methodChannel != null) {
-      return methodChannel.
-        invokeMethod<bool>(
-          "attach", 
-          {
-            "participant_id": participant.id, 
-            "media_stream_id": mediaStream?.id
-          }
-        )
-        .then((value) {
-          _participant = participant;
-          _mediaStream = mediaStream;
-        });
+  Future<void> setMediaStreamFor(Participant? participant, MediaStream? mediaStream) {
+    _mediaStream = mediaStream;
+    _participant = participant;
+    if (_mediaStream != null && _participant != null) {
+      return _attach();
+    } else {
+      return Future.error("Media stream and participant cannot be null");
     }
-    return Future.error("The VideoView has not been instantiated yet.");
+  }
+
+  Future<void> _attach() async {
+    final methodChannel = _methodChannel;
+    if (methodChannel != null) {
+      return methodChannel.invokeMethod<bool>(
+          "attach",
+          {
+            "participant_id": _participant?.id,
+            "media_stream_id": _mediaStream?.id
+          }
+      ).then((value) {
+        developer.log("[KB]: video stream is attached? : $value");
+      });
+    } else {
+      return _readyListener.getTask();
+    }
   }
 
   Future<void> _detach() async {
@@ -320,4 +341,32 @@ class _VideoViewState extends State<VideoView> {
       }
     return Future.error("The VideoView has not been instantiated yet.");
   }
+
+
+  Future<void> _attachedVideoWhenReady() {
+    final Map<String, String> params = { };
+    final participantId = _participant?.id;
+    if (participantId != null) {
+      params["participant_id"] = participantId;
+    }
+
+    final mediaStreamId = _mediaStream?.id;
+    if (mediaStreamId != null) {
+      params["media_stream_id"] = mediaStreamId;
+    }
+
+    final mediaStreamLabel = _mediaStream?.label;
+    if (mediaStreamLabel != null && mediaStreamLabel != "") {
+      params["media_stream_label"] = mediaStreamLabel;
+    }
+
+    return _methodChannel!.invokeMethod("attach", params);
+  }
+}
+
+enum NativeViewStatus {
+  NOT_INITIALIZED,
+  INITIALIZED,
+  CREATED,
+  DISPOSED
 }

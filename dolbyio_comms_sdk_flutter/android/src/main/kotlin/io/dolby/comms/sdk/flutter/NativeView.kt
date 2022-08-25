@@ -11,10 +11,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 
-class NativeView(context: Context, id: Int, messenger: BinaryMessenger): PlatformView, MethodChannel.MethodCallHandler {
+class NativeView(context: Context, id: Int): PlatformView, MethodChannel.MethodCallHandler {
 
     private val videoView: VideoView
-    private val channel: MethodChannel
 
     override fun getView(): VideoView {
         return videoView
@@ -23,8 +22,6 @@ class NativeView(context: Context, id: Int, messenger: BinaryMessenger): Platfor
     init {
         videoView = VideoView(context)
         videoView.id = id
-        channel = MethodChannel(messenger, "video_view_${id}_method_channel")
-        channel.setMethodCallHandler(this)
     }
 
     override fun dispose() {
@@ -33,7 +30,6 @@ class NativeView(context: Context, id: Int, messenger: BinaryMessenger): Platfor
 
     override fun onFlutterViewDetached() {
         super.onFlutterViewDetached()
-        channel.setMethodCallHandler(null)
     }
 
     fun isAttached(result: MethodChannel.Result) {

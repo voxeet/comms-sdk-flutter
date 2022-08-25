@@ -74,6 +74,7 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin {
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         nativeModules.forEach { it.onDetached() }
         nativeEventEmitters.forEach { it.onDetached() }
+        videoViewFactory.onDetachedFromPlugin()
     }
 
     private companion object EventChannel {

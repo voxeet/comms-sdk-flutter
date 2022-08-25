@@ -48,6 +48,16 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
     });
 
     _dolbyioCommsSdkFlutterPlugin.conference.onStreamsChange().listen((params) {
+      int? index;
+      for (var i =0 ; i < participants.length; ++i) {
+        if (participants[i].id == params.body.participant.id) {
+          index = i;
+          break;
+        }
+      }
+      if (index != null) {
+        participants[index] = params.body.participant;
+      }
       developer.log("onStreamsChange");
     });
 
