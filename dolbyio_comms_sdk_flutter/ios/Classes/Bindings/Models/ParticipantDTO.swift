@@ -108,12 +108,13 @@ extension DTO {
         }
         
         func toSdkType() throws -> VTParticipantPermissions {
-            let vtParticipantPermissions = VTParticipantPermissions()
             guard let vtParticipant = VoxeetSDK.shared.conference.current?.findParticipant(with: participant.id) else {
                 fatalError("TODO: Throw actual error here")
             }
-            vtParticipantPermissions.participant = vtParticipant
-            vtParticipantPermissions.permissions = permissions.map { $0.conferencePermission }
+            let vtParticipantPermissions = VTParticipantPermissions(
+                participant: vtParticipant,
+                permissions: permissions.map { $0.conferencePermission }
+            )
             return vtParticipantPermissions
         }
     }
