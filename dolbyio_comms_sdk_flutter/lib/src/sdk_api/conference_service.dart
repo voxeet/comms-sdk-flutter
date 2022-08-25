@@ -59,7 +59,7 @@ class ConferenceService {
   }
 
   /// Leaves the current conference. The [options] parameter allows setting additional options for the leaving participant.
-  Future<void> leave(ConferenceLeaveOptions? options) async {
+  Future<void> leave({ConferenceLeaveOptions? options}) async {
     await _methodChannel.invokeMethod<void>("leave");
     if (options != null && options.leaveRoom) {
       await _sessionService.close();
@@ -111,7 +111,7 @@ class ConferenceService {
   ///
   /// <img src="https://files.readme.io/d4d9f7a-05_Axis_People_v04_220202.png" width="700">
   ///
-  Future<void> setSpatialPosition(Participant? participant, SpatialPosition position) async {
+  Future<void> setSpatialPosition({Participant? participant, required SpatialPosition position}) async {
     await _methodChannel
         .invokeMethod<void>("setSpatialPosition", {"participant": participant?.toJson(), "position": position.toJson()});
     return Future.value();
@@ -273,7 +273,7 @@ class ConferenceService {
   }
 
   /// Replays a recorded [conference]. The [replayOptions] parameter refers to additional replay options that you can define. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
-  Future<Conference> replay(Conference conference, ConferenceReplayOptions? replayOptions) async {
+  Future<Conference> replay({required Conference conference, ConferenceReplayOptions? replayOptions}) async {
     var arguments = {
       "conference": conference.toJson(),
       "offset": replayOptions?.offset,

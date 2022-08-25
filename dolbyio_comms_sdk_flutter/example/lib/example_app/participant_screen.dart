@@ -357,7 +357,7 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
 
   void leaveConference() {
     var leaveOptions = ConferenceLeaveOptions(false);
-    _dolbyioCommsSdkFlutterPlugin.conference.leave(leaveOptions).then((value) {
+    _dolbyioCommsSdkFlutterPlugin.conference.leave(options: leaveOptions).then((value) {
       Navigator.of(context).pop();
       developer.log('Conference left.');
     }).onError((error, stackTrace) {

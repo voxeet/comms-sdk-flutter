@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '/widgets/file_presentation_test_buttons.dart';
-import '/widgets/secondary_button.dart';
-import '/widgets/video_presentation_test_buttons.dart';
-import '/example_app/join_screen.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/file_presentation_test_buttons.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/secondary_button.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/video_presentation_test_buttons.dart';
+import 'package:flutter/material.dart';
+import '../example_app/join_screen.dart';
 import 'dialogs.dart';
 import 'dart:convert';
 
@@ -132,7 +132,7 @@ class TestButtons extends StatelessWidget {
   void leave(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
         .current()
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.leave(null))
+        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.leave())
         .then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const JoinConference(username: ''))))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
@@ -218,7 +218,7 @@ class TestButtons extends StatelessWidget {
 
   void setMySpatialPosition(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialPosition(null, SpatialPosition(1.0, 1.0, 1.0))
+        .setSpatialPosition(position: SpatialPosition(1.0, 1.0, 1.0))
         .then((value) => showDialog(context, 'Success', 'OK'))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
@@ -227,7 +227,10 @@ class TestButtons extends StatelessWidget {
     _dolbyioCommsSdkFlutterPlugin.conference
         .current()
         .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(value))
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(value.first, SpatialPosition(1.0, 1.0, 1.0)))
+        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+              participant: value.first,
+              position: SpatialPosition(1.0, 1.0, 1.0),
+            ))
         .then((value) => showDialog(context, 'Success', 'OK'))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
@@ -314,32 +317,31 @@ class TestButtons extends StatelessWidget {
 
   //MediaDeviceService
   void getComfortNoiseLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.getComfortNoiseLevel()
+    _dolbyioCommsSdkFlutterPlugin.mediaDevice
+        .getComfortNoiseLevel()
         .then((value) => showDialog(context, "Success", value.value))
-        .onError((error, stackTrace) =>
-        showDialog(context, "Error", error.toString()));
+        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
   }
 
   void setComfortNoiseLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.setComfortNoiseLevel(
-        ComfortNoiseLevel.Medium)
+    _dolbyioCommsSdkFlutterPlugin.mediaDevice
+        .setComfortNoiseLevel(ComfortNoiseLevel.Medium)
         .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-        showDialog(context, "Error", error.toString()));
+        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
   }
 
   void isFrontCamera(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.isFrontCamera()
+    _dolbyioCommsSdkFlutterPlugin.mediaDevice
+        .isFrontCamera()
         .then((value) => showDialog(context, "Success", value.toString()))
-        .onError((error, stackTrace) =>
-        showDialog(context, "Error", error.toString()));
+        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
   }
 
   void switchCamera(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice.switchCamera()
+    _dolbyioCommsSdkFlutterPlugin.mediaDevice
+        .switchCamera()
         .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-        showDialog(context, "Error", error.toString()));
+        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
   }
 
   //Command service
