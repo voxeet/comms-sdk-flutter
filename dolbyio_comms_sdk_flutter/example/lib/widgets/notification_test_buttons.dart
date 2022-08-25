@@ -69,6 +69,5 @@ class _NotificationTestButtonsState extends State<NotificationTestButtons> {
         .invite(conference, participants)
         .then((value) => showDialog(context, "Success", "OK"))
         .onError((error, stackTrace) => showDialog(context, "Error", error.toString())));
-    developer.log(participants.toString());
   }
 }
