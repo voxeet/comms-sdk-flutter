@@ -179,6 +179,10 @@ extension DTO {
             @unknown default: fatalError("TODO: Throw actual error here")
             }
         }
+
+        func toSdkType() -> VTConferencePermission {
+            return conferencePermission
+        }
     }
     
     struct ConferenceStatus: Codable {
