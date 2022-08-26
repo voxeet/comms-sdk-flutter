@@ -1,3 +1,3 @@
-## 0.0.1
+## 3.6.0-beta.1
 
-* Initial release
+Introduced the Flutter SDK that supports creating high-quality video conferencing applications for iOS and Android devices.
