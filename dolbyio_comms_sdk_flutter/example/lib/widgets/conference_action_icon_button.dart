@@ -14,19 +14,21 @@ class ConferenceActionIconButton extends StatefulWidget {
 class _ConferenceActionIconButtonState extends State<ConferenceActionIconButton> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SizedBox(
-          width: 50,
-          height: 50,
-          child: ElevatedButton(
-              onPressed: widget.onPressedIcon,
-              style: ElevatedButton.styleFrom(
-                shape: const CircleBorder(),
-                primary: widget.backgroundIconColor,
-              ),
-              child: widget.iconWidget),
+    return Expanded(
+      child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: 50,
+            height: 50,
+            child: ElevatedButton(
+                onPressed: widget.onPressedIcon,
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  primary: widget.backgroundIconColor,
+                ),
+                child: widget.iconWidget),
+          ),
         ),
-      );
+    );
   }
 }
