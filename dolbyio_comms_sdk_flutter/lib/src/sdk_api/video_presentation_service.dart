@@ -9,8 +9,6 @@ import 'models/video_presentation.dart';
 
 /// The VideoPresentationService allows sharing videos during a conference. To present a video, a conference participant needs to provide the URL of the video file. We recommend sharing files in the MPEG-4 Part 14 or MP4 video formats.
 ///
-/// **Note**: This service is currently supported only on Android devices.
-///
 /// **The video presentation workflow:**
 ///
 /// 1. The presenter calls the [start] method to start the video presentation. This method automatically starts playing the shared video file.

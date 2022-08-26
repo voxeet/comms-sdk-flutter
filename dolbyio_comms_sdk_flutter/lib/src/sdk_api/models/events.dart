@@ -40,8 +40,6 @@ class FilePresentationChangedEventType {
 }
 
 /// The InvitationReceivedNotificationData class gathers information about a received invitation.
-///
-/// **Note**: This class is currently supported only on Android devices.
 class InvitationReceivedNotificationData {
   /// The conference alias.
   String conferenceAlias;
@@ -72,8 +70,6 @@ class InvitationReceivedNotificationData {
 }
 
 /// The MessageReceivedData interface gathers information about a received message.
-///
-/// **Note**: This class is currently supported only on Android devices.
 class MessageReceivedData {
   /// The received message.
   String message;

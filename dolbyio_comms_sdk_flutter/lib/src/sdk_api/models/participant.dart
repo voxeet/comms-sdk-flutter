@@ -109,8 +109,6 @@ enum ParticipantType {
 }
 
 /// The ParticipantInvited class gathers information about an invited participant.
-///
-/// **Note**: This class is currently supported only on Android devices.
 class ParticipantInvited {
   /// Information about the invited participant.
   ParticipantInfo info;

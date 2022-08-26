@@ -10,8 +10,6 @@ import 'models/enums.dart';
 import 'models/participant.dart';
 
 /// The NotificationService allows inviting participants to a conference.
-///
-/// **Note**: This service is currently supported only on Android devices.
 class NotificationService {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("notification_service");

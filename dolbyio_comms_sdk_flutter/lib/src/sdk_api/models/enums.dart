@@ -57,8 +57,6 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
 }
 
 /// The NotificationServiceEventNames enum gathers the NotificationService events.
-///
-/// **Note**: This enum is currently supported only on Android devices.
 enum NotificationServiceEventNames implements EnumWithStringValue {
   /// Emitted when an application user receives an invitation.
   InvitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED');
@@ -76,8 +74,6 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
 }
 
 /// The CommandServiceEventNames enum gathers the CommandService events.
-///
-/// **Note**: This enum is currently supported only on Android devices.
 enum CommandServiceEventNames implements EnumWithStringValue {
   /// Emitted when a participant receives a message.
   MessageReceived('EVENT_COMMAND_MESSAGE_RECEIVED');
@@ -95,8 +91,6 @@ enum CommandServiceEventNames implements EnumWithStringValue {
 }
 
 /// The VideoPresentationState enum gathers the possible statuses of a video presentation.
-///
-/// **Note**: This enum is currently supported only on Android devices.
 enum VideoPresentationState {
   /// The video presentation is paused.
   PAUSED('paused'),
@@ -120,8 +114,6 @@ enum VideoPresentationState {
 }
 
 /// The VideoPresentationEventNames enum gathers the possible statuses of a video presentation.
-///
-/// **Note**: This enum is currently supported only on Android devices.
 enum VideoPresentationEventNames implements EnumWithStringValue {
   /// Emitted when a video presentation is paused.
   VideoPresentationPaused('EVENT_VIDEOPRESENTATION_PAUSED'),

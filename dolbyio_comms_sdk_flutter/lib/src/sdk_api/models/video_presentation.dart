@@ -1,8 +1,6 @@
 import 'participant.dart';
 
 /// The VideoPresentation class gathers information about a video presentation.
-///
-/// **Note**: This class is currently supported only on Android devices.
 class VideoPresentation {
   /// The participant who started the presentation.
   Participant owner;
