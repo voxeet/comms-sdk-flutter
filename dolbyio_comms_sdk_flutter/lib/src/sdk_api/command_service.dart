@@ -9,8 +9,6 @@ import '../mapper/mapper.dart';
 
 
 /// The CommandService allows the application to send and receive text messages and notifications during a conference.
-///
-/// **Note**: This service is currently supported only on Android devices.
 class CommandService {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("command_service");
