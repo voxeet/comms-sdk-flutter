@@ -34,6 +34,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
     });
 
     _dolbyioCommsSdkFlutterPlugin.conference.onStreamsChange().listen((params) {
+      initParticipantsList();
       developer.log("onStreamsChange");
     });
 

@@ -81,12 +81,28 @@ class VideoView extends StatefulWidget {
 
   /// @internal
   final Participant? participant;
+
+  /// @internal
+  final MediaStream? mediaStream;
+
   /// @internal
   final MediaStreamSelector? mediaStreamSelector;
+
   /// @internal
   final VideoViewController? videoViewController;
 
-  /// A constructor that is required when the [VideoView] is an element in a collection 
+  /// A constructor that should be used when the [VideoView] is an element in a collection 
+  /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the [Participant]
+  /// for whom the [MediaStream] should be displayed, the [MediaStream], and an optional [Key]. 
+  const VideoView.withMediaStream({required this.participant, required this.mediaStream, Key? key})
+    : videoViewController = null
+    , mediaStreamSelector = null
+    , super(key: key)
+    ;
+
+  /// @internal
+  /// 
+  /// A constructor that could be used when the [VideoView] is an element in a collection 
   /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the [Participant]
   /// who would like to display a [MediaStream], an optional [Key], and the [MediaStreamSelector]. 
   /// 
@@ -95,16 +111,18 @@ class VideoView extends StatefulWidget {
   /// return the [MediaStream] that should be displayed based on the [List] of [MediaStream]s provided as 
   /// an argument to the closure. This closure runs when the [VideoView] is created and every time the 
   /// [MediaStream]s of the related [Participant] change.
-  const VideoView.forList({required this.participant, Key? key, required this.mediaStreamSelector})
+  const VideoView.withMediaStreamSelector({required this.participant, Key? key, required this.mediaStreamSelector})
     : videoViewController = null
+    , mediaStream = null
     , super(key: key)
     ;
 
-  /// A constructor that is required when the [VideoView] is used as a stand-alone widget 
+  /// A constructor that shuold be used when the [VideoView] is used as a stand-alone widget 
   /// outside of collection widgets such as [GridView] or [ListView]. The constructor requires providing 
   /// the [VideoViewController] and, optionally, a [Key].
   const VideoView({required this.videoViewController, Key? key})
     : participant = null
+    , mediaStream = null
     , mediaStreamSelector = null
     , super(key: key)
     ;
@@ -145,6 +163,7 @@ class _VideoViewState extends State<VideoView> {
     _controller?._updateState(this);
     _participant = widget.participant;
     _refreshSubscriptionForMediaStreamSelector();
+    _updateParticipantAndStream();
     super.initState();
   }
 
@@ -154,26 +173,12 @@ class _VideoViewState extends State<VideoView> {
     _controller?._updateState(this);
     _participant = widget.participant;
     _refreshSubscriptionForMediaStreamSelector();
-    final participant = _participant;
-    final mediaStreamSelector = widget.mediaStreamSelector;
-    if (participant != null && mediaStreamSelector != null) {
-      _mediaStream = mediaStreamSelector(participant.streams);
-    }
+    _updateParticipantAndStream();
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if (_mediaStream == null) {
-      final mediaStreamSelector = widget.mediaStreamSelector;
-      final mediaStreams = _participant?.streams;
-      if (mediaStreams != null && mediaStreamSelector != null) {
-        setState(() {
-          _mediaStream = mediaStreamSelector(mediaStreams);
-        });
-      }
-    }
 
     final Map<String, String> creationParams = { };
 
@@ -259,12 +264,32 @@ class _VideoViewState extends State<VideoView> {
           final mediaStreamSelector = widget.mediaStreamSelector;
           if (_participant?.id == e.body.participant.id && mediaStreamSelector != null) {
             setState(() {
+              _participant = e.body.participant;
               _mediaStream = mediaStreamSelector(e.body.participant.streams);
             });
           }
 
           return Future.value();
         });
+    }
+  }
+
+  void _updateParticipantAndStream() {
+    final participant = _participant;
+    final mediaStream = widget.mediaStream;
+    final mediaStreamSelector = widget.mediaStreamSelector;
+    if (participant != null) {
+      if (mediaStreamSelector != null) {
+        setState(() {
+          _participant = participant;
+          _mediaStream = mediaStreamSelector(participant.streams);
+        });
+      } else if (mediaStream != null) {
+        setState(() {
+          _participant = participant;
+          _mediaStream = mediaStream;
+        });
+      }
     }
   }
 
