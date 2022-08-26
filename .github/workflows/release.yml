@@ -30,16 +30,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-         cd dolbyio_comms_sdk_flutter
          dart pub get
       - name: Generate dart doc
         run: |
-         cd dolbyio_comms_sdk_flutter
          dart doc .  
       - name: Deploy github pages🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           force : true
           single-commit: true
-          folder: dolbyio_comms_sdk_flutter/doc/api # The folder the action should deploy.
+          folder: doc/api # The folder the action should deploy.
 
