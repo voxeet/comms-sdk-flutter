@@ -8,6 +8,10 @@ private enum EventKeys: String, CaseIterable {
 
 class CommandServiceBinding: Binding {
     
+    override func onInit() {
+        super.onInit()
+        VoxeetSDK.shared.command.delegate = self
+    }
     
     /// Sends a message to all conference participants.
     /// - Parameters:
@@ -31,13 +35,14 @@ class CommandServiceBinding: Binding {
 
 extension CommandServiceBinding: VTCommandDelegate {
     func received(participant: VTParticipant, message: String) {
-//        send(
-//            event: EventKeys.messageReceived,
-//            body: MessageDTO(
-//                participant: participant,
-//                message: message
-//            ).toReactModel()
-//        )
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.messageReceived,
+                body: DTO.Participant(participant: participant)
+            )
+        } catch {
+            fatalError("TODO: Throw error here")
+        }
     }
 }
 
