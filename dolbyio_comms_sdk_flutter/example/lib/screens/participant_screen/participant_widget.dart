@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'remote_participant_options.dart';
 
@@ -16,21 +17,12 @@ class ParticipantWidget extends StatelessWidget {
       children: [
         Expanded(
             flex: 5,
-            child: VideoView.forList(
-                participant: participant,
-                key: ValueKey('video_view_tile_${participant.id}'),
-                mediaStreamSelector: (streams) {
-                  MediaStream? stream;
-                  if (streams != null) {
-                    for (final s in streams) {
-                      if (s.type == MediaStreamType.Camera) {
-                        stream = s;
-                        break;
-                      }
-                    }
-                  }
-                  return stream;
-                }
+            child: VideoView.withMediaStream(
+              participant: participant, 
+              mediaStream:participant.streams?.firstWhereOrNull(
+                (s) => s.type == MediaStreamType.Camera
+              ),
+              key: ValueKey('video_view_tile_${participant.id}')
             )
         ),
         Expanded(
