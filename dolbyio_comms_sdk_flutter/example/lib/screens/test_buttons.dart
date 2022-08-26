@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/file_presentation_test_buttons.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/secondary_button.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/video_presentation_test_buttons.dart';
-import '../example_app/join_screen.dart';
+import '/screens/join_screen.dart';
 import '/widgets/dialogs.dart';
 import 'dart:convert';
 

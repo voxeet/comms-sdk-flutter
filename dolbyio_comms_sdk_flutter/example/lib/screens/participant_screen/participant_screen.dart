@@ -3,11 +3,10 @@ import 'dart:async';
 import 'dart:developer' as developer;
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/modal_bottom_sheet.dart';
-import '/widgets/participant_grid.dart';
-import '/widgets/dialogs.dart';
+import 'participant_grid.dart';
 import '/widgets/dolby_title.dart';
-import '/widgets/conference_controls.dart';
-import '/widgets/conference_title.dart';
+import 'conference_controls.dart';
+import 'conference_title.dart';
 
 class ParticipantScreen extends StatefulWidget {
   const ParticipantScreen({Key? key}) : super(key: key);
@@ -48,40 +47,6 @@ class ParticipantScreenContent extends StatefulWidget {
 
 class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  List<Participant> participants = [];
-
-  Future<void> showDialog(
-      BuildContext context, String title, String text) async {
-    await ViewDialogs.dialog(
-      context: context,
-      title: title,
-      body: text,
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initParticipantsList();
-
-    _dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange().listen((params) {
-      initParticipantsList();
-      developer.log("onParticipantsChange");
-    });
-
-    _dolbyioCommsSdkFlutterPlugin.conference.onStreamsChange().listen((params) {
-      developer.log("onStreamsChange");
-    });
-
-    _dolbyioCommsSdkFlutterPlugin.conference.onStatusChange().listen((params) {
-      developer.log("onStatusChange");
-    });
-
-    _dolbyioCommsSdkFlutterPlugin.command.onMessageReceived().listen((params) {
-      showDialog(context, params.type.value, "Message: ${params.body.message}");
-      developer.log("onMessageReceived");
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +59,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           child: Column(
             children: [
               ConferenceTitle(conference: getCurrentConference()),
-              ParticipantGrid(participants: participants),
+              ParticipantGrid(),
               const ShowModalBottomSheet(),
               ConferenceControls(conference: getCurrentConference()),
             ],
@@ -110,16 +75,4 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         .then((value) {conference = value;});
     return conference;
   }
-
-  Future<void> initParticipantsList() async {
-    final currentConference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
-    final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(currentConference);
-    final availableParticipants = conferenceParticipants.where((element) => element.status != ParticipantStatus.LEFT);
-    setState(() => participants = availableParticipants.toList());
-    return Future.value();
-  }
-}
-
-void onError(String message, Object? error) {
-  developer.log(message, error: error);
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '/example_app/participant_screen.dart';
 import 'dart:developer' as developer;
 
 class RemoteParticipantOptions extends StatefulWidget {
@@ -92,5 +91,9 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
           });
       setState(() => isRemoteMuted = false);
     }
+  }
+
+  void onError(String message, Object? error) {
+    developer.log(message, error: error);
   }
 }

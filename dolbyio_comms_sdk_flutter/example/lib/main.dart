@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/primary_button.dart';
-import '/example_app/login_screen.dart';
+import '/screens/login_screen.dart';
 
 void main() {
   runApp(const MaterialApp(home: MyApp()));

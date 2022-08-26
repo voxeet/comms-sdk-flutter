@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '/widgets/remote_participant_options.dart';
+import 'remote_participant_options.dart';
 
 class ParticipantWidget extends StatelessWidget {
-  Participant participant;
-  int participantIndex;
+  final Participant participant;
+  final int participantIndex;
 
-  ParticipantWidget(
+  const ParticipantWidget(
       {Key? key, required this.participant, required this.participantIndex})
       : super(key: key);
 

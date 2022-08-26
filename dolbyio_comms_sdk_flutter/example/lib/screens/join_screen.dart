@@ -1,4 +1,3 @@
-import 'package:dolbyio_comms_sdk_flutter_example/example_app/participant_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,6 +10,7 @@ import '/widgets/primary_button.dart';
 import '/widgets/dialogs.dart';
 import '/widgets/circular_progress_indicator.dart';
 import '/permission_helper.dart';
+import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
 
 class JoinConference extends StatelessWidget {
@@ -229,5 +229,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
         MaterialPageRoute(builder: (context) => const ParticipantScreen())
     );
     setState(() => isJoining = false);
+  }
+
+  void onError(String message, Object? error) {
+    developer.log(message, error: error);
   }
 }

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '/example_app/join_screen.dart';
-import '/example_app/login_screen.dart';
-import '/example_app/participant_screen.dart';
-import 'conference_action_icon_button.dart';
+import '/screens/join_screen.dart';
+import '/screens/login_screen.dart';
+import '/widgets/conference_action_icon_button.dart';
 import 'dart:developer' as developer;
-import 'dialogs.dart';
+import '/widgets/dialogs.dart';
 
 class ConferenceControls extends StatefulWidget {
   final Future<Conference?> conference;
@@ -134,5 +133,9 @@ class _ConferenceControlsState extends State<ConferenceControls> {
             .onError((error, stackTrace) { onError('Error during leaving', error); });
       });
     }
+  }
+
+  void onError(String message, Object? error) {
+    developer.log(message, error: error);
   }
 }
