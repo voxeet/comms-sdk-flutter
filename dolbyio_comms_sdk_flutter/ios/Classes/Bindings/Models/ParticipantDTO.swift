@@ -164,6 +164,24 @@ extension DTO {
             self.streams = participant.streams.map { MediaStream(mediaStream: $0) }
             self.audioReceivingFrom = participant.audioReceivingFrom
             self.audioTransmitting = participant.audioTransmitting
-        }        
+        }
+    }
+
+    struct ParticipantInvited: Codable {
+
+        let info: ParticipantInfo
+        let permissions: [ConferencePermission]?
+
+        init(participantInvited: VTParticipantInvited) {
+            self.info = ParticipantInfo(participantInfo: participantInvited.info)
+            self.permissions = participantInvited.permissions?.map { ConferencePermission(conferencePermision: $0) }
+        }
+
+        func toSdkType() -> VTParticipantInvited {
+            return VTParticipantInvited(
+                info: info.toSdkType(),
+                permissions: permissions?.map { $0.toSdkType() }
+            )
+        }
     }
 }
