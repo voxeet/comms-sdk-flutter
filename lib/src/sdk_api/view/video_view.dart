@@ -1,5 +1,4 @@
 import 'dart:async';
-// import 'dart:collection';
 import 'dart:developer' as developer;
 
 import 'package:flutter/foundation.dart';
@@ -10,7 +9,9 @@ import 'package:flutter/widgets.dart';
 
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 
-/// A controller for the [VideoView] that is responsible for attaching a [Participant] and a [MediaStream] to the [VideoView], detaching them, and getting information about the [VideoView] state.
+/// A controller for the [VideoView] that is responsible for attaching a [Participant] and a
+/// [MediaStream] to the [VideoView], detaching them, and getting information about the
+/// [VideoView] state.
 /// 
 /// An instance of this class can be provided during the instantiation of the [VideoView] widget, 
 /// if this widget is constructed using [VideoView.forList].
@@ -32,7 +33,8 @@ class VideoViewController {
 
   VideoViewController();
 
-  /// Detaches a [MediaStream] and a [Participant] from the [VideoView] to stop displaying the [MediaStream].
+  /// Detaches a [MediaStream] and a [Participant] from the [VideoView] to stop displaying
+  /// the [MediaStream].
   Future<void> detach() async {
     final state = _state;
     if (state != null) {
@@ -52,7 +54,8 @@ class VideoViewController {
     return Future.value(false);
   }
 
-  /// Returns true if the attached [MediaStream] contains a video track whose contents come from a screen shared by the local participant.
+  /// Returns true if the attached [MediaStream] contains a video track whose contents come from a
+  /// screen shared by the local participant.
   Future<bool> isScreenShare() async {
     final state = _state;
     if (state != null) {
@@ -67,13 +70,18 @@ class VideoViewController {
   }
 }
 
-/// A closure that selects and updates a [MediaStream] that should be displayed by the [VideoView]. It 
-/// must be provided to the [VideoView.forList] constructor.
+/// @internal
+/// 
+/// A closure that selects and updates a [MediaStream] that should be displayed by the [VideoView]. 
+/// It must be provided to the [VideoView.forList] constructor.
 typedef MediaStreamSelector = MediaStream? Function(List<MediaStream>? mediaStreams);
 
 /// A widget that can display a [MediaStream] for a [Participant]. 
 /// 
-/// You can use [VideoView] in two ways, either as an item of a [GridView] or a [ListView] used with the [VideoView.forList] constructor or as a stand-alone widget outside of collection widgets, such as [GridView] or [ListView]. In this second option, you need to use the [VideoView] constructor and provide a [VideoViewController] to the constructor.
+/// You can use [VideoView] in two ways, either as an item of a [GridView] or a [ListView] used
+/// with the [VideoView.forList] constructor or as a stand-alone widget outside of collection
+/// widgets, such as [GridView] or [ListView]. In this second option, you need to use the
+/// [VideoView] constructor and provide a [VideoViewController] to the constructor.
 class VideoView extends StatefulWidget {
 
   /// @internal
@@ -92,8 +100,9 @@ class VideoView extends StatefulWidget {
   final VideoViewController? videoViewController;
 
   /// A constructor that should be used when the [VideoView] is an element in a collection 
-  /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the [Participant]
-  /// for whom the [MediaStream] should be displayed, the [MediaStream], and an optional [Key]. 
+  /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the
+  /// [Participant] for whom the [MediaStream] should be displayed, the [MediaStream], and an
+  /// optional [Key]. 
   const VideoView.withMediaStream({required this.participant, required this.mediaStream, Key? key})
     : videoViewController = null
     , mediaStreamSelector = null
@@ -103,23 +112,26 @@ class VideoView extends StatefulWidget {
   /// @internal
   /// 
   /// A constructor that could be used when the [VideoView] is an element in a collection 
-  /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the [Participant]
-  /// who would like to display a [MediaStream], an optional [Key], and the [MediaStreamSelector]. 
+  /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the
+  /// [Participant] who would like to display a [MediaStream], an optional [Key], and
+  /// the [MediaStreamSelector]. 
   /// 
   /// The [MediaStreamSelector] is a closure or an unnamed function that is run internally by the 
   /// widget to decide which [MediaStream] to display. The algorithm from this closure should 
-  /// return the [MediaStream] that should be displayed based on the [List] of [MediaStream]s provided as 
-  /// an argument to the closure. This closure runs when the [VideoView] is created and every time the 
-  /// [MediaStream]s of the related [Participant] change.
-  const VideoView.withMediaStreamSelector({required this.participant, Key? key, required this.mediaStreamSelector})
+  /// return the [MediaStream] that should be displayed based on the [List] of [MediaStream]s
+  /// provided as an argument to the closure. This closure runs when the [VideoView] is created and
+  /// every time the [MediaStream]s of the related [Participant] change.
+  const VideoView.withMediaStreamSelector({
+    required this.participant, Key? key, required this.mediaStreamSelector
+  })
     : videoViewController = null
     , mediaStream = null
     , super(key: key)
     ;
 
   /// A constructor that shuold be used when the [VideoView] is used as a stand-alone widget 
-  /// outside of collection widgets such as [GridView] or [ListView]. The constructor requires providing 
-  /// the [VideoViewController] and, optionally, a [Key].
+  /// outside of collection widgets such as [GridView] or [ListView]. The constructor requires
+  /// providing the [VideoViewController] and, optionally, a [Key].
   const VideoView({required this.videoViewController, Key? key})
     : participant = null
     , mediaStream = null
