@@ -18,30 +18,27 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 class VideoViewController {
 
   _VideoViewState?  _state;
+
+  Participant? _participant;
+  MediaStream? _mediaStream;
   
   /// Attaches a [Participant] and a [MediaStream] to the [VideoView]. This allows the
   /// [VideoView] to display the provided [MediaStream] if the media stream object belongs
   /// to the provided [Participant]. 
-  Future<void> attach(Participant participant, MediaStream? mediaStream) {
-    final state = _state;
-    if (state != null) {
-      return state._attach(participant, mediaStream);
-    }
-    developer.log("VideoViewController.attach(): The VideoView has not been instantiated yet.");
-    return Future.error("The VideoView has not been instantiated yet.");
+  void attach(Participant participant, MediaStream? mediaStream) {
+    _participant = participant;
+    _mediaStream = mediaStream;
+    _state?._attach(participant, mediaStream);
   }
 
   VideoViewController();
 
   /// Detaches a [MediaStream] and a [Participant] from the [VideoView] to stop displaying
   /// the [MediaStream].
-  Future<void> detach() async {
-    final state = _state;
-    if (state != null) {
-      return state._detach();
-    }
-    developer.log("VideoViewController.detach(): The VideoView has not been instantiated yet.");
-    return Future.error("The VideoView has not been instantiated yet.");
+  void detach() async {
+    _participant = null;
+    _mediaStream = null;
+    _state?._detach();
   }
 
   /// Returns true if a [MediaStream] is currently attached to the [VideoView].
@@ -70,12 +67,6 @@ class VideoViewController {
   }
 }
 
-/// @internal
-/// 
-/// A closure that selects and updates a [MediaStream] that should be displayed by the [VideoView]. 
-/// It must be provided to the [VideoView.forList] constructor.
-typedef MediaStreamSelector = MediaStream? Function(List<MediaStream>? mediaStreams);
-
 /// A widget that can display a [MediaStream] for a [Participant]. 
 /// 
 /// You can use [VideoView] in two ways, either as an item of a [GridView] or a [ListView] used
@@ -94,9 +85,6 @@ class VideoView extends StatefulWidget {
   final MediaStream? mediaStream;
 
   /// @internal
-  final MediaStreamSelector? mediaStreamSelector;
-
-  /// @internal
   final VideoViewController? videoViewController;
 
   /// A constructor that should be used when the [VideoView] is an element in a collection 
@@ -105,27 +93,6 @@ class VideoView extends StatefulWidget {
   /// optional [Key]. 
   const VideoView.withMediaStream({required this.participant, required this.mediaStream, Key? key})
     : videoViewController = null
-    , mediaStreamSelector = null
-    , super(key: key)
-    ;
-
-  /// @internal
-  /// 
-  /// A constructor that could be used when the [VideoView] is an element in a collection 
-  /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the
-  /// [Participant] who would like to display a [MediaStream], an optional [Key], and
-  /// the [MediaStreamSelector]. 
-  /// 
-  /// The [MediaStreamSelector] is a closure or an unnamed function that is run internally by the 
-  /// widget to decide which [MediaStream] to display. The algorithm from this closure should 
-  /// return the [MediaStream] that should be displayed based on the [List] of [MediaStream]s
-  /// provided as an argument to the closure. This closure runs when the [VideoView] is created and
-  /// every time the [MediaStream]s of the related [Participant] change.
-  const VideoView.withMediaStreamSelector({
-    required this.participant, Key? key, required this.mediaStreamSelector
-  })
-    : videoViewController = null
-    , mediaStream = null
     , super(key: key)
     ;
 
@@ -135,7 +102,6 @@ class VideoView extends StatefulWidget {
   const VideoView({required this.videoViewController, Key? key})
     : participant = null
     , mediaStream = null
-    , mediaStreamSelector = null
     , super(key: key)
     ;
 
@@ -152,10 +118,8 @@ class _VideoViewState extends State<VideoView> {
     return _viewNumber;
   }
 
-  VideoViewController? _controller;
   Participant? _participant;
   MediaStream? _mediaStream;
-  StreamSubscription<dynamic>? _onStreamChangeSubscription;
   int viewNumber;
   MethodChannel? _methodChannel;
 
@@ -164,27 +128,15 @@ class _VideoViewState extends State<VideoView> {
     ;
 
   @override
-  void dispose() {
-    _onStreamChangeSubscription?.cancel();
-    super.dispose();
-  }
-
-  @override
   void initState() {
-    _controller = widget.videoViewController;
-    _controller?._updateState(this);
-    _participant = widget.participant;
-    _refreshSubscriptionForMediaStreamSelector();
+    widget.videoViewController?._updateState(this);
     _updateParticipantAndStream();
     super.initState();
   }
 
   @override
   void didUpdateWidget(covariant VideoView oldWidget) {
-    _controller = widget.videoViewController;
-    _controller?._updateState(this);
-    _participant = widget.participant;
-    _refreshSubscriptionForMediaStreamSelector();
+    widget.videoViewController?._updateState(this);
     _updateParticipantAndStream();
     super.didUpdateWidget(oldWidget);
   }
@@ -264,78 +216,28 @@ class _VideoViewState extends State<VideoView> {
     throw UnimplementedError();
   }
 
-  void _refreshSubscriptionForMediaStreamSelector() {
-
-    _onStreamChangeSubscription?.cancel();
-    _onStreamChangeSubscription = null;
-
-    if (widget.mediaStreamSelector != null) {
-      _onStreamChangeSubscription = DolbyioCommsSdk.instance.conference.onStreamsChange()
-        .listen((e) async {
-
-          final mediaStreamSelector = widget.mediaStreamSelector;
-          if (_participant?.id == e.body.participant.id && mediaStreamSelector != null) {
-            setState(() {
-              _participant = e.body.participant;
-              _mediaStream = mediaStreamSelector(e.body.participant.streams);
-            });
-          }
-
-          return Future.value();
-        });
-    }
-  }
-
   void _updateParticipantAndStream() {
-    final participant = _participant;
-    final mediaStream = widget.mediaStream;
-    final mediaStreamSelector = widget.mediaStreamSelector;
-    if (participant != null) {
-      if (mediaStreamSelector != null) {
-        setState(() {
-          _participant = participant;
-          _mediaStream = mediaStreamSelector(participant.streams);
-        });
-      } else if (mediaStream != null) {
-        setState(() {
-          _participant = participant;
-          _mediaStream = mediaStream;
-        });
-      }
+    if (widget.videoViewController != null) {
+      _participant = widget.videoViewController?._participant;
+      _mediaStream = widget.videoViewController?._mediaStream;
+    } else {
+      _participant = widget.participant;
+      _mediaStream = widget.mediaStream;
     }
   }
 
-  Future<void> _attach(Participant participant, MediaStream? mediaStream) async {
-    final methodChannel = _methodChannel;
-      if (methodChannel != null) {
-      return methodChannel.
-        invokeMethod<bool>(
-          "attach", 
-          {
-            "participant_id": participant.id, 
-            "media_stream_id": mediaStream?.id
-          }
-        )
-        .then((value) {
-          _participant = participant;
-          _mediaStream = mediaStream;
-        });
-    }
-    return Future.error("The VideoView has not been instantiated yet.");
+  void _attach(Participant participant, MediaStream? mediaStream) {
+    setState(() {
+      _participant = participant;
+      _mediaStream = mediaStream;
+    });
   }
 
-  Future<void> _detach() async {
-    final methodChannel = _methodChannel;
-    if (methodChannel != null) {
-      return _methodChannel
-        ?.invokeMethod<bool>("detach")
-        .then((value) => null)
-        .then((value) {
-          _participant = null;
-          _mediaStream = null;
-        });
-    }
-    return Future.error("The VideoView has not been instantiated yet.");
+  void _detach() {
+    setState(() {
+      _participant = null;
+      _mediaStream = null;
+    });
   }
 
   Future<bool> _isAttached() async {
