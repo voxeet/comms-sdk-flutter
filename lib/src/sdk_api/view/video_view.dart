@@ -18,30 +18,40 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 class VideoViewController {
 
   _VideoViewState?  _state;
+
+  Participant? _participant;
+  MediaStream? _mediaStream;
   
   /// Attaches a [Participant] and a [MediaStream] to the [VideoView]. This allows the
   /// [VideoView] to display the provided [MediaStream] if the media stream object belongs
   /// to the provided [Participant]. 
-  Future<void> attach(Participant participant, MediaStream? mediaStream) {
+  void attach(Participant participant, MediaStream? mediaStream) {
+
+    _participant = participant;
+    _mediaStream = mediaStream;
+
     final state = _state;
-    if (state != null) {
-      return state._attach(participant, mediaStream);
+    if (state != null && state._methodChannel != null) {
+      state._attach(participant, mediaStream);
+    } else {
+      developer.log("VideoViewController.attach(): The VideoView has not been instantiated yet.");
     }
-    developer.log("VideoViewController.attach(): The VideoView has not been instantiated yet.");
-    return Future.error("The VideoView has not been instantiated yet.");
   }
 
   VideoViewController();
 
   /// Detaches a [MediaStream] and a [Participant] from the [VideoView] to stop displaying
   /// the [MediaStream].
-  Future<void> detach() async {
+  void detach() async {
+    _participant = null;
+    _mediaStream = null;
+
     final state = _state;
-    if (state != null) {
-      return state._detach();
+    if (state != null && state._methodChannel != null) {
+      state._detach();
+    } else {
+      developer.log("VideoViewController.detach(): The VideoView has not been instantiated yet.");
     }
-    developer.log("VideoViewController.detach(): The VideoView has not been instantiated yet.");
-    return Future.error("The VideoView has not been instantiated yet.");
   }
 
   /// Returns true if a [MediaStream] is currently attached to the [VideoView].
@@ -269,7 +279,7 @@ class _VideoViewState extends State<VideoView> {
     _onStreamChangeSubscription?.cancel();
     _onStreamChangeSubscription = null;
 
-    if (widget.mediaStreamSelector != null) {
+    if (_controller == null && widget.mediaStreamSelector != null) {
       _onStreamChangeSubscription = DolbyioCommsSdk.instance.conference.onStreamsChange()
         .listen((e) async {
 
@@ -287,20 +297,28 @@ class _VideoViewState extends State<VideoView> {
   }
 
   void _updateParticipantAndStream() {
-    final participant = _participant;
-    final mediaStream = widget.mediaStream;
-    final mediaStreamSelector = widget.mediaStreamSelector;
-    if (participant != null) {
-      if (mediaStreamSelector != null) {
-        setState(() {
-          _participant = participant;
-          _mediaStream = mediaStreamSelector(participant.streams);
-        });
-      } else if (mediaStream != null) {
-        setState(() {
-          _participant = participant;
-          _mediaStream = mediaStream;
-        });
+    final controller = _controller;
+    if (controller != null) {
+      setState(() {
+        _participant = controller._participant;
+        _mediaStream = controller._mediaStream;
+      });
+    } else {
+      final participant = _participant;
+      final mediaStream = widget.mediaStream;
+      final mediaStreamSelector = widget.mediaStreamSelector;
+      if (participant != null) {
+        if (mediaStreamSelector != null) {
+          setState(() {
+            _participant = participant;
+            _mediaStream = mediaStreamSelector(participant.streams);
+          });
+        } else if (mediaStream != null) {
+          setState(() {
+            _participant = participant;
+            _mediaStream = mediaStream;
+          });
+        }
       }
     }
   }
