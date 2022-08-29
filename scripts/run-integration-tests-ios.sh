@@ -23,7 +23,7 @@ else
     fi
 fi
 
-cd test_app
+cd example
 USE_SDK_MOCK=true flutter test integration_tests --flavor "$xcode_build_scheme" -d "$device_id"
 test_exit_code=$?
 
