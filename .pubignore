@@ -36,3 +36,4 @@ build/
 
 # Only in .pubignore
 /test_app/*
+/scripts/*
