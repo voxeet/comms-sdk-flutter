@@ -67,23 +67,21 @@ class _ParticipantGridState extends State<ParticipantGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: GridView.builder(
-            itemCount: participants.length,
-            scrollDirection: Axis.vertical,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12
-            ),
-            itemBuilder: (context, index) {
-              var participant = participants[index];
-              return ParticipantWidget(
-                  participant: participant,
-                  participantIndex: index
-              );
-            }),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: GridView.builder(
+          itemCount: participants.length,
+          scrollDirection: Axis.vertical,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12
+          ),
+          itemBuilder: (context, index) {
+            var participant = participants[index];
+            return ParticipantWidget(
+                participant: participant,
+                participantIndex: index
+            );
+          }),
     );
   }
 
