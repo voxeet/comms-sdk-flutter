@@ -38,7 +38,10 @@ extension CommandServiceBinding: VTCommandDelegate {
         do {
             try nativeEventEmitter.sendEvent(
                 event: EventKeys.messageReceived,
-                body: DTO.Participant(participant: participant)
+                body: DTO.MessageReceivedData(
+                    message: message,
+                    participant: participant
+                )
             )
         } catch {
             fatalError("TODO: Throw error here")

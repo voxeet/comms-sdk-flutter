@@ -22,22 +22,4 @@ void main() {
       assertLabel: "assertSendArgs", 
       expected: {"message": "test"});
   });
-
-  testWidgets('CommandService: received', (tester) async {
-
-    await runNative(
-      methodChannel: commandServiceAssertsMethodChannel, 
-      label: "emitOnMessageReceived",
-      args: { });
-
-    List<Event<CommandServiceEventNames, MessageReceivedData>> receivedEvents = [];
-    await for (final event in dolbyioCommsSdkFlutterPlugin.command.onMessageReceived()) {
-      receivedEvents.add(event);
-      if (receivedEvents.length > 2) {
-        break;
-      }
-    }
-    expect(receivedEvents[0].body.message, "test");
-    expect(receivedEvents[1].body.participant, "participant_id_5_1");
-  });
 }
