@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/dialogs.dart';
@@ -15,6 +17,11 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   List<Participant> participants = [];
 
+  StreamSubscription<Event<ConferenceServiceEventNames, Participant>>? onParticipantsChangeSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>? onStreamsChangeSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? onStatusChangeSubscription;
+  StreamSubscription<Event<CommandServiceEventNames, MessageReceivedData>>? onMessageReceivedChangeSubscription;
+
   Future<void> showDialog(
       BuildContext context, String title, String text) async {
     await ViewDialogs.dialog(
@@ -28,24 +35,42 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   void initState() {
     super.initState();
     initParticipantsList();
-    _dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange().listen((params) {
-      initParticipantsList();
-      developer.log("onParticipantsChange");
-    });
 
-    _dolbyioCommsSdkFlutterPlugin.conference.onStreamsChange().listen((params) {
-      initParticipantsList();
-      developer.log("onStreamsChange");
-    });
+    onParticipantsChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
+      .onParticipantsChange()
+      .listen((params) {
+        initParticipantsList();
+        developer.log("onParticipantsChange");
+      });
 
-    _dolbyioCommsSdkFlutterPlugin.conference.onStatusChange().listen((params) {
-      developer.log("onStatusChange");
-    });
+    onStreamsChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
+      .onStreamsChange()
+      .listen((params) {
+        initParticipantsList();
+        developer.log("onStreamsChange");
+      });
 
-    _dolbyioCommsSdkFlutterPlugin.command.onMessageReceived().listen((params) {
-      showDialog(context, params.type.value, "Message: ${params.body.message}");
-      developer.log("onMessageReceived");
-    });
+    onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
+      .onStatusChange()
+      .listen((params) {
+        developer.log("onStatusChange");
+      });
+
+    onMessageReceivedChangeSubscription = _dolbyioCommsSdkFlutterPlugin.command
+      .onMessageReceived()
+      .listen((params) {
+        showDialog(context, params.type.value, "Message: ${params.body.message}");
+        developer.log("onMessageReceived");
+      });
+  }
+
+  @override
+  void dispose() {
+    onParticipantsChangeSubscription?.cancel();
+    onStreamsChangeSubscription?.cancel();
+    onStatusChangeSubscription?.cancel();
+    onMessageReceivedChangeSubscription?.cancel();
+    super.dispose();
   }
 
   @override
