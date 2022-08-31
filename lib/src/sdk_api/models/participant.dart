@@ -1,9 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/streams.dart';
-
 import 'conference.dart';
 import 'participant_info.dart';
-
+import 'streams.dart';
 
 /// The Participant class gathers information about a conference participant.
 class Participant {

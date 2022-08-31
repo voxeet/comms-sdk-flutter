@@ -44,6 +44,7 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
   /// Emitted when a presenter changes the displayed page of the shared file.
   FilePresentationUpdated('EVENT_FILEPRESENTATION_UPDATED');
 
+  @override
   final String value;
 
   const FilePresentationServiceEventNames(this.value);
@@ -61,6 +62,7 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
   /// Emitted when an application user receives an invitation.
   InvitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED');
 
+  @override
   final String value;
 
   const NotificationServiceEventNames(this.value);
@@ -78,6 +80,7 @@ enum CommandServiceEventNames implements EnumWithStringValue {
   /// Emitted when a participant receives a message.
   MessageReceived('EVENT_COMMAND_MESSAGE_RECEIVED');
 
+  @override
   final String value;
 
   const CommandServiceEventNames(this.value);
@@ -130,6 +133,7 @@ enum VideoPresentationEventNames implements EnumWithStringValue {
   /// Emitted when a video presentation is stopped.
   VideoPresentationStopped('EVENT_VIDEOPRESENTATION_STOPPED');
 
+  @override
   final String value;
 
   const VideoPresentationEventNames(this.value);

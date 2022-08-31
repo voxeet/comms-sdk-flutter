@@ -1,9 +1,7 @@
 import 'dart:async';
-
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_native_events.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/mapper/mapper.dart';
-
+import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
+import '../dolbyio_comms_sdk_native_events.dart';
+import '../mapper/mapper.dart';
 import 'models/enums.dart';
 import 'models/video_presentation.dart';
 

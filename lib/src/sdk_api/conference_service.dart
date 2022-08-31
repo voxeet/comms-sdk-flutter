@@ -1,14 +1,12 @@
 import 'dart:async';
-
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_native_events.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/events.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/session_service.dart';
-
 import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
+import '../dolbyio_comms_sdk_native_events.dart';
 import '../mapper/mapper.dart';
 import 'models/conference.dart';
+import 'models/events.dart';
 import 'models/participant.dart';
 import 'models/spatial.dart';
+import 'session_service.dart';
 
 /// The ConferenceService allows an application to manage a conference life-cycle and interact with the conference. The service allows creating, joining, and leaving conferences and managing the audio, video, and screen-share streams.
 class ConferenceService {

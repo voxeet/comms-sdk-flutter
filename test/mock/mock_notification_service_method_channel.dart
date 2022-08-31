@@ -1,7 +1,6 @@
 import 'package:dolbyio_comms_sdk_flutter/src/mapper/mapper.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/enums.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/events.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/participant.dart';
 import 'package:flutter/services.dart';
 
 import 'mock_event_method_channel.dart';
