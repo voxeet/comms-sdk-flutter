@@ -3,21 +3,20 @@ import 'package:dolbyio_comms_sdk_flutter_example/widgets/secondary_button.dart'
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '/widgets/dialogs.dart';
 
-import 'dialogs.dart';
-
-class FilePresentationTestButtons extends StatelessWidget {
+class FilePresentationServiceTestButtons extends StatelessWidget {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   FileConverted? fileConverted;
   int selectedPage = 0;
 
-  FilePresentationTestButtons({Key? key}) : super(key: key);
+  FilePresentationServiceTestButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 8.0, // gap between adjacent chips
-      runSpacing: 4.0, // gap between lines
+      spacing: 8.0,
+      runSpacing: 4.0,
       children: <Widget>[
         SecondaryButton(text: 'Convert', onPressed: () => convert(context), fillWidth: false),
         SecondaryButton(text: 'Start', onPressed: () => startFilePresentation(context), fillWidth: false),
@@ -38,7 +37,6 @@ class FilePresentationTestButtons extends StatelessWidget {
     );
   }
 
-  //File presentation service
   void convert(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
