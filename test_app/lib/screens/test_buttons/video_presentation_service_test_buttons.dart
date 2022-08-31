@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '../widgets/secondary_button.dart';
-import 'dialogs.dart';
+import '/widgets/secondary_button.dart';
+import '/widgets/dialogs.dart';
 
-class VideoPresentationTestButtons extends StatefulWidget {
-  const VideoPresentationTestButtons({Key? key}) : super(key: key);
+class VideoPresentationServiceTestButtons extends StatefulWidget {
+  const VideoPresentationServiceTestButtons({Key? key}) : super(key: key);
 
   @override
-  State<VideoPresentationTestButtons> createState() => _VideoPresentationTestButtonsState();
+  State<VideoPresentationServiceTestButtons> createState() => _VideoPresentationServiceTestButtonsState();
 }
 
-class _VideoPresentationTestButtonsState extends State<VideoPresentationTestButtons> {
+class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   String url = '';
 
@@ -114,7 +114,7 @@ class _VideoPresentationTestButtonsState extends State<VideoPresentationTestButt
         .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
   }
 
-  void play(){
+  void play() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .play()
         .then((value) => showAlertDialog(context, 'Success', "OK"))
