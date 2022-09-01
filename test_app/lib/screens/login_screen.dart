@@ -168,8 +168,9 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
 
   void navigateToJoinConference() async {
     await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) =>
-            JoinConference(username: usernameTextController.text)
+        MaterialPageRoute(
+          settings: const RouteSettings(name: "JoinConferenceScreen"),
+          builder: (context) => JoinConference(username: usernameTextController.text)
         )
     );
     setState(() => isLogging = false);

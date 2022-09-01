@@ -42,7 +42,11 @@ class _MyAppState extends State<MyApp> {
                   widgetText: const Text('Open example app'),
                   onPressed: () {
                     Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const LoginScreen()));
+                        MaterialPageRoute(
+                          settings: const RouteSettings(name: "LoginScreen"),
+                          builder: (context) => const LoginScreen()
+                        )
+                    );
                   }),
               PrimaryButton(
                 widgetText: const Text('Run playground'),
