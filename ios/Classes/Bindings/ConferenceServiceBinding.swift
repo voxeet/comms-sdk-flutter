@@ -659,21 +659,30 @@ class ConferenceServiceBinding: Binding {
 
 extension ConferenceServiceBinding: VTConferenceDelegate {
     func statusUpdated(status: VTConferenceStatus) {
-        //		send(
-        //			event: EventKeys.statusUpdated,
-        //			body: StatusDTO(
-        //				status: status
-        //			).toReactModel()
-        //		)
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.statusUpdated,
+                body: DTO.ConferenceStatus(status: status)
+            )
+        } catch {
+            fatalError("TODO: Throw error here")
+        }
     }
     
     func permissionsUpdated(permissions: [Int]) {
-        //		send(
-        //			event: EventKeys.permissionsUpdated,
-        //			body: PermissionsDTO(
-        //				permissions: permissions.compactMap { VTConferencePermission(rawValue: $0) }
-        //			).toReactModel()
-        //		)
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.permissionsUpdated,
+                body: permissions.map { (rawPermission: Int) -> DTO.ConferencePermission in
+                    guard let vtConferencePermission = VTConferencePermission(rawValue: rawPermission) else {
+                        fatalError("TODO: Throw error here")
+                    }
+                    return DTO.ConferencePermission(conferencePermision: vtConferencePermission)
+                }
+            )
+        } catch {
+            fatalError("TODO: Throw error here")
+        }
     }
     
     func participantAdded(participant: VTParticipant) {
