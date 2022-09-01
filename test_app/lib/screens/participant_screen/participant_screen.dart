@@ -7,6 +7,7 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'participant_grid.dart';
 import '/widgets/modal_bottom_sheet.dart';
 import '/widgets/dolby_title.dart';
+import 'dart:developer' as developer;
 
 class ParticipantScreen extends StatefulWidget {
   const ParticipantScreen({Key? key}) : super(key: key);
@@ -47,6 +48,30 @@ class ParticipantScreenContent extends StatefulWidget {
 
 class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+  StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? onStatusChangeSubscription;
+  static const snackBarDisplayDuration = Duration(milliseconds: 600);
+
+  @override
+  void initState() {
+    super.initState();
+
+    onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
+        .onStatusChange()
+        .listen((params) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(params.body.name.toString()),
+        duration: snackBarDisplayDuration,
+        backgroundColor: Colors.deepPurple,
+      ));
+      developer.log("onStatusChange");
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    onStatusChangeSubscription?.cancel();
+  }
 
   @override
   Widget build(BuildContext context) {

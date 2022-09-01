@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -55,13 +58,28 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKey = GlobalKey<FormState>();
   bool isJoining = false;
+  static const snackBarDisplayDuration = Duration(milliseconds: 600);
+  bool switchValue = false;
+  StreamSubscription<Event<NotificationServiceEventNames, InvitationReceivedNotificationData>>? onInvitationReceivedSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? onStatusChangeSubscription;
 
   @override
   void initState() {
     super.initState();
-    _dolbyioCommsSdkFlutterPlugin.notification.onInvitationReceived().listen((params) {
-      showInvitationDialog(context, params.body.toJson().toString(), params.body.conferenceId.toString());
-    });
+
+    onInvitationReceivedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onInvitationReceived()
+        .listen((params) {
+          showInvitationDialog(
+              context, params.body.toJson().toString(),
+              params.body.conferenceId.toString());
+        });
+  }
+
+  @override
+  void dispose() {
+    onInvitationReceivedSubscription?.cancel();
+    super.dispose();
   }
 
   Future<void> showInvitationDialog(BuildContext context, String body, String conferenceId) async {
@@ -121,6 +139,21 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                   controller: conferenceAliasTextController,
                   focusColor: Colors.deepPurple
                 ),
+              ),
+              Row(
+                children: [
+                  const Text("Observe Conference Status"),
+                  CupertinoSwitch(
+                      value: switchValue,
+                      onChanged: (value) {
+                        setState(() {
+                          switchValue = value;
+                          observeConferenceStatus(switchValue);
+                          developer.log(switchValue.toString());
+                        });
+                      }
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               PrimaryButton(
@@ -222,6 +255,22 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     _dolbyioCommsSdkFlutterPlugin.conference.fetch(conferenceId)
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
         .onError((error, stackTrace) => onError('Error during declining.', error));
+  }
+
+  void observeConferenceStatus(bool switchValue) {
+    if(switchValue == true) {
+      onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
+          .onStatusChange()
+          .listen((params) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(params.body.name.toString()),
+          duration: snackBarDisplayDuration,
+          backgroundColor: Colors.deepPurple,
+        ));
+      });
+    } else {
+      onStatusChangeSubscription?.cancel();
+    }
   }
 
   Future navigateToParticipantScreen(BuildContext context) async {
