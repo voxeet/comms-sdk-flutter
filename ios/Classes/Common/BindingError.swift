@@ -27,6 +27,7 @@ internal enum BindingError: Error {
     case noAudioProcessing
     case noNoiseLevel
     case noPermission
+    case noFileConverted
 }
 
 extension BindingError: LocalizedError {
@@ -83,6 +84,8 @@ extension BindingError: LocalizedError {
             return "Noise level was not provided"
         case .noPermission:
             return "Pacticipant permission was not provided"
+        case .noFileConverted:
+            return "Converted File was not provided"
         }
     }
 }

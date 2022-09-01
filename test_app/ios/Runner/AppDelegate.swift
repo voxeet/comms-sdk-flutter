@@ -30,6 +30,7 @@ import VoxeetSDK
         MediaDeviceServiceAsserts.create()
         VideoPresentationServiceAsserts.create()
         NotificationServiceAsserts.create()
+        FilePresentationServiceAsserts.create()
 #endif
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
