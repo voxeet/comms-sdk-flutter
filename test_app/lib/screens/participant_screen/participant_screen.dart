@@ -1,12 +1,12 @@
-import '/screens/test_buttons/test_buttons.dart';
-import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '/widgets/modal_bottom_sheet.dart';
-import 'participant_grid.dart';
-import '/widgets/dolby_title.dart';
+import '../test_buttons/test_buttons.dart';
 import 'conference_controls.dart';
 import 'conference_title.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'participant_grid.dart';
+import '/widgets/modal_bottom_sheet.dart';
+import '/widgets/dolby_title.dart';
 
 class ParticipantScreen extends StatefulWidget {
   const ParticipantScreen({Key? key}) : super(key: key);
