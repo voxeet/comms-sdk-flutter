@@ -1,5 +1,4 @@
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

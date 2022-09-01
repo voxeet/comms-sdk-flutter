@@ -1,7 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'participant.dart';
-import 'streams.dart';
 import 'enums.dart';
 
 /// The Conference class gathers information about a conference.
@@ -414,6 +413,7 @@ enum ConferenceServiceEventNames implements EnumWithStringValue {
   /// The SDK can also emit the streamRemoved event only for the local participant. When the local participant uses the [ConferenceService.stopAudio] method to locally mute a selected remote participant who does not use a camera, the local participant receives the streamRemoved event.
   StreamRemoved('EVENT_CONFERENCE_STREAM_REMOVED');
 
+  @override
   final String value;
 
   const ConferenceServiceEventNames(this.value);

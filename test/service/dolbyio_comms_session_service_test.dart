@@ -2,7 +2,6 @@ import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/participant.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/participant_info.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/recording.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';

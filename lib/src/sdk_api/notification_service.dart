@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_native_events.dart';
-
-import '../../dolbyio_comms_sdk_flutter.dart';
+import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
+import '../dolbyio_comms_sdk_native_events.dart';
 import '../mapper/mapper.dart';
 import 'models/conference.dart';
 import 'models/enums.dart';
+import 'models/events.dart';
 import 'models/participant.dart';
 
 /// The NotificationService allows inviting participants to a conference.

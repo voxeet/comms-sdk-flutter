@@ -1,11 +1,11 @@
-import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/conference.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/events.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/participant.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/video_presentation.dart';
-
+import '../sdk_api/models/conference.dart';
+import '../sdk_api/models/events.dart';
+import '../sdk_api/models/file_presentation.dart';
+import '../sdk_api/models/participant.dart';
+import '../sdk_api/models/participant_info.dart';
 import '../sdk_api/models/recording.dart';
 import '../sdk_api/models/streams.dart';
+import '../sdk_api/models/video_presentation.dart';
 
 class ConferenceMapper {
   static Conference fromMap(Map<Object?, Object?> map) {

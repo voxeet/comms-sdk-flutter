@@ -1,12 +1,9 @@
 import 'dart:async';
-
-import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_native_events.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/enums.dart';
-
+import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
+import '../dolbyio_comms_sdk_native_events.dart';
 import '../mapper/mapper.dart';
-
+import 'models/enums.dart';
+import 'models/events.dart';
 
 /// The CommandService allows the application to send and receive text messages and notifications during a conference.
 class CommandService {

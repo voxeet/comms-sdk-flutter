@@ -1,4 +1,3 @@
-
 typedef AudioTrack = Object;
 typedef VideoTrack = Object;
 
