@@ -53,4 +53,45 @@ void main() {
         assertLabel: "assertStopArgs",
         expected: {"hasRun": true, "url": 'https://dolby.io/video_url'});
   });
+
+  testWidgets('FilePresentationService: getImage', (tester) async {
+    runNative(
+      methodChannel: filePresentationServiceAssertsMethodChannel,
+      label: "setGetImageArgs",
+      args: {
+        "hasRun": true,
+        "url": 'https://dolby.io/image_url'
+      });
+
+    var url = await dolbyioCommsSdkFlutterPlugin.filePresentation.getImage(5);
+
+    await expectNative(
+        methodChannel: filePresentationServiceAssertsMethodChannel,
+        assertLabel: "assertGetImageArgs",
+        expected: {
+          "hasRun": true, 
+          "page": 5
+        });
+    
+    expect(url, 'https://dolby.io/image_url');
+  });
+
+  testWidgets('FilePresentationService: getThumbnail', (tester) async {
+    runNative(
+      methodChannel: filePresentationServiceAssertsMethodChannel,
+      label: "setGetThumbnailArgs",
+      args: {
+        "hasRun": true,
+        "url": 'https://dolby.io/thumbnail_url'
+      });
+
+    var url = await dolbyioCommsSdkFlutterPlugin.filePresentation.getThumbnail(3);
+
+    await expectNative(
+        methodChannel: filePresentationServiceAssertsMethodChannel,
+        assertLabel: "assertGetThumbnailArgs",
+        expected: {"hasRun": true, "page": 3});
+
+    expect(url, 'https://dolby.io/thumbnail_url');
+  });
 }
