@@ -213,7 +213,7 @@ class ConferenceService {
   /// Gets the status of a specific [conference].
   Future<ConferenceStatus> getStatus(Conference conference) async {
     var result = await _methodChannel.invokeMethod<String>("getStatus", conference.toJson());
-    return Future.value(result != null ? ConferenceStatus.valueOf(result) : null);
+    return Future.value(result != null ? ConferenceStatus.decode(result) : null);
   }
 
   /// Gets the [standard WebRTC statistics](https://www.w3.org/TR/webrtc-stats/#dom-rtcstatstype).
@@ -298,7 +298,7 @@ class ConferenceService {
     return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.StatusUpdated]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
       final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
-      final status = ConferenceStatus.valueOf(eventMap["body"] as String) ?? ConferenceStatus.DEFAULT;
+      final status = ConferenceStatus.decode(eventMap["body"] as String) ?? ConferenceStatus.defaultStatus;
       return Event(eventType, status);
     });
   }

@@ -89,7 +89,7 @@ void main() {
     expect(conference.id, "setCreateConferenceReturn_id_1");
     expect(conference.alias, "setCreateConferenceReturn_alias_1");
     expect(conference.isNew, false);
-    expect(conference.status, ConferenceStatus.ENDED);
+    expect(conference.status, ConferenceStatus.ended);
 
     await resetSDK();
 
@@ -114,7 +114,7 @@ void main() {
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_2");
     expect(conference.participants[0].status, ParticipantStatus.DECLINE);
     expect(conference.participants[0].type, ParticipantType.LISTENER);
-    expect(conference.status, ConferenceStatus.CREATED);
+    expect(conference.status, ConferenceStatus.created);
 
     await resetSDK();
 
@@ -139,7 +139,7 @@ void main() {
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_3");
     expect(conference.participants[0].status, ParticipantStatus.ERROR);
     expect(conference.participants[0].type, ParticipantType.USER);
-    expect(conference.status, ConferenceStatus.ENDED);
+    expect(conference.status, ConferenceStatus.ended);
 
     await resetSDK();
 
@@ -164,7 +164,7 @@ void main() {
     expect(conference.participants[0].info?.avatarUrl, null);
     expect(conference.participants[0].status, ParticipantStatus.CONNECTING);
     expect(conference.participants[0].type, ParticipantType.UNKNOWN);
-    expect(conference.status, ConferenceStatus.ENDED);
+    expect(conference.status, ConferenceStatus.ended);
   });
 
   testWidgets('ConferenceService: join', (tester) async {
@@ -190,7 +190,7 @@ void main() {
           ParticipantStatus.CONNECTED,
           ParticipantType.LISTENER)
       ],
-      ConferenceStatus.CREATED);
+      ConferenceStatus.created);
 
     var conferenceJoinOptions = ConferenceJoinOptions();
     conferenceJoinOptions.conferenceAccessToken = "conference_access_token";
@@ -603,7 +603,7 @@ void main() {
               ParticipantStatus.CONNECTED,
               ParticipantType.LISTENER)
         ],
-        ConferenceStatus.CREATED);
+        ConferenceStatus.created);
 
     var replayOptions = ConferenceReplayOptions("token", 1);
 
@@ -652,7 +652,7 @@ void main() {
       "setCreateConferenceReturn_id_5",
       true,
       [],
-      ConferenceStatus.CREATED);
+      ConferenceStatus.created);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -671,7 +671,7 @@ void main() {
       "setCreateConferenceReturn_id_6",
       true,
       [],
-      ConferenceStatus.CREATED);
+      ConferenceStatus.created);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -789,7 +789,7 @@ void main() {
 
     var conference = Conference(
       "setCreateConferenceReturn_alias_5", "setCreateConferenceReturn_id_5",
-      true, [], ConferenceStatus.CREATING);
+      true, [], ConferenceStatus.creating);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -803,13 +803,13 @@ void main() {
       assertLabel: "assertFetchConferenceArgs",
       expected: { "conferenceId": "setCreateConferenceReturn_id_5"});
 
-    expect(status, ConferenceStatus.CREATED);
+    expect(status, ConferenceStatus.created);
 
     await resetSDK();
 
     conference = Conference(
       "setCreateConferenceReturn_alias_6", "setCreateConferenceReturn_id_6",
-      true, [], ConferenceStatus.CREATED);
+      true, [], ConferenceStatus.created);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -823,7 +823,7 @@ void main() {
       assertLabel: "assertFetchConferenceArgs",
       expected: { "conferenceId": "setCreateConferenceReturn_id_6"});
 
-    expect(status, ConferenceStatus.DESTROYED);
+    expect(status, ConferenceStatus.destroyed);
   });
 
   testWidgets('ConferenceService: isMuted', (tester) async {

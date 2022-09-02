@@ -28,59 +28,65 @@ class Conference {
         "id": id,
         "isNew": isNew,
         "participants": participants.map((e) => e.toJson()).toList(),
-        "status": status.name,
+        "status": status.encode(),
       };
 }
 
 /// The ConferenceStatus enum represents the possible conference statuses.
 enum ConferenceStatus {
   /// The conference has been created.
-  CREATED('CREATED'),
+  created('CREATED'),
 
   /// The SDK is currently creating the conference.
-  CREATING('CREATING'),
+  creating('CREATING'),
 
   /// The default conference status.
-  DEFAULT('DEFAULT'),
+  defaultStatus('DEFAULT'),
 
   /// The conference has been destroyed. This status may be triggered by the following situations:
   /// - The last conference participant leaves the conference
   /// - The time to live or the conference time limit elapses
   /// - The conference creator uses the Terminate REST API to terminate the conference
-  DESTROYED('DESTROYED'),
+  destroyed('DESTROYED'),
 
   /// A conference has ended.
-  ENDED('ENDED'),
+  ended('ENDED'),
 
   /// An error has occurred.
-  ERROR('ERROR'),
+  error('ERROR'),
 
   /// @internal
   /// @nodoc
-  FIRST_PARTICIPANT('FIRST_PARTICIPANT'),
+  firstParticipant('FIRST_PARTICIPANT'),
 
   /// The local participant has successfully joined the conference.
-  JOINED('JOINED'),
+  joined('JOINED'),
 
   /// The local participant is joining the conference.
-  JOINING('JOINING'),
+  joining('JOINING'),
 
   /// The local participant is leaving the conference.
-  LEAVING('LEAVING'),
+  leaving('LEAVING'),
 
   /// The local participant has successfully left the conference.
-  LEFT('LEFT'),
+  left('LEFT'),
 
   /// @internal
   /// @nodoc
-  NO_MORE_PARTICIPANT('NO_MORE_PARTICIPANT');
+  noMoreParticipant('NO_MORE_PARTICIPANT');
 
-  final String name;
+  final String _value;
 
-  const ConferenceStatus(this.name);
+  const ConferenceStatus(this._value);
 
-  static ConferenceStatus? valueOf(String value) {
-    return ConferenceStatus.values.firstWhereOrNull((element) => element.name == value);
+  /// @internal
+  static ConferenceStatus? decode(String value) {
+    return ConferenceStatus.values.firstWhereOrNull((element) => element._value == value);
+  }
+
+  /// @internal
+  String encode() {
+    return _value;
   }
 }
 

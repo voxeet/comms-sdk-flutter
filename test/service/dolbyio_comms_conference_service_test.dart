@@ -28,13 +28,13 @@ var participantMap = {
 };
 
 var participants = [participant];
-var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.JOINED);
+var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.joined);
 var conferenceMap = {
   "alias": "test_conf",
   "id": "test_id",
   "isNew": true,
   "participants": participants.map((e) => e.toJson()).toList(),
-  "status": ConferenceStatus.JOINED.name
+  "status": ConferenceStatus.joined.encode()
 };
 
 @GenerateMocks([SessionService])
@@ -348,7 +348,7 @@ void main() {
 
     var result = await conferenceService.getStatus(conference);
 
-    expect(result, ConferenceStatus.JOINED);
+    expect(result, ConferenceStatus.joined);
     verify(channel.invokeMethod("getStatus", conferenceMap)).called(1);
   });
 

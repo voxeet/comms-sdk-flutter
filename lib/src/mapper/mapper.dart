@@ -14,7 +14,7 @@ class ConferenceMapper {
     var isNew = map.containsKey("isNew") ? map["isNew"] as bool : null;
     var participants =
         map.containsKey("participants") ? prepareParticipantsList(map["participants"] as List<Object?>) : List<Participant>.empty();
-    var status = ConferenceStatus.valueOf(map["status"] as String? ?? "DEFAULT") ?? ConferenceStatus.DEFAULT;
+    var status = ConferenceStatus.decode(map["status"] as String? ?? "DEFAULT") ?? ConferenceStatus.defaultStatus;
     return Conference(alias, id, isNew, participants, status);
   }
 

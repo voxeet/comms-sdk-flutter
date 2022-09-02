@@ -21,7 +21,7 @@ var participantsInvitation = [
   ParticipantInvited(userToInvite.info!, [ConferencePermission.sendAudio])
 ];
 
-var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.JOINED);
+var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.joined);
 
 void main() {
   var notificationService = DolbyioCommsSdk.instance.notification;

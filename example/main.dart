@@ -219,7 +219,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
             _dolbyioCommsSdkFlutterPlugin.conference.join(value, joinOptions))
         .then((conference) {
       // Check conference status
-      if (conference.status == ConferenceStatus.JOINED) {
+      if (conference.status == ConferenceStatus.joined) {
         _dolbyioCommsSdkFlutterPlugin.conference.current().then((value) {
           setState(() => isJoining = false);
         });

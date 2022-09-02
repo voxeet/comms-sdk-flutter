@@ -203,7 +203,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   void checkJoinConferenceResult(Conference conference) {
-    if (conference.status == ConferenceStatus.JOINED) {
+    if (conference.status == ConferenceStatus.joined) {
       navigateToParticipantScreen(context);
     } else {
       developer.log('Cannot join to conference.');
