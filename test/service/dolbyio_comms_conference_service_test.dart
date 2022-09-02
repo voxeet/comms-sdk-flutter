@@ -61,7 +61,7 @@ void main() {
       ..liveRecording = true
       ..rtcpMode = RTCPMode.BEST
       ..ttl = 1000
-      ..videoCodec = Codec.H264;
+      ..videoCodec = Codec.h264;
     var createOptions = ConferenceCreateOption("conference", createParams, 1);
     when(channel.invokeMethod("create", createOptions.toJson())).thenAnswer((_) => Future.value(conference.toJson()));
 
@@ -75,7 +75,7 @@ void main() {
         "liveRecording": true,
         "rtcpMode": RTCPMode.BEST.name,
         "ttl": 1000,
-        "videoCodec": Codec.H264.name,
+        "videoCodec": Codec.h264.encode(),
       },
       "pinCode": 1
     })).called(1);

@@ -132,7 +132,7 @@ class ConferenceCreateParameters {
         "liveRecording": liveRecording,
         "rtcpMode": rtcpMode?.name,
         "ttl": ttl,
-        "videoCodec": videoCodec?.name,
+        "videoCodec": videoCodec?.encode(),
       };
 }
 
@@ -155,14 +155,20 @@ enum RTCPMode {
 /// The Codec enum gathers the available video codecs.
 enum Codec {
   /// The default H264 video codec.
-  H264('H264'),
+  h264('H264'),
 
   /// The VP8 video codec.
-  VP8('VP8');
+  vp8('VP8');
 
-  final String name;
+  final String _value;
 
-  const Codec(this.name);
+  /// @internal
+  const Codec(this._value);
+
+  /// @internal
+  String encode() { 
+    return _value;
+  }
 }
 
 /// The ConferenceJoinOptions class defines how an application expects to join a conference in terms of media preference.

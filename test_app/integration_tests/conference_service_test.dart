@@ -24,7 +24,7 @@ void main() {
     parameters.liveRecording = true;
     parameters.rtcpMode = RTCPMode.BEST;
     parameters.ttl = 15;
-    parameters.videoCodec = Codec.H264;
+    parameters.videoCodec = Codec.h264;
     var options = ConferenceCreateOption("test_alias", parameters, 1234);
     var conference =
         await dolbyioCommsSdkFlutterPlugin.conference.create(options);
@@ -56,7 +56,7 @@ void main() {
     parameters.liveRecording = false;
     parameters.rtcpMode = RTCPMode.WORST;
     parameters.ttl = 30;
-    parameters.videoCodec = Codec.VP8;
+    parameters.videoCodec = Codec.vp8;
     options = ConferenceCreateOption("test_alias2", parameters, 4321);
     conference = await dolbyioCommsSdkFlutterPlugin.conference.create(options);
     await expectNative(
