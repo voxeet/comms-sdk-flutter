@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +59,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKey = GlobalKey<FormState>();
   bool isJoining = false;
-  static const snackBarDisplayDuration = Duration(milliseconds: 600);
   bool switchValue = false;
   StreamSubscription<Event<NotificationServiceEventNames, InvitationReceivedNotificationData>>? onInvitationReceivedSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? onStatusChangeSubscription;
@@ -79,6 +79,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   @override
   void dispose() {
     onInvitationReceivedSubscription?.cancel();
+    onStatusChangeSubscription?.cancel();
     super.dispose();
   }
 
@@ -262,11 +263,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
           .onStatusChange()
           .listen((params) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(params.body.name.toString()),
-          duration: snackBarDisplayDuration,
-          backgroundColor: Colors.deepPurple,
-        ));
+        StatusSnackbar.buildSnackbar(context, params.body.name.toString());
       });
     } else {
       onStatusChangeSubscription?.cancel();
@@ -275,7 +272,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   Future navigateToParticipantScreen(BuildContext context) async {
     await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const ParticipantScreen())
+        MaterialPageRoute(builder: (context) => ParticipantScreen(switchValue: switchValue))
     );
     setState(() => isJoining = false);
   }
