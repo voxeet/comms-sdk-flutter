@@ -50,7 +50,7 @@ class ParticipantInfoMapper {
 class ParticipantInvitedMapper {
   static ParticipantInvited fromMap(Map<Object?, Object?> participant) {
     var info = ParticipantInfoMapper.fromMap(participant["info"] as Map<Object?, Object?>);
-    var permissions = (participant["permisions"] as List<Object?>).map((e) => ConferencePermission.valueOf(e as String));
+    var permissions = (participant["permisions"] as List<Object?>).map((e) => ConferencePermission.decode(e as String));
 
     return ParticipantInvited(info, permissions.whereType<ConferencePermission>().toList());
   }
@@ -76,7 +76,7 @@ class MessageReceivedMapper {
 
 class PermissionsUpdatedMapper {
   static List<ConferencePermission> fromList(List<Object?> data) {
-    return data.map((value) => ConferencePermission.valueOf(value as String)).toList();
+    return data.map((value) => ConferencePermission.decode(value as String)).toList();
   }
 }
 

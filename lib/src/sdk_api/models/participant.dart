@@ -42,7 +42,7 @@ class ParticipantPermissions {
   ParticipantPermissions(this.participant, this.permissions);
 
   /// Returns a representation of this object as a JSON object.
-  Map<String, Object?> toJson() => {"participant": participant.toJson(), "permissions": permissions.map((e) => e.name).toList()};
+  Map<String, Object?> toJson() => {"participant": participant.toJson(), "permissions": permissions.map((e) => e.encode()).toList()};
 }
 
 /// The ParticipantStatus enum gathers the possible statuses of a conference participant.
@@ -116,5 +116,5 @@ class ParticipantInvited {
   ParticipantInvited(this.info, this.permissions);
 
   /// Returns a representation of this object as a JSON object.
-  Map<String, Object?> toJson() => {"info": info.toJson(), "permisions": permissions?.map((e) => e.value).toList()};
+  Map<String, Object?> toJson() => {"info": info.toJson(), "permisions": permissions?.map((e) => e.encode()).toList()};
 }

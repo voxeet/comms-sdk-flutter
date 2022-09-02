@@ -122,7 +122,7 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         .current()
         .then((conference) => conference.participants.first)
         .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions([
-          ParticipantPermissions(participant, [ConferencePermission.SEND_AUDIO, ConferencePermission.SEND_VIDEO])
+          ParticipantPermissions(participant, [ConferencePermission.sendAudio, ConferencePermission.sendVideo])
         ]))
         .then((value) => showDialog(context, 'Success', "OK"))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));

@@ -446,7 +446,7 @@ void main() {
 
   test("test updatePermissions method", () async {
     var permissions = [
-      ParticipantPermissions(participant, [ConferencePermission.SEND_AUDIO])
+      ParticipantPermissions(participant, [ConferencePermission.sendAudio])
     ];
     when(channel.invokeMethod("updatePermissions", permissions.map((e) => e.toJson()).toList())).thenAnswer((_) => Future.value());
 

@@ -338,50 +338,54 @@ class ConferenceReplayOptions {
 /// The ConferencePermission enum gathers the possible permissions a participant may have in a conference.
 enum ConferencePermission {
   /// Allows a participant to invite other participants to a conference.
-  INVITE('INVITE'),
+  invite('INVITE'),
 
   /// Allows a participant to join a conference.
-  JOIN('JOIN'),
+  join('JOIN'),
 
   /// Allows a participant to kick other participants from a conference
-  KICK('KICK'),
+  kick('KICK'),
 
   /// Allows a participant to record a conference.
-  RECORD('RECORD'),
+  record('RECORD'),
 
   /// Allows a participant to send an audio stream during a conference.
-  SEND_AUDIO('SEND_AUDIO'),
+  sendAudio('SEND_AUDIO'),
 
   /// Allows a participant to send a message to other participants during a conference.
-  SEND_MESSAGE('SEND_MESSAGE'),
+  sendMessage('SEND_MESSAGE'),
 
   /// Allows a participant to send a video stream during a conference.
-  SEND_VIDEO('SEND_VIDEO'),
+  sendVideo('SEND_VIDEO'),
 
   /// Allows a participant to share a file during a conference.
-  SHARE_FILE('SHARE_FILE'),
+  shareFile('SHARE_FILE'),
 
   /// Allows a participant to share a screen during a conference.
-  SHARE_SCREEN('SHARE_SCREEN'),
+  shareScreen('SHARE_SCREEN'),
 
   /// Allows a participant to share a video during a conference.
-  SHARE_VIDEO('SHARE_VIDEO'),
+  shareVideo('SHARE_VIDEO'),
 
   /// Allows a participant to stream a conference.
-  STREAM('STREAM'),
+  stream('STREAM'),
 
   /// Allows a participant to update other participants' permissions.
-  UPDATE_PERMISSIONS('UPDATE_PERMISSIONS');
+  updatePermissions('UPDATE_PERMISSIONS');
 
-  final String value;
+  final String _value;
 
-  const ConferencePermission(this.value);
+  const ConferencePermission(this._value);
 
-  static ConferencePermission valueOf(String? value) {
+  static ConferencePermission decode(String? value) {
     return ConferencePermission.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
+  }
+
+  String encode() {
+    return _value;
   }
 }
 

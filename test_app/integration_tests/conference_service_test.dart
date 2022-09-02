@@ -987,7 +987,7 @@ void main() {
       label: "setCurrentConference",
       args: { "type": 5 });
 
-    var conferencePermissions = [ConferencePermission.INVITE];
+    var conferencePermissions = [ConferencePermission.invite];
     var participantPermissions =
         ParticipantPermissions(participant, conferencePermissions);
 
@@ -1017,7 +1017,7 @@ void main() {
       label: "setCurrentConference",
       args: { "type": 5 });
 
-    conferencePermissions = [ConferencePermission.KICK];
+    conferencePermissions = [ConferencePermission.kick];
     participantPermissions =
         ParticipantPermissions(participant, conferencePermissions);
 

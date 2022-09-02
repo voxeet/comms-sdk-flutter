@@ -18,7 +18,7 @@ var participants = [
 ];
 
 var participantsInvitation = [
-  ParticipantInvited(userToInvite.info!, [ConferencePermission.SEND_AUDIO])
+  ParticipantInvited(userToInvite.info!, [ConferencePermission.sendAudio])
 ];
 
 var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.JOINED);
