@@ -108,6 +108,34 @@ class FilePresentationServiceBinding: Binding {
             completionHandler.handleError(error)?.orSuccess()
         }
     }
+    
+    func getImage(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let page: Int = try flutterArguments.asDictionary(argKey: "page").decode() ?? 0
+            if let urlString = VoxeetSDK.shared.filePresentation.image(page: page)?.absoluteString {
+                completionHandler.success(flutterConvertible: urlString)
+            }
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
+    
+    func getThumbnail(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let page: Int = try flutterArguments.asDictionary(argKey: "page").decode() ?? 0
+            if let urlString = VoxeetSDK.shared.filePresentation.thumbnail(page: page)?.absoluteString {
+                completionHandler.success(flutterConvertible: urlString)
+            }
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
 }
 
 extension FilePresentationServiceBinding: FlutterBinding {
@@ -127,6 +155,10 @@ extension FilePresentationServiceBinding: FlutterBinding {
             start(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "stop":
             stop(completionHandler: completionHandler)
+        case "getImage":
+            getImage(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "getThumbnail":
+            getThumbnail(flutterArguments: flutterArguments, completionHandler: completionHandler)
         default:
             completionHandler.methodNotImplemented()
         }
