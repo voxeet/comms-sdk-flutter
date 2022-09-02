@@ -5,26 +5,31 @@ abstract class EnumWithStringValue implements Enum {
 /// The ComfortNoiseLevel enum gathers the available comfort noise levels.
 enum ComfortNoiseLevel {
   /// The default comfort noise level that is based on the device database. The database contains the proper comfort noise levels, individual for all devices.
-  Default('default'),
+  defaultLevel('default'),
 
   /// The low comfort noise level.
-  Low('low'),
+  low('low'),
 
   /// The medium comfort noise level.
-  Medium('medium'),
+  medium('medium'),
 
   /// The disabled comfort noise.
-  Off('off');
+  off('off');
 
-  final String value;
+  final String _value;
 
-  const ComfortNoiseLevel(this.value);
+  const ComfortNoiseLevel(this._value);
 
-  static ComfortNoiseLevel valueOf(String? value) {
+  static ComfortNoiseLevel decode(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return ComfortNoiseLevel.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
+  }
+
+  String encode() {
+    return _value;
   }
 }
 

@@ -33,13 +33,13 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
   void getComfortNoiseLevel(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.mediaDevice
         .getComfortNoiseLevel()
-        .then((comfortNoiseLevel) => showDialog(context, "Success", comfortNoiseLevel.value))
+        .then((comfortNoiseLevel) => showDialog(context, "Success", comfortNoiseLevel.toString()))
         .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
   }
 
   void setComfortNoiseLevel(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Medium)
+        .setComfortNoiseLevel(ComfortNoiseLevel.medium)
         .then((value) => showDialog(context, "Success", "OK"))
         .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
   }

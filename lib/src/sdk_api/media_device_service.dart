@@ -11,7 +11,7 @@ class MediaDeviceService {
 
   /// Retrieves the comfort noise level setting for output devices in Dolby Voice conferences.
   Future<ComfortNoiseLevel> getComfortNoiseLevel() async {
-    return Future.value(ComfortNoiseLevel.valueOf(
+    return Future.value(ComfortNoiseLevel.decode(
         await _methodChannel.invokeMethod<String?>("getComfortNoiseLevel")));
   }
 
@@ -24,7 +24,7 @@ class MediaDeviceService {
   /// Sets the [comfort noise level] for output devices in Dolby Voice conferences.
   Future<void> setComfortNoiseLevel(ComfortNoiseLevel noiseLevel) async {
     return await _methodChannel.invokeMethod<void>(
-        "setComfortNoiseLevel", {"noiseLevel": noiseLevel.value});
+        "setComfortNoiseLevel", {"noiseLevel": noiseLevel.encode()});
   }
 
   /// Switches the current camera to a different camera that is available.
