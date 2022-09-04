@@ -89,7 +89,7 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
 /// The CommandServiceEventNames enum gathers the CommandService events.
 enum CommandServiceEventNames implements EnumWithStringValue {
   /// Emitted when a participant receives a message.
-  MessageReceived('EVENT_COMMAND_MESSAGE_RECEIVED');
+  messageReceived('EVENT_COMMAND_MESSAGE_RECEIVED');
 
   @override
   final String value;
@@ -97,8 +97,11 @@ enum CommandServiceEventNames implements EnumWithStringValue {
   const CommandServiceEventNames(this.value);
 
   static CommandServiceEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return CommandServiceEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) {
+        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+      },
       orElse: () => throw Exception("Invalid enum name"),
     );
   }

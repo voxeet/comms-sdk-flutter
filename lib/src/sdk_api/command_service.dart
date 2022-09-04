@@ -19,9 +19,9 @@ class CommandService {
     return await _methodChannel.invokeMethod<void>("send", args);
   }
 
-  /// Returns a [Stream] of the [CommandServiceEventNames.MessageReceived] events. By subscribing to the returned stream you will be notified about received messages.
+  /// Returns a [Stream] of the [CommandServiceEventNames.messageReceived] events. By subscribing to the returned stream you will be notified about received messages.
   Stream<Event<CommandServiceEventNames, MessageReceivedData>> onMessageReceived() {
-    return _nativeEventsReceiver.addListener([CommandServiceEventNames.MessageReceived]).map((event) {
+    return _nativeEventsReceiver.addListener([CommandServiceEventNames.messageReceived]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
       final eventType = CommandServiceEventNames.valueOf(eventMap["key"] as String);
       final participant = MessageReceivedMapper.fromMap(eventMap["body"] as Map<Object?, Object?>);

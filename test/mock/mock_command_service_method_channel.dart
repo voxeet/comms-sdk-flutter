@@ -8,7 +8,7 @@ class MockCommandServiceMethodChannel {
   Object? onMethodCall(MethodCall call) {
     switch(call.method) {
       case "send":
-        var eventType = CommandServiceEventNames.MessageReceived.value;
+        var eventType = CommandServiceEventNames.messageReceived.value;
         var args = call.arguments as Map<Object?, Object?>?;
         var message = "";
         if (args != null && args.containsKey("message")) {

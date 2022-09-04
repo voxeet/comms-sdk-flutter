@@ -59,7 +59,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
     onMessageReceivedChangeSubscription = _dolbyioCommsSdkFlutterPlugin.command
       .onMessageReceived()
       .listen((params) {
-        showDialog(context, params.type.value, "Message: ${params.body.message}");
+        showDialog(context, params.type.name, "Message: ${params.body.message}");
         developer.log("onMessageReceived");
       });
   }
