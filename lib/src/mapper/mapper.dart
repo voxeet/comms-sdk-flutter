@@ -115,7 +115,7 @@ class RecordingInformationMapper {
     var participantId = map["participantId"] as String;
     var startTimestamp = map["startTimestamp"] as num;
     var status = map.containsKey("recordingStatus") ? map["recordingStatus"] as String : null;
-    return RecordingInformation(participantId, startTimestamp, RecordingStatus.valueOf(status));
+    return RecordingInformation(participantId, startTimestamp, RecordingStatus.decode(status));
   }
 }
 

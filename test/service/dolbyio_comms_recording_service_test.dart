@@ -24,10 +24,10 @@ void main() {
   tearDown(() => channel.setMockMethodCallHandler(null));
 
   test("test getCurrentRecording method and check if result is received", () async {
-    var status = RecordingStatus.NOT_RECORDING;
+    var status = RecordingStatus.notRecording;
     var participantId = "1234";
     var startTimestamp = 1658483423;
-    var expected = {"recordingStatus": status.name, "participantId": participantId, "startTimestamp": startTimestamp};
+    var expected = {"recordingStatus": status.encode(), "participantId": participantId, "startTimestamp": startTimestamp};
     when(channel.invokeMethod("currentRecording")).thenAnswer((_) => Future.value(expected));
 
     var result = await recordingService.currentRecording();
