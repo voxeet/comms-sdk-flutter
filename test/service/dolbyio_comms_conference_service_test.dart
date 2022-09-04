@@ -378,7 +378,7 @@ void main() {
   });
 
   test("test setVideoForwarding method", () async {
-    var strategy = VideoForwardingStrategy.CLOSEST_USER;
+    var strategy = VideoForwardingStrategy.closestUser;
     var maxVideoForwarding = 3;
     when(channel.invokeMethod("setVideoForwarding", {
       "strategy": 'CLOSEST_USER',

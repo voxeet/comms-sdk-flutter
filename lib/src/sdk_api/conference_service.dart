@@ -260,7 +260,7 @@ class ConferenceService {
   ) async {
     return await _methodChannel.invokeMethod<bool>(
       "setVideoForwarding",
-      {"strategy": strategy.value, "max": max, "prioritizedParticipants": prioritizedParticipants.map((e) => e.toJson()).toList()},
+      {"strategy": strategy.encode(), "max": max, "prioritizedParticipants": prioritizedParticipants.map((e) => e.toJson()).toList()},
     );
   }
 

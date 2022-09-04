@@ -241,7 +241,7 @@ class ConferenceServiceTestButtons extends StatelessWidget {
     _dolbyioCommsSdkFlutterPlugin.conference
         .current()
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(conference))
-        .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference.setVideoForwarding(VideoForwardingStrategy.LAST_SPEAKER, 4, participants))
+        .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference.setVideoForwarding(VideoForwardingStrategy.lastSpeaker, 4, participants))
         .then((value) => showDialog(context, 'Success', jsonEncode(value)))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }

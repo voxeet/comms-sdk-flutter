@@ -470,17 +470,21 @@ class AudioProcessingSenderOptions {
 }
 
 enum VideoForwardingStrategy {
-  LAST_SPEAKER('LAST_SPEAKER'),
-  CLOSEST_USER('CLOSEST_USER');
+  lastSpeaker('LAST_SPEAKER'),
+  closestUser('CLOSEST_USER');
 
-  final String value;
+  final String _value;
 
-  const VideoForwardingStrategy(this.value);
+  const VideoForwardingStrategy(this._value);
 
-  static VideoForwardingStrategy valueOf(String value) {
+  static VideoForwardingStrategy decode(String value) {
     return VideoForwardingStrategy.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
+  }
+
+  String encode() {
+    return _value;
   }
 }
