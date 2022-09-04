@@ -293,9 +293,9 @@ class ConferenceService {
     return Future.value();
   }
   
-  /// Returns a [Stream] of the [ConferenceServiceEventNames.StatusUpdated] events. By subscribing to the returned stream you will be notified about conference status changes.
+  /// Returns a [Stream] of the [ConferenceServiceEventNames.statusUpdated] events. By subscribing to the returned stream you will be notified about conference status changes.
   Stream<Event<ConferenceServiceEventNames, ConferenceStatus>> onStatusChange() {
-    return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.StatusUpdated]).map((event) {
+    return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.statusUpdated]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
       final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
       final status = ConferenceStatus.decode(eventMap["body"] as String) ?? ConferenceStatus.defaultStatus;
@@ -303,9 +303,9 @@ class ConferenceService {
     });
   }
   
-  /// Returns a [Stream] of the [ConferenceServiceEventNames.PermissionsUpdated] events. By subscribing to the returned stream you will be notified about conference permissions changes.
+  /// Returns a [Stream] of the [ConferenceServiceEventNames.permissionsUpdated] events. By subscribing to the returned stream you will be notified about conference permissions changes.
   Stream<Event<ConferenceServiceEventNames, List<ConferencePermission>>> onPermissionsChange() {
-    return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.PermissionsUpdated]).map((event) {
+    return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.permissionsUpdated]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
       final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
       final permissions = PermissionsUpdatedMapper.fromList(eventMap["body"] as List<Object?>);
@@ -313,11 +313,11 @@ class ConferenceService {
     });
   }
   
-  /// Returns a [Stream] of the [ConferenceServiceEventNames.ParticipantAdded] and [ConferenceServiceEventNames.ParticipantUpdated] events. By subscribing to the returned stream you will be notified about changed statuses of conference participants and new participants in a conference.
+  /// Returns a [Stream] of the [ConferenceServiceEventNames.participantAdded] and [ConferenceServiceEventNames.participantUpdated] events. By subscribing to the returned stream you will be notified about changed statuses of conference participants and new participants in a conference.
   Stream<Event<ConferenceServiceEventNames, Participant>> onParticipantsChange() {
     return _nativeEventsReceiver.addListener([
-      ConferenceServiceEventNames.ParticipantAdded,
-      ConferenceServiceEventNames.ParticipantUpdated,
+      ConferenceServiceEventNames.participantAdded,
+      ConferenceServiceEventNames.participantUpdated,
     ]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
       final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
@@ -326,12 +326,12 @@ class ConferenceService {
     });
   }
   
-  /// Returns a [Stream] of the [ConferenceServiceEventNames.StreamAdded], [ConferenceServiceEventNames.StreamUpdated], and [ConferenceServiceEventNames.StreamRemoved] events. By subscribing to the returned stream you will be notified about new, changed, and removed streams of conference participants.
+  /// Returns a [Stream] of the [ConferenceServiceEventNames.streamAdded], [ConferenceServiceEventNames.streamUpdated], and [ConferenceServiceEventNames.streamRemoved] events. By subscribing to the returned stream you will be notified about new, changed, and removed streams of conference participants.
   Stream<Event<ConferenceServiceEventNames, StreamsChangeData>> onStreamsChange() {
     return _nativeEventsReceiver.addListener([
-      ConferenceServiceEventNames.StreamAdded,
-      ConferenceServiceEventNames.StreamUpdated,
-      ConferenceServiceEventNames.StreamRemoved
+      ConferenceServiceEventNames.streamAdded,
+      ConferenceServiceEventNames.streamUpdated,
+      ConferenceServiceEventNames.streamRemoved
     ]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
       final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
