@@ -10,10 +10,10 @@ import 'package:mockito/mockito.dart';
 import '../mock/mock_method_channel.dart';
 
 final userToInvite =
-    Participant("my_id2", ParticipantInfo("userToInvite", null, null), ParticipantStatus.connected, ParticipantType.USER);
+    Participant("my_id2", ParticipantInfo("userToInvite", null, null), ParticipantStatus.connected, ParticipantType.user);
 
 var participants = [
-  Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.USER),
+  Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.user),
   userToInvite
 ];
 

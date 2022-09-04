@@ -113,7 +113,7 @@ void main() {
     expect(conference.participants[0].info?.name, "participant_info_name_2");
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_2");
     expect(conference.participants[0].status, ParticipantStatus.decline);
-    expect(conference.participants[0].type, ParticipantType.LISTENER);
+    expect(conference.participants[0].type, ParticipantType.listner);
     expect(conference.status, ConferenceStatus.created);
 
     await resetSDK();
@@ -138,7 +138,7 @@ void main() {
     expect(conference.participants[0].info?.name, "participant_info_name_3");
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_3");
     expect(conference.participants[0].status, ParticipantStatus.error);
-    expect(conference.participants[0].type, ParticipantType.USER);
+    expect(conference.participants[0].type, ParticipantType.user);
     expect(conference.status, ConferenceStatus.ended);
 
     await resetSDK();
@@ -163,7 +163,7 @@ void main() {
     expect(conference.participants[0].info?.name, "");
     expect(conference.participants[0].info?.avatarUrl, null);
     expect(conference.participants[0].status, ParticipantStatus.connecting);
-    expect(conference.participants[0].type, ParticipantType.UNKNOWN);
+    expect(conference.participants[0].type, ParticipantType.unknown);
     expect(conference.status, ConferenceStatus.ended);
   });
 
@@ -188,7 +188,7 @@ void main() {
           "participant_id",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
           ParticipantStatus.connected,
-          ParticipantType.LISTENER)
+          ParticipantType.listner)
       ],
       ConferenceStatus.created);
 
@@ -265,7 +265,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -285,7 +285,7 @@ void main() {
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -352,7 +352,7 @@ void main() {
       "participant_id_5_1",
       ParticipantInfo("participant_name", "avatar_url", "external_id"),
       ParticipantStatus.connected,
-      ParticipantType.LISTENER);
+      ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -379,7 +379,7 @@ void main() {
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
           ParticipantStatus.inactive,
-          ParticipantType.USER);
+          ParticipantType.user);
 
       runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -427,7 +427,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -447,7 +447,7 @@ void main() {
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -468,7 +468,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -488,7 +488,7 @@ void main() {
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -509,7 +509,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -529,7 +529,7 @@ void main() {
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -550,7 +550,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -570,7 +570,7 @@ void main() {
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -601,7 +601,7 @@ void main() {
               "participant_id",
               ParticipantInfo("participant_name", "avatar_url", "external_id"),
               ParticipantStatus.connected,
-              ParticipantType.LISTENER)
+              ParticipantType.listner)
         ],
         ConferenceStatus.created);
 
@@ -695,7 +695,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     var position = SpatialPosition(1, 1, 1);
 
@@ -767,7 +767,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER
+        ParticipantType.listner
         );
 
     runNative(
@@ -853,7 +853,7 @@ void main() {
       "participant_id_5_1",
       ParticipantInfo("participant_name", "avatar_url", "external_id"),
       ParticipantStatus.connected,
-      ParticipantType.LISTENER);
+      ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -880,7 +880,7 @@ void main() {
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
           ParticipantStatus.inactive,
-          ParticipantType.USER);
+          ParticipantType.user);
 
       runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -913,7 +913,7 @@ void main() {
           "participant_id_5_1",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
           ParticipantStatus.connected,
-          ParticipantType.LISTENER)
+          ParticipantType.listner)
     ]);
 
     await expectNative(
@@ -980,7 +980,7 @@ void main() {
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
         ParticipantStatus.connected,
-        ParticipantType.LISTENER);
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -1010,7 +1010,7 @@ void main() {
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
           ParticipantStatus.connected,
-          ParticipantType.LISTENER);
+          ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,

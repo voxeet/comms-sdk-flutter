@@ -14,7 +14,7 @@ import '../mock/mock_method_channel.dart';
 import '../test_helpers.dart';
 import 'dolbyio_comms_conference_service_test.mocks.dart';
 
-var participant = Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.USER);
+var participant = Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.user);
 var participantMap = {
   "id": "my_id",
   "info": {
@@ -23,7 +23,7 @@ var participantMap = {
     "externalId": null,
   },
   "status": ParticipantStatus.connected.encode(),
-  "type": ParticipantType.USER.value,
+  "type": ParticipantType.user.encode(),
   "streams": null,
 };
 

@@ -27,7 +27,7 @@ class Participant {
     "id": id,
     "info": info?.toJson(),
     "status": status?.encode(),
-    "type": type?.value,
+    "type": type?.encode(),
     "streams": streams?.map((e) => e.toJson()).toList()
   };
 }
@@ -93,20 +93,26 @@ enum ParticipantStatus {
 /// The ParticipantType enum gathers the possible types of a conference participant.
 enum ParticipantType {
   /// A participant who cannot send any audio or video stream to a conference.
-  LISTENER("listener"),
+  listner("listener"),
 
   /// A participant who can send and receive audio and video during the conference.
-  USER("user"),
+  user("user"),
 
   /// A participant whos type is not known.
-  UNKNOWN("unknown");
+  unknown("unknown");
 
-  final String value;
+  final String _value;
 
-  const ParticipantType(this.value);
+  const ParticipantType(this._value);
 
-  static ParticipantType? valueOf(String? value) {
-    return ParticipantType.values.firstWhereOrNull((element) => element.value == value || element.name == value) ?? ParticipantType.UNKNOWN;
+  static ParticipantType? decode(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
+    return ParticipantType.values
+      .firstWhereOrNull((element) => element._value == lowerCaseValue) ?? ParticipantType.unknown;
+  }
+
+  String encode() {
+    return _value;
   }
 }
 

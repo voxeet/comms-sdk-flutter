@@ -32,7 +32,7 @@ class ParticipantMapper {
     var streams = participant.containsKey("streams")
         ? (participant["streams"] as List<Object?>?)?.map((e) => MediaStreamMapper.fromMap(e as Map<Object?, Object?>)).toList()
         : null;
-    var result = Participant(id, info, ParticipantStatus.decode(status), ParticipantType.valueOf(type));
+    var result = Participant(id, info, ParticipantStatus.decode(status), ParticipantType.decode(type));
     result.streams = streams;
     return result;
   }

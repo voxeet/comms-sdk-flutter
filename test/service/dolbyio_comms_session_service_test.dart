@@ -60,7 +60,7 @@ void main() {
       "my_id2",
       ParticipantInfo("userToInvite", null, null),
       ParticipantStatus.connected,
-      ParticipantType.USER,
+      ParticipantType.user,
     );
     when(channel.invokeMethod("getParticipant")).thenAnswer((_) => Future.value(participant.toJson()));
 
