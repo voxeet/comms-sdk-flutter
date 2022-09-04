@@ -127,7 +127,7 @@ class MediaStreamMapper {
     var audioTracks = toNoNullableList(stream["audioTracks"] as List<Object?>);
 
     var videoTracks = toNoNullableList(stream["videoTracks"] as List<Object?>);
-    return MediaStream(id, MediaStreamType.valueOf(type)!, audioTracks, videoTracks, label);
+    return MediaStream(id, MediaStreamType.decode(type)!, audioTracks, videoTracks, label);
   }
 }
 
