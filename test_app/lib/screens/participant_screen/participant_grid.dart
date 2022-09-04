@@ -7,7 +7,7 @@ import 'participant_widget.dart';
 import 'dart:developer' as developer;
 
 class ParticipantGrid extends StatefulWidget {
-  ParticipantGrid({Key? key}) : super(key: key);
+  const ParticipantGrid({Key? key}) : super(key: key);
 
   @override
   State<ParticipantGrid> createState() => _ParticipantGridState();

@@ -8,7 +8,7 @@ class PrimaryButton extends StatefulWidget {
   const PrimaryButton({super.key, required this.widgetText, required this.onPressed, this.color = Colors.blue});
 
   @override
-  _PrimaryButtonState createState() => _PrimaryButtonState();
+  State<PrimaryButton> createState() => _PrimaryButtonState();
 }
 
 class _PrimaryButtonState extends State<PrimaryButton> {

@@ -43,7 +43,7 @@ class JoinConference extends StatelessWidget {
 class JoinConferenceContent extends StatefulWidget {
   final String username;
 
-  JoinConferenceContent({Key? key, required this.username}) : super(key: key);
+  const JoinConferenceContent({Key? key, required this.username}) : super(key: key);
 
   @override
   State<JoinConferenceContent> createState() => _JoinConferenceContentState();
