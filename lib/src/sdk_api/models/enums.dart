@@ -38,16 +38,16 @@ enum ComfortNoiseLevel {
 /// **Note**: This enum is currently supported only on Android devices.
 enum FilePresentationServiceEventNames implements EnumWithStringValue {
   /// Emitted when a file is converted.
-  FileConverted('EVENT_FILEPRESENTATION_FILE_CONVERTED'),
+  fileConverted('EVENT_FILEPRESENTATION_FILE_CONVERTED'),
 
   /// Emitted when a presenter starts a file presentation.
-  FilePresentationStarted('EVENT_FILEPRESENTATION_STARTED'),
+  filePresentationStarted('EVENT_FILEPRESENTATION_STARTED'),
 
   /// Emitted when a presenter ends a file presentation.
-  FilePresentationStopped('EVENT_FILEPRESENTATION_STOPPED'),
+  filePresentationStopped('EVENT_FILEPRESENTATION_STOPPED'),
 
   /// Emitted when a presenter changes the displayed page of the shared file.
-  FilePresentationUpdated('EVENT_FILEPRESENTATION_UPDATED');
+  filePresentationUpdated('EVENT_FILEPRESENTATION_UPDATED');
 
   @override
   final String value;
@@ -55,8 +55,11 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
   const FilePresentationServiceEventNames(this.value);
 
   static FilePresentationServiceEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return FilePresentationServiceEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) {
+        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+      },
       orElse: () => throw Exception("Invalid enum name"),
     );
   }

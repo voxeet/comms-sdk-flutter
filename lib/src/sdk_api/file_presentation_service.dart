@@ -13,21 +13,21 @@ import 'models/file_presentation.dart';
 ///
 /// 1. The presenter calls the [convert] method to upload and convert a file.
 ///
-/// 2. The presenter receives the [FilePresentationServiceEventNames.FileConverted] event when the file conversion is finished.
+/// 2. The presenter receives the [FilePresentationServiceEventNames.fileConverted] event when the file conversion is finished.
 ///
 /// 3. The presenter calls the [start] method to start presenting the file.
 ///
-/// 4. The presenter and the viewers receive the [FilePresentationServiceEventNames.FilePresentationStarted] event that informs that the file presentation is started.
+/// 4. The presenter and the viewers receive the [FilePresentationServiceEventNames.filePresentationStarted] event that informs that the file presentation is started.
 ///
 /// 5. The presenter calls the [getImage] method to get the URL of the converted file and display the proper page of the file by retrieving the individual images.
 ///
 /// 6. The application is responsible for coordinating the page flip between the local and the presented files. The presenter calls the [setPage] method to inform the service to send the updated page number to other participants.
 ///
-/// 7. The presenter and viewers receive the [FilePresentationServiceEventNames.FilePresentationUpdated] event with the current page number. Receiving the event should trigger calling the [getImage] method to display the proper page of the file by retrieving the individual images.
+/// 7. The presenter and viewers receive the [FilePresentationServiceEventNames.filePresentationUpdated] event with the current page number. Receiving the event should trigger calling the [getImage] method to display the proper page of the file by retrieving the individual images.
 ///
 /// 8. The presenter calls the [stop] method to end the file presentation.
 ///
-/// 9. The presenter and the viewers receive the [FilePresentationServiceEventNames.FilePresentationStopped] event that informs about the end of the file presentation.
+/// 9. The presenter and the viewers receive the [FilePresentationServiceEventNames.filePresentationStopped] event that informs about the end of the file presentation.
 ///
 class FilePresentationService {
   /// @internal
@@ -89,9 +89,9 @@ class FilePresentationService {
     return Future.value();
   }
 
-  /// Returns a [Stream] of the [FilePresentationServiceEventNames.FileConverted] events. By subscribing to the returned stream you will be notified about finished file conversions.
+  /// Returns a [Stream] of the [FilePresentationServiceEventNames.fileConverted] events. By subscribing to the returned stream you will be notified about finished file conversions.
   Stream<Event<FilePresentationServiceEventNames, FileConverted>> onFileConverted() {
-    return _nativeEventsReceiver.addListener([FilePresentationServiceEventNames.FileConverted]).map((map) {
+    return _nativeEventsReceiver.addListener([FilePresentationServiceEventNames.fileConverted]).map((map) {
       final event = map as Map<Object?, Object?>;
       final key = FilePresentationServiceEventNames.valueOf(event["key"] as String);
       final data = event["body"] as Map<Object?, Object?>;
@@ -99,12 +99,12 @@ class FilePresentationService {
     });
   }
 
-  /// Returns a [Stream] of the [FilePresentationServiceEventNames.FilePresentationStarted], [FilePresentationServiceEventNames.FilePresentationStopped], and [FilePresentationServiceEventNames.FilePresentationUpdated] events. By subscribing to the returned stream you will be notified about started, modified, and stopped file presentations.
+  /// Returns a [Stream] of the [FilePresentationServiceEventNames.filePresentationStarted], [FilePresentationServiceEventNames.filePresentationStopped], and [FilePresentationServiceEventNames.filePresentationUpdated] events. By subscribing to the returned stream you will be notified about started, modified, and stopped file presentations.
   Stream<Event<FilePresentationServiceEventNames, FilePresentation>> onFilePresentationChange() {
     var events = [
-      FilePresentationServiceEventNames.FilePresentationStarted,
-      FilePresentationServiceEventNames.FilePresentationStopped,
-      FilePresentationServiceEventNames.FilePresentationUpdated
+      FilePresentationServiceEventNames.filePresentationStarted,
+      FilePresentationServiceEventNames.filePresentationStopped,
+      FilePresentationServiceEventNames.filePresentationUpdated
     ];
     return _nativeEventsReceiver.addListener(events).map((map) {
       final event = map as Map<Object?, Object?>;
