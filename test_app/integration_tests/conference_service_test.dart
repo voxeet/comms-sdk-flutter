@@ -112,7 +112,7 @@ void main() {
     expect(conference.participants[0].info?.externalId, "participant_info_external_id_2");
     expect(conference.participants[0].info?.name, "participant_info_name_2");
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_2");
-    expect(conference.participants[0].status, ParticipantStatus.DECLINE);
+    expect(conference.participants[0].status, ParticipantStatus.decline);
     expect(conference.participants[0].type, ParticipantType.LISTENER);
     expect(conference.status, ConferenceStatus.created);
 
@@ -137,7 +137,7 @@ void main() {
     expect(conference.participants[0].info?.externalId, "participant_info_external_id_3");
     expect(conference.participants[0].info?.name, "participant_info_name_3");
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_3");
-    expect(conference.participants[0].status, ParticipantStatus.ERROR);
+    expect(conference.participants[0].status, ParticipantStatus.error);
     expect(conference.participants[0].type, ParticipantType.USER);
     expect(conference.status, ConferenceStatus.ended);
 
@@ -162,7 +162,7 @@ void main() {
     expect(conference.participants[0].info?.externalId, null);
     expect(conference.participants[0].info?.name, "");
     expect(conference.participants[0].info?.avatarUrl, null);
-    expect(conference.participants[0].status, ParticipantStatus.CONNECTING);
+    expect(conference.participants[0].status, ParticipantStatus.connecting);
     expect(conference.participants[0].type, ParticipantType.UNKNOWN);
     expect(conference.status, ConferenceStatus.ended);
   });
@@ -187,7 +187,7 @@ void main() {
         Participant(
           "participant_id",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.CONNECTED,
+          ParticipantStatus.connected,
           ParticipantType.LISTENER)
       ],
       ConferenceStatus.created);
@@ -264,7 +264,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -284,7 +284,7 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -351,7 +351,7 @@ void main() {
     var participant = Participant(
       "participant_id_5_1",
       ParticipantInfo("participant_name", "avatar_url", "external_id"),
-      ParticipantStatus.CONNECTED,
+      ParticipantStatus.connected,
       ParticipantType.LISTENER);
 
     runNative(
@@ -378,7 +378,7 @@ void main() {
       participant = Participant(
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.INACTIVE,
+          ParticipantStatus.inactive,
           ParticipantType.USER);
 
       runNative(
@@ -426,7 +426,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -446,7 +446,7 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -467,7 +467,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -487,7 +487,7 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -508,7 +508,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -528,7 +528,7 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -549,7 +549,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -569,7 +569,7 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -600,7 +600,7 @@ void main() {
           Participant(
               "participant_id",
               ParticipantInfo("participant_name", "avatar_url", "external_id"),
-              ParticipantStatus.CONNECTED,
+              ParticipantStatus.connected,
               ParticipantType.LISTENER)
         ],
         ConferenceStatus.created);
@@ -694,7 +694,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     var position = SpatialPosition(1, 1, 1);
@@ -766,7 +766,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER
         );
 
@@ -852,7 +852,7 @@ void main() {
      var participant = Participant(
       "participant_id_5_1",
       ParticipantInfo("participant_name", "avatar_url", "external_id"),
-      ParticipantStatus.CONNECTED,
+      ParticipantStatus.connected,
       ParticipantType.LISTENER);
 
     runNative(
@@ -879,7 +879,7 @@ void main() {
       participant = Participant(
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.INACTIVE,
+          ParticipantStatus.inactive,
           ParticipantType.USER);
 
       runNative(
@@ -912,7 +912,7 @@ void main() {
       Participant(
           "participant_id_5_1",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.CONNECTED,
+          ParticipantStatus.connected,
           ParticipantType.LISTENER)
     ]);
 
@@ -979,7 +979,7 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
+        ParticipantStatus.connected,
         ParticipantType.LISTENER);
 
     runNative(
@@ -1009,7 +1009,7 @@ void main() {
     participant = Participant(
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.CONNECTED,
+          ParticipantStatus.connected,
           ParticipantType.LISTENER);
 
     runNative(

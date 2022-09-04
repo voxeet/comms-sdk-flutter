@@ -98,7 +98,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   Future<void> initParticipantsList() async {
     final currentConference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(currentConference);
-    final availableParticipants = conferenceParticipants.where((element) => element.status != ParticipantStatus.LEFT);
+    final availableParticipants = conferenceParticipants.where((element) => element.status != ParticipantStatus.left);
     setState(() => participants = availableParticipants.toList());
     return Future.value();
   }

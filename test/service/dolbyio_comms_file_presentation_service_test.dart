@@ -10,7 +10,7 @@ import '../test_helpers.dart';
 final participant = Participant(
   "my_id2",
   ParticipantInfo("userToInvite", null, null),
-  ParticipantStatus.CONNECTED,
+  ParticipantStatus.connected,
   ParticipantType.USER,
 );
 

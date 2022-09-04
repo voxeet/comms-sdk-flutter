@@ -26,7 +26,7 @@ class Participant {
   Map<String, Object?> toJson() => {
     "id": id,
     "info": info?.toJson(),
-    "status": status?.value,
+    "status": status?.encode(),
     "type": type?.value,
     "streams": streams?.map((e) => e.toJson()).toList()
   };
@@ -48,41 +48,45 @@ class ParticipantPermissions {
 /// The ParticipantStatus enum gathers the possible statuses of a conference participant.
 enum ParticipantStatus {
   /// The participant has successfully connected to a conference.
-  CONNECTED('CONNECTED'),
+  connected('CONNECTED'),
 
   /// A participant successfully connected to a conference. In the next release, this status will be replaced with a new status.
-  ON_AIR('ON_AIR'),
+  onAir('ON_AIR'),
 
   /// The participant has received a conference invitation and is connecting to the conference.
-  CONNECTING('CONNECTING'),
+  connecting('CONNECTING'),
 
   /// The invited participant has declined a conference invitation. 
-  DECLINE('DECLINE'),
+  decline('DECLINE'),
 
   /// A peer connection has failed and the participant cannot connect to a conference.
-  ERROR('ERROR'),
+  error('ERROR'),
 
   /// The participant did not enable audio, video, or screen-share and is not connected to any stream.
-  INACTIVE('INACTIVE'),
+  inactive('INACTIVE'),
 
   /// The participant has been kicked out of a conference.
-  KICKED('KICKED'),
+  kicked('KICKED'),
 
   /// The participant has left a conference.
-  LEFT('LEFT'),
+  left('LEFT'),
 
   /// The participant has been invited to a conference and is waiting for an invitation.
-  RESERVED('RESERVED'),
+  reserved('RESERVED'),
 
   /// The participant has encountered a peer connection problem that may result in the Error or Connected status.
-  WARNING('WARNING');
+  warning('WARNING');
 
-  final String value;
+  final String _value;
 
-  const ParticipantStatus(this.value);
+  const ParticipantStatus(this._value);
 
-  static ParticipantStatus? valueOf(String? value) {
-    return ParticipantStatus.values.firstWhereOrNull((element) => element.value == value || element.name == value);
+  static ParticipantStatus? decode(String? value) {
+    return ParticipantStatus.values.firstWhereOrNull((element) => element._value == value);
+  }
+
+  String encode() {
+    return _value;
   }
 }
 
