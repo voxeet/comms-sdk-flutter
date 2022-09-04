@@ -22,7 +22,7 @@ void main() {
     var parameters = ConferenceCreateParameters();
     parameters.dolbyVoice = true;
     parameters.liveRecording = true;
-    parameters.rtcpMode = RTCPMode.BEST;
+    parameters.rtcpMode = RTCPMode.best;
     parameters.ttl = 15;
     parameters.videoCodec = Codec.h264;
     var options = ConferenceCreateOption("test_alias", parameters, 1234);
@@ -54,7 +54,7 @@ void main() {
     parameters = ConferenceCreateParameters();
     parameters.dolbyVoice = false;
     parameters.liveRecording = false;
-    parameters.rtcpMode = RTCPMode.WORST;
+    parameters.rtcpMode = RTCPMode.worst;
     parameters.ttl = 30;
     parameters.videoCodec = Codec.vp8;
     options = ConferenceCreateOption("test_alias2", parameters, 4321);

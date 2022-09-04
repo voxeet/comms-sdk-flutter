@@ -59,7 +59,7 @@ void main() {
     var createParams = ConferenceCreateParameters()
       ..dolbyVoice = true
       ..liveRecording = true
-      ..rtcpMode = RTCPMode.BEST
+      ..rtcpMode = RTCPMode.best
       ..ttl = 1000
       ..videoCodec = Codec.h264;
     var createOptions = ConferenceCreateOption("conference", createParams, 1);
@@ -73,7 +73,7 @@ void main() {
       "params": {
         "dolbyVoice": true,
         "liveRecording": true,
-        "rtcpMode": RTCPMode.BEST.name,
+        "rtcpMode": RTCPMode.best.encode(),
         "ttl": 1000,
         "videoCodec": Codec.h264.encode(),
       },

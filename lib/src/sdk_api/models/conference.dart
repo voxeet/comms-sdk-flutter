@@ -136,7 +136,7 @@ class ConferenceCreateParameters {
   Map<String, dynamic> toJson() => {
         "dolbyVoice": dolbyVoice,
         "liveRecording": liveRecording,
-        "rtcpMode": rtcpMode?.name,
+        "rtcpMode": rtcpMode?.encode(),
         "ttl": ttl,
         "videoCodec": videoCodec?.encode(),
       };
@@ -145,17 +145,21 @@ class ConferenceCreateParameters {
 /// The RTCPMode enum gathers the possible bitrate adaptation modes for video transmission.
 enum RTCPMode {
   /// Averages the available bandwidth of all receivers and adjusts the transmission bitrate to this value.
-  AVERAGE('average'),
+  average('average'),
 
   /// Does not adjust the transmission bitrate to the receivers' bandwidth.
-  BEST('best'),
+  best('best'),
 
   /// Adjusts the transmission bitrate to the receiver who has the worst network conditions.
-  WORST('worst');
+  worst('worst');
 
-  final String name;
+  final String _value;
 
-  const RTCPMode(this.name);
+  const RTCPMode(this._value);
+
+  String encode() {
+    return _value;
+  }
 }
 
 /// The Codec enum gathers the available video codecs.
