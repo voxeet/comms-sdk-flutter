@@ -266,28 +266,28 @@ enum RTCStatsType {
   codec('codec'),
 
   /// Statistics for an inbound RTP stream that is currently received with this RTCPeerConnection object. It is accessed by the RTCInboundRtpStreamStats.
-  inbound_rtp('inbound-rtp'),
+  inboundRtp('inbound-rtp'),
 
   /// Statistics for an outbound RTP stream that is currently sent with this RTCPeerConnection object. It is accessed by the RTCOutboundRtpStreamStats.
-  outbound_rtp('outbound-rtp'),
+  outboundRtp('outbound-rtp'),
 
   /// Statistics for the remote endpoint's inbound RTP stream corresponding to an outbound stream that is currently sent with this RTCPeerConnection object.
-  remote_inbound_rtp('remote-inbound-rtp'),
+  remoteInboundRtp('remote-inbound-rtp'),
 
   /// Statistics for the remote endpoint's outbound RTP stream corresponding to an inbound stream that is currently received with this RTCPeerConnection object.
-  remote_outbound_rtp('remote-outbound-rtp'),
+  remoteOutboundRtp('remote-outbound-rtp'),
 
   /// Statistics for the media produced by a MediaStreamTrack that is currently attached to an RTCRtpSender.
-  media_source('media-source'),
+  mediaSource('media-source'),
 
   /// Statistics for a contributing source (CSRC) that contributed to an inbound RTP stream.
   csrc('csrc'),
 
   /// Statistics related to the RTCPeerConnection object.
-  peer_connection('peer-connection'),
+  peerConnection('peer-connection'),
 
   /// Statistics related to each RTCDataChannel id.
-  data_channel('data-channel'),
+  dataChannel('data-channel'),
 
   /// Contains statistics related to a specific MediaStream.
   stream('stream'),
@@ -308,29 +308,29 @@ enum RTCStatsType {
   transport('transport'),
 
   /// SCTP transport statistics related to an RTCSctpTransport object.
-  sctp_transport('sctp-transport'),
+  sctpTransport('sctp-transport'),
 
   /// ICE candidate pair statistics related to the RTCIceTransport objects.
-  candidate_pair('candidate-pair'),
+  candidatePair('candidate-pair'),
 
   /// ICE local candidate statistics related to the RTCIceTransport objects.
-  local_candidate('local-candidate'),
+  localCandidate('local-candidate'),
 
   /// ICE remote candidate statistics related to the RTCIceTransport objects.
-  remote_candidate('remote-candidate'),
+  remoteCandidate('remote-candidate'),
 
   /// Information about a certificate used by an RTCIceTransport.
   certificate('certificate'),
 
   /// Information about the connection to an ICE server (e.g. STUN or TURN).
-  ice_server('ice-server');
+  iceServer('ice-server');
 
-  final String _name;
+  final String _value;
 
-  const RTCStatsType(String name) : _name = name;
+  const RTCStatsType(this._value);
 
-  static RTCStatsType valueOf(String name) {
-    return RTCStatsType.values.firstWhere((element) => element._name == name);
+  static RTCStatsType decode(String value) {
+    return RTCStatsType.values.firstWhere((element) => element._value == value);
   }
 }
 

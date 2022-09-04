@@ -219,7 +219,7 @@ class ConferenceService {
   /// Gets the [standard WebRTC statistics](https://www.w3.org/TR/webrtc-stats/#dom-rtcstatstype).
   Future<List<RTCStatsType>> getLocalStats() async {
     var result = await _methodChannel.invokeMethod<List<String>>("getLocalStats");
-    return result != null ? result.map((e) => RTCStatsType.valueOf(e)).toList() : List<RTCStatsType>.empty();
+    return result != null ? result.map((e) => RTCStatsType.decode(e)).toList() : List<RTCStatsType>.empty();
   }
 
   /// Returns the maximum number of video streams that can be transmitted to the local participant.
