@@ -69,7 +69,7 @@ class VideoPresentationService {
   /// Provides the current state of a video presentation.
   Future<VideoPresentationState> state() async {
     var result = await _methodChannel.invokeMethod<String>("state");
-    return Future.value(result != null ? VideoPresentationState.valueOf(result) : null);
+    return Future.value(result != null ? VideoPresentationState.decode(result) : null);
   }
 
   /// Returns a [Stream] of the [VideoPresentationEventNames.VideoPresentationStarted], [VideoPresentationEventNames.VideoPresentationPaused], [VideoPresentationEventNames.VideoPresentationPlayed], and [VideoPresentationEventNames.VideoPresentationSought] events. By subscribing to the returned stream you will be notified about status changes of video presentations.

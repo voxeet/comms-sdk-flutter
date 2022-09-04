@@ -103,7 +103,7 @@ class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationS
   void state() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .state()
-        .then((state) => showAlertDialog(context, 'Success', state.value))
+        .then((state) => showAlertDialog(context, 'Success', state.name))
         .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
   }
 

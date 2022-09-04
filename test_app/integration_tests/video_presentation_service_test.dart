@@ -58,7 +58,7 @@ void main() {
     dolbyioCommsSdkFlutterPlugin.videoPresentation.play();
     var statePlay =
         await dolbyioCommsSdkFlutterPlugin.videoPresentation.state();
-    expect(statePlay, VideoPresentationState.PLAY);
+    expect(statePlay, VideoPresentationState.play);
 
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,
@@ -70,7 +70,7 @@ void main() {
     dolbyioCommsSdkFlutterPlugin.videoPresentation.stop();
     var stateStop =
         await dolbyioCommsSdkFlutterPlugin.videoPresentation.state();
-    expect(stateStop, VideoPresentationState.STOPPED);
+    expect(stateStop, VideoPresentationState.stopped);
 
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,
@@ -82,7 +82,7 @@ void main() {
     dolbyioCommsSdkFlutterPlugin.videoPresentation.pause(0);
     var statePause =
         await dolbyioCommsSdkFlutterPlugin.videoPresentation.state();
-    expect(statePause, VideoPresentationState.PAUSED);
+    expect(statePause, VideoPresentationState.paused);
 
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,

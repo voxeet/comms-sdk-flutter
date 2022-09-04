@@ -101,21 +101,22 @@ enum CommandServiceEventNames implements EnumWithStringValue {
 /// The VideoPresentationState enum gathers the possible statuses of a video presentation.
 enum VideoPresentationState {
   /// The video presentation is paused.
-  PAUSED('paused'),
+  paused('paused'),
 
   /// The video presentation is played.
-  PLAY('play'),
+  play('play'),
 
   /// The video presentation is stopped.
-  STOPPED('stopped');
+  stopped('stopped');
 
-  final String value;
+  final String _value;
 
-  const VideoPresentationState(this.value);
+  const VideoPresentationState(this._value);
 
-  static VideoPresentationState valueOf(String? value) {
+  static VideoPresentationState decode(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return VideoPresentationState.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value.toLowerCase() == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
