@@ -68,7 +68,7 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
 /// The NotificationServiceEventNames enum gathers the NotificationService events.
 enum NotificationServiceEventNames implements EnumWithStringValue {
   /// Emitted when an application user receives an invitation.
-  InvitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED');
+  invitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED');
 
   @override
   final String value;
@@ -76,8 +76,11 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
   const NotificationServiceEventNames(this.value);
 
   static NotificationServiceEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return NotificationServiceEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) { 
+        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+      },
       orElse: () => throw Exception("Invalid enum name"),
     );
   }

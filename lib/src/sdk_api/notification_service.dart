@@ -33,9 +33,9 @@ class NotificationService {
     return _methodChannel.invokeMethod<void>("invite", args);
   }
   
-  /// Returns a [Stream] of the [NotificationServiceEventNames.InvitationReceived] events. By subscribing to the returned stream you will be notified about new conference invitations.
+  /// Returns a [Stream] of the [NotificationServiceEventNames.invitationReceived] events. By subscribing to the returned stream you will be notified about new conference invitations.
   Stream<Event<NotificationServiceEventNames, InvitationReceivedNotificationData>> onInvitationReceived() {
-    return _eventStream.addListener([NotificationServiceEventNames.InvitationReceived.value]).map((map) {
+    return _eventStream.addListener([NotificationServiceEventNames.invitationReceived.value]).map((map) {
       final event = map as Map<Object?, Object?>;
       final key = NotificationServiceEventNames.valueOf(event["key"] as String);
       final data = event["body"] as Map<Object?, Object?>;

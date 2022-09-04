@@ -25,7 +25,7 @@ class MockNotificationServiceMethodChannel {
 
   void inviteParticipant(Map<Object?, Object?>? args) {
     if (args != null && args.containsKey("conference") && args.containsKey("participants")) {
-      var eventType = NotificationServiceEventNames.InvitationReceived.value; // ATT: NotificationServiceEventNames.value
+      var eventType = NotificationServiceEventNames.invitationReceived.value;
       final conference = ConferenceMapper.fromMap(args["conference"] as Map<Object?, Object?>);
 
       final participants = (args["participants"] as List<Object?>).map((e) {
