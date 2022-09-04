@@ -134,19 +134,19 @@ enum VideoPresentationState {
 /// The VideoPresentationEventNames enum gathers the possible statuses of a video presentation.
 enum VideoPresentationEventNames implements EnumWithStringValue {
   /// Emitted when a video presentation is paused.
-  VideoPresentationPaused('EVENT_VIDEOPRESENTATION_PAUSED'),
+  videoPresentationPaused('EVENT_VIDEOPRESENTATION_PAUSED'),
 
   /// Emitted when a video presentation is resumed.
-  VideoPresentationPlayed('EVENT_VIDEOPRESENTATION_PLAYED'),
+  videoPresentationPlayed('EVENT_VIDEOPRESENTATION_PLAYED'),
 
   /// Emitted when a video presentation is sought.
-  VideoPresentationSought('EVENT_VIDEOPRESENTATION_SOUGHT'),
+  videoPresentationSought('EVENT_VIDEOPRESENTATION_SOUGHT'),
 
   /// Emitted when a video presentation is started.
-  VideoPresentationStarted('EVENT_VIDEOPRESENTATION_STARTED'),
+  videoPresentationStarted('EVENT_VIDEOPRESENTATION_STARTED'),
 
   /// Emitted when a video presentation is stopped.
-  VideoPresentationStopped('EVENT_VIDEOPRESENTATION_STOPPED');
+  videoPresentationStopped('EVENT_VIDEOPRESENTATION_STOPPED');
 
   @override
   final String value;
@@ -154,8 +154,9 @@ enum VideoPresentationEventNames implements EnumWithStringValue {
   const VideoPresentationEventNames(this.value);
 
   static VideoPresentationEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return VideoPresentationEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element.value == value || element.name.toLowerCase() == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
