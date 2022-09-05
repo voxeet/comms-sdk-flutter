@@ -41,7 +41,7 @@ class TestButtons extends StatelessWidget {
               const SizedBox(height: 10),
               const Text("File presentation service"),
               const SizedBox(height: 10),
-              FilePresentationServiceTestButtons(),
+              const FilePresentationServiceTestButtons(),
               const SizedBox(height: 10),
               const Text("Video presentation service"),
               const SizedBox(height: 10),
