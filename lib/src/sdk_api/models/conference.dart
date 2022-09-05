@@ -469,8 +469,11 @@ class AudioProcessingSenderOptions {
       };
 }
 
+/// The VideoForwardingStrategy enum defines how the SDK should select conference participants whose videos will be transmitted to the local participant. There are two possible values; the selection can be either based on the participants' audio volume or the distance from the local participant.
 enum VideoForwardingStrategy {
+  /// Selects participants based on their audio volume. This allows the local participant to receive video streams only from active speakers.
   lastSpeaker('LAST_SPEAKER'),
+  /// Selects participants based on their distance from the local participant. This allows the local participant to receive video streams only from the nearest participants. This value is available only for participants who enabled spatial audio.
   closestUser('CLOSEST_USER');
 
   final String _value;

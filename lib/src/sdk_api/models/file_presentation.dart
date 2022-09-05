@@ -1,8 +1,6 @@
 import 'participant.dart';
 
 /// The File class gathers information about a file that a presenter wants to share during a conference.
-///
-/// **Note**: This class is currently supported only on Android devices.
 class File {
   /// The URL of a file.
   String uri;
@@ -15,8 +13,6 @@ class File {
 }
 
 /// The FileConverted class gathers information about a converted file.
-///
-/// **Note**: This class is currently supported only on Android devices.
 class FileConverted {
   /// The file ID.
   String id;
@@ -45,8 +41,6 @@ class FileConverted {
 }
 
 /// The FilePresentation class gathers information about a file presentation.
-///
-/// **Note**: This class is currently supported only on Android devices.
 class FilePresentation {
   /// The file ID.
   String id;
