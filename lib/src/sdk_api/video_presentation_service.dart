@@ -11,13 +11,13 @@ import 'models/video_presentation.dart';
 ///
 /// 1. The presenter calls the [start] method to start the video presentation. This method automatically starts playing the shared video file.
 ///
-/// 2. All participants receive the [VideoPresentationEventNames.VideoPresentationStarted] event.
+/// 2. All participants receive the [VideoPresentationEventNames.videoPresentationStarted] event.
 ///
-/// 3. The presenter can call the [pause] method to pause the shared video. In such a situation, all conference participants receive the [VideoPresentationEventNames.VideoPresentationPaused] event.
+/// 3. The presenter can call the [pause] method to pause the shared video. In such a situation, all conference participants receive the [VideoPresentationEventNames.videoPresentationPaused] event.
 ///
-/// 4. The presenter can call the [play] method to resume the paused video. In this situation, all conference participants receive the [VideoPresentationEventNames.VideoPresentationPlayed] event.
+/// 4. The presenter can call the [play] method to resume the paused video. In this situation, all conference participants receive the [VideoPresentationEventNames.videoPresentationPlayed] event.
 ///
-/// 5. The presenter can call the [seek] method to navigate to a specific section of the shared video. This method applies the provided timestamp. After calling the seek method, all conference participants receive the [VideoPresentationEventNames.VideoPresentationSought] event and watch the video from the specified timestamp.
+/// 5. The presenter can call the [seek] method to navigate to a specific section of the shared video. This method applies the provided timestamp. After calling the seek method, all conference participants receive the [VideoPresentationEventNames.videoPresentationSought] event and watch the video from the specified timestamp.
 ///
 /// 6. The presenter calls the [stop] method to stop the video presentation.
 ///
@@ -69,16 +69,16 @@ class VideoPresentationService {
   /// Provides the current state of a video presentation.
   Future<VideoPresentationState> state() async {
     var result = await _methodChannel.invokeMethod<String>("state");
-    return Future.value(result != null ? VideoPresentationState.valueOf(result) : null);
+    return Future.value(result != null ? VideoPresentationState.decode(result) : null);
   }
 
-  /// Returns a [Stream] of the [VideoPresentationEventNames.VideoPresentationStarted], [VideoPresentationEventNames.VideoPresentationPaused], [VideoPresentationEventNames.VideoPresentationPlayed], and [VideoPresentationEventNames.VideoPresentationSought] events. By subscribing to the returned stream you will be notified about status changes of video presentations.
+  /// Returns a [Stream] of the [VideoPresentationEventNames.videoPresentationStarted], [VideoPresentationEventNames.videoPresentationPaused], [VideoPresentationEventNames.videoPresentationPlayed], and [VideoPresentationEventNames.videoPresentationSought] events. By subscribing to the returned stream you will be notified about status changes of video presentations.
   Stream<Event<VideoPresentationEventNames, VideoPresentation>> onVideoPresentationChange() {
     var events = [
-      VideoPresentationEventNames.VideoPresentationStarted,
-      VideoPresentationEventNames.VideoPresentationPaused,
-      VideoPresentationEventNames.VideoPresentationPlayed,
-      VideoPresentationEventNames.VideoPresentationSought,
+      VideoPresentationEventNames.videoPresentationStarted,
+      VideoPresentationEventNames.videoPresentationPaused,
+      VideoPresentationEventNames.videoPresentationPlayed,
+      VideoPresentationEventNames.videoPresentationSought,
     ];
     return _nativeEventsReceiver.addListener(events).map((map) {
       final event = map as Map<Object?, Object?>;
@@ -88,9 +88,9 @@ class VideoPresentationService {
     });
   }
   
-  /// Returns a [Stream] of the [VideoPresentationEventNames.VideoPresentationStopped] events. By subscribing to the returned stream you will be notified each time a video presentation ends.
+  /// Returns a [Stream] of the [VideoPresentationEventNames.videoPresentationStopped] events. By subscribing to the returned stream you will be notified each time a video presentation ends.
   Stream<Event<VideoPresentationEventNames, void>> onVideoPresentationStopped() {
-    return _nativeEventsReceiver.addListener([VideoPresentationEventNames.VideoPresentationStopped]).map((map) {
+    return _nativeEventsReceiver.addListener([VideoPresentationEventNames.videoPresentationStopped]).map((map) {
       final event = map as Map<Object?, Object?>;
       final key = VideoPresentationEventNames.valueOf(event["key"] as String);
       return Event(key, null);

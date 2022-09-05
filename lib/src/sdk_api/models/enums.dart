@@ -5,26 +5,31 @@ abstract class EnumWithStringValue implements Enum {
 /// The ComfortNoiseLevel enum gathers the available comfort noise levels.
 enum ComfortNoiseLevel {
   /// The default comfort noise level that is based on the device database. The database contains the proper comfort noise levels, individual for all devices.
-  Default('default'),
+  defaultLevel('default'),
 
   /// The low comfort noise level.
-  Low('low'),
+  low('low'),
 
   /// The medium comfort noise level.
-  Medium('medium'),
+  medium('medium'),
 
   /// The disabled comfort noise.
-  Off('off');
+  off('off');
 
-  final String value;
+  final String _value;
 
-  const ComfortNoiseLevel(this.value);
+  const ComfortNoiseLevel(this._value);
 
-  static ComfortNoiseLevel valueOf(String? value) {
+  static ComfortNoiseLevel decode(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return ComfortNoiseLevel.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
+  }
+
+  String encode() {
+    return _value;
   }
 }
 
@@ -33,16 +38,16 @@ enum ComfortNoiseLevel {
 /// **Note**: This enum is currently supported only on Android devices.
 enum FilePresentationServiceEventNames implements EnumWithStringValue {
   /// Emitted when a file is converted.
-  FileConverted('EVENT_FILEPRESENTATION_FILE_CONVERTED'),
+  fileConverted('EVENT_FILEPRESENTATION_FILE_CONVERTED'),
 
   /// Emitted when a presenter starts a file presentation.
-  FilePresentationStarted('EVENT_FILEPRESENTATION_STARTED'),
+  filePresentationStarted('EVENT_FILEPRESENTATION_STARTED'),
 
   /// Emitted when a presenter ends a file presentation.
-  FilePresentationStopped('EVENT_FILEPRESENTATION_STOPPED'),
+  filePresentationStopped('EVENT_FILEPRESENTATION_STOPPED'),
 
   /// Emitted when a presenter changes the displayed page of the shared file.
-  FilePresentationUpdated('EVENT_FILEPRESENTATION_UPDATED');
+  filePresentationUpdated('EVENT_FILEPRESENTATION_UPDATED');
 
   @override
   final String value;
@@ -50,8 +55,11 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
   const FilePresentationServiceEventNames(this.value);
 
   static FilePresentationServiceEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return FilePresentationServiceEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) {
+        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+      },
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -60,7 +68,7 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
 /// The NotificationServiceEventNames enum gathers the NotificationService events.
 enum NotificationServiceEventNames implements EnumWithStringValue {
   /// Emitted when an application user receives an invitation.
-  InvitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED');
+  invitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED');
 
   @override
   final String value;
@@ -68,8 +76,11 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
   const NotificationServiceEventNames(this.value);
 
   static NotificationServiceEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return NotificationServiceEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) { 
+        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+      },
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -78,7 +89,7 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
 /// The CommandServiceEventNames enum gathers the CommandService events.
 enum CommandServiceEventNames implements EnumWithStringValue {
   /// Emitted when a participant receives a message.
-  MessageReceived('EVENT_COMMAND_MESSAGE_RECEIVED');
+  messageReceived('EVENT_COMMAND_MESSAGE_RECEIVED');
 
   @override
   final String value;
@@ -86,8 +97,11 @@ enum CommandServiceEventNames implements EnumWithStringValue {
   const CommandServiceEventNames(this.value);
 
   static CommandServiceEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return CommandServiceEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) {
+        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+      },
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -96,21 +110,22 @@ enum CommandServiceEventNames implements EnumWithStringValue {
 /// The VideoPresentationState enum gathers the possible statuses of a video presentation.
 enum VideoPresentationState {
   /// The video presentation is paused.
-  PAUSED('paused'),
+  paused('paused'),
 
   /// The video presentation is played.
-  PLAY('play'),
+  play('play'),
 
   /// The video presentation is stopped.
-  STOPPED('stopped');
+  stopped('stopped');
 
-  final String value;
+  final String _value;
 
-  const VideoPresentationState(this.value);
+  const VideoPresentationState(this._value);
 
-  static VideoPresentationState valueOf(String? value) {
+  static VideoPresentationState decode(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return VideoPresentationState.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value.toLowerCase() == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -119,19 +134,19 @@ enum VideoPresentationState {
 /// The VideoPresentationEventNames enum gathers the possible statuses of a video presentation.
 enum VideoPresentationEventNames implements EnumWithStringValue {
   /// Emitted when a video presentation is paused.
-  VideoPresentationPaused('EVENT_VIDEOPRESENTATION_PAUSED'),
+  videoPresentationPaused('EVENT_VIDEOPRESENTATION_PAUSED'),
 
   /// Emitted when a video presentation is resumed.
-  VideoPresentationPlayed('EVENT_VIDEOPRESENTATION_PLAYED'),
+  videoPresentationPlayed('EVENT_VIDEOPRESENTATION_PLAYED'),
 
   /// Emitted when a video presentation is sought.
-  VideoPresentationSought('EVENT_VIDEOPRESENTATION_SOUGHT'),
+  videoPresentationSought('EVENT_VIDEOPRESENTATION_SOUGHT'),
 
   /// Emitted when a video presentation is started.
-  VideoPresentationStarted('EVENT_VIDEOPRESENTATION_STARTED'),
+  videoPresentationStarted('EVENT_VIDEOPRESENTATION_STARTED'),
 
   /// Emitted when a video presentation is stopped.
-  VideoPresentationStopped('EVENT_VIDEOPRESENTATION_STOPPED');
+  videoPresentationStopped('EVENT_VIDEOPRESENTATION_STOPPED');
 
   @override
   final String value;
@@ -139,8 +154,9 @@ enum VideoPresentationEventNames implements EnumWithStringValue {
   const VideoPresentationEventNames(this.value);
 
   static VideoPresentationEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
     return VideoPresentationEventNames.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element.value == value || element.name.toLowerCase() == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }

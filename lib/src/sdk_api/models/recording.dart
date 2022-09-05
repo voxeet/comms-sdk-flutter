@@ -18,16 +18,20 @@ class RecordingInformation {
 /// The RecordingStatus enum gathers the possible statuses of recording.
 enum RecordingStatus {
   /// The conference is recorded.
-  RECORDING('RECORDING'),
+  recording('RECORDING'),
 
   /// The conference is not recorded.
-  NOT_RECORDING('NOT_RECORDING');
+  notRecording('NOT_RECORDING');
 
-  final String name;
+  final String _value;
 
-  const RecordingStatus(this.name);
+  const RecordingStatus(this._value);
 
-  static RecordingStatus? valueOf(String? value) {
-    return RecordingStatus.values.firstWhereOrNull((element) => element.name == value);
+  static RecordingStatus? decode(String? value) {
+    return RecordingStatus.values.firstWhereOrNull((element) => element._value == value);
+  }
+
+  String encode() {
+    return _value;
   }
 }

@@ -43,7 +43,7 @@ class JoinConference extends StatelessWidget {
 class JoinConferenceContent extends StatefulWidget {
   final String username;
 
-  JoinConferenceContent({Key? key, required this.username}) : super(key: key);
+  const JoinConferenceContent({Key? key, required this.username}) : super(key: key);
 
   @override
   State<JoinConferenceContent> createState() => _JoinConferenceContentState();
@@ -203,7 +203,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   void checkJoinConferenceResult(Conference conference) {
-    if (conference.status == ConferenceStatus.JOINED) {
+    if (conference.status == ConferenceStatus.joined) {
       navigateToParticipantScreen(context);
     } else {
       developer.log('Cannot join to conference.');

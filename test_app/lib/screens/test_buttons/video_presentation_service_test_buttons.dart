@@ -18,16 +18,16 @@ class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationS
   void initState() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation.onVideoPresentationChange()
         .listen((event) {
-      if(event.type == VideoPresentationEventNames.VideoPresentationStarted) {
+      if(event.type == VideoPresentationEventNames.videoPresentationStarted) {
         showAlertDialog(context, "VideoPresentationStarted", "On Event Change");
       }
-      else if(event.type == VideoPresentationEventNames.VideoPresentationPaused) {
+      else if(event.type == VideoPresentationEventNames.videoPresentationPaused) {
         showAlertDialog(context, "VideoPresentationPaused", "On Event Change");
       }
-      else if(event.type == VideoPresentationEventNames.VideoPresentationPlayed) {
+      else if(event.type == VideoPresentationEventNames.videoPresentationPlayed) {
         showAlertDialog(context, "VideoPresentationPlayed", "On Event Change");
       }
-      else if(event.type == VideoPresentationEventNames.VideoPresentationSought) {
+      else if(event.type == VideoPresentationEventNames.videoPresentationSought) {
         showAlertDialog(context, "VideoPresentationSought", "On Event Change");
       }
     });
@@ -103,7 +103,7 @@ class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationS
   void state() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .state()
-        .then((state) => showAlertDialog(context, 'Success', state.value))
+        .then((state) => showAlertDialog(context, 'Success', state.name))
         .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
   }
 

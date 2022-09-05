@@ -67,7 +67,7 @@ void main() {
   });
 
   test("test video presentation state method", () async {
-    var expectedState = VideoPresentationState.PAUSED;
+    var expectedState = VideoPresentationState.paused;
     when(channel.invokeMethod("state")).thenAnswer((_) => Future.value("paused"));
 
     var result = await videoPresentationService.state();

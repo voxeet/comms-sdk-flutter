@@ -7,7 +7,7 @@ import 'participant_widget.dart';
 import 'dart:developer' as developer;
 
 class ParticipantGrid extends StatefulWidget {
-  ParticipantGrid({Key? key}) : super(key: key);
+  const ParticipantGrid({Key? key}) : super(key: key);
 
   @override
   State<ParticipantGrid> createState() => _ParticipantGridState();
@@ -59,7 +59,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
     onMessageReceivedChangeSubscription = _dolbyioCommsSdkFlutterPlugin.command
       .onMessageReceived()
       .listen((params) {
-        showDialog(context, params.type.value, "Message: ${params.body.message}");
+        showDialog(context, params.type.name, "Message: ${params.body.message}");
         developer.log("onMessageReceived");
       });
   }
@@ -98,7 +98,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   Future<void> initParticipantsList() async {
     final currentConference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(currentConference);
-    final availableParticipants = conferenceParticipants.where((element) => element.status != ParticipantStatus.LEFT);
+    final availableParticipants = conferenceParticipants.where((element) => element.status != ParticipantStatus.left);
     setState(() => participants = availableParticipants.toList());
     return Future.value();
   }

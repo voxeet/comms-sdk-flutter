@@ -59,8 +59,8 @@ void main() {
     final participant = Participant(
       "my_id2",
       ParticipantInfo("userToInvite", null, null),
-      ParticipantStatus.CONNECTED,
-      ParticipantType.USER,
+      ParticipantStatus.connected,
+      ParticipantType.user,
     );
     when(channel.invokeMethod("getParticipant")).thenAnswer((_) => Future.value(participant.toJson()));
 

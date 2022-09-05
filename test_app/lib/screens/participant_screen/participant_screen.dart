@@ -59,7 +59,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           child: Column(
             children: [
               ConferenceTitle(conference: getCurrentConference()),
-              ParticipantGrid(),
+              const ParticipantGrid(),
               const ModalBottomSheet(child: TestButtons()),
               ConferenceControls(conference: getCurrentConference()),
             ],

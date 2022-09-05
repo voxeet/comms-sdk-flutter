@@ -5,40 +5,6 @@ import 'streams.dart';
 
 typedef FileConvertedType = FileConverted;
 
-enum CommsAPIEventNames {
-  TokenRefresh('EVENT_SDK_TOKEN_REFRESH');
-
-  final String _name;
-
-  const CommsAPIEventNames(this._name);
-}
-
-class TokenRefresh {}
-
-class CommsAPIEventMap {
-  TokenRefresh? tokenRefresh;
-}
-
-/// The FileConvertedEventType class gathers information about a converted file.
-///
-/// **Note**: This class is currently supported only on Android devices.
-class FileConvertedEventType {
-  /// The object containing properties specific to the event.
-  FileConvertedType fileConverted;
-
-  FileConvertedEventType(this.fileConverted);
-}
-
-/// The FilePresentationChangedEventType class gathers information about a presented file.
-///
-/// **Note**: This class is currently supported only on Android devices.
-class FilePresentationChangedEventType {
-  /// The object containing properties specific to the event.
-  FilePresentation filePresentation;
-
-  FilePresentationChangedEventType(this.filePresentation);
-}
-
 /// The InvitationReceivedNotificationData class gathers information about a received invitation.
 class InvitationReceivedNotificationData {
   /// The conference alias.

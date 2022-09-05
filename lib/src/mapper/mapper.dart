@@ -14,7 +14,7 @@ class ConferenceMapper {
     var isNew = map.containsKey("isNew") ? map["isNew"] as bool : null;
     var participants =
         map.containsKey("participants") ? prepareParticipantsList(map["participants"] as List<Object?>) : List<Participant>.empty();
-    var status = ConferenceStatus.valueOf(map["status"] as String? ?? "DEFAULT") ?? ConferenceStatus.DEFAULT;
+    var status = ConferenceStatus.decode(map["status"] as String? ?? "DEFAULT") ?? ConferenceStatus.defaultStatus;
     return Conference(alias, id, isNew, participants, status);
   }
 
@@ -32,7 +32,7 @@ class ParticipantMapper {
     var streams = participant.containsKey("streams")
         ? (participant["streams"] as List<Object?>?)?.map((e) => MediaStreamMapper.fromMap(e as Map<Object?, Object?>)).toList()
         : null;
-    var result = Participant(id, info, ParticipantStatus.valueOf(status), ParticipantType.valueOf(type));
+    var result = Participant(id, info, ParticipantStatus.decode(status), ParticipantType.decode(type));
     result.streams = streams;
     return result;
   }
@@ -50,7 +50,7 @@ class ParticipantInfoMapper {
 class ParticipantInvitedMapper {
   static ParticipantInvited fromMap(Map<Object?, Object?> participant) {
     var info = ParticipantInfoMapper.fromMap(participant["info"] as Map<Object?, Object?>);
-    var permissions = (participant["permisions"] as List<Object?>).map((e) => ConferencePermission.valueOf(e as String));
+    var permissions = (participant["permisions"] as List<Object?>).map((e) => ConferencePermission.decode(e as String));
 
     return ParticipantInvited(info, permissions.whereType<ConferencePermission>().toList());
   }
@@ -76,7 +76,7 @@ class MessageReceivedMapper {
 
 class PermissionsUpdatedMapper {
   static List<ConferencePermission> fromList(List<Object?> data) {
-    return data.map((value) => ConferencePermission.valueOf(value as String)).toList();
+    return data.map((value) => ConferencePermission.decode(value as String)).toList();
   }
 }
 
@@ -115,7 +115,7 @@ class RecordingInformationMapper {
     var participantId = map["participantId"] as String;
     var startTimestamp = map["startTimestamp"] as num;
     var status = map.containsKey("recordingStatus") ? map["recordingStatus"] as String : null;
-    return RecordingInformation(participantId, startTimestamp, RecordingStatus.valueOf(status));
+    return RecordingInformation(participantId, startTimestamp, RecordingStatus.decode(status));
   }
 }
 
@@ -127,7 +127,7 @@ class MediaStreamMapper {
     var audioTracks = toNoNullableList(stream["audioTracks"] as List<Object?>);
 
     var videoTracks = toNoNullableList(stream["videoTracks"] as List<Object?>);
-    return MediaStream(id, MediaStreamType.valueOf(type)!, audioTracks, videoTracks, label);
+    return MediaStream(id, MediaStreamType.decode(type)!, audioTracks, videoTracks, label);
   }
 }
 

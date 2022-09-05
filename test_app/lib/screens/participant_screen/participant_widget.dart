@@ -20,7 +20,7 @@ class ParticipantWidget extends StatelessWidget {
             child: VideoView.withMediaStream(
               participant: participant, 
               mediaStream:participant.streams?.firstWhereOrNull(
-                (s) => s.type == MediaStreamType.Camera
+                (s) => s.type == MediaStreamType.camera
               ),
               key: ValueKey('video_view_tile_${participant.id}')
             )

@@ -14,7 +14,7 @@ import '../mock/mock_method_channel.dart';
 import '../test_helpers.dart';
 import 'dolbyio_comms_conference_service_test.mocks.dart';
 
-var participant = Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.CONNECTED, ParticipantType.USER);
+var participant = Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.user);
 var participantMap = {
   "id": "my_id",
   "info": {
@@ -22,19 +22,19 @@ var participantMap = {
     "avatarUrl": null,
     "externalId": null,
   },
-  "status": ParticipantStatus.CONNECTED.value,
-  "type": ParticipantType.USER.value,
+  "status": ParticipantStatus.connected.encode(),
+  "type": ParticipantType.user.encode(),
   "streams": null,
 };
 
 var participants = [participant];
-var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.JOINED);
+var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.joined);
 var conferenceMap = {
   "alias": "test_conf",
   "id": "test_id",
   "isNew": true,
   "participants": participants.map((e) => e.toJson()).toList(),
-  "status": ConferenceStatus.JOINED.name
+  "status": ConferenceStatus.joined.encode()
 };
 
 @GenerateMocks([SessionService])
@@ -59,9 +59,9 @@ void main() {
     var createParams = ConferenceCreateParameters()
       ..dolbyVoice = true
       ..liveRecording = true
-      ..rtcpMode = RTCPMode.BEST
+      ..rtcpMode = RTCPMode.best
       ..ttl = 1000
-      ..videoCodec = Codec.H264;
+      ..videoCodec = Codec.h264;
     var createOptions = ConferenceCreateOption("conference", createParams, 1);
     when(channel.invokeMethod("create", createOptions.toJson())).thenAnswer((_) => Future.value(conference.toJson()));
 
@@ -73,9 +73,9 @@ void main() {
       "params": {
         "dolbyVoice": true,
         "liveRecording": true,
-        "rtcpMode": RTCPMode.BEST.name,
+        "rtcpMode": RTCPMode.best.encode(),
         "ttl": 1000,
-        "videoCodec": Codec.H264.name,
+        "videoCodec": Codec.h264.encode(),
       },
       "pinCode": 1
     })).called(1);
@@ -348,7 +348,7 @@ void main() {
 
     var result = await conferenceService.getStatus(conference);
 
-    expect(result, ConferenceStatus.JOINED);
+    expect(result, ConferenceStatus.joined);
     verify(channel.invokeMethod("getStatus", conferenceMap)).called(1);
   });
 
@@ -378,7 +378,7 @@ void main() {
   });
 
   test("test setVideoForwarding method", () async {
-    var strategy = VideoForwardingStrategy.CLOSEST_USER;
+    var strategy = VideoForwardingStrategy.closestUser;
     var maxVideoForwarding = 3;
     when(channel.invokeMethod("setVideoForwarding", {
       "strategy": 'CLOSEST_USER',
@@ -446,7 +446,7 @@ void main() {
 
   test("test updatePermissions method", () async {
     var permissions = [
-      ParticipantPermissions(participant, [ConferencePermission.SEND_AUDIO])
+      ParticipantPermissions(participant, [ConferencePermission.sendAudio])
     ];
     when(channel.invokeMethod("updatePermissions", permissions.map((e) => e.toJson()).toList())).thenAnswer((_) => Future.value());
 

@@ -37,24 +37,24 @@ void main() {
   test("test getComfortNoiseLevel method and check if result is received",
       () async {
     var comfortNoiseLevel = await mediaDeviceService.getComfortNoiseLevel();
-    expect(ComfortNoiseLevel.Default, comfortNoiseLevel);
+    expect(ComfortNoiseLevel.defaultLevel, comfortNoiseLevel);
   });
 
   test("test setComfortNoiseLevel method and check if result is received",
       () async {
     // set low level
-    mediaDeviceService.setComfortNoiseLevel(ComfortNoiseLevel.Low);
+    mediaDeviceService.setComfortNoiseLevel(ComfortNoiseLevel.low);
     expect(
-        ComfortNoiseLevel.Low, await mediaDeviceService.getComfortNoiseLevel());
+        ComfortNoiseLevel.low, await mediaDeviceService.getComfortNoiseLevel());
 
     // set off level
-    mediaDeviceService.setComfortNoiseLevel(ComfortNoiseLevel.Off);
+    mediaDeviceService.setComfortNoiseLevel(ComfortNoiseLevel.off);
     expect(
-        ComfortNoiseLevel.Off, await mediaDeviceService.getComfortNoiseLevel());
+        ComfortNoiseLevel.off, await mediaDeviceService.getComfortNoiseLevel());
 
     // set medium level
-    mediaDeviceService.setComfortNoiseLevel(ComfortNoiseLevel.Medium);
-    expect(ComfortNoiseLevel.Medium,
+    mediaDeviceService.setComfortNoiseLevel(ComfortNoiseLevel.medium);
+    expect(ComfortNoiseLevel.medium,
         await mediaDeviceService.getComfortNoiseLevel());
   });
 

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 class InputTextField extends StatefulWidget {
   final String labelText;
-  TextEditingController? controller;
+  final TextEditingController? controller;
   final Color focusColor;
 
-  InputTextField(
-      {Key? key,
-        required this.labelText,
-        required this.controller,
-        this.focusColor = Colors.deepPurple});
+  const InputTextField({
+    Key? key,
+    required this.labelText,
+    required this.controller,
+    this.focusColor = Colors.deepPurple
+  }): super(key: key);
 
   @override
-  _InputTextFieldState createState() => _InputTextFieldState();
+  State<InputTextField> createState() => _InputTextFieldState();
 }
 
 class _InputTextFieldState extends State<InputTextField> {
