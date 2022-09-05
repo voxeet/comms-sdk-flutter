@@ -1,8 +1,9 @@
 import '../test_buttons/test_buttons.dart';
 import 'conference_controls.dart';
 import 'conference_title.dart';
-import 'dart:async';
+import '/screens/test_buttons/test_buttons.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'participant_grid.dart';
 import '/widgets/modal_bottom_sheet.dart';
@@ -27,7 +28,7 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
           decoration: const BoxDecoration(color: Colors.deepPurple),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children:  const [
+              children:   const [
                 DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
                 ParticipantScreenContent()
               ]

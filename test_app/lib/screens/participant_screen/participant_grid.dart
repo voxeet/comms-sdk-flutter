@@ -19,7 +19,6 @@ class _ParticipantGridState extends State<ParticipantGrid> {
 
   StreamSubscription<Event<ConferenceServiceEventNames, Participant>>? onParticipantsChangeSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>? onStreamsChangeSubscription;
-  StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? onStatusChangeSubscription;
   StreamSubscription<Event<CommandServiceEventNames, MessageReceivedData>>? onMessageReceivedChangeSubscription;
 
   Future<void> showDialog(
@@ -50,12 +49,6 @@ class _ParticipantGridState extends State<ParticipantGrid> {
         developer.log("onStreamsChange");
       });
 
-    onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
-      .onStatusChange()
-      .listen((params) {
-        developer.log("onStatusChange");
-      });
-
     onMessageReceivedChangeSubscription = _dolbyioCommsSdkFlutterPlugin.command
       .onMessageReceived()
       .listen((params) {
@@ -68,7 +61,6 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   void dispose() {
     onParticipantsChangeSubscription?.cancel();
     onStreamsChangeSubscription?.cancel();
-    onStatusChangeSubscription?.cancel();
     onMessageReceivedChangeSubscription?.cancel();
     super.dispose();
   }
