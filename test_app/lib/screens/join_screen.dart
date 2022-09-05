@@ -78,6 +78,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   @override
   void dispose() {
     onInvitationReceivedSubscription?.cancel();
+    onStatusChangeSubscription?.cancel();
     super.dispose();
   }
 
@@ -265,6 +266,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       });
     } else {
       onStatusChangeSubscription?.cancel();
+      onStatusChangeSubscription = null;
     }
   }
 
