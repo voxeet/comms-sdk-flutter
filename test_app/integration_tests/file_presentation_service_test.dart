@@ -57,7 +57,7 @@ void main() {
   testWidgets('FilePresentationService: getImage', (tester) async {
     runNative(
       methodChannel: filePresentationServiceAssertsMethodChannel,
-      label: "setGetImageArgs",
+      label: "setGetImageReturn",
       args: {
         "hasRun": true,
         "url": 'https://dolby.io/image_url'
@@ -79,7 +79,7 @@ void main() {
   testWidgets('FilePresentationService: getThumbnail', (tester) async {
     runNative(
       methodChannel: filePresentationServiceAssertsMethodChannel,
-      label: "setGetThumbnailArgs",
+      label: "setGetThumbnailReturn",
       args: {
         "hasRun": true,
         "url": 'https://dolby.io/thumbnail_url'
