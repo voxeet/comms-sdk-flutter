@@ -57,6 +57,7 @@ class ConferenceService {
   }
 
   /// Leaves the current conference. The [options] parameter allows setting additional options for the leaving participant.
+  /// The [options] parameter allows choosing additional options for the leaving participant.
   Future<void> leave({ConferenceLeaveOptions? options}) async {
     await _methodChannel.invokeMethod<void>("leave");
     if (options != null && options.leaveRoom) {
