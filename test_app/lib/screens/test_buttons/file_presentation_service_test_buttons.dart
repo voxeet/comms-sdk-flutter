@@ -5,12 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '/widgets/dialogs.dart';
 
-class FilePresentationServiceTestButtons extends StatelessWidget {
+class FilePresentationServiceTestButtons extends StatefulWidget {
+  const FilePresentationServiceTestButtons({Key? key}) : super(key: key);
+
+  @override
+  State<FilePresentationServiceTestButtons> createState() => _FilePresentationServiceTestButtonsState();
+}
+
+class _FilePresentationServiceTestButtonsState extends State<FilePresentationServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   FileConverted? fileConverted;
   int selectedPage = 0;
-
-  FilePresentationServiceTestButtons({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +23,13 @@ class FilePresentationServiceTestButtons extends StatelessWidget {
       spacing: 8.0,
       runSpacing: 4.0,
       children: <Widget>[
-        SecondaryButton(text: 'Convert', onPressed: () => convert(context), fillWidth: false),
-        SecondaryButton(text: 'Start', onPressed: () => startFilePresentation(context), fillWidth: false),
-        SecondaryButton(text: 'Stop', onPressed: () => stopFilePresentation(context), fillWidth: false),
-        SecondaryButton(text: 'getCurrent', onPressed: () => getCurrent(context), fillWidth: false),
-        SecondaryButton(text: 'setPage', onPressed: () => setPage(context), fillWidth: false),
-        SecondaryButton(text: 'getImage', onPressed: () => getImage(context), fillWidth: false),
-        SecondaryButton(text: 'getThumbnail', onPressed: () => getThumbnail(context), fillWidth: false),
+        SecondaryButton(text: 'Convert', onPressed: () => convert(), fillWidth: false),
+        SecondaryButton(text: 'Start', onPressed: () => startFilePresentation(), fillWidth: false),
+        SecondaryButton(text: 'Stop', onPressed: () => stopFilePresentation(), fillWidth: false),
+        SecondaryButton(text: 'getCurrent', onPressed: () => getCurrent(), fillWidth: false),
+        SecondaryButton(text: 'setPage', onPressed: () => setPage(), fillWidth: false),
+        SecondaryButton(text: 'getImage', onPressed: () => getImage(), fillWidth: false),
+        SecondaryButton(text: 'getThumbnail', onPressed: () => getThumbnail(), fillWidth: false),
       ],
     );
   }
@@ -37,7 +42,7 @@ class FilePresentationServiceTestButtons extends StatelessWidget {
     );
   }
 
-  void convert(BuildContext context) async {
+  void convert() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['doc', 'docx', 'ppt', 'pptx', 'pdf'],
@@ -54,7 +59,7 @@ class FilePresentationServiceTestButtons extends StatelessWidget {
     }
   }
 
-  void startFilePresentation(BuildContext context) {
+  void startFilePresentation() {
     if (fileConverted != null) {
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .start(fileConverted!)
@@ -65,14 +70,14 @@ class FilePresentationServiceTestButtons extends StatelessWidget {
     }
   }
 
-  void stopFilePresentation(BuildContext context) {
+  void stopFilePresentation() {
     _dolbyioCommsSdkFlutterPlugin.filePresentation
         .stop()
         .then((value) => showDialog(context, 'Success', "OK"))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
 
-  void getCurrent(BuildContext context) {
+  void getCurrent() {
     if (fileConverted != null) {
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .getCurrent()
@@ -83,7 +88,7 @@ class FilePresentationServiceTestButtons extends StatelessWidget {
     }
   }
 
-  void setPage(BuildContext context) {
+  void setPage() {
     if (fileConverted != null) {
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .setPage(0)
@@ -94,7 +99,7 @@ class FilePresentationServiceTestButtons extends StatelessWidget {
     }
   }
 
-  void getImage(BuildContext context) {
+  void getImage() {
     if (fileConverted != null) {
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .getImage(0)
@@ -105,7 +110,7 @@ class FilePresentationServiceTestButtons extends StatelessWidget {
     }
   }
 
-  void getThumbnail(BuildContext context) {
+  void getThumbnail() {
     if (fileConverted != null) {
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .getThumbnail(0)
