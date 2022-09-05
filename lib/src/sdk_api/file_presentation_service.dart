@@ -7,8 +7,6 @@ import 'models/file_presentation.dart';
 
 /// The FilePresentationService allows presenting files during a conference. The Dolby.io Communications APIs service converts the user-provided file into multiple pages that are accessible through the [getImage] method.
 ///
-/// **Note**: This service is currently supported only on Android devices.
-///
 /// **The file presentation workflow:**
 ///
 /// 1. The presenter calls the [convert] method to upload and convert a file.

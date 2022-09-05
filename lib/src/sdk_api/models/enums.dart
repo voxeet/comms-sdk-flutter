@@ -34,8 +34,6 @@ enum ComfortNoiseLevel {
 }
 
 /// The FilePresentationServiceEventNames enum gathers events informing about the file presentation status.
-///
-/// **Note**: This enum is currently supported only on Android devices.
 enum FilePresentationServiceEventNames implements EnumWithStringValue {
   /// Emitted when a file is converted.
   fileConverted('EVENT_FILEPRESENTATION_FILE_CONVERTED'),
