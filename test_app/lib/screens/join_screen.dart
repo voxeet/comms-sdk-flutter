@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -79,7 +78,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   @override
   void dispose() {
     onInvitationReceivedSubscription?.cancel();
-    onStatusChangeSubscription?.cancel();
     super.dispose();
   }
 
@@ -272,7 +270,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   Future navigateToParticipantScreen(BuildContext context) async {
     await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ParticipantScreen(switchValue: switchValue))
+        MaterialPageRoute(builder: (context) => const ParticipantScreen())
     );
     setState(() => isJoining = false);
   }
