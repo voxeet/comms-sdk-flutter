@@ -204,8 +204,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         onError = result::error,
         onSuccess = {
             val participantId = call.argument<Map<Any, Any?>?>("id") as? String
-            participantId?.let{
-                    id ->
+            participantId?.let{ id ->
                 VoxeetSDK
                     .conference()
                     .findParticipantById(id)
