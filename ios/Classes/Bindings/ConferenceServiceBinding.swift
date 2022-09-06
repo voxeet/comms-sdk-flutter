@@ -461,40 +461,29 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-    
-    /*
-     // MARK: - Getters
-     
-     /// Returns information about the current conference.
-     /// - Parameters:
-     ///   - resolve: returns current conference object
-     ///   - reject: returns error on failure
-     func current(
-     completionHandler: FlutterMethodCallCompletionHandler
-     ) {
-     guard let conference = current else {
-     ModuleError.noCurrentConference.send(with: reject)
-     return
-     }
-     resolve(conference.toReactModel())
-     }
-     
-     /// Provides standard WebRTC statistics for the application.
-     /// - Parameters:
-     ///   - resolve: returns local stats on success
-     ///   - reject: returns error on failure
-     func getLocalStats(
-     completionHandler: FlutterMethodCallCompletionHandler
-     ) {
-     guard let localStats = VoxeetSDK.shared.conference.localStats() else {
-     ModuleError.noLocalStats.send(with: reject)
-     return
-     }
-     resolve(localStats)
-     }
-     
-     // MARK: - Setters
-     */
+
+    /// Provides standard WebRTC statistics for the application.
+    /// - Parameters:
+    ///   - resolve: returns local stats on success
+    ///   - reject: returns error on failure
+    func getLocalStats(
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            guard let localParticipant = VoxeetSDK.shared.session.participant else {
+                throw BindingError.noCurrentParticipant
+            }
+            guard let localStats = VoxeetSDK.shared.conference.localStats(participant: localParticipant, isForTelemetry: false) else {
+                completionHandler.success()
+                return
+            }
+            let jsonData = try JSONSerialization.data(withJSONObject: localStats, options: .prettyPrinted)
+
+            completionHandler.success(encodable: try JSONEncoder().encode(jsonData))
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
     
     /// Sets the maximum number of video streams that may be transmitted to the local participant.
     /// - Parameters:
@@ -805,6 +794,8 @@ extension ConferenceServiceBinding: FlutterBinding {
             isMuted(completionHandler: completionHandler)
         case "isSpeaking":
             isSpeaking(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "getLocalStats":
+            getLocalStats(completionHandler: completionHandler)
         case "setMaxVideoForwarding":
             setMaxVideoForwarding(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "setAudioProcessing":
