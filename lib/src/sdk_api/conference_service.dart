@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
 import '../dolbyio_comms_sdk_native_events.dart';
 import '../mapper/mapper.dart';
@@ -218,9 +219,16 @@ class ConferenceService {
   }
 
   /// Gets the [standard WebRTC statistics](https://www.w3.org/TR/webrtc-stats/#dom-rtcstatstype).
-  Future<List<RTCStatsType>> getLocalStats() async {
-    var result = await _methodChannel.invokeMethod<List<String>>("getLocalStats");
-    return result != null ? result.map((e) => RTCStatsType.decode(e)).toList() : List<RTCStatsType>.empty();
+  Future<Map<String, dynamic>> getLocalStats() async {
+    final result = await _methodChannel.invokeMapMethod<String, String>("getLocalStats");
+    if(result != null) {
+      final map = <String, dynamic>{};
+      result.forEach((key, value) {
+        map[key] = jsonDecode(value);
+      });
+      return map;
+    }
+    return {};
   }
 
   /// Returns the maximum number of video streams that can be transmitted to the local participant.

@@ -1,5 +1,6 @@
 package io.dolby.comms.sdk.flutter.module
 
+import android.util.Log
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.internal.ParamsHolder
 import com.voxeet.sdk.models.VideoForwardingStrategy
@@ -306,7 +307,16 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
 
     private fun getLocalStats(result: Result) = scope.launch(
         onError = result::error,
-        onSuccess = { VoxeetSDK.conference().localStats().let { result.success(it) } }
+        onSuccess = {
+            VoxeetSDK.conference().localStats()
+                .let { it ->
+                    val map = HashMap<String, String>()
+                    it.forEach {
+                        map[it.key] = it.value.toString()
+                    }
+                    result.success(map)
+                }
+        }
     )
 
     private fun setMaxVideoForwarding(call: MethodCall, result: Result) = scope.launch(
