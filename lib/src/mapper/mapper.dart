@@ -26,7 +26,7 @@ class ConferenceMapper {
 class ParticipantMapper {
   static Participant fromMap(Map<Object?, Object?> participant) {
     var id = participant.containsKey("id") ? participant["id"] as String : "";
-    var info = participant.containsKey("info") ? ParticipantInfoMapper.fromMap(participant["info"] as Map<Object?, Object?>) : null;
+    var info = participant.containsKey("info") && participant["info"] != null ? ParticipantInfoMapper.fromMap(participant["info"] as Map<Object?, Object?>) : null;
     var status = participant.containsKey("status") ? participant["status"] as String? : null;
     var type = participant.containsKey("type") ? participant["type"] as String : null;
     var streams = participant.containsKey("streams")
