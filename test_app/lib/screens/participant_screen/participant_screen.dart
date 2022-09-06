@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'participant_grid.dart';
-import '/widgets/modal_bottom_sheet.dart';
 import '/widgets/dolby_title.dart';
+import '/widgets/modal_bottom_sheet.dart';
 
 class ParticipantScreen extends StatefulWidget {
   const ParticipantScreen({Key? key}) : super(key: key);
@@ -47,10 +47,43 @@ class ParticipantScreenContent extends StatefulWidget {
 }
 
 class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
+
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+
+  final VideoViewController _localParticipantVideoViewController = VideoViewController();
+  StreamSubscription<Event<ConferenceServiceEventNames, Participant>>? _participantsChangeSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>? _streamsChangeSubscription;
+
+  Participant? _localParticipant;
+  
+  @override
+  void initState() {
+    super.initState();
+    _participantsChangeSubscription = 
+      _dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange().listen((event) {
+        _updateLocalView();
+      });
+
+    _streamsChangeSubscription = 
+      _dolbyioCommsSdkFlutterPlugin.conference.onStreamsChange().listen((event) {
+        _updateLocalView();
+      });
+  }
+
+  @override
+  void deactivate() {
+    _participantsChangeSubscription?.cancel();
+    _streamsChangeSubscription?.cancel();
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Widget videoView = const FlutterLogo();
+    if (_localParticipant != null) {
+      videoView = VideoView(videoViewController: _localParticipantVideoViewController);
+    }
+
     return Expanded(
         child: Container(
           decoration: const BoxDecoration(
@@ -60,7 +93,21 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           child: Column(
             children: [
               ConferenceTitle(conference: getCurrentConference()),
-              const ParticipantGrid(),
+              Expanded(
+                child: Stack(
+                  children: [
+                    const ParticipantGrid(),
+                    Positioned(
+                      left: 10, bottom: 10,
+                      width: 100, height: 140,
+                      child: Container(
+                        decoration: const BoxDecoration(color: Colors.blueGrey),
+                        child: videoView,
+                      )
+                    ),
+                  ]
+                )
+              ),
               const ModalBottomSheet(child: TestButtons()),
               ConferenceControls(conference: getCurrentConference()),
             ],
@@ -76,4 +123,37 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         .then((value) {conference = value;});
     return conference;
   }
+
+  Future<void> _updateLocalView() async {
+    final currentConference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+    final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin.conference
+      .getParticipants(currentConference);
+    final availableParticipants = conferenceParticipants.where(
+      (element) => element.status != ParticipantStatus.left
+    );
+    if (availableParticipants.isNotEmpty) {
+      final localParticipant = availableParticipants.first;
+      final streams = localParticipant.streams;
+      MediaStream? stream;
+      if (streams != null) {
+        for (final s in streams) {
+          if (s.type == MediaStreamType.camera) {
+            stream = s;
+            break;
+          }
+        }
+      }
+      if (stream != null) {
+        _localParticipantVideoViewController.attach(localParticipant, stream);
+      } else {
+        _localParticipantVideoViewController.detach();
+      }
+
+      setState(() {
+        _localParticipant = localParticipant;
+      });
+    }
+    return Future.value();
+  }
+
 }
