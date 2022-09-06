@@ -73,23 +73,23 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
 
   void muteRemoteParticipant(int index) {
     if (isRemoteMuted == false) {
-      _dolbyioCommsSdkFlutterPlugin.conference.current()
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .current()
           .then((conference) {
             _dolbyioCommsSdkFlutterPlugin.conference
-                .mute(conference.participants.elementAt((index)), true)
-                .then((value) => developer.log('Participant has been muted'))
-                .onError((error, stackTrace) => onError('Error during mutting remote participant', error));
+                .getParticipant(conference.participants[index].id)
+                .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, true));
+            setState(() => isRemoteMuted = true);
           });
-      setState(() => isRemoteMuted = true);
     } else {
-      _dolbyioCommsSdkFlutterPlugin.conference.current()
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .current()
           .then((conference) {
             _dolbyioCommsSdkFlutterPlugin.conference
-                .mute(conference.participants.elementAt(index), false)
-                .then((value) => developer.log('Participant has been unmuted'))
-                .onError((error, stackTrace) => onError('Error during unmutting remote participant', error));
+                .getParticipant(conference.participants[index].id)
+                .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, false));
+            setState(() => isRemoteMuted = false);
           });
-      setState(() => isRemoteMuted = false);
     }
   }
 

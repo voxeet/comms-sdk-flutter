@@ -222,7 +222,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   ConferenceCreateOption conferenceCreateOptions() {
     var conferenceName = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
-    params.dolbyVoice = true;
+    params.dolbyVoice = false;
     var createOptions = ConferenceCreateOption(conferenceName, params, 0);
     return createOptions;
   }
