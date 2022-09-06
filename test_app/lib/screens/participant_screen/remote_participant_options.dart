@@ -66,9 +66,11 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
   void kickParticipant(int index) {
     _dolbyioCommsSdkFlutterPlugin.conference
         .current()
-        .then((conference) => conference.participants.elementAt(index))
-        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.kick(participant))
-        .onError((error, stackTrace) => onError("Error during kicking participant", error));
+        .then((conference) {
+          _dolbyioCommsSdkFlutterPlugin.conference
+              .getParticipant(conference.participants[index].id)
+              .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.kick(participant));
+        });
   }
 
   void muteRemoteParticipant(int index) {
