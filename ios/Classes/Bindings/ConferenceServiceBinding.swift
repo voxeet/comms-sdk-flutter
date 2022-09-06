@@ -461,25 +461,16 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-
+        
     /// Provides standard WebRTC statistics for the application.
     /// - Parameters:
-    ///   - resolve: returns local stats on success
-    ///   - reject: returns error on failure
+    ///   - completionHandler: Call methods on this instance when execution has finished.
     func getLocalStats(
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            guard let localParticipant = VoxeetSDK.shared.session.participant else {
-                throw BindingError.noCurrentParticipant
-            }
-            guard let localStats = VoxeetSDK.shared.conference.localStats(participant: localParticipant, isForTelemetry: false) else {
-                completionHandler.success()
-                return
-            }
-            let jsonData = try JSONSerialization.data(withJSONObject: localStats, options: .prettyPrinted)
-
-            completionHandler.success(encodable: try JSONEncoder().encode(jsonData))
+            let nativeLocalStats = VoxeetSDK.shared.conference.localStats()
+            completionHandler.success(flutterConvertible: try DTO.LocalStatsFlutterConvertible(nativeLocalStats: nativeLocalStats))
         } catch {
             completionHandler.failure(error)
         }
