@@ -461,40 +461,20 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-    
-    /*
-     // MARK: - Getters
-     
-     /// Returns information about the current conference.
-     /// - Parameters:
-     ///   - resolve: returns current conference object
-     ///   - reject: returns error on failure
-     func current(
-     completionHandler: FlutterMethodCallCompletionHandler
-     ) {
-     guard let conference = current else {
-     ModuleError.noCurrentConference.send(with: reject)
-     return
-     }
-     resolve(conference.toReactModel())
-     }
-     
-     /// Provides standard WebRTC statistics for the application.
-     /// - Parameters:
-     ///   - resolve: returns local stats on success
-     ///   - reject: returns error on failure
-     func getLocalStats(
-     completionHandler: FlutterMethodCallCompletionHandler
-     ) {
-     guard let localStats = VoxeetSDK.shared.conference.localStats() else {
-     ModuleError.noLocalStats.send(with: reject)
-     return
-     }
-     resolve(localStats)
-     }
-     
-     // MARK: - Setters
-     */
+        
+    /// Provides standard WebRTC statistics for the application.
+    /// - Parameters:
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func getLocalStats(
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let nativeLocalStats = VoxeetSDK.shared.conference.localStats()
+            completionHandler.success(flutterConvertible: try DTO.LocalStatsFlutterConvertible(nativeLocalStats: nativeLocalStats))
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
     
     /// Sets the maximum number of video streams that may be transmitted to the local participant.
     /// - Parameters:
@@ -805,6 +785,8 @@ extension ConferenceServiceBinding: FlutterBinding {
             isMuted(completionHandler: completionHandler)
         case "isSpeaking":
             isSpeaking(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "getLocalStats":
+            getLocalStats(completionHandler: completionHandler)
         case "setMaxVideoForwarding":
             setMaxVideoForwarding(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "setAudioProcessing":
