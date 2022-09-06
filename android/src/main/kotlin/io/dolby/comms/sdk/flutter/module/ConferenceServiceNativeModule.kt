@@ -1,6 +1,5 @@
 package io.dolby.comms.sdk.flutter.module
 
-import android.util.Log
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.internal.ParamsHolder
 import com.voxeet.sdk.models.VideoForwardingStrategy
