@@ -33,7 +33,9 @@ target 'Runner' do
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
-  if ENV['USE_SDK_MOCK']
+  puts("USE_SDK_MOCK #{ENV['USE_SDK_MOCK']}")
+  if ENV['USE_SDK_MOCK'] == "true"
+    puts("Using mocks")
     pod 'VoxeetSDK', :path => '../../test_utils/VoxeetSDKMock'
     pod 'WebRTC', :path => '../../test_utils/WebRTCMock'
   end

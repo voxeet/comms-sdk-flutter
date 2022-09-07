@@ -38,6 +38,9 @@ jobs:
       - name: Run tests
         run: |
          flutter test
+      - name: Build app
+        run: |
+          ./scripts/build-android.sh
 
   build-macos:
     name: flutter build macos
@@ -62,3 +65,6 @@ jobs:
       - name: Run tests
         run: |
          flutter test
+      - name: Run unmocked integration tests
+        run: |
+          ./scripts/run-unmocked-integration-tests-ios.sh
