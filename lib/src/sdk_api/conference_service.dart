@@ -31,7 +31,9 @@ class ConferenceService {
   /// Returns the Conference object for the current conference.
   Future<Conference> current() async {
     var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("current") ?? <String, Object?>{};
-    return ConferenceMapper.fromMap(result);
+    var conference = ConferenceMapper.fromMap(result);
+    conference.participants = await _getLocalToFirstPlace(conference.participants);
+    return conference;
   }
 
   /// Returns the Conference object that you can use to join the conference. If the [conferenceId] parameter is not provided, the method returns the current Conference object.
@@ -76,7 +78,8 @@ class ConferenceService {
   /// Gets a list of participants who are present at a specific conference defined in the [conference] parameter.
   Future<List<Participant>> getParticipants(Conference conference) async {
     var result = await _methodChannel.invokeMethod<List<Object?>>("getParticipants", conference.toJson());
-    return result != null ? result.map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>)).toList() : List.empty();
+    var participants =  result != null ? result.map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>)).toList() : List<Participant>.empty();
+    return _getLocalToFirstPlace(participants);
   }
 
   /// Stops playing a specific remote participant's audio to the local participant or stops playing the local participant's audio to the conference. The [participant] parameter refers to the participant who should be muted. The [isMuted] parameter enables and disables audio; true indicates that the SDK should mute the participant, false indicates that the participant should not be muted.
@@ -350,6 +353,21 @@ class ConferenceService {
           StreamsChangeData(ParticipantMapper.fromMap(streamsChangeData["participant"] as Map<Object?, Object?>),
               MediaStreamMapper.fromMap(streamsChangeData["stream"] as Map<Object?, Object?>)));
     });
+  }
+
+  Future<List<Participant>> _getLocalToFirstPlace(List<Participant> participants) async {
+    var localParticipant = await _sessionService.getParticipant();
+    if (participants.isEmpty || participants.first.id == localParticipant?.id) {
+      return participants;
+    }
+    var result = List<Participant>.empty(growable: true);
+    result.add(participants.firstWhere((element) => element.id == localParticipant?.id));
+    for (var p in participants) {
+      if (p.id != localParticipant?.id) {
+        result.add(p);
+      }
+    }
+    return result;
   }
 }
 
