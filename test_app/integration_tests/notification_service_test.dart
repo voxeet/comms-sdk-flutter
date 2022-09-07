@@ -23,7 +23,7 @@ void main() {
         .fetch("fetch_conferenceId_1");
     dolbyioCommsSdkFlutterPlugin.notification.invite(conference, [
       ParticipantInvited(ParticipantInfo("name", "avatarUrl", "externalId"),
-          [ConferencePermission.INVITE].toList())
+          [ConferencePermission.invite].toList())
     ]);
     await expectNative(
         methodChannel: notificationServiceAssertsMethodChannel,

@@ -2,7 +2,7 @@ name: dolbyio_comms_sdk_flutter
 description: >
   Dolby.io Communications SDK for Flutter allows you to create high-quality video conferencing
   applications for multiple platforms using a single codebase.
-version: 3.6.0-beta.1
+version: 3.6.0-beta.2
 homepage: https://github.com/DolbyIO/comms-sdk-flutter
 
 environment:
@@ -12,7 +12,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  mockito: ^5.2.0
   plugin_platform_interface: ^2.0.2
   collection: ^1.16.0
 
@@ -21,6 +20,7 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^2.0.0
   build_runner: ^2.2.0
+  mockito: ^5.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

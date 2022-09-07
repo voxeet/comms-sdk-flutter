@@ -1,14 +1,13 @@
 import 'package:dolbyio_comms_sdk_flutter/src/mapper/mapper.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/enums.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/events.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/participant.dart';
 import 'package:flutter/services.dart';
 
 import 'mock_event_method_channel.dart';
 
-class MockNotivicationServiceMethodChannel {
-  var declineMethodStatus = CallStatus.NOT_CALL;
-  var inviteMethodStatus = CallStatus.NOT_CALL;
+class MockNotificationServiceMethodChannel {
+  var declineMethodStatus = CallStatus.notCalled;
+  var inviteMethodStatus = CallStatus.notCalled;
 
   Object? onMethodCall(MethodCall call) {
     switch(call.method) {
@@ -26,14 +25,14 @@ class MockNotivicationServiceMethodChannel {
 
   void inviteParticipant(Map<Object?, Object?>? args) {
     if (args != null && args.containsKey("conference") && args.containsKey("participants")) {
-      var eventType = NotificationServiceEventNames.InvitationReceived.value;
+      var eventType = NotificationServiceEventNames.invitationReceived.value;
       final conference = ConferenceMapper.fromMap(args["conference"] as Map<Object?, Object?>);
 
       final participants = (args["participants"] as List<Object?>).map((e) {
         final pMap = e as Map<Object?, Object?>;
         return ParticipantInvitedMapper.fromMap(pMap);
       }).toList();
-      inviteMethodStatus = CallStatus.OK;
+      inviteMethodStatus = CallStatus.ok;
       var listener = MockListeners.instance.listeners[eventType];
       if (listener != null) {
         for (var p in participants) {
@@ -50,23 +49,22 @@ class MockNotivicationServiceMethodChannel {
 
       }
     } else {
-      inviteMethodStatus = CallStatus.ERROR_INCORRECT_ARGUMENT;
+      inviteMethodStatus = CallStatus.errorIncorrectArgument;
     }
   }
 
   void decline(Map<Object?, Object?>? args) {
     if (args != null && args.containsKey("conference")) {
-      final conference = ConferenceMapper.fromMap(args["conference"] as Map<Object?, Object?>);
-      declineMethodStatus = CallStatus.OK;
+      declineMethodStatus = CallStatus.ok;
     } else {
-      declineMethodStatus = CallStatus.ERROR_INCORRECT_ARGUMENT;
+      declineMethodStatus = CallStatus.errorIncorrectArgument;
     }
   }
 }
 
 enum CallStatus {
-  NOT_CALL,
-  OK,
-  ERROR_INCORRECT_ARGUMENT,
-  UNKNOWN_ERROR;
+  notCalled,
+  ok,
+  errorIncorrectArgument,
+  unknownError;
 }

@@ -1,18 +1,18 @@
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '../widgets/secondary_button.dart';
-import 'dialogs.dart';
+import '/widgets/secondary_button.dart';
+import '/widgets/text_form_field.dart';
+import '/widgets/dialogs.dart';
 import 'dart:developer' as developer;
 
-class NotificationTestButtons extends StatefulWidget {
-  const NotificationTestButtons({Key? key}) : super(key: key);
+class NotificationServiceTestButtons extends StatefulWidget {
+  const NotificationServiceTestButtons({Key? key}) : super(key: key);
 
   @override
-  State<NotificationTestButtons> createState() => _NotificationTestButtonsState();
+  State<NotificationServiceTestButtons> createState() => _NotificationServiceTestButtonsState();
 }
 
-class _NotificationTestButtonsState extends State<NotificationTestButtons> {
+class _NotificationServiceTestButtonsState extends State<NotificationServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKey = GlobalKey<FormState>();
   TextEditingController nameTextController = TextEditingController();

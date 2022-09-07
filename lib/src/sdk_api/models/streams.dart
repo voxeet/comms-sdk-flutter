@@ -1,4 +1,3 @@
-
 typedef AudioTrack = Object;
 typedef VideoTrack = Object;
 
@@ -25,7 +24,7 @@ class MediaStream {
   Map<String?, Object?> toJson() =>
       {
         "id": id,
-        "type": type.value,
+        "type": type.encode(),
         "audioTracks": audioTracks,
         "videoTracks": videoTracks,
         "label": label
@@ -35,22 +34,31 @@ class MediaStream {
 /// The MediaStreamType enum gathers the possible types of media streams.
 enum MediaStreamType {
   /// The camera media stream, either audio, video, or audio and video. This stream type is enabled by default.
-  Camera('CAMERA'),
+  camera('CAMERA'),
   /// A media stream produced by an external device.
-  Custom('CUSTOM'),
+  custom('CUSTOM'),
   /// The screen-share media stream.
-  ScreenShare('SCREEN_SHARE');
+  screenShare('SCREEN_SHARE');
 
-  final String value;
+  final String _value;
 
-  const MediaStreamType(this.value);
+  const MediaStreamType(this._value);
 
-  static MediaStreamType? valueOf(String? value) {
+  static MediaStreamType? decode(String? value) {
     if (value == null) {
       return null;
     }
-    return MediaStreamType.values.firstWhere((element) => element.value == value || element.name == value);
+    final lowerCaseValue = value.toLowerCase();
+    return MediaStreamType.values.firstWhere(
+      (element) {
+        return element._value.toLowerCase() == lowerCaseValue || 
+          element.name.toLowerCase() == lowerCaseValue;
+      } 
+    );
+  }
 
+  String encode() {
+    return _value;
   }
 }
 

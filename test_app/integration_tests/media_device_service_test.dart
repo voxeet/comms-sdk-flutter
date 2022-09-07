@@ -15,10 +15,10 @@ void main() {
 
   testWidgets('MediaDeviceService: getComfortNoiseLevel', (tester) async {
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Default);
+        .setComfortNoiseLevel(ComfortNoiseLevel.defaultLevel);
     var noiseLevelDefault =
         await dolbyioCommsSdkFlutterPlugin.mediaDevice.getComfortNoiseLevel();
-    expect(noiseLevelDefault, ComfortNoiseLevel.Default);
+    expect(noiseLevelDefault, ComfortNoiseLevel.defaultLevel);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertGetComfortNoiseLevelArgs",
@@ -27,10 +27,10 @@ void main() {
     await resetSDK();
 
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Low);
+        .setComfortNoiseLevel(ComfortNoiseLevel.low);
     var noiseLevelLow =
         await dolbyioCommsSdkFlutterPlugin.mediaDevice.getComfortNoiseLevel();
-    expect(noiseLevelLow, ComfortNoiseLevel.Low);
+    expect(noiseLevelLow, ComfortNoiseLevel.low);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertGetComfortNoiseLevelArgs",
@@ -39,10 +39,10 @@ void main() {
     await resetSDK();
 
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Medium);
+        .setComfortNoiseLevel(ComfortNoiseLevel.medium);
     var noiseLevelMedium =
         await dolbyioCommsSdkFlutterPlugin.mediaDevice.getComfortNoiseLevel();
-    expect(noiseLevelMedium, ComfortNoiseLevel.Medium);
+    expect(noiseLevelMedium, ComfortNoiseLevel.medium);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertGetComfortNoiseLevelArgs",
@@ -51,10 +51,10 @@ void main() {
     await resetSDK();
 
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Off);
+        .setComfortNoiseLevel(ComfortNoiseLevel.off);
     var noiseLevelOff =
         await dolbyioCommsSdkFlutterPlugin.mediaDevice.getComfortNoiseLevel();
-    expect(noiseLevelOff, ComfortNoiseLevel.Off);
+    expect(noiseLevelOff, ComfortNoiseLevel.off);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertGetComfortNoiseLevelArgs",
@@ -63,7 +63,7 @@ void main() {
 
   testWidgets('MediaDeviceService: setComfortNoiseLevel', (tester) async {
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Default);
+        .setComfortNoiseLevel(ComfortNoiseLevel.defaultLevel);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertSetComfortNoiseLevelArgs",
@@ -72,21 +72,21 @@ void main() {
     await resetSDK();
 
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Low);
+        .setComfortNoiseLevel(ComfortNoiseLevel.low);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertSetComfortNoiseLevelArgs",
         expected: {"noiseLevel": 1});
 
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Medium);
+        .setComfortNoiseLevel(ComfortNoiseLevel.medium);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertSetComfortNoiseLevelArgs",
         expected: {"noiseLevel": 2});
 
     dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.Off);
+        .setComfortNoiseLevel(ComfortNoiseLevel.off);
     await expectNative(
         methodChannel: mediaDeviceServiceAssertsMethodChannel,
         assertLabel: "assertSetComfortNoiseLevelArgs",

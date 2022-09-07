@@ -15,7 +15,7 @@ class InputTextFormField extends StatefulWidget {
       : super(key: key);
 
   @override
-  _InputTextFormFieldState createState() => _InputTextFormFieldState();
+  State<InputTextFormField> createState() => _InputTextFormFieldState();
 }
 
 class _InputTextFormFieldState extends State<InputTextFormField> {

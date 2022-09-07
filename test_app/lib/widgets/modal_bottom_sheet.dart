@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '/screens/test_buttons.dart';
 
-class ShowModalBottomSheet extends StatelessWidget {
-  const ShowModalBottomSheet({Key? key}) : super(key: key);
+class ModalBottomSheet extends StatelessWidget {
+  final Widget child;
+
+  const ModalBottomSheet({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class ShowModalBottomSheet extends StatelessWidget {
               builder: (context) {
                 return FractionallySizedBox(
                     heightFactor: 0.8,
-                    child: TestButtons()
+                    child: child
                 );
               }),
         ),

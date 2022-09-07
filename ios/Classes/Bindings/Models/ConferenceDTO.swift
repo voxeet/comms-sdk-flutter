@@ -323,4 +323,27 @@ extension DTO {
     struct AudioProcessingSenderOptions: Codable {
         let audioProcessing: Bool?
     }
+    
+    struct LocalStatsFlutterConvertible: FlutterConvertible {
+        
+        var map: [String: Any] = [:]
+        
+        init(nativeLocalStats: [String: [[String: Any]]]?) throws {
+            guard let nativeLocalStats = nativeLocalStats else {
+                return
+            }
+            for (key, value) in nativeLocalStats {
+                let jsonString = String(data: try JSONSerialization.data(withJSONObject: value), encoding: .utf8)
+                map[key] = jsonString
+            }
+        }
+        
+        static func fromFlutterValue(_ value: Any) throws -> LocalStatsFlutterConvertible {
+            fatalError("Not implemented")
+        }
+        
+        func toFlutterValue() -> Any {
+            return map
+        }
+    }
 }

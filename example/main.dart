@@ -1,73 +1,65 @@
-// 1. Import SDK
-import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+// Step 1. Create a new project and replace the contents of it's main.dart file with this example
+
+// Step 2: Import the permission handler package
 import 'package:permission_handler/permission_handler.dart';
-
+// Step 3: Import the Dolby.io Communications SDK for Flutter
+import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
-
+ 
 import 'dart:math';
 import 'dart:core';
 import 'dart:developer' as developer;
-
+ 
 void main() {
   runApp(const MaterialApp(home: FlutterScreen()));
 }
-
+ 
 class FlutterScreen extends StatefulWidget {
   const FlutterScreen({Key? key}) : super(key: key);
-
+ 
   @override
   State<FlutterScreen> createState() => _FlutterScreenState();
 }
-
+ 
 class _FlutterScreenState extends State<FlutterScreen> {
-  // 2. Import sdk flutter plugin
-  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-
+  // Step 3: Instantiate the SDK here
+  final dolbyioCommsSdk = DolbyioCommsSdk.instance;
+ 
   TextEditingController usernameController = TextEditingController();
   TextEditingController conferenceNameController = TextEditingController();
-
+ 
+  // Generate a client access token from the Dolby.io dashboard
+  // and insert the token to the accessToken variable
   String accessToken = '';
-
+ 
   bool isLeaving = false;
   bool isJoining = false;
   bool isInitializedList = false;
-
-  // 9. List for storing participants
+ 
+  // Step 7: Store the participants list here
   List<Participant> participants = [];
-
+ 
   @override
   void initState() {
     super.initState();
 
+    // Step 2: Request the microphone and camera permissions
     [
-      Permission.bluetoothConnect,
-      Permission.microphone,
-      Permission.camera,
+        Permission.bluetoothConnect,
+        Permission.microphone,
+        Permission.camera,
     ].request();
-
-    // 4. Initialize SDK
+ 
+    // Step 3: Call initializeSdk()
     initializeSdk();
 
-    // 6. Open session
+    // Step 4: Call openSession()
     openSession();
-
-    // 11. Update participants list after any change
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .onParticipantsChange()
-        .listen((params) {
-      _dolbyioCommsSdkFlutterPlugin.conference.current().then((conference) =>
-          _dolbyioCommsSdkFlutterPlugin.conference
-              .getParticipants(conference)
-              .then((participantsList) {
-            setState(() => participants = participantsList);
-            setState(() => isInitializedList = true);
-          }).onError((error, stackTrace) {
-            developer.log("Error during initializing participant list.",
-                error: error);
-          }));
-    });
+ 
+    // Step 7: Call updateParticipantsList()
+    updateParticipantsList();
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,18 +84,18 @@ class _FlutterScreenState extends State<FlutterScreen> {
                         ),
                         const SizedBox(height: 12),
                         TextField(
-                          decoration: const InputDecoration(
-                              hintText: 'Conference name'),
+                          decoration: const InputDecoration(hintText: 'Conference name'),
                           controller: conferenceNameController,
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton(
-                          onPressed: () {
-                            joinConference();
+                          onPressed: () async {
+                            // Step 5: Call joinConference()
+                            await joinConference();
                           },
                           child: isJoining
-                              ? const Text('Joining...')
-                              : const Text('Join to conference'),
+                            ? const Text('Joining...')
+                            : const Text('Join the conference'),
                         ),
                       ],
                     ),
@@ -135,7 +127,8 @@ class _FlutterScreenState extends State<FlutterScreen> {
                         const SizedBox(
                           height: 16,
                         ),
-                        // 10. UI for participants
+
+                        // Step 7: Display the list of participants
                         Material(
                           elevation: 8,
                           child: ListView.builder(
@@ -143,8 +136,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
                             itemCount: participants.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                title: Text(
-                                    "${participants[index].info!.name} (${participants[index].status?.name})"),
+                                title: Text("${participants[index].info!.name} (${participants[index].status?.name})"),
                                 leading: const Icon(
                                   Icons.person,
                                   color: Colors.black,
@@ -153,92 +145,97 @@ class _FlutterScreenState extends State<FlutterScreen> {
                             },
                           ),
                         ),
+
                         const SizedBox(
                           height: 12,
                         ),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(primary: Colors.red),
-                          onPressed: () {
-                            leave();
+                          onPressed: () async {
+                            // Step 6: Call leaveConference()
+                            await leaveConference();
                           },
-                          child: isLeaving
-                              ? const Text('Leaving...')
-                              : const Text("Leave conference"),
+                          child: isJoining
+                            ? const Text('Leaving...')
+                            : const Text('Leave the conference'),
                         )
                       ])
-                    : const Center(
-                        child: Text(
-                            "Join to conference to see participants list.")))
+                    : const Center(child: Text("Join the conference to see the list of participants.")))
           ],
         ),
       ),
     );
   }
-
-  // 3. Define initialize SDK method
+ 
+  // Step 3: Define the initializeSdk function
   Future<void> initializeSdk() async {
-    // Generate a client access token from the Dolby.io dashboard and insert into access_token variable;
-    accessToken = '';
-
-    // Initialize sdk with access token from dolby.io dashboard
-    // In final solution please make sure refresh token is properly implemented
-    await _dolbyioCommsSdkFlutterPlugin.initializeToken(accessToken, () async {
-      return /* refresh token */ accessToken;
+    // Initialize the SDK with the access token
+    await dolbyioCommsSdk.initializeToken(accessToken, () async {
+      // Request a new access token here
+      return accessToken;
     });
   }
 
-  // 5. Define open session method
-  void openSession() {
-    // Generate random user name
+  // Step 4: Define the openSession function
+  Future<void> openSession() async {
+    // Generate a random username
     int randomNumber = Random().nextInt(1000);
     usernameController.text = "user-$randomNumber";
-
-    // Open session for participant
+  
+    // Open a new session for the local participant
     var participantInfo = ParticipantInfo(usernameController.text, null, null);
-    _dolbyioCommsSdkFlutterPlugin.session.open(participantInfo);
+    await dolbyioCommsSdk.session.open(participantInfo);
   }
 
-  // 7. Create conference and/or join to it
-  void joinConference() {
+  // Step 5: Define the joinConference function
+  Future<void> joinConference() async {
     setState(() => isJoining = true);
 
     // Create conference options
     var params = ConferenceCreateParameters();
     params.dolbyVoice = true;
-    var createOptions =
-        ConferenceCreateOption(conferenceNameController.text, params, 0);
+    var createOptions = ConferenceCreateOption(conferenceNameController.text, params, 0);
 
-    // Join conference with audio and video
+    // Join the conference with audio and video
     var joinOptions = ConferenceJoinOptions();
     joinOptions.constraints = ConferenceConstraints(true, true);
 
-    // Join to conference
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .create(createOptions)
-        .then((value) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.join(value, joinOptions))
-        .then((conference) {
-      // Check conference status
-      if (conference.status == ConferenceStatus.JOINED) {
-        _dolbyioCommsSdkFlutterPlugin.conference.current().then((value) {
-          setState(() => isJoining = false);
-        });
-        developer.log('Joined to conference.');
-      } else {
-        developer.log('Cannot join to conference.');
-      }
-    });
+    // Join the conference
+    var conference = await dolbyioCommsSdk.conference.create(createOptions);
+    conference = await dolbyioCommsSdk.conference.join(conference, joinOptions);
+
+    // Check the conference status
+    if (conference.status == ConferenceStatus.joined) {
+      setState(() => isJoining = false);
+      developer.log('Joined to conference.');
+    } else {
+      developer.log('Cannot join to conference.');
+    }
   }
 
-  // 8. Leave conference
-  void leave() {
+  // Step 6: Define the leaveConference function
+  Future<void> leaveConference() async {
     setState(() => isLeaving = true);
 
-    // Leave conference
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) => _dolbyioCommsSdkFlutterPlugin.conference.leave(null))
-        .then((value) => setState(() => isInitializedList = false))
-        .then((value) => setState(() => isLeaving = false));
+    await dolbyioCommsSdk.conference.leave(options: null);
+    
+    setState(() => isInitializedList = true);
+    setState(() => isLeaving = true);
+  }
+
+  // Step 7: Define the updateParticipantsList method
+  void updateParticipantsList() {
+    dolbyioCommsSdk.conference.onParticipantsChange()
+      .listen((params) async {
+        try {
+          var conference = await dolbyioCommsSdk.conference.current();
+          var participantsList = await dolbyioCommsSdk.conference.getParticipants(conference);
+          
+          setState(() => participants = participantsList);
+          setState(() => isInitializedList = true);
+        } catch (error) {
+          developer.log("Error during initializing participant list.", error: error);
+        }
+      });
   }
 }

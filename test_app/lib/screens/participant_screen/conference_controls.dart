@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '/screens/join_screen.dart';
-import '/screens/login_screen.dart';
 import '/widgets/conference_action_icon_button.dart';
 import 'dart:developer' as developer;
-import '/widgets/dialogs.dart';
 
 class ConferenceControls extends StatefulWidget {
   final Future<Conference?> conference;
 
-  ConferenceControls({Key? key, required this.conference}) : super(key: key);
+  const ConferenceControls({Key? key, required this.conference}) : super(key: key);
 
   @override
   State<ConferenceControls> createState() => _ConferenceControlsState();
@@ -17,7 +14,7 @@ class ConferenceControls extends StatefulWidget {
 
 class _ConferenceControlsState extends State<ConferenceControls> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  bool sessionShouldBeClose = false, isMicOff = false, isVideoOff = false;
+  bool isMicOff = false, isVideoOff = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +46,7 @@ class _ConferenceControlsState extends State<ConferenceControls> {
                 iconWidget: isVideoOff ? const Icon(Icons.videocam_off) : const Icon(Icons.videocam),
               ),
               ConferenceActionIconButton(
-                  onPressedIcon: () { leaveConference(); },
+                  onPressedIcon: () { leaveConferenceDialog(context); },
                   iconWidget: const Icon(Icons.phone),
                   backgroundIconColor: Colors.red
               ),
@@ -58,15 +55,37 @@ class _ConferenceControlsState extends State<ConferenceControls> {
     );
   }
 
-  Future<void> showClosingSessionDialog(
-      BuildContext context, String title, String text) async {
-    await ViewDialogs.dialog(
-        context: context,
-        title: title,
-        body: text,
-        okText: "Yes",
-        cancelText: "No",
-        result: (value) { setState(() => sessionShouldBeClose = value); }
+  Future<void> leaveConferenceDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Leaving options'),
+          content: const Text('Do you want to close session while leaving conference?'),
+          actions: <TextButton>[
+            TextButton(
+              child: const Text('YES'),
+              onPressed: () {
+                leaveConference(closeSession: true);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('NO'),
+              onPressed: () {
+                leaveConference(closeSession: false);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('CANCEL'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -108,31 +127,26 @@ class _ConferenceControlsState extends State<ConferenceControls> {
     });
   }
 
-  void leaveConference() async {
-    await showClosingSessionDialog(context, 'Do you want to close the session?', '');
-    if(sessionShouldBeClose) {
-      var options = ConferenceLeaveOptions(true);
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .leave(options: options)
-          .then((value) {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-              const LoginScreen())
-            );
-          })
-          .onError((error, stackTrace) { onError('Error during leaving', error); });
-    } else {
-      var options = ConferenceLeaveOptions(false);
-      widget.conference.then((current) {
+  void leaveConference({required bool closeSession})  {
+    if(closeSession) {
+        var options = ConferenceLeaveOptions(true);
         _dolbyioCommsSdkFlutterPlugin.conference
             .leave(options: options)
             .then((value) {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) =>
-                JoinConference(username: current!.participants.first.info!.name)
-              ));
+              Navigator.of(context).popUntil(ModalRoute.withName("LoginScreen"));
             })
             .onError((error, stackTrace) { onError('Error during leaving', error); });
-      });
-    }
+      } else {
+        var options = ConferenceLeaveOptions(false);
+        widget.conference.then((current) {
+          _dolbyioCommsSdkFlutterPlugin.conference
+              .leave(options: options)
+              .then((value) {
+                Navigator.of(context).popUntil(ModalRoute.withName("JoinConferenceScreen"));
+              })
+              .onError((error, stackTrace) {onError('Error during leaving', error);});
+        });
+      }
   }
 
   void onError(String message, Object? error) {

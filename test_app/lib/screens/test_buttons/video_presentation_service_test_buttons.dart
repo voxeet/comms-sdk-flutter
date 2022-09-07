@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '../widgets/secondary_button.dart';
-import 'dialogs.dart';
+import '/widgets/secondary_button.dart';
+import '/widgets/dialogs.dart';
 
-class VideoPresentationTestButtons extends StatefulWidget {
-  const VideoPresentationTestButtons({Key? key}) : super(key: key);
+class VideoPresentationServiceTestButtons extends StatefulWidget {
+  const VideoPresentationServiceTestButtons({Key? key}) : super(key: key);
 
   @override
-  State<VideoPresentationTestButtons> createState() => _VideoPresentationTestButtonsState();
+  State<VideoPresentationServiceTestButtons> createState() => _VideoPresentationServiceTestButtonsState();
 }
 
-class _VideoPresentationTestButtonsState extends State<VideoPresentationTestButtons> {
+class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   String url = '';
 
@@ -18,16 +18,16 @@ class _VideoPresentationTestButtonsState extends State<VideoPresentationTestButt
   void initState() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation.onVideoPresentationChange()
         .listen((event) {
-      if(event.type == VideoPresentationEventNames.VideoPresentationStarted) {
+      if(event.type == VideoPresentationEventNames.videoPresentationStarted) {
         showAlertDialog(context, "VideoPresentationStarted", "On Event Change");
       }
-      else if(event.type == VideoPresentationEventNames.VideoPresentationPaused) {
+      else if(event.type == VideoPresentationEventNames.videoPresentationPaused) {
         showAlertDialog(context, "VideoPresentationPaused", "On Event Change");
       }
-      else if(event.type == VideoPresentationEventNames.VideoPresentationPlayed) {
+      else if(event.type == VideoPresentationEventNames.videoPresentationPlayed) {
         showAlertDialog(context, "VideoPresentationPlayed", "On Event Change");
       }
-      else if(event.type == VideoPresentationEventNames.VideoPresentationSought) {
+      else if(event.type == VideoPresentationEventNames.videoPresentationSought) {
         showAlertDialog(context, "VideoPresentationSought", "On Event Change");
       }
     });
@@ -103,7 +103,7 @@ class _VideoPresentationTestButtonsState extends State<VideoPresentationTestButt
   void state() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .state()
-        .then((state) => showAlertDialog(context, 'Success', state.value))
+        .then((state) => showAlertDialog(context, 'Success', state.name))
         .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
   }
 
@@ -114,7 +114,7 @@ class _VideoPresentationTestButtonsState extends State<VideoPresentationTestButt
         .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
   }
 
-  void play(){
+  void play() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .play()
         .then((value) => showAlertDialog(context, 'Success', "OK"))

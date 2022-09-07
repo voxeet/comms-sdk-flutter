@@ -9,7 +9,7 @@ export 'src/sdk_api/session_service.dart' show SessionService;
 export 'src/sdk_api/video_presentation_service.dart' show VideoPresentationService;
 export 'src/sdk_api/models/conference.dart' show Conference, ConferenceConstraints, ConferenceCreateOption, ConferenceCreateParameters, ConferenceJoinOptions, ConferenceLeaveOptions, ConferenceMixingOptions, ConferenceStatus, ConferenceReplayOptions, Codec, RTCPMode, ConferencePermission, ConferenceServiceEventNames, AudioProcessingOptions, AudioProcessingSenderOptions, RTCStatsType, VideoForwardingStrategy;
 export 'src/sdk_api/models/enums.dart' show ComfortNoiseLevel, FilePresentationServiceEventNames, NotificationServiceEventNames, CommandServiceEventNames, VideoPresentationState, VideoPresentationEventNames;
-export 'src/sdk_api/models/events.dart' show FileConvertedEventType, FilePresentationChangedEventType, InvitationReceivedNotificationData, MessageReceivedData, StreamsChangeData;
+export 'src/sdk_api/models/events.dart' show InvitationReceivedNotificationData, MessageReceivedData, StreamsChangeData;
 export 'src/sdk_api/models/file_presentation.dart' show File, FileConverted, FilePresentation;
 export 'src/sdk_api/models/participant_info.dart' show ParticipantInfo;
 export 'src/sdk_api/models/participant.dart' show Participant, ParticipantPermissions, ParticipantStatus, ParticipantType, ParticipantInvited;

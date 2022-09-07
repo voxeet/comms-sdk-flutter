@@ -10,18 +10,18 @@ import 'package:mockito/mockito.dart';
 import '../mock/mock_method_channel.dart';
 
 final userToInvite =
-    Participant("my_id2", ParticipantInfo("userToInvite", null, null), ParticipantStatus.CONNECTED, ParticipantType.USER);
+    Participant("my_id2", ParticipantInfo("userToInvite", null, null), ParticipantStatus.connected, ParticipantType.user);
 
 var participants = [
-  Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.CONNECTED, ParticipantType.USER),
+  Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.user),
   userToInvite
 ];
 
 var participantsInvitation = [
-  ParticipantInvited(userToInvite.info!, [ConferencePermission.SEND_AUDIO])
+  ParticipantInvited(userToInvite.info!, [ConferencePermission.sendAudio])
 ];
 
-var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.JOINED);
+var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.joined);
 
 void main() {
   var notificationService = DolbyioCommsSdk.instance.notification;

@@ -461,40 +461,20 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
-    
-    /*
-     // MARK: - Getters
-     
-     /// Returns information about the current conference.
-     /// - Parameters:
-     ///   - resolve: returns current conference object
-     ///   - reject: returns error on failure
-     func current(
-     completionHandler: FlutterMethodCallCompletionHandler
-     ) {
-     guard let conference = current else {
-     ModuleError.noCurrentConference.send(with: reject)
-     return
-     }
-     resolve(conference.toReactModel())
-     }
-     
-     /// Provides standard WebRTC statistics for the application.
-     /// - Parameters:
-     ///   - resolve: returns local stats on success
-     ///   - reject: returns error on failure
-     func getLocalStats(
-     completionHandler: FlutterMethodCallCompletionHandler
-     ) {
-     guard let localStats = VoxeetSDK.shared.conference.localStats() else {
-     ModuleError.noLocalStats.send(with: reject)
-     return
-     }
-     resolve(localStats)
-     }
-     
-     // MARK: - Setters
-     */
+        
+    /// Provides standard WebRTC statistics for the application.
+    /// - Parameters:
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func getLocalStats(
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let nativeLocalStats = VoxeetSDK.shared.conference.localStats()
+            completionHandler.success(flutterConvertible: try DTO.LocalStatsFlutterConvertible(nativeLocalStats: nativeLocalStats))
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
     
     /// Sets the maximum number of video streams that may be transmitted to the local participant.
     /// - Parameters:
@@ -659,21 +639,30 @@ class ConferenceServiceBinding: Binding {
 
 extension ConferenceServiceBinding: VTConferenceDelegate {
     func statusUpdated(status: VTConferenceStatus) {
-        //		send(
-        //			event: EventKeys.statusUpdated,
-        //			body: StatusDTO(
-        //				status: status
-        //			).toReactModel()
-        //		)
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.statusUpdated,
+                body: DTO.ConferenceStatus(status: status)
+            )
+        } catch {
+            fatalError("TODO: Throw error here")
+        }
     }
     
     func permissionsUpdated(permissions: [Int]) {
-        //		send(
-        //			event: EventKeys.permissionsUpdated,
-        //			body: PermissionsDTO(
-        //				permissions: permissions.compactMap { VTConferencePermission(rawValue: $0) }
-        //			).toReactModel()
-        //		)
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.permissionsUpdated,
+                body: permissions.map { (rawPermission: Int) -> DTO.ConferencePermission in
+                    guard let vtConferencePermission = VTConferencePermission(rawValue: rawPermission) else {
+                        fatalError("TODO: Throw error here")
+                    }
+                    return DTO.ConferencePermission(conferencePermision: vtConferencePermission)
+                }
+            )
+        } catch {
+            fatalError("TODO: Throw error here")
+        }
     }
     
     func participantAdded(participant: VTParticipant) {
@@ -796,6 +785,8 @@ extension ConferenceServiceBinding: FlutterBinding {
             isMuted(completionHandler: completionHandler)
         case "isSpeaking":
             isSpeaking(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "getLocalStats":
+            getLocalStats(completionHandler: completionHandler)
         case "setMaxVideoForwarding":
             setMaxVideoForwarding(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "setAudioProcessing":

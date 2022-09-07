@@ -2,7 +2,6 @@ import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/participant.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/participant_info.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/recording.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -60,8 +59,8 @@ void main() {
     final participant = Participant(
       "my_id2",
       ParticipantInfo("userToInvite", null, null),
-      ParticipantStatus.CONNECTED,
-      ParticipantType.USER,
+      ParticipantStatus.connected,
+      ParticipantType.user,
     );
     when(channel.invokeMethod("getParticipant")).thenAnswer((_) => Future.value(participant.toJson()));
 

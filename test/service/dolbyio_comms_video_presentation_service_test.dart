@@ -1,8 +1,5 @@
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk.dart';
 import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/enums.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/video_presentation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -70,7 +67,7 @@ void main() {
   });
 
   test("test video presentation state method", () async {
-    var expectedState = VideoPresentationState.PAUSED;
+    var expectedState = VideoPresentationState.paused;
     when(channel.invokeMethod("state")).thenAnswer((_) => Future.value("paused"));
 
     var result = await videoPresentationService.state();

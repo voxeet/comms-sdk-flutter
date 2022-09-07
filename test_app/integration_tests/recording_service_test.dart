@@ -24,7 +24,7 @@ void main() {
     var current = await dolbyioCommsSdkFlutterPlugin.recording.currentRecording();
     expect(current?.participantId, "123");
     expect(current?.startTimestamp, 1);
-    expect(current?.recordingStatus, RecordingStatus.RECORDING);
+    expect(current?.recordingStatus, RecordingStatus.recording);
   });
 
   testWidgets('RecordingService: start', (tester) async {

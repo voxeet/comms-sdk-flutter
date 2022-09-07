@@ -8,7 +8,7 @@ class ConferenceActionIconButton extends StatefulWidget {
   const ConferenceActionIconButton({Key? key, required this.iconWidget, required this.backgroundIconColor, required this.onPressedIcon}) : super(key: key);
 
   @override
-  _ConferenceActionIconButtonState createState() => _ConferenceActionIconButtonState();
+  State<ConferenceActionIconButton> createState() => _ConferenceActionIconButtonState();
 }
 
 class _ConferenceActionIconButtonState extends State<ConferenceActionIconButton> {

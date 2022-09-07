@@ -6,7 +6,6 @@
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
 import 'dart:developer' as developer;
-
 import 'dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'sdk_api/command_service.dart';
 import 'sdk_api/conference_service.dart';

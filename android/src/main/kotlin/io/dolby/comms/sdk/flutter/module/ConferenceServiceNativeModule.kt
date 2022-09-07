@@ -2,6 +2,7 @@ package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.internal.ParamsHolder
+import com.voxeet.sdk.models.Participant
 import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.VideoForwardingOptions
@@ -60,6 +61,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
             ::isSpeaking.name -> isSpeaking(call, result)
             ::replay.name -> replay(call, result)
             ::updatePermissions.name -> updatePermissions(call, result)
+            ::kick.name -> kick(call, result)
         }
     }
 
@@ -198,6 +200,19 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         }
     )
 
+    private fun kick(call: MethodCall, result: Result) = scope.launch(
+        onError = result::error,
+        onSuccess = {
+            val participantId = call.argument<Map<Any, Any?>?>("id") as? String
+            participantId?.let{ id ->
+                VoxeetSDK
+                    .conference()
+                    .findParticipantById(id)
+                    ?.let { p -> VoxeetSDK.conference().kick(p).await() }
+            }.let { r -> result.success(r ?: false) }
+        }
+    )
+
     private fun muteOutput(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
@@ -306,7 +321,16 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
 
     private fun getLocalStats(result: Result) = scope.launch(
         onError = result::error,
-        onSuccess = { VoxeetSDK.conference().localStats().let { result.success(it) } }
+        onSuccess = {
+            VoxeetSDK.conference().localStats()
+                .let { it ->
+                    val map = HashMap<String, String>()
+                    it.forEach {
+                        map[it.key] = it.value.toString()
+                    }
+                    result.success(map)
+                }
+        }
     )
 
     private fun setMaxVideoForwarding(call: MethodCall, result: Result) = scope.launch(

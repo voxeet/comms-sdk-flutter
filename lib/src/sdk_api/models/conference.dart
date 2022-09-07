@@ -1,7 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'participant.dart';
-import 'streams.dart';
 import 'enums.dart';
 
 /// The Conference class gathers information about a conference.
@@ -29,59 +28,65 @@ class Conference {
         "id": id,
         "isNew": isNew,
         "participants": participants.map((e) => e.toJson()).toList(),
-        "status": status.name,
+        "status": status.encode(),
       };
 }
 
 /// The ConferenceStatus enum represents the possible conference statuses.
 enum ConferenceStatus {
   /// The conference has been created.
-  CREATED('CREATED'),
+  created('CREATED'),
 
   /// The SDK is currently creating the conference.
-  CREATING('CREATING'),
+  creating('CREATING'),
 
   /// The default conference status.
-  DEFAULT('DEFAULT'),
+  defaultStatus('DEFAULT'),
 
   /// The conference has been destroyed. This status may be triggered by the following situations:
   /// - The last conference participant leaves the conference
   /// - The time to live or the conference time limit elapses
   /// - The conference creator uses the Terminate REST API to terminate the conference
-  DESTROYED('DESTROYED'),
+  destroyed('DESTROYED'),
 
   /// A conference has ended.
-  ENDED('ENDED'),
+  ended('ENDED'),
 
   /// An error has occurred.
-  ERROR('ERROR'),
+  error('ERROR'),
 
   /// @internal
   /// @nodoc
-  FIRST_PARTICIPANT('FIRST_PARTICIPANT'),
+  firstParticipant('FIRST_PARTICIPANT'),
 
   /// The local participant has successfully joined the conference.
-  JOINED('JOINED'),
+  joined('JOINED'),
 
   /// The local participant is joining the conference.
-  JOINING('JOINING'),
+  joining('JOINING'),
 
   /// The local participant is leaving the conference.
-  LEAVING('LEAVING'),
+  leaving('LEAVING'),
 
   /// The local participant has successfully left the conference.
-  LEFT('LEFT'),
+  left('LEFT'),
 
   /// @internal
   /// @nodoc
-  NO_MORE_PARTICIPANT('NO_MORE_PARTICIPANT');
+  noMoreParticipant('NO_MORE_PARTICIPANT');
 
-  final String name;
+  final String _value;
 
-  const ConferenceStatus(this.name);
+  const ConferenceStatus(this._value);
 
-  static ConferenceStatus? valueOf(String value) {
-    return ConferenceStatus.values.firstWhereOrNull((element) => element.name == value);
+  /// @internal
+  static ConferenceStatus? decode(String value) {
+    return ConferenceStatus.values.firstWhereOrNull((element) => element._value == value);
+  }
+
+  /// @internal
+  String encode() {
+    return _value;
   }
 }
 
@@ -131,39 +136,49 @@ class ConferenceCreateParameters {
   Map<String, dynamic> toJson() => {
         "dolbyVoice": dolbyVoice,
         "liveRecording": liveRecording,
-        "rtcpMode": rtcpMode?.name,
+        "rtcpMode": rtcpMode?.encode(),
         "ttl": ttl,
-        "videoCodec": videoCodec?.name,
+        "videoCodec": videoCodec?.encode(),
       };
 }
 
 /// The RTCPMode enum gathers the possible bitrate adaptation modes for video transmission.
 enum RTCPMode {
   /// Averages the available bandwidth of all receivers and adjusts the transmission bitrate to this value.
-  AVERAGE('average'),
+  average('average'),
 
   /// Does not adjust the transmission bitrate to the receivers' bandwidth.
-  BEST('best'),
+  best('best'),
 
   /// Adjusts the transmission bitrate to the receiver who has the worst network conditions.
-  WORST('worst');
+  worst('worst');
 
-  final String name;
+  final String _value;
 
-  const RTCPMode(this.name);
+  const RTCPMode(this._value);
+
+  String encode() {
+    return _value;
+  }
 }
 
 /// The Codec enum gathers the available video codecs.
 enum Codec {
   /// The default H264 video codec.
-  H264('H264'),
+  h264('H264'),
 
   /// The VP8 video codec.
-  VP8('VP8');
+  vp8('VP8');
 
-  final String name;
+  final String _value;
 
-  const Codec(this.name);
+  /// @internal
+  const Codec(this._value);
+
+  /// @internal
+  String encode() { 
+    return _value;
+  }
 }
 
 /// The ConferenceJoinOptions class defines how an application expects to join a conference in terms of media preference.
@@ -251,28 +266,28 @@ enum RTCStatsType {
   codec('codec'),
 
   /// Statistics for an inbound RTP stream that is currently received with this RTCPeerConnection object. It is accessed by the RTCInboundRtpStreamStats.
-  inbound_rtp('inbound-rtp'),
+  inboundRtp('inbound-rtp'),
 
   /// Statistics for an outbound RTP stream that is currently sent with this RTCPeerConnection object. It is accessed by the RTCOutboundRtpStreamStats.
-  outbound_rtp('outbound-rtp'),
+  outboundRtp('outbound-rtp'),
 
   /// Statistics for the remote endpoint's inbound RTP stream corresponding to an outbound stream that is currently sent with this RTCPeerConnection object.
-  remote_inbound_rtp('remote-inbound-rtp'),
+  remoteInboundRtp('remote-inbound-rtp'),
 
   /// Statistics for the remote endpoint's outbound RTP stream corresponding to an inbound stream that is currently received with this RTCPeerConnection object.
-  remote_outbound_rtp('remote-outbound-rtp'),
+  remoteOutboundRtp('remote-outbound-rtp'),
 
   /// Statistics for the media produced by a MediaStreamTrack that is currently attached to an RTCRtpSender.
-  media_source('media-source'),
+  mediaSource('media-source'),
 
   /// Statistics for a contributing source (CSRC) that contributed to an inbound RTP stream.
   csrc('csrc'),
 
   /// Statistics related to the RTCPeerConnection object.
-  peer_connection('peer-connection'),
+  peerConnection('peer-connection'),
 
   /// Statistics related to each RTCDataChannel id.
-  data_channel('data-channel'),
+  dataChannel('data-channel'),
 
   /// Contains statistics related to a specific MediaStream.
   stream('stream'),
@@ -293,29 +308,29 @@ enum RTCStatsType {
   transport('transport'),
 
   /// SCTP transport statistics related to an RTCSctpTransport object.
-  sctp_transport('sctp-transport'),
+  sctpTransport('sctp-transport'),
 
   /// ICE candidate pair statistics related to the RTCIceTransport objects.
-  candidate_pair('candidate-pair'),
+  candidatePair('candidate-pair'),
 
   /// ICE local candidate statistics related to the RTCIceTransport objects.
-  local_candidate('local-candidate'),
+  localCandidate('local-candidate'),
 
   /// ICE remote candidate statistics related to the RTCIceTransport objects.
-  remote_candidate('remote-candidate'),
+  remoteCandidate('remote-candidate'),
 
   /// Information about a certificate used by an RTCIceTransport.
   certificate('certificate'),
 
   /// Information about the connection to an ICE server (e.g. STUN or TURN).
-  ice_server('ice-server');
+  iceServer('ice-server');
 
-  final String _name;
+  final String _value;
 
-  const RTCStatsType(String name) : _name = name;
+  const RTCStatsType(this._value);
 
-  static RTCStatsType valueOf(String name) {
-    return RTCStatsType.values.firstWhere((element) => element._name == name);
+  static RTCStatsType decode(String value) {
+    return RTCStatsType.values.firstWhere((element) => element._value == value);
   }
 }
 
@@ -333,66 +348,70 @@ class ConferenceReplayOptions {
 /// The ConferencePermission enum gathers the possible permissions a participant may have in a conference.
 enum ConferencePermission {
   /// Allows a participant to invite other participants to a conference.
-  INVITE('INVITE'),
+  invite('INVITE'),
 
   /// Allows a participant to join a conference.
-  JOIN('JOIN'),
+  join('JOIN'),
 
   /// Allows a participant to kick other participants from a conference
-  KICK('KICK'),
+  kick('KICK'),
 
   /// Allows a participant to record a conference.
-  RECORD('RECORD'),
+  record('RECORD'),
 
   /// Allows a participant to send an audio stream during a conference.
-  SEND_AUDIO('SEND_AUDIO'),
+  sendAudio('SEND_AUDIO'),
 
   /// Allows a participant to send a message to other participants during a conference.
-  SEND_MESSAGE('SEND_MESSAGE'),
+  sendMessage('SEND_MESSAGE'),
 
   /// Allows a participant to send a video stream during a conference.
-  SEND_VIDEO('SEND_VIDEO'),
+  sendVideo('SEND_VIDEO'),
 
   /// Allows a participant to share a file during a conference.
-  SHARE_FILE('SHARE_FILE'),
+  shareFile('SHARE_FILE'),
 
   /// Allows a participant to share a screen during a conference.
-  SHARE_SCREEN('SHARE_SCREEN'),
+  shareScreen('SHARE_SCREEN'),
 
   /// Allows a participant to share a video during a conference.
-  SHARE_VIDEO('SHARE_VIDEO'),
+  shareVideo('SHARE_VIDEO'),
 
   /// Allows a participant to stream a conference.
-  STREAM('STREAM'),
+  stream('STREAM'),
 
   /// Allows a participant to update other participants' permissions.
-  UPDATE_PERMISSIONS('UPDATE_PERMISSIONS');
+  updatePermissions('UPDATE_PERMISSIONS');
 
-  final String value;
+  final String _value;
 
-  const ConferencePermission(this.value);
+  const ConferencePermission(this._value);
 
-  static ConferencePermission valueOf(String? value) {
+  static ConferencePermission decode(String? value) {
     return ConferencePermission.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
+  }
+
+  String encode() {
+    return _value;
   }
 }
 
 /// The ConferenceServiceEventNames enum gathers events that inform about changes in the participants list and the connected streams.
 enum ConferenceServiceEventNames implements EnumWithStringValue {
   /// Emitted when a new participant is invited to a conference. The SDK does not emit the participantAdded event for the local participant. Listeners only receive the participantAdded events about users; they do not receive events for other listeners. Users receive the participantAdded events about users and do not receive any events about listeners.
-  ParticipantAdded('EVENT_CONFERENCE_PARTICIPANT_ADDED'),
+  participantAdded('EVENT_CONFERENCE_PARTICIPANT_ADDED'),
 
   /// Emitted when a conference participant changes status. Listeners only receive the participantUpdated events about users; they do not receive events for other listeners. Users receive the participantUpdated events about users and do not receive any events about listeners.
-  ParticipantUpdated('EVENT_CONFERENCE_PARTICIPANT_UPDATED'),
+  participantUpdated('EVENT_CONFERENCE_PARTICIPANT_UPDATED'),
 
   /// Emitted when the local participant's permissions are updated.
-  PermissionsUpdated('EVENT_CONFERENCE_PERMISSIONS_UPDATED'),
+  permissionsUpdated('EVENT_CONFERENCE_PERMISSIONS_UPDATED'),
 
   /// Emitted when a conference status has changed.
-  StatusUpdated('EVENT_CONFERENCE_STATUS_UPDATED'),
+  statusUpdated('EVENT_CONFERENCE_STATUS_UPDATED'),
 
   /// Emitted when the SDK adds a new stream to a conference participant. Each conference participant can be connected to two streams: the audio and video stream and the screen-share stream. If a participant enables audio or video, the SDK adds the audio and video stream to the participant and emits the streamAdded event to all participants. When a participant is connected to the audio and video stream and changes the stream, for example, enables a camera while using a microphone, the SDK updates the audio and video stream and emits the [streamUpdated] event. When a participant starts sharing a screen, the SDK adds the screen-share stream to this participants and emits the streamAdded event to all participants. The following graphic shows this behavior:
   ///
@@ -401,19 +420,20 @@ enum ConferenceServiceEventNames implements EnumWithStringValue {
   /// Based on the stream type, the application chooses to either render a camera view or a screen-share view.
   /// When a new participant joins a conference with enabled audio and video, the SDK emits the streamAdded event that contains audio and video tracks.
   /// The SDK can also emit the streamAdded event only for the local participant. When the local participant uses the [ConferenceService.stopAudio] method to locally mute the selected remote participant who does not use a camera, the local participant receives the [streamRemoved] event. After using the [ConferenceService.startAudio] method for this remote participant, the local participant receives the streamAdded event.
-  StreamAdded('EVENT_CONFERENCE_STREAM_ADDED'),
+  streamAdded('EVENT_CONFERENCE_STREAM_ADDED'),
 
   /// Emitted when a conference participant who is connected to the audio and video stream changes the stream by enabling a microphone while using a camera or by enabling a camera while using a microphone. The event is emitted to all conference participants. The following graphic shows this behavior:
   ///
   /// <img src="https://files.readme.io/21575c1-conference-stream-added.png" width="700">
   ///
   /// The SDK can also emit the streamUpdated event only for the local participant. When the local participant uses the [ConferenceService.stopAudio] or [ConferenceService.startAudio] method to locally mute or un-mute a selected remote participant who uses a camera, the local participant receives the streamUpdated event.
-  StreamUpdated('EVENT_CONFERENCE_STREAM_UPDATED'),
+  streamUpdated('EVENT_CONFERENCE_STREAM_UPDATED'),
 
   /// Emitted when the SDK removes a stream from a conference participant. Each conference participant can be connected to two streams: the audio and video stream and the screen-share stream. If a participant disables audio and video or stops a screen-share presentation, the SDK removes the proper stream and emits the streamRemoved event to all conference participants.
   /// The SDK can also emit the streamRemoved event only for the local participant. When the local participant uses the [ConferenceService.stopAudio] method to locally mute a selected remote participant who does not use a camera, the local participant receives the streamRemoved event.
-  StreamRemoved('EVENT_CONFERENCE_STREAM_REMOVED');
+  streamRemoved('EVENT_CONFERENCE_STREAM_REMOVED');
 
+  @override
   final String value;
 
   const ConferenceServiceEventNames(this.value);
@@ -449,18 +469,25 @@ class AudioProcessingSenderOptions {
       };
 }
 
+/// The VideoForwardingStrategy enum defines how the SDK should select conference participants whose videos will be transmitted to the local participant. There are two possible values; the selection can be either based on the participants' audio volume or the distance from the local participant.
 enum VideoForwardingStrategy {
-  LAST_SPEAKER('LAST_SPEAKER'),
-  CLOSEST_USER('CLOSEST_USER');
+  /// Selects participants based on their audio volume. This allows the local participant to receive video streams only from active speakers.
+  lastSpeaker('LAST_SPEAKER'),
+  /// Selects participants based on their distance from the local participant. This allows the local participant to receive video streams only from the nearest participants. This value is available only for participants who enabled spatial audio.
+  closestUser('CLOSEST_USER');
 
-  final String value;
+  final String _value;
 
-  const VideoForwardingStrategy(this.value);
+  const VideoForwardingStrategy(this._value);
 
-  static VideoForwardingStrategy valueOf(String value) {
+  static VideoForwardingStrategy decode(String value) {
     return VideoForwardingStrategy.values.firstWhere(
-      (element) => element.value == value || element.name == value,
+      (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
+  }
+
+  String encode() {
+    return _value;
   }
 }

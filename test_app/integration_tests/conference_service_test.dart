@@ -22,9 +22,9 @@ void main() {
     var parameters = ConferenceCreateParameters();
     parameters.dolbyVoice = true;
     parameters.liveRecording = true;
-    parameters.rtcpMode = RTCPMode.BEST;
+    parameters.rtcpMode = RTCPMode.best;
     parameters.ttl = 15;
-    parameters.videoCodec = Codec.H264;
+    parameters.videoCodec = Codec.h264;
     var options = ConferenceCreateOption("test_alias", parameters, 1234);
     var conference =
         await dolbyioCommsSdkFlutterPlugin.conference.create(options);
@@ -54,9 +54,9 @@ void main() {
     parameters = ConferenceCreateParameters();
     parameters.dolbyVoice = false;
     parameters.liveRecording = false;
-    parameters.rtcpMode = RTCPMode.WORST;
+    parameters.rtcpMode = RTCPMode.worst;
     parameters.ttl = 30;
-    parameters.videoCodec = Codec.VP8;
+    parameters.videoCodec = Codec.vp8;
     options = ConferenceCreateOption("test_alias2", parameters, 4321);
     conference = await dolbyioCommsSdkFlutterPlugin.conference.create(options);
     await expectNative(
@@ -89,7 +89,7 @@ void main() {
     expect(conference.id, "setCreateConferenceReturn_id_1");
     expect(conference.alias, "setCreateConferenceReturn_alias_1");
     expect(conference.isNew, false);
-    expect(conference.status, ConferenceStatus.ENDED);
+    expect(conference.status, ConferenceStatus.ended);
 
     await resetSDK();
 
@@ -112,9 +112,9 @@ void main() {
     expect(conference.participants[0].info?.externalId, "participant_info_external_id_2");
     expect(conference.participants[0].info?.name, "participant_info_name_2");
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_2");
-    expect(conference.participants[0].status, ParticipantStatus.DECLINE);
-    expect(conference.participants[0].type, ParticipantType.LISTENER);
-    expect(conference.status, ConferenceStatus.CREATED);
+    expect(conference.participants[0].status, ParticipantStatus.decline);
+    expect(conference.participants[0].type, ParticipantType.listner);
+    expect(conference.status, ConferenceStatus.created);
 
     await resetSDK();
 
@@ -137,9 +137,9 @@ void main() {
     expect(conference.participants[0].info?.externalId, "participant_info_external_id_3");
     expect(conference.participants[0].info?.name, "participant_info_name_3");
     expect(conference.participants[0].info?.avatarUrl, "participant_info_avatar_url_3");
-    expect(conference.participants[0].status, ParticipantStatus.ERROR);
-    expect(conference.participants[0].type, ParticipantType.USER);
-    expect(conference.status, ConferenceStatus.ENDED);
+    expect(conference.participants[0].status, ParticipantStatus.error);
+    expect(conference.participants[0].type, ParticipantType.user);
+    expect(conference.status, ConferenceStatus.ended);
 
     await resetSDK();
 
@@ -162,9 +162,9 @@ void main() {
     expect(conference.participants[0].info?.externalId, null);
     expect(conference.participants[0].info?.name, "");
     expect(conference.participants[0].info?.avatarUrl, null);
-    expect(conference.participants[0].status, ParticipantStatus.CONNECTING);
-    expect(conference.participants[0].type, ParticipantType.UNKNOWN);
-    expect(conference.status, ConferenceStatus.ENDED);
+    expect(conference.participants[0].status, ParticipantStatus.connecting);
+    expect(conference.participants[0].type, ParticipantType.unknown);
+    expect(conference.status, ConferenceStatus.ended);
   });
 
   testWidgets('ConferenceService: join', (tester) async {
@@ -187,10 +187,10 @@ void main() {
         Participant(
           "participant_id",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.CONNECTED,
-          ParticipantType.LISTENER)
+          ParticipantStatus.connected,
+          ParticipantType.listner)
       ],
-      ConferenceStatus.CREATED);
+      ConferenceStatus.created);
 
     var conferenceJoinOptions = ConferenceJoinOptions();
     conferenceJoinOptions.conferenceAccessToken = "conference_access_token";
@@ -264,8 +264,8 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -284,8 +284,8 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -351,8 +351,8 @@ void main() {
     var participant = Participant(
       "participant_id_5_1",
       ParticipantInfo("participant_name", "avatar_url", "external_id"),
-      ParticipantStatus.CONNECTED,
-      ParticipantType.LISTENER);
+      ParticipantStatus.connected,
+      ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -378,8 +378,8 @@ void main() {
       participant = Participant(
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.INACTIVE,
-          ParticipantType.USER);
+          ParticipantStatus.inactive,
+          ParticipantType.user);
 
       runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -426,8 +426,8 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -446,8 +446,8 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -467,8 +467,8 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -487,8 +487,8 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -508,8 +508,8 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -528,8 +528,8 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -549,8 +549,8 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -569,8 +569,8 @@ void main() {
     participant = Participant(
         "participant_id_5_2",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -600,10 +600,10 @@ void main() {
           Participant(
               "participant_id",
               ParticipantInfo("participant_name", "avatar_url", "external_id"),
-              ParticipantStatus.CONNECTED,
-              ParticipantType.LISTENER)
+              ParticipantStatus.connected,
+              ParticipantType.listner)
         ],
-        ConferenceStatus.CREATED);
+        ConferenceStatus.created);
 
     var replayOptions = ConferenceReplayOptions("token", 1);
 
@@ -652,7 +652,7 @@ void main() {
       "setCreateConferenceReturn_id_5",
       true,
       [],
-      ConferenceStatus.CREATED);
+      ConferenceStatus.created);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -671,7 +671,7 @@ void main() {
       "setCreateConferenceReturn_id_6",
       true,
       [],
-      ConferenceStatus.CREATED);
+      ConferenceStatus.created);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -694,8 +694,8 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     var position = SpatialPosition(1, 1, 1);
 
@@ -766,8 +766,8 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER
+        ParticipantStatus.connected,
+        ParticipantType.listner
         );
 
     runNative(
@@ -789,7 +789,7 @@ void main() {
 
     var conference = Conference(
       "setCreateConferenceReturn_alias_5", "setCreateConferenceReturn_id_5",
-      true, [], ConferenceStatus.CREATING);
+      true, [], ConferenceStatus.creating);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -803,13 +803,13 @@ void main() {
       assertLabel: "assertFetchConferenceArgs",
       expected: { "conferenceId": "setCreateConferenceReturn_id_5"});
 
-    expect(status, ConferenceStatus.CREATED);
+    expect(status, ConferenceStatus.created);
 
     await resetSDK();
 
     conference = Conference(
       "setCreateConferenceReturn_alias_6", "setCreateConferenceReturn_id_6",
-      true, [], ConferenceStatus.CREATED);
+      true, [], ConferenceStatus.created);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -823,7 +823,7 @@ void main() {
       assertLabel: "assertFetchConferenceArgs",
       expected: { "conferenceId": "setCreateConferenceReturn_id_6"});
 
-    expect(status, ConferenceStatus.DESTROYED);
+    expect(status, ConferenceStatus.destroyed);
   });
 
   testWidgets('ConferenceService: isMuted', (tester) async {
@@ -852,8 +852,8 @@ void main() {
      var participant = Participant(
       "participant_id_5_1",
       ParticipantInfo("participant_name", "avatar_url", "external_id"),
-      ParticipantStatus.CONNECTED,
-      ParticipantType.LISTENER);
+      ParticipantStatus.connected,
+      ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -879,8 +879,8 @@ void main() {
       participant = Participant(
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.INACTIVE,
-          ParticipantType.USER);
+          ParticipantStatus.inactive,
+          ParticipantType.user);
 
       runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
@@ -912,8 +912,8 @@ void main() {
       Participant(
           "participant_id_5_1",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.CONNECTED,
-          ParticipantType.LISTENER)
+          ParticipantStatus.connected,
+          ParticipantType.listner)
     ]);
 
     await expectNative(
@@ -979,15 +979,15 @@ void main() {
     var participant = Participant(
         "participant_id_5_1",
         ParticipantInfo("participant_name", "avatar_url", "external_id"),
-        ParticipantStatus.CONNECTED,
-        ParticipantType.LISTENER);
+        ParticipantStatus.connected,
+        ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
-    var conferencePermissions = [ConferencePermission.INVITE];
+    var conferencePermissions = [ConferencePermission.invite];
     var participantPermissions =
         ParticipantPermissions(participant, conferencePermissions);
 
@@ -1009,15 +1009,15 @@ void main() {
     participant = Participant(
           "participant_id_5_2",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),
-          ParticipantStatus.CONNECTED,
-          ParticipantType.LISTENER);
+          ParticipantStatus.connected,
+          ParticipantType.listner);
 
     runNative(
       methodChannel: conferenceServiceAssertsMethodChannel,
       label: "setCurrentConference",
       args: { "type": 5 });
 
-    conferencePermissions = [ConferencePermission.KICK];
+    conferencePermissions = [ConferencePermission.kick];
     participantPermissions =
         ParticipantPermissions(participant, conferencePermissions);
 

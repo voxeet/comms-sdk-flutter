@@ -1,5 +1,4 @@
-import 'package:dolbyio_comms_sdk_flutter/src/dolbyio_comms_sdk_flutter_platform_interface.dart';
-
+import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
 import '../mapper/mapper.dart';
 import 'models/recording.dart';
 
