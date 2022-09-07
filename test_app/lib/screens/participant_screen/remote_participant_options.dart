@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'dart:developer' as developer;
 
+import '../../widgets/dialogs.dart';
+
 class RemoteParticipantOptions extends StatefulWidget {
   final int index;
 
@@ -45,6 +47,14 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
                 title: Text('Mute'),
               ),
             ),
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 2,
+              child: ListTile(
+                title: Text('Update permissions'),
+                leading: Icon(Icons.perm_camera_mic_outlined, color: Colors.deepPurple)
+              )
+            )
           ];
         },
         onSelected: (value) {
@@ -58,6 +68,10 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
               {
                 muteRemoteParticipant(widget.index);
                 break;
+              }
+            case 2:
+              {
+                updatePermissions(widget.index);
               }
           }
         });
@@ -93,6 +107,29 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
             setState(() => isRemoteMuted = false);
           });
     }
+  }
+
+  void updatePermissions(int index) {
+    _dolbyioCommsSdkFlutterPlugin.conference.current()
+        .then((conference) => conference.participants[index])
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions([
+      ParticipantPermissions(participant, [ConferencePermission.sendAudio])
+    ]))
+        .then((value) => showDialog(context, 'Success', "OK"))
+        .onError((error, stackTrace) =>
+        showDialog(
+            context,
+            'Error',
+            "$error\nThis method is only available  for protected conferences")
+    );
+  }
+
+  Future<void> showDialog(BuildContext context, String title, String text) async {
+    await ViewDialogs.dialog(
+      context: context,
+      title: title,
+      body: text,
+    );
   }
 
   void onError(String message, Object? error) {

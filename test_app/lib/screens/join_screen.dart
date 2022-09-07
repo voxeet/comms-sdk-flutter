@@ -262,7 +262,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
           .onStatusChange()
           .listen((params) {
-        StatusSnackbar.buildSnackbar(context, params.body.name.toString());
+        StatusSnackbar.buildSnackbar(
+            context,
+            params.body.name.toString(),
+            const Duration(milliseconds: 700)
+        );
       });
     } else {
       onStatusChangeSubscription?.cancel();

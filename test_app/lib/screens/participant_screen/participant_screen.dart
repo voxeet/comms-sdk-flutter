@@ -1,3 +1,4 @@
+import '../../widgets/status_snackbar.dart';
 import '../test_buttons/test_buttons.dart';
 import 'conference_controls.dart';
 import 'conference_title.dart';
@@ -53,6 +54,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   final VideoViewController _localParticipantVideoViewController = VideoViewController();
   StreamSubscription<Event<ConferenceServiceEventNames, Participant>>? _participantsChangeSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>? _streamsChangeSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, List<ConferencePermission>>>? _onPermissionsChangeSubsription;
 
   Participant? _localParticipant;
   
@@ -68,12 +70,22 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       _dolbyioCommsSdkFlutterPlugin.conference.onStreamsChange().listen((event) {
         _updateLocalView();
       });
+
+    _onPermissionsChangeSubsription =
+        _dolbyioCommsSdkFlutterPlugin.conference.onPermissionsChange().listen((event) {
+          StatusSnackbar.buildSnackbar(
+              context,
+              event.body.toString(),
+              const Duration(seconds: 2)
+          );
+        });
   }
 
   @override
   void deactivate() {
     _participantsChangeSubscription?.cancel();
     _streamsChangeSubscription?.cancel();
+    _onPermissionsChangeSubsription?.cancel();
     super.deactivate();
   }
 
