@@ -42,7 +42,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         SecondaryButton(text: 'Set video forwarding', onPressed: () => setVideoForwarding(context)),
         SecondaryButton(text: 'Set audio processing', onPressed: () => setAudioProcessing(context)),
         SecondaryButton(text: 'Is speaking', onPressed: () => isSpeaking(context)),
-        SecondaryButton(text: 'Update permissions', onPressed: () => updatePermissions(context)),
         SecondaryButton(text: 'Get max video forwarding', onPressed: () => getMaxVideoForwarding(context)),
       ],
     );
@@ -115,17 +114,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         .current()
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.mute(conference.participants.first, mute))
         .then((isMuted) => showDialog(context, 'Success', isMuted.toString()))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
-  }
-
-  void updatePermissions(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => conference.participants.first)
-        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions([
-          ParticipantPermissions(participant, [ConferencePermission.sendAudio, ConferencePermission.sendVideo])
-        ]))
-        .then((value) => showDialog(context, 'Success', "OK"))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
 
