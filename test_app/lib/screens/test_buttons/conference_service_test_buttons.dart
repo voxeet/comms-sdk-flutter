@@ -42,7 +42,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         SecondaryButton(text: 'Set video forwarding', onPressed: () => setVideoForwarding(context)),
         SecondaryButton(text: 'Set audio processing', onPressed: () => setAudioProcessing(context)),
         SecondaryButton(text: 'Is speaking', onPressed: () => isSpeaking(context)),
-        SecondaryButton(text: 'Update permissions', onPressed: () => updatePermissions(context)),
         SecondaryButton(text: 'Get max video forwarding', onPressed: () => getMaxVideoForwarding(context)),
       ],
     );
