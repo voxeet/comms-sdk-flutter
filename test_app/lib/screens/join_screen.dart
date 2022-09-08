@@ -18,8 +18,9 @@ import 'dart:developer' as developer;
 
 class JoinConference extends StatelessWidget {
   final String username;
+  final String externalId;
 
-  const JoinConference({Key? key, required this.username}) : super(key: key);
+  const JoinConference({Key? key, required this.username, required this.externalId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class JoinConference extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-                  JoinConferenceContent(username: username)
+                  JoinConferenceContent(username: username, externalId: externalId)
                 ],
               )
           )
@@ -45,8 +46,9 @@ class JoinConference extends StatelessWidget {
 
 class JoinConferenceContent extends StatefulWidget {
   final String username;
+  final String externalId;
 
-  const JoinConferenceContent({Key? key, required this.username}) : super(key: key);
+  const JoinConferenceContent({Key? key, required this.username, required this.externalId}) : super(key: key);
 
   @override
   State<JoinConferenceContent> createState() => _JoinConferenceContentState();
@@ -58,7 +60,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKey = GlobalKey<FormState>();
   bool isJoining = false;
-  bool switchValue = false;
+  bool switchConferenceStatus = false;
+  bool switchSpatialAudio = false;
+  bool switchDolbyVoice = false;
   StreamSubscription<Event<NotificationServiceEventNames, InvitationReceivedNotificationData>>? onInvitationReceivedSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? onStatusChangeSubscription;
 
@@ -130,6 +134,10 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 blackText: "Logged in as ",
                 colorText: widget.username
               ),
+              TwoColorText(
+                  blackText: "External ID  ",
+                  colorText: widget.externalId
+              ),
               const SizedBox(height: 16),
               Form(
               key: formKey,
@@ -144,18 +152,42 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 children: [
                   const Text("Observe Conference Status"),
                   CupertinoSwitch(
-                      value: switchValue,
+                      value: switchConferenceStatus,
                       onChanged: (value) {
                         setState(() {
-                          switchValue = value;
-                          observeConferenceStatus(switchValue);
-                          developer.log(switchValue.toString());
+                          switchConferenceStatus = value;
+                          observeConferenceStatus(switchConferenceStatus);
                         });
                       }
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Text("Spatial Audio"),
+                  CupertinoSwitch(
+                      value: switchSpatialAudio,
+                      onChanged: (value) {
+                        setState(() {
+                          switchSpatialAudio = value;
+                        });
+                      }
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text("Dolby Voice"),
+                  CupertinoSwitch(
+                      value: switchDolbyVoice,
+                      onChanged: (value) {
+                        setState(() {
+                          switchDolbyVoice = value;
+                        });
+                      }
+                  ),
+                ],
+              ),
               PrimaryButton(
                   widgetText: isJoining
                     ? const WhiteCircularProgressIndicator()
@@ -222,7 +254,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   ConferenceCreateOption conferenceCreateOptions() {
     var conferenceName = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
-    params.dolbyVoice = false;
+    params.dolbyVoice = switchDolbyVoice;
     var createOptions = ConferenceCreateOption(conferenceName, params, 0);
     return createOptions;
   }
@@ -231,7 +263,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var joinOptions = ConferenceJoinOptions();
     joinOptions.constraints = ConferenceConstraints(true, true);
     joinOptions.maxVideoForwarding = 4;
-    joinOptions.spatialAudio = false;
+    joinOptions.spatialAudio = switchSpatialAudio;
     return joinOptions;
   }
 

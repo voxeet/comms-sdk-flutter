@@ -39,7 +39,7 @@ class ParticipantWidget extends StatelessWidget {
                   Padding(
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
-                          getParticipantName(),
+                          '${getParticipantName()}: ${getParticipantStatus()!}',
                           style: const TextStyle(color: Colors.white))
                   ),
                   if (participantIndex != 0) RemoteParticipantOptions(index: participantIndex),
@@ -54,5 +54,10 @@ class ParticipantWidget extends StatelessWidget {
   String getParticipantName() {
     String participantName = participant.info!.name;
     return participantName;
+  }
+
+  String? getParticipantStatus() {
+    String? participantStatus = participant.status?.encode();
+    return participantStatus;
   }
 }

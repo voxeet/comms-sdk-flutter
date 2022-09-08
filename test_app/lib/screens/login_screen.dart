@@ -170,7 +170,11 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     await Navigator.of(context).push(
         MaterialPageRoute(
           settings: const RouteSettings(name: "JoinConferenceScreen"),
-          builder: (context) => JoinConference(username: usernameTextController.text)
+          builder: (context) =>
+              JoinConference(
+                  username: usernameTextController.text,
+                  externalId: externalIdTextController.text
+              )
         )
     );
     setState(() => isLogging = false);
