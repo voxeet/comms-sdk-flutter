@@ -74,6 +74,7 @@ class ConferenceService {
   }
 
   /// Gets a list of participants who are present at a specific conference defined in the [conference] parameter.
+  /// **Note**: If a session is closed and reopened, the list obtained from the getParticipants method can sometimes get corrupted. This can result in no preview video being displayed for the local participant or the local participant appearing twice on the list.
   Future<List<Participant>> getParticipants(Conference conference) async {
     var result = await _methodChannel.invokeMethod<List<Object?>>("getParticipants", conference.toJson());
     return result != null ? result.map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>)).toList() : List.empty();
