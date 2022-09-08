@@ -234,21 +234,6 @@ void main() {
     })).called(1);
   });
 
-  test("test setSpatialPosition method without participant passed", () async {
-    var position = SpatialPosition(1.0, 2.0, 3.0);
-    when(channel.invokeMethod("setSpatialPosition", {
-      "position": position.toJson(),
-      "participant": null,
-    })).thenAnswer((_) => Future.value());
-
-    await conferenceService.setSpatialPosition(position: position);
-
-    verify(channel.invokeMethod("setSpatialPosition", {
-      "position": {"x": 1.0, "y": 2.0, "z": 3.0},
-      "participant": null
-    })).called(1);
-  });
-
   test("test startAudio method", () async {
     when(channel.invokeMethod("startAudio", participant.toJson())).thenAnswer((_) => Future.value());
 

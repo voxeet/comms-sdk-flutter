@@ -33,7 +33,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         SecondaryButton(text: 'Stop video', onPressed: () => stopVideo(context)),
         SecondaryButton(text: 'Start screen share', onPressed: () => startScreenShare(context)),
         SecondaryButton(text: 'Stop screen share', onPressed: () => stopScreenShare(context)),
-        SecondaryButton(text: 'Set my spatial position', onPressed: () => setMySpatialPosition(context)),
         SecondaryButton(text: 'Set spatial position', onPressed: () => setSpatialPosition(context)),
         SecondaryButton(text: 'Set spatial direction', onPressed: () => setSpatialDirection(context)),
         SecondaryButton(text: 'Set spatial environment', onPressed: () => setSpatialEnvironment(context)),
@@ -170,13 +169,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.stopScreenShare())
         .then((value) => showDialog(context, 'Success', 'OK'))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString() + stackTrace.toString()));
-  }
-
-  void setMySpatialPosition(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialPosition(position: SpatialPosition(1.0, 1.0, 1.0))
-        .then((value) => showDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
 
   void setSpatialPosition(BuildContext context) {
