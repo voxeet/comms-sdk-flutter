@@ -43,6 +43,7 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         SecondaryButton(text: 'Set audio processing', onPressed: () => setAudioProcessing(context)),
         SecondaryButton(text: 'Is speaking', onPressed: () => isSpeaking(context)),
         SecondaryButton(text: 'Update permissions', onPressed: () => updatePermissions(context)),
+        SecondaryButton(text: 'Get max video forwarding', onPressed: () => getMaxVideoForwarding(context)),
       ],
     );
   }
@@ -262,5 +263,12 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference.isSpeaking(participants.first))
         .then((isSpeaking) => showDialog(context, 'Success', isSpeaking.toString()))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+  }
+
+  void getMaxVideoForwarding(BuildContext context) {
+    _dolbyioCommsSdkFlutterPlugin.conference
+    .getMaxVideoForwarding()
+    .then((maxVideoForwarding) => showDialog(context, 'Success', maxVideoForwarding.toString()))
+    .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
 }
