@@ -54,6 +54,14 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
                 title: Text('Update permissions'),
                 leading: Icon(Icons.perm_camera_mic_outlined, color: Colors.deepPurple)
               )
+            ),
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 3,
+              child: ListTile(
+                title: Text('Set spatial position'),
+                leading: Icon(Icons.spatial_audio, color: Colors.deepPurple)
+              )
             )
           ];
         },
@@ -72,6 +80,12 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
             case 2:
               {
                 updatePermissions(widget.index);
+                break;
+              }
+            case 3:
+              {
+                setSpatialPosition(widget.index);
+                break;
               }
           }
         });
@@ -122,6 +136,20 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
             'Error',
             "$error\nThis method is only available  for protected conferences")
     );
+  }
+
+  void setSpatialPosition(int index) {
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .current()
+        .then((conference) => conference.participants[index])
+        .then((participant) =>
+            _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+              participant: participant,
+              position: SpatialPosition(1.0, 1.0, 1.0),
+            ))
+        .then((value) => showDialog(context, 'Success', 'OK'))
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
   }
 
   Future<void> showDialog(BuildContext context, String title, String text) async {

@@ -112,9 +112,9 @@ class ConferenceService {
   ///
   /// <img src="https://files.readme.io/d4d9f7a-05_Axis_People_v04_220202.png" width="700">
   ///
-  Future<void> setSpatialPosition({Participant? participant, required SpatialPosition position}) async {
+  Future<void> setSpatialPosition({required Participant participant, required SpatialPosition position}) async {
     await _methodChannel
-        .invokeMethod<void>("setSpatialPosition", {"participant": participant?.toJson(), "position": position.toJson()});
+        .invokeMethod<void>("setSpatialPosition", {"participant": participant.toJson(), "position": position.toJson()});
     return Future.value();
   }
 
