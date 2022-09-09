@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/secondary_button.dart';
-import '/screens/join_screen.dart';
 import '/widgets/dialogs.dart';
 import 'dart:convert';
 
@@ -16,7 +15,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
       spacing: 8.0,
       runSpacing: 4.0,
       children: <Widget>[
-        SecondaryButton(text: 'Leave', onPressed: () => leave(context)),
         SecondaryButton(text: 'Get participant', onPressed: () => getParticipant(context)),
         SecondaryButton(text: 'Get participants', onPressed: () => getParticipants(context)),
         SecondaryButton(text: 'Fetch conference', onPressed: () => fetchConference(context)),
@@ -90,14 +88,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         .current()
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.getAudioLevel(conference.participants.first))
         .then((audioLevel) => showDialog(context, 'Success', audioLevel.toString()))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
-  }
-
-  void leave(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.leave())
-        .then((value) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const JoinConference(username: ''))))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
 

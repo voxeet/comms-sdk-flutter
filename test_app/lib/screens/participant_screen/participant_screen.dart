@@ -64,6 +64,11 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     _participantsChangeSubscription = 
       _dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange().listen((event) {
         _updateLocalView();
+        StatusSnackbar.buildSnackbar(
+            context,
+            "${event.body.info?.name}: ${event.body.status?.encode()}",
+            const Duration(seconds: 1)
+        );
       });
 
     _streamsChangeSubscription = 
