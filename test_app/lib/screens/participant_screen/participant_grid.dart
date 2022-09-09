@@ -79,7 +79,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
             var participant = participants[index];
             return ParticipantWidget(
                 participant: participant,
-                participantIndex: index
+                isLocal: index == 0
             );
           }),
     );
