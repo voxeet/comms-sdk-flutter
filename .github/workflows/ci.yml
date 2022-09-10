@@ -37,7 +37,7 @@ jobs:
          flutter pub get
       - name: Run tests
         run: |
-         flutter test
+         flutter test -r expanded
       - name: Build app
         run: |
           ./scripts/build-android.sh
@@ -64,7 +64,7 @@ jobs:
          flutter pub get
       - name: Run tests
         run: |
-         flutter test
+         flutter test -r expanded
       - name: Run unmocked integration tests
         run: |
           ./scripts/run-unmocked-integration-tests-ios.sh
