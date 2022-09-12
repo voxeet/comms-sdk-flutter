@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '../../widgets/dialogs.dart';
+import 'permissions_list.dart';
 
 class RemoteParticipantOptions extends StatefulWidget {
   final Participant participant;
@@ -14,7 +15,14 @@ class RemoteParticipantOptions extends StatefulWidget {
 
 class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+  List<ConferencePermission> permissionsList = [];
   bool isRemoteMuted = false;
+
+  void updatePermissionsList(List<ConferencePermission> newPermissionsList) {
+    setState(() {
+      permissionsList = newPermissionsList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +80,7 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
                 muteRemoteParticipant();
                 break;
             case 2:
-                updatePermissions();
+                showPermissionsDialog();
                 break;
             case 3:
                 setSpatialPosition();
@@ -101,11 +109,11 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
     try {
       final participant = await _upToDateParticipant();
       await _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions([
-        ParticipantPermissions(participant, [ConferencePermission.sendAudio])
+        ParticipantPermissions(participant, permissionsList)
       ]);
-      await showDialog('Success', "OK");
+      await showDialogWindow('Success', "OK");
     } catch(error) {
-      showDialog(
+      showDialogWindow(
         'Error',
         "$error\nThis method is only available  for protected conferences"
       );
@@ -119,13 +127,13 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
           participant: participant,
           position: SpatialPosition(1.0, 1.0, 1.0),
         );
-      await showDialog('Success', 'OK');
+      await showDialogWindow('Success', 'OK');
     } catch(error) {
-      showDialog('Error', error.toString());
+      showDialogWindow('Error', error.toString());
     }
   }
 
-  Future<void> showDialog(String title, String text) async {
+  Future<void> showDialogWindow(String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
       title: title,
@@ -135,5 +143,38 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
 
   Future<Participant> _upToDateParticipant() async {
     return _dolbyioCommsSdkFlutterPlugin.conference.getParticipant(widget.participant.id);
+  }
+
+  Future<void> showPermissionsDialog() async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Update permissions"),
+            actionsOverflowButtonSpacing: 20,
+            content: PermissionsList(
+                permissionsCallback: updatePermissionsList
+            ),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    updatePermissions();
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+                  child: const Text("Update")
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    permissionsList.clear();
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
+                  child: const Text("Cancel")
+              ),
+            ],
+          );
+        }
+    );
   }
 }
