@@ -1,3 +1,4 @@
+import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/secondary_button.dart';
@@ -54,8 +55,7 @@ class ConferenceServiceTestButtons extends StatelessWidget {
 
   void getParticipant(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.getParticipant(conference.participants.first.id))
+        .getLocalParticipant()
         .then((participant) => showDialog(context, 'Success', participant.toJson().toString()))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
@@ -85,8 +85,8 @@ class ConferenceServiceTestButtons extends StatelessWidget {
 
   void getAudioLevel(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.getAudioLevel(conference.participants.first))
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.getAudioLevel(participant))
         .then((audioLevel) => showDialog(context, 'Success', audioLevel.toString()))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
@@ -100,8 +100,8 @@ class ConferenceServiceTestButtons extends StatelessWidget {
 
   void setMute(BuildContext context, bool mute) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.mute(conference.participants.first, mute))
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, mute))
         .then((isMuted) => showDialog(context, 'Success', isMuted.toString()))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }
@@ -115,32 +115,32 @@ class ConferenceServiceTestButtons extends StatelessWidget {
 
   void startAudio(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.startAudio(conference.participants.first)
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.startAudio(participant)
         .then((value) => showDialog(context, 'Success', 'OK'))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString())));
   }
 
   void stopAudio(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.stopAudio(conference.participants.first)
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.stopAudio(participant)
         .then((value) => showDialog(context, 'Success', 'OK'))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString())));
   }
 
   void startVideo(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.startVideo(conference.participants.first)
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.startVideo(participant)
         .then((value) => showDialog(context, 'Success', 'OK'))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString() + stackTrace.toString())));
   }
 
   void stopVideo(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.stopVideo(conference.participants.first)
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.stopVideo(participant)
         .then((value) => showDialog(context, 'Success', 'OK'))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString() + stackTrace.toString())));
   }
@@ -163,10 +163,9 @@ class ConferenceServiceTestButtons extends StatelessWidget {
 
   void setSpatialPosition(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(conference))
-        .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
-          participant: participants.first,
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+          participant: participant,
           position: SpatialPosition(1.0, 1.0, 1.0),
         ))
         .then((value) => showDialog(context, 'Success', 'OK'))
@@ -228,9 +227,8 @@ class ConferenceServiceTestButtons extends StatelessWidget {
 
   void isSpeaking(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference.getParticipants(conference))
-        .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference.isSpeaking(participants.first))
+        .getLocalParticipant()
+        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.isSpeaking(participant))
         .then((isSpeaking) => showDialog(context, 'Success', isSpeaking.toString()))
         .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
   }

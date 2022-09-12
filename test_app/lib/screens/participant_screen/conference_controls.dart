@@ -1,3 +1,4 @@
+import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/conference_action_icon_button.dart';
@@ -93,17 +94,22 @@ class _ConferenceControlsState extends State<ConferenceControls> {
     if (isMicOff == false) {
       widget.conference.then((current) {
         _dolbyioCommsSdkFlutterPlugin.conference
-            .mute(current!.participants.first, true)
-            .then((value) => developer.log('Local participant has been muted.'))
-            .onError((error, stackTrace) => onError('Error during mutting.', error));
+            .getLocalParticipant()
+            .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference
+              .mute(participant, true)
+              .then((value) => developer.log('Local participant has been muted.'))
+              .onError((error, stackTrace) => onError('Error during mutting.', error))
+        );
       });
       setState(() => isMicOff = true);
     } else {
         widget.conference.then((current) {
-          _dolbyioCommsSdkFlutterPlugin.conference
-          .mute(current!.participants.first, false)
-          .then((value) => developer.log('Local participant has been unmuted.'))
-          .onError((error, stackTrace) => onError('Error during unmutting.', error));
+          _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant()
+            .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference
+              .mute(participant, false)
+              .then((value) => developer.log('Local participant has been unmuted.'))
+              .onError((error, stackTrace) => onError('Error during unmutting.', error))
+          );
       });
       setState(() => isMicOff = false);
     }
@@ -111,19 +117,23 @@ class _ConferenceControlsState extends State<ConferenceControls> {
 
   void onStopVideo() {
     widget.conference.then((current) {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .stopVideo(current!.participants.first)
-          .then((value) => developer.log('Local participant video has been stopped.'))
-          .onError((error, stackTrace) => onError('Error during stopping video.', error));
+      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant()
+          .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.stopVideo(participant)
+            .then((value) => developer.log('Local participant video has been stopped.'))
+            .onError((error, stackTrace) => onError('Error during stopping video.', error))
+      );
+
     });
   }
 
   void onStartVideo() {
     widget.conference.then((current) {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .startVideo(current!.participants.first)
-          .then((value) => developer.log('Local participant video has been started.'))
-          .onError((error, stackTrace) => onError('Error during starting video.', error));
+      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant()
+          .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference
+            .startVideo(participant)
+            .then((value) => developer.log('Local participant video has been started.'))
+            .onError((error, stackTrace) => onError('Error during starting video.', error))
+      );
     });
   }
 
