@@ -37,7 +37,13 @@ jobs:
          flutter pub get
       - name: Run tests
         run: |
-         flutter test
+         flutter test -r expanded
+      - name: Build app
+        run: |
+          ./scripts/build-android.sh
+      - name: Analyze
+        run: |
+          flutter analyze
 
   build-macos:
     name: flutter build macos
@@ -47,11 +53,6 @@ jobs:
     steps:
       - name: Checkout repo 
         uses: actions/checkout@v2
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: 15
-          distribution: 'adopt'
       - name: Set up Flutter version
         uses: subosito/flutter-action@v2.4.0
         with:
@@ -61,4 +62,10 @@ jobs:
          flutter pub get
       - name: Run tests
         run: |
-         flutter test
+         flutter test -r expanded
+      - name: Run unmocked integration tests
+        run: |
+          ./scripts/run-unmocked-integration-tests-ios.sh
+      - name: Analyze
+        run: |
+          flutter analyze
