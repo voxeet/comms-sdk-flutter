@@ -154,7 +154,7 @@ extension VideoPresentationServiceBinding: VTVideoPresentationDelegate {
                 body: DTO.VideoPresentation(videoPresentation: videoPresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -165,7 +165,7 @@ extension VideoPresentationServiceBinding: VTVideoPresentationDelegate {
                 body: DTO.VideoPresentation(videoPresentation: videoPresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -176,7 +176,7 @@ extension VideoPresentationServiceBinding: VTVideoPresentationDelegate {
                 body: DTO.VideoPresentation(videoPresentation: videoPresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -187,7 +187,7 @@ extension VideoPresentationServiceBinding: VTVideoPresentationDelegate {
                 body: DTO.VideoPresentation(videoPresentation: videoPresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -198,7 +198,7 @@ extension VideoPresentationServiceBinding: VTVideoPresentationDelegate {
                 body: DTO.VideoPresentation(videoPresentation: videoPresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
 }

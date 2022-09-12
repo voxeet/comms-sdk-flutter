@@ -645,7 +645,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 body: DTO.ConferenceStatus(status: status)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -655,13 +655,13 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 event: EventKeys.permissionsUpdated,
                 body: permissions.map { (rawPermission: Int) -> DTO.ConferencePermission in
                     guard let vtConferencePermission = VTConferencePermission(rawValue: rawPermission) else {
-                        fatalError("TODO: Throw error here")
+                        throw EncoderError.createObjectFailed()
                     }
                     return DTO.ConferencePermission(conferencePermision: vtConferencePermission)
                 }
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -672,7 +672,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 body: DTO.Participant(participant: participant)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -683,7 +683,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 body: DTO.Participant(participant: participant)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -697,7 +697,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 )
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -711,7 +711,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 )
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -725,7 +725,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 )
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
 }
