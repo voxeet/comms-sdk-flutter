@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'dart:developer' as developer;
-
 import '../../widgets/dialogs.dart';
 
 class RemoteParticipantOptions extends StatefulWidget {
-  final int index;
+  final Participant participant;
 
-  const RemoteParticipantOptions({Key? key, required this.index})
+  const RemoteParticipantOptions({Key? key, required this.participant})
       : super(key: key);
 
   @override
@@ -68,91 +66,66 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
         onSelected: (value) {
           switch (value) {
             case 0:
-              {
-                kickParticipant(widget.index);
+                kickParticipant();
                 break;
-              }
             case 1:
-              {
-                muteRemoteParticipant(widget.index);
+                muteRemoteParticipant();
                 break;
-              }
             case 2:
-              {
-                updatePermissions(widget.index);
+                updatePermissions();
                 break;
-              }
             case 3:
-              {
-                setSpatialPosition(widget.index);
+                setSpatialPosition();
                 break;
-              }
           }
         });
   }
 
-  void kickParticipant(int index) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) {
-          _dolbyioCommsSdkFlutterPlugin.conference
-              .getParticipant(conference.participants[index].id)
-              .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.kick(participant));
-        });
+  Future<void> kickParticipant() async {
+    final participant = await _upToDateParticipant();
+    _dolbyioCommsSdkFlutterPlugin.conference.kick(participant);
   }
 
-  void muteRemoteParticipant(int index) {
+  Future<void> muteRemoteParticipant() async {
+    final participant = await _upToDateParticipant();
     if (isRemoteMuted == false) {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .current()
-          .then((conference) {
-            _dolbyioCommsSdkFlutterPlugin.conference
-                .getParticipant(conference.participants[index].id)
-                .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, true));
-            setState(() => isRemoteMuted = true);
-          });
+      _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, true);
+      setState(() => isRemoteMuted = true);
     } else {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .current()
-          .then((conference) {
-            _dolbyioCommsSdkFlutterPlugin.conference
-                .getParticipant(conference.participants[index].id)
-                .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, false));
-            setState(() => isRemoteMuted = false);
-          });
+      _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, false);
+      setState(() => isRemoteMuted = false);
     }
   }
 
-  void updatePermissions(int index) {
-    _dolbyioCommsSdkFlutterPlugin.conference.current()
-        .then((conference) => conference.participants[index])
-        .then((participant) => _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions([
-      ParticipantPermissions(participant, [ConferencePermission.sendAudio])
-    ]))
-        .then((value) => showDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) =>
-        showDialog(
-            context,
-            'Error',
-            "$error\nThis method is only available  for protected conferences")
-    );
+  Future<void> updatePermissions() async {
+    try {
+      final participant = await _upToDateParticipant();
+      await _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions([
+        ParticipantPermissions(participant, [ConferencePermission.sendAudio])
+      ]);
+      await showDialog('Success', "OK");
+    } catch(error) {
+      showDialog(
+        'Error',
+        "$error\nThis method is only available  for protected conferences"
+      );
+    }
   }
 
-  void setSpatialPosition(int index) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => conference.participants[index])
-        .then((participant) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
-              participant: participant,
-              position: SpatialPosition(1.0, 1.0, 1.0),
-            ))
-        .then((value) => showDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) =>
-            showDialog(context, 'Error', error.toString()));
+  Future<void> setSpatialPosition() async {
+    try {
+      final participant = await _upToDateParticipant();
+        _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+          participant: participant,
+          position: SpatialPosition(1.0, 1.0, 1.0),
+        );
+      await showDialog('Success', 'OK');
+    } catch(error) {
+      showDialog('Error', error.toString());
+    }
   }
 
-  Future<void> showDialog(BuildContext context, String title, String text) async {
+  Future<void> showDialog(String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
       title: title,
@@ -160,7 +133,7 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
     );
   }
 
-  void onError(String message, Object? error) {
-    developer.log(message, error: error);
+  Future<Participant> _upToDateParticipant() async {
+    return _dolbyioCommsSdkFlutterPlugin.conference.getParticipant(widget.participant.id);
   }
 }

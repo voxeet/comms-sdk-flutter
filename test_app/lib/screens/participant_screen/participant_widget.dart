@@ -5,10 +5,10 @@ import 'remote_participant_options.dart';
 
 class ParticipantWidget extends StatelessWidget {
   final Participant participant;
-  final int participantIndex;
+  final bool isLocal;
 
   const ParticipantWidget(
-      {Key? key, required this.participant, required this.participantIndex})
+      {Key? key, required this.participant, required this.isLocal})
       : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ class ParticipantWidget extends StatelessWidget {
                           '${getParticipantName()}: ${getParticipantStatus()!}',
                           style: const TextStyle(color: Colors.white))
                   ),
-                  if (participantIndex != 0) RemoteParticipantOptions(index: participantIndex),
+                  if (!isLocal) RemoteParticipantOptions(participant: participant),
                 ],
               ),
             )
