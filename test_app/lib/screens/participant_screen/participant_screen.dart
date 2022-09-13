@@ -1,3 +1,4 @@
+import '../../conference_ext.dart';
 import '../../widgets/status_snackbar.dart';
 import '../test_buttons/test_buttons.dart';
 import 'conference_controls.dart';
@@ -134,22 +135,32 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   }
 
   Future<Conference?> getCurrentConference() async {
-    Conference? conference;
-    await _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((value) {conference = value;});
-    return conference;
+    try {
+      return await _dolbyioCommsSdkFlutterPlugin.conference.current();
+    } catch(error) {
+        return null;
+    }
   }
 
   Future<void> _updateLocalView() async {
-    final currentConference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+    final navigator = Navigator.of(context);
+    final currentConference = await getCurrentConference();
+    if(currentConference == null) {
+      navigator.popUntil(ModalRoute.withName("JoinConferenceScreen"));
+      return Future.value();
+    }
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin.conference
       .getParticipants(currentConference);
+    final localParticipant = await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+    if (localParticipant.status == ParticipantStatus.left ||
+        localParticipant.status == ParticipantStatus.kicked) {
+      navigator.popUntil(ModalRoute.withName("JoinConferenceScreen"));
+      return Future.value();
+    }
     final availableParticipants = conferenceParticipants.where(
       (element) => element.status != ParticipantStatus.left
     );
     if (availableParticipants.isNotEmpty) {
-      final localParticipant = availableParticipants.first;
       final streams = localParticipant.streams;
       MediaStream? stream;
       if (streams != null) {
