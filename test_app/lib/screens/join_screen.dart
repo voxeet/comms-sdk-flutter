@@ -210,7 +210,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   void checkPermissions() {
     Permissions.checkPermissions(
-      permissions: [Permission.camera, Permission.microphone],
+      permissions: [Permission.camera, Permission.microphone, Permission.bluetoothConnect],
       onGranted: () => onJoinButtonPressed(),
       onPermanentlyDenied: (permissions) async {
         await ViewDialogs.dialog(
