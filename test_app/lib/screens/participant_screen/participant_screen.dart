@@ -58,6 +58,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   StreamSubscription<Event<ConferenceServiceEventNames, List<ConferencePermission>>>? _onPermissionsChangeSubsription;
 
   Participant? _localParticipant;
+  bool shouldCloseSessionOnLeave = false;
   
   @override
   void initState() {
@@ -85,11 +86,17 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
               const Duration(seconds: 2)
           );
         });
+      ConferenceControls(conference: getCurrentConference(), updateCloseSessionFlag: (shouldCloseSession) {
+          shouldCloseSessionOnLeave = shouldCloseSession;
+      });
+
   }
 
   @override
   void deactivate() {
     _participantsChangeSubscription?.cancel();
+    var options = ConferenceLeaveOptions(shouldCloseSessionOnLeave);
+    _dolbyioCommsSdkFlutterPlugin.conference.leave(options: options);
     _streamsChangeSubscription?.cancel();
     _onPermissionsChangeSubsription?.cancel();
     super.deactivate();
@@ -127,7 +134,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
                 )
               ),
               const ModalBottomSheet(child: TestButtons()),
-              ConferenceControls(conference: getCurrentConference()),
+              ConferenceControls(conference: getCurrentConference(), updateCloseSessionFlag: (shouldCloseSession) => shouldCloseSessionOnLeave),
             ],
           ),
         ),

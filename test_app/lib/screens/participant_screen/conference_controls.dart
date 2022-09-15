@@ -4,10 +4,12 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/conference_action_icon_button.dart';
 import 'dart:developer' as developer;
 
+typedef ParticipantConferenceStatus = void Function(bool closeSessionOnDeactivate);
+
 class ConferenceControls extends StatefulWidget {
   final Future<Conference?> conference;
-
-  const ConferenceControls({Key? key, required this.conference}) : super(key: key);
+  final ParticipantConferenceStatus updateCloseSessionFlag;
+  const ConferenceControls({Key? key, required this.conference, required this.updateCloseSessionFlag}) : super(key: key);
 
   @override
   State<ConferenceControls> createState() => _ConferenceControlsState();
@@ -15,7 +17,7 @@ class ConferenceControls extends StatefulWidget {
 
 class _ConferenceControlsState extends State<ConferenceControls> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  bool isMicOff = false, isVideoOff = false;
+  bool isMicOff = false, isVideoOff = false; // closeSessionOnDeactivate = false;
 
   @override
   Widget build(BuildContext context) {
@@ -68,14 +70,12 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               child: const Text('YES'),
               onPressed: () {
                 leaveConference(closeSession: true);
-                Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: const Text('NO'),
               onPressed: () {
                 leaveConference(closeSession: false);
-                Navigator.of(context).pop();
               },
             ),
             TextButton(
@@ -138,25 +138,15 @@ class _ConferenceControlsState extends State<ConferenceControls> {
   }
 
   void leaveConference({required bool closeSession})  {
-    if(closeSession) {
-        var options = ConferenceLeaveOptions(true);
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .leave(options: options)
-            .then((value) {
-              Navigator.of(context).popUntil(ModalRoute.withName("LoginScreen"));
-            })
-            .onError((error, stackTrace) { onError('Error during leaving', error); });
-      } else {
-        var options = ConferenceLeaveOptions(false);
-        widget.conference.then((current) {
-          _dolbyioCommsSdkFlutterPlugin.conference
-              .leave(options: options)
-              .then((value) {
-                Navigator.of(context).popUntil(ModalRoute.withName("JoinConferenceScreen"));
-              })
-              .onError((error, stackTrace) {onError('Error during leaving', error);});
-        });
-      }
+    if (closeSession) {
+      widget.updateCloseSessionFlag(true);
+      Navigator.of(context).popUntil(ModalRoute.withName("LoginScreen"));
+    } else {
+      widget.updateCloseSessionFlag(false);
+
+      Navigator.of(context)
+          .popUntil(ModalRoute.withName("JoinConferenceScreen"));
+    }
   }
 
   void onError(String message, Object? error) {
