@@ -63,7 +63,8 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final TextEditingController conferenceIdTextController =
       TextEditingController();
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  final formKey = GlobalKey<FormState>();
+  final formKeyAlias = GlobalKey<FormState>();
+  final formKeyId = GlobalKey<FormState>();
   bool isJoining = false;
   bool switchConferenceStatus = false;
   bool switchSpatialAudio = false;
@@ -142,7 +143,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                   blackText: "External ID  ", colorText: widget.externalId),
               const SizedBox(height: 16),
               Form(
-                key: formKey,
+                key: formKeyAlias,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 child: InputTextFormField(
                     labelText: 'Conference alias',
@@ -198,6 +199,21 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     onJoinButtonPressed();
                   },
                   color: Colors.deepPurple),
+              const SizedBox(height: 16),
+              Form(
+                key: formKeyId,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: InputTextFormField(
+                    labelText: 'Conference ID with record',
+                    controller: conferenceIdTextController,
+                    focusColor: Colors.deepPurple,
+                ),
+              ),
+              PrimaryButton(
+                  widgetText: const Text("Replay conference"),
+                  onPressed: onReplayButtonPressed,
+                  color: Colors.deepPurple,
+              )
             ],
           ),
         ),
@@ -232,12 +248,21 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   void onJoinButtonPressed() {
-    final isValidForm = formKey.currentState!.validate();
+    final isValidForm = formKeyAlias.currentState!.validate();
     if (isValidForm) {
       setState(() => isJoining = true);
       join();
     } else {
       developer.log('Cannot join to conference due to error.');
+    }
+  }
+
+  void onReplayButtonPressed() {
+    final isValidForm = formKeyId.currentState!.validate();
+    if (isValidForm) {
+      replay();
+    } else {
+      developer.log('Cannot replay the conference due to error.');
     }
   }
 
@@ -314,6 +339,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       onStatusChangeSubscription?.cancel();
       onStatusChangeSubscription = null;
     }
+  }
+
+  void replay() {
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .fetch(conferenceIdTextController.text).then((conference) =>
+        _dolbyioCommsSdkFlutterPlugin.conference.replay(conference: conference)
+        .then((conference) => developer.log(conference.toString())))
+        .onError((error, stackTrace) => developer.log(error.toString()));
   }
 
   Future navigateToParticipantScreen(BuildContext context) async {
