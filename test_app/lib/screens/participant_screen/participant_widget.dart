@@ -52,7 +52,7 @@ class ParticipantWidget extends StatelessWidget {
   }
 
   String getParticipantName() {
-    String participantName = participant.info!.name;
+    String participantName = participant.info?.name ?? "";
     return participantName;
   }
 

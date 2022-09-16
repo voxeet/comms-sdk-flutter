@@ -75,7 +75,10 @@ enum ParticipantStatus {
   reserved('RESERVED'),
 
   /// The participant has encountered a peer connection problem that may result in the Error or Connected status.
-  warning('WARNING');
+  warning('WARNING'),
+
+  /// The participant status is undefined
+  unknow('UNKNOWN');
 
   final String _value;
 
