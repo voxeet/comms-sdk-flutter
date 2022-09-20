@@ -18,7 +18,6 @@ import 'sdk_api/video_presentation_service.dart';
 
 /// DolbyioCommsSdk is the main class that allows an application to interact with Dolby.io services.
 class DolbyioCommsSdk {
-
   static final DolbyioCommsSdk instance = DolbyioCommsSdk._internal();
 
   final _methodChannel =
@@ -48,20 +47,27 @@ class DolbyioCommsSdk {
   /// Retrieves the VideoPresentationService instance that allows presenting video files during conferences.
   final VideoPresentationService videoPresentation;
 
-  DolbyioCommsSdk._allFields(this.command, this.conference, this.filePresentation, this.mediaDevice, 
-    this.notification, this.recording, this.session, this.videoPresentation);
+  DolbyioCommsSdk._allFields(
+      this.command,
+      this.conference,
+      this.filePresentation,
+      this.mediaDevice,
+      this.notification,
+      this.recording,
+      this.session,
+      this.videoPresentation);
 
   factory DolbyioCommsSdk._internal() {
     final sessionService = SessionService();
     return DolbyioCommsSdk._allFields(
-      CommandService(),
-      ConferenceService(sessionService),
-      FilePresentationService(),
-      MediaDeviceService(),
-      NotificationService(),
-      RecordingService(),
-      sessionService,
-      VideoPresentationService());
+        CommandService(),
+        ConferenceService(sessionService),
+        FilePresentationService(),
+        MediaDeviceService(),
+        NotificationService(),
+        RecordingService(),
+        sessionService,
+        VideoPresentationService());
   }
 
   /// Initializes the SDK using the [customerKey] and [customerSecret]. For security reasons, we recommend using the [initializeToken] method in production. Use initialize method only for prototyping new applications.
@@ -74,7 +80,6 @@ class DolbyioCommsSdk {
         {"customerKey": customerKey, "customerSecret": customerSecret});
     return result;
   }
-
 
   /// Initializes the SDK with an access token that is provided by the customer backend communicating with Dolby.io servers. The token allows securing the customer key and secret.
   /// The following diagram presents the authentication flow:
@@ -101,7 +106,7 @@ class DolbyioCommsSdk {
   ///
   /// The method contains two parameters:
   /// - [accessToken]:  The access token provided by the customer's backend.
-  /// - [refreshAccessToken]:  A callback that is called when the access token needs to be refreshed. 
+  /// - [refreshAccessToken]:  A callback that is called when the access token needs to be refreshed.
   Future<void> initializeToken(
       String? accessToken, RefreshAccessTokenType refreshAccessToken) async {
     _methodChannel.setMethodCallHandler((call) async {
