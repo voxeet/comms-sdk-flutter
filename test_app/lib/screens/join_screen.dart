@@ -16,6 +16,8 @@ import '/permission_helper.dart';
 import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
 
+import 'replay_screen.dart';
+
 class JoinConference extends StatelessWidget {
   final String username;
   final String externalId;
@@ -66,6 +68,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final formKeyAlias = GlobalKey<FormState>();
   final formKeyId = GlobalKey<FormState>();
   bool isJoining = false;
+  bool isReplaying = false;
   bool switchConferenceStatus = false;
   bool switchSpatialAudio = false;
   bool switchDolbyVoice = false;
@@ -210,10 +213,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 ),
               ),
               PrimaryButton(
-                  widgetText: const Text("Replay conference"),
-                  onPressed: onReplayButtonPressed,
-                  color: Colors.deepPurple,
-              )
+                  widgetText: isReplaying
+                      ? const WhiteCircularProgressIndicator()
+                      : const Text('Replay conference'),
+                  onPressed: () {
+                    onReplayButtonPressed();
+                  },
+                  color: Colors.deepPurple
+              ),
             ],
           ),
         ),
@@ -260,6 +267,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   void onReplayButtonPressed() {
     final isValidForm = formKeyId.currentState!.validate();
     if (isValidForm) {
+      setState(() => isReplaying = true);
       replay();
     } else {
       developer.log('Cannot replay the conference due to error.');
@@ -286,6 +294,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var conferenceName = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
     params.dolbyVoice = switchDolbyVoice;
+    params.liveRecording = true;
     var createOptions = ConferenceCreateOption(conferenceName, params, 0);
     return createOptions;
   }
@@ -345,8 +354,23 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceIdTextController.text).then((conference) =>
         _dolbyioCommsSdkFlutterPlugin.conference.replay(conference: conference)
-        .then((conference) => developer.log(conference.toString())))
+        .then((conference) => checkReplayConferenceResult(conference)))
         .onError((error, stackTrace) => developer.log(error.toString()));
+  }
+
+  void checkReplayConferenceResult(Conference conference) {
+    if (conference.status == ConferenceStatus.joined) {
+      navigateToReplayScreen(context, conference);
+    } else {
+      developer.log('Cannot replay the conference.');
+    }
+  }
+
+  Future navigateToReplayScreen(BuildContext context, Conference conference) async {
+    await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ReplayScreen(conference: conference))
+    );
+    setState(() => isReplaying = false);
   }
 
   Future navigateToParticipantScreen(BuildContext context) async {
