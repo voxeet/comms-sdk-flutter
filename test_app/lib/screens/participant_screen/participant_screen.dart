@@ -86,10 +86,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
               const Duration(seconds: 2)
           );
         });
-      ConferenceControls(conference: getCurrentConference(), updateCloseSessionFlag: (shouldCloseSession) {
-          shouldCloseSessionOnLeave = shouldCloseSession;
-      });
-
   }
 
   @override
@@ -134,7 +130,9 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
                 )
               ),
               const ModalBottomSheet(child: TestButtons()),
-              ConferenceControls(conference: getCurrentConference(), updateCloseSessionFlag: (shouldCloseSession) => shouldCloseSessionOnLeave),
+              ConferenceControls(conference: getCurrentConference(), updateCloseSessionFlag: (shouldCloseSession) {
+                shouldCloseSessionOnLeave = shouldCloseSession;
+              }),
             ],
           ),
         ),
