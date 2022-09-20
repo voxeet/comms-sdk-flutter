@@ -37,7 +37,7 @@ extension DTO {
             case "UNKNOWN": participantType = .none
             case "USER": participantType = .user
             case "LISTENER": participantType = .listener
-            default: fatalError("TODO: Throw actual error here")
+            default: throw EncoderError.decoderFailed()
             }
         }
 
@@ -50,7 +50,7 @@ extension DTO {
             case .pstn: try container.encode("UNKNOWN")
             case .none: try container.encode("UNKNOWN")
             case .mixer: try container.encode("UNKNOWN")
-            @unknown default: fatalError("TODO: Throw actual error here")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
         
@@ -150,7 +150,7 @@ extension DTO {
             case "CAMERA": mediaStreamType = .Camera
             case "SCREEN_SHARE": mediaStreamType = .ScreenShare
             case "CUSTOM": mediaStreamType = .Custom
-            default: fatalError("TODO: Throw actual error here")
+            default: throw EncoderError.decoderFailed()
             }
         }
         
@@ -160,7 +160,7 @@ extension DTO {
             case .Camera: try container.encode("CAMERA")
             case .ScreenShare: try container.encode("SCREEN_SHARE")
             case .Custom: try container.encode("CUSTOM")
-            @unknown default: fatalError("TODO: Throw actual error here")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
     }

@@ -44,7 +44,7 @@ extension CommandServiceBinding: VTCommandDelegate {
                 )
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
 }

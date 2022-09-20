@@ -21,7 +21,7 @@ extension DTO {
             case "low": noiseLevel = .low
             case "medium": noiseLevel = .medium
             case "off": noiseLevel = .off
-            default: fatalError("TODO: Throw actual error here")
+            default: throw EncoderError.decoderFailed()
             }
         }
         
@@ -32,7 +32,7 @@ extension DTO {
             case .low: try container.encode("low")
             case .medium: try container.encode("medium")
             case .off: try container.encode("off")
-            @unknown default: fatalError("TODO: Throw actual error here")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
         

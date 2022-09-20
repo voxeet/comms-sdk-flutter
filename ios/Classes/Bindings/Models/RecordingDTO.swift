@@ -25,7 +25,7 @@ extension DTO {
             switch try container.decode(String.self).uppercased() { // TODO: remove uppercased()
             case "RECORDING": recordingStatus = .recording
             case "NOT_RECORDING": recordingStatus = .notRecording
-            default: fatalError("TODO: Throw actual error here")
+            default: throw EncoderError.decoderFailed()
             }
         }
 
@@ -34,7 +34,7 @@ extension DTO {
             switch recordingStatus {
             case .recording: try container.encode("RECORDING")
             case .notRecording: try container.encode("NOT_RECORDING")
-            @unknown default: fatalError("TODO: Throw actual error here")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
 

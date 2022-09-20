@@ -31,7 +31,7 @@ extension DTO {
             case "stopped": state = .stopped
             case "play": state = .playing
             case "paused": state = .paused
-            default: fatalError("TODO: Throw actual error here")
+            default: throw EncoderError.decoderFailed()
             }
         }
         
@@ -41,7 +41,7 @@ extension DTO {
             case .stopped: try container.encode("stopped")
             case .playing: try container.encode("play")
             case .paused: try container.encode("paused")
-            @unknown default: fatalError("TODO: Throw actual error here")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
         

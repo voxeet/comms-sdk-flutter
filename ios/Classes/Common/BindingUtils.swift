@@ -34,7 +34,7 @@ struct FlutterMethodCallArguments {
         
         func decode<T: FlutterConvertible>() throws -> T {
             guard let argument = argument else {
-                fatalError("TODO: Throw actual error here")
+                throw EncoderError.notExist()
             }
             return try T.fromFlutterValue(argument)
         }
@@ -49,17 +49,17 @@ struct FlutterMethodCallArguments {
     
     func asArray(argIndex: Int) throws -> Argument {
         guard let argArray = methodCallArguments as? [Any] else {
-            fatalError("TODO: Throw actual error here")
+            throw EncoderError.notArray()
         }
         guard 0 <= argIndex, argIndex < argArray.count else {
-            fatalError("TODO: Throw actual error here")
+            throw EncoderError.outOfRange()
         }
         return Argument(argArray[argIndex])
     }
 
     func asDictionary(argKey: String) throws -> Argument {
         guard let argDictionary = methodCallArguments as? [String: Any] else {
-            fatalError("TODO: Throw actual error here")
+            throw EncoderError.notDictionary()
         }
         return Argument(argDictionary[argKey])
     }

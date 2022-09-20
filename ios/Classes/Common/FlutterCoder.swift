@@ -39,30 +39,30 @@ class FlutterValueEncoder: Encoder {
 
         mutating func encodeNil(forKey key: Key) throws {
             guard encoder.keyedStorage != nil else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             encoder.keyedStorage?[key.stringValue] = NSNull()
         }
         
-        mutating func encode(_ value: Bool, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: String, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: Double, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: Float, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: Int, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: Int8, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: Int16, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: Int32, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: Int64, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: UInt, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: UInt8, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: UInt16, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: UInt32, forKey key: Key) throws { store(fc: value, k: key) }
-        mutating func encode(_ value: UInt64, forKey key: Key) throws { store(fc: value, k: key) }
+        mutating func encode(_ value: Bool, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: String, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: Double, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: Float, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: Int, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: Int8, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: Int16, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: Int32, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: Int64, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: UInt, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: UInt8, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: UInt16, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: UInt32, forKey key: Key) throws { try store(fc: value, k: key) }
+        mutating func encode(_ value: UInt64, forKey key: Key) throws { try store(fc: value, k: key) }
         
         mutating func encode<T>(_ value: T, forKey key: Key) throws where T : Encodable {
             let enc = FlutterValueEncoder()
             try value.encode(to: enc)
-            store(v: enc.storage(), k: key)
+            try store(v: enc.storage(), k: key)
         }
 
         mutating func encodeConditional<T>(
@@ -71,18 +71,18 @@ class FlutterValueEncoder: Encoder {
         ) throws where T : AnyObject, T : Encodable {
             let enc = FlutterValueEncoder()
             try object.encode(to: enc)
-            store(v: enc.storage(), k: key)
+            try store(v: enc.storage(), k: key)
         }
 
-        private func store(v value: Any?, k key: Key) {
+        private func store(v value: Any?, k key: Key) throws -> Void {
             guard encoder.keyedStorage != nil else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             encoder.keyedStorage?[key.stringValue] = value
         }
 
-        private func store(fc flutterConvertible: FlutterConvertible?, k key: Key) {
-            store(v: flutterConvertible?.toFlutterValue(), k: key)
+        private func store(fc flutterConvertible: FlutterConvertible?, k key: Key) throws {
+            try store(v: flutterConvertible?.toFlutterValue(), k: key)
         }
     }
     
@@ -115,42 +115,42 @@ class FlutterValueEncoder: Encoder {
         
         mutating func encodeNil() throws {
             guard encoder.unkeyedStorage != nil else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             encoder.unkeyedStorage?.append(NSNull())
 
         }
 
-        mutating func encode(_ value: Bool) throws { store(fc: value) }
-        mutating func encode(_ value: String) throws { store(fc: value) }
-        mutating func encode(_ value: Double) throws { store(fc: value) }
-        mutating func encode(_ value: Float) throws { store(fc: value) }
-        mutating func encode(_ value: Int) throws { store(fc: value) }
-        mutating func encode(_ value: Int8) throws { store(fc: value) }
-        mutating func encode(_ value: Int16) throws { store(fc: value) }
-        mutating func encode(_ value: Int32) throws { store(fc: value) }
-        mutating func encode(_ value: Int64) throws { store(fc: value) }
-        mutating func encode(_ value: UInt) throws { store(fc: value) }
-        mutating func encode(_ value: UInt8) throws { store(fc: value) }
-        mutating func encode(_ value: UInt16) throws { store(fc: value) }
-        mutating func encode(_ value: UInt32) throws { store(fc: value) }
-        mutating func encode(_ value: UInt64) throws { store(fc: value) }
+        mutating func encode(_ value: Bool) throws { try store(fc: value) }
+        mutating func encode(_ value: String) throws { try store(fc: value) }
+        mutating func encode(_ value: Double) throws { try store(fc: value) }
+        mutating func encode(_ value: Float) throws { try store(fc: value) }
+        mutating func encode(_ value: Int) throws { try store(fc: value) }
+        mutating func encode(_ value: Int8) throws { try store(fc: value) }
+        mutating func encode(_ value: Int16) throws { try store(fc: value) }
+        mutating func encode(_ value: Int32) throws { try store(fc: value) }
+        mutating func encode(_ value: Int64) throws { try store(fc: value) }
+        mutating func encode(_ value: UInt) throws { try store(fc: value) }
+        mutating func encode(_ value: UInt8) throws { try store(fc: value) }
+        mutating func encode(_ value: UInt16) throws { try store(fc: value) }
+        mutating func encode(_ value: UInt32) throws { try store(fc: value) }
+        mutating func encode(_ value: UInt64) throws { try store(fc: value) }
 
         mutating func encode<T>(_ value: T) throws where T : Encodable {
             let enc = FlutterValueEncoder()
             try value.encode(to: enc)
-            store(v: enc.storage())
+            try store(v: enc.storage())
         }
         
-        private func store(v value: Any) {
+        private func store(v value: Any) throws {
             guard encoder.unkeyedStorage != nil else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             encoder.unkeyedStorage?.append(value)
         }
         
-        private func store(fc flutterConvertible: FlutterConvertible) {
-            store(v: flutterConvertible.toFlutterValue())
+        private func store(fc flutterConvertible: FlutterConvertible) throws -> Void {
+            try store(v: flutterConvertible.toFlutterValue())
         }
     }
     
@@ -186,7 +186,7 @@ class FlutterValueEncoder: Encoder {
         mutating func encode<T>(_ value: T) throws where T : Encodable {
             let enc = FlutterValueEncoder()
             try value.encode(to: enc)
-            store(v: enc.storage())
+            store(v: try enc.storage())
         }
         
         private func store(fc flutterConvertible: FlutterConvertible) {
@@ -220,7 +220,7 @@ class FlutterValueEncoder: Encoder {
         return FSingleValueEncodingContainer(encoder: self)
     }
     
-    func storage() -> Any {
+    func storage() throws -> Any {
         if let s = keyedStorage {
             return s
         }
@@ -230,12 +230,12 @@ class FlutterValueEncoder: Encoder {
         if let s = singleValueStorage {
             return s
         }
-        fatalError("TODO: Throw error here")
+        throw EncoderError.storageFailed()
     }
     
     func encode<T: Encodable>(e: T) throws -> Any {
         try e.encode(to: self)
-        return storage()
+        return try storage()
     }
     
 }
@@ -276,7 +276,7 @@ class FlutterValueDecoder: Decoder {
             guard
                 let storage = decoder.keyedStorage
             else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             return storage[key.stringValue] == nil || storage[key.stringValue] is NSNull
         }
@@ -306,7 +306,7 @@ class FlutterValueDecoder: Decoder {
                 let storage = decoder.keyedStorage,
                 let value = storage[k.stringValue]
             else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             return value
         }
@@ -352,7 +352,7 @@ class FlutterValueDecoder: Decoder {
                 let storage = decoder.unkeyedStorage,
                 !isAtEnd
             else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             return storage[currentIndex] is NSNull
         }
@@ -385,7 +385,7 @@ class FlutterValueDecoder: Decoder {
                 let storage = decoder.unkeyedStorage,
                 !isAtEnd
             else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             return storage[currentIndex]
         }
@@ -429,7 +429,7 @@ class FlutterValueDecoder: Decoder {
             guard
                 let storage = decoder.singleValueStorage
             else {
-                fatalError("TODO: Throw error here")
+                throw EncoderError.notExist()
             }
             return storage
         }
@@ -484,7 +484,7 @@ class FlutterValueDecoder: Decoder {
 extension String: FlutterConvertible {
     static func fromFlutterValue(_ value: Any) throws -> String {
         guard let str = value as? String else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToStringFailed()
         }
         return str
     }
@@ -492,9 +492,9 @@ extension String: FlutterConvertible {
 }
 
 extension Bool: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Bool {
+    static func fromFlutterValue(_ value: Any) throws -> Bool {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.boolValue
     }
@@ -502,9 +502,9 @@ extension Bool: FlutterConvertible {
 }
 
 extension Double: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Double {
+    static func fromFlutterValue(_ value: Any) throws -> Double {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.doubleValue
     }
@@ -512,9 +512,9 @@ extension Double: FlutterConvertible {
 }
 
 extension Float: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Float {
+    static func fromFlutterValue(_ value: Any) throws -> Float {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.floatValue
     }
@@ -522,9 +522,9 @@ extension Float: FlutterConvertible {
 }
 
 extension Int: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Int {
+    static func fromFlutterValue(_ value: Any) throws -> Int {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.intValue
     }
@@ -532,9 +532,9 @@ extension Int: FlutterConvertible {
 }
 
 extension Int8: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Int8 {
+    static func fromFlutterValue(_ value: Any) throws -> Int8 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.int8Value
     }
@@ -542,9 +542,9 @@ extension Int8: FlutterConvertible {
 }
 
 extension Int16: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Int16 {
+    static func fromFlutterValue(_ value: Any) throws -> Int16 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.int16Value
     }
@@ -552,9 +552,9 @@ extension Int16: FlutterConvertible {
 }
 
 extension Int32: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Int32 {
+    static func fromFlutterValue(_ value: Any) throws -> Int32 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.int32Value
     }
@@ -562,9 +562,9 @@ extension Int32: FlutterConvertible {
 }
 
 extension Int64: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> Int64 {
+    static func fromFlutterValue(_ value: Any) throws -> Int64 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.int64Value
     }
@@ -572,9 +572,9 @@ extension Int64: FlutterConvertible {
 }
 
 extension UInt: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> UInt {
+    static func fromFlutterValue(_ value: Any) throws -> UInt {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.uintValue
     }
@@ -582,9 +582,9 @@ extension UInt: FlutterConvertible {
 }
 
 extension UInt8: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> UInt8 {
+    static func fromFlutterValue(_ value: Any) throws -> UInt8 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.uint8Value
     }
@@ -592,9 +592,9 @@ extension UInt8: FlutterConvertible {
 }
 
 extension UInt16: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> UInt16 {
+    static func fromFlutterValue(_ value: Any) throws -> UInt16 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.uint16Value
     }
@@ -602,9 +602,9 @@ extension UInt16: FlutterConvertible {
 }
 
 extension UInt32: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> UInt32 {
+    static func fromFlutterValue(_ value: Any) throws -> UInt32 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.uint32Value
     }
@@ -612,9 +612,9 @@ extension UInt32: FlutterConvertible {
 }
 
 extension UInt64: FlutterConvertible {
-    static func fromFlutterValue(_ value: Any) -> UInt64 {
+    static func fromFlutterValue(_ value: Any) throws -> UInt64 {
         guard let num = value as? NSNumber else {
-            fatalError("TODO: Throw error here")
+            throw EncoderError.castingToNumberFailed()
         }
         return num.uint64Value
     }
