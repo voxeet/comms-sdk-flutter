@@ -51,7 +51,7 @@ class ParticipantScreenContent extends StatefulWidget {
 class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  //StreamSubscription<Event<ConferenceServiceEventNames, Participant>>? onParticipantsChangeSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? _conferenceStatusChangeSubscription;
   //StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>? onStreamsChangeSubscription;
   List<Participant> participants = [];
 
@@ -75,15 +75,12 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     //   initParticipantsList();
     //   developer.log("onStreamsChange");
     // });
-    // _conferenceStatusChangeSubscription =
-    //     _dolbyioCommsSdkFlutterPlugin.conference.onStatusChange().listen((event) {
-    //       if(event.body.encode() == ConferenceStatus.destroyed.encode()
-    //           || event.body.encode() == ConferenceStatus.ended.encode()) {
-    //         _dolbyioCommsSdkFlutterPlugin.conference.leave().then((value) {
-    //           Navigator.of(context).popUntil(ModalRoute.withName("JoinConferenceScreen"));
-    //         }).onError((error, stackTrace) {developer.log(error.toString());});
-    //       }
-    //     });
+    _conferenceStatusChangeSubscription =
+        _dolbyioCommsSdkFlutterPlugin.conference.onStatusChange().listen((event) {
+          if(event.body.encode() == ConferenceStatus.ended.encode()) {
+            Navigator.of(context).popUntil(ModalRoute.withName("JoinConferenceScreen"));
+          }
+        });
 
   }
 
@@ -127,7 +124,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
                     ]
                 )
             ),
-            ConferenceControls(conference: getCurrentConference())
+          //  ConferenceControls(conference: getCurrentConference())
           ],
         ),
       ),
