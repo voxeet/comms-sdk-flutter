@@ -359,7 +359,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   void checkReplayConferenceResult(Conference conference) {
-    if (conference.status == ConferenceStatus.joined) {
+    if (conference.id != null) {
       navigateToReplayScreen(context, conference);
     } else {
       developer.log('Cannot replay the conference.');
