@@ -69,4 +69,5 @@ dependencies {
     implementation ("com.voxeet.sdk:sdk:${voxeet_sdk_version}") {
         transitive = true
     }
+    implementation project(path: ':flutter_plugin_android_lifecycle')
 }
