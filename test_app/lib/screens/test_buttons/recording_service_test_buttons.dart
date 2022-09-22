@@ -14,14 +14,19 @@ class RecordingServiceTestButtons extends StatelessWidget {
       spacing: 8.0,
       runSpacing: 4.0,
       children: <Widget>[
-        SecondaryButton(text: 'Start recording', onPressed: () => startRecording(context)),
-        SecondaryButton(text: 'Stop recording', onPressed: () => stopRecording(context)),
-        SecondaryButton(text: 'Current recording', onPressed: () => currentRecording(context)),
+        SecondaryButton(
+            text: 'Start recording', onPressed: () => startRecording(context)),
+        SecondaryButton(
+            text: 'Stop recording', onPressed: () => stopRecording(context)),
+        SecondaryButton(
+            text: 'Current recording',
+            onPressed: () => currentRecording(context)),
       ],
     );
   }
 
-  Future<void> showDialog(BuildContext context, String title, String text) async {
+  Future<void> showDialog(
+      BuildContext context, String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
       title: title,
@@ -33,20 +38,24 @@ class RecordingServiceTestButtons extends StatelessWidget {
     _dolbyioCommsSdkFlutterPlugin.recording
         .start()
         .then((value) => showDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
   }
 
   void stopRecording(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.recording
         .stop()
         .then((value) => showDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
   }
 
   void currentRecording(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.recording
         .currentRecording()
-        .then((recordingInformation) => showDialog(context, 'Success', recordingInformation.toString()))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+        .then((recordingInformation) =>
+            showDialog(context, 'Success', recordingInformation.toString()))
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
   }
 }

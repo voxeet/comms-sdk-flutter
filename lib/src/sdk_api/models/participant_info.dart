@@ -13,9 +13,6 @@ class ParticipantInfo {
   ParticipantInfo(this.name, this.avatarUrl, this.externalId);
 
   /// Returns a representation of this object as a JSON object.
-  Map<String, Object?> toJson() => {
-    "name": name,
-    "avatarUrl": avatarUrl,
-    "externalId": externalId
-  };
+  Map<String, Object?> toJson() =>
+      {"name": name, "avatarUrl": avatarUrl, "externalId": externalId};
 }

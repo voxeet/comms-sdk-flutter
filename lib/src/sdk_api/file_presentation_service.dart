@@ -29,11 +29,13 @@ import 'models/file_presentation.dart';
 ///
 class FilePresentationService {
   /// @internal
-  final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("file_presentation_service");
+  final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
+      "file_presentation_service");
 
   /// @internal
-  late final _nativeEventsReceiver =
-      DolbyioCommsSdkNativeEventsReceiver<FilePresentationServiceEventNames>.forModuleNamed("file_presentation_service");
+  late final _nativeEventsReceiver = DolbyioCommsSdkNativeEventsReceiver<
+          FilePresentationServiceEventNames>.forModuleNamed(
+      "file_presentation_service");
 
   /// Converts a provided [file] into multiple images. The file is uploaded as FormData.
   ///
@@ -45,14 +47,18 @@ class FilePresentationService {
   /// After the conversion, the files are broken into individual images with a maximum resolution of 2560x1600.
   ///
   Future<FileConverted> convert(File file) async {
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("convert", file.toJson());
-    return Future.value(result != null ? FileConvertedMapper.fromMap(result) : null);
+    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>(
+        "convert", file.toJson());
+    return Future.value(
+        result != null ? FileConvertedMapper.fromMap(result) : null);
   }
 
   /// Returns information about the current state of the file presentation.
   Future<FilePresentation> getCurrent() async {
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("getCurrent");
-    return Future.value(result != null ? FilePresentationMapper.fromMap(result) : null);
+    var result =
+        await _methodChannel.invokeMethod<Map<Object?, Object?>>("getCurrent");
+    return Future.value(
+        result != null ? FilePresentationMapper.fromMap(result) : null);
   }
 
   /// Provides the image URL that refers to a specific page of the presented file.
@@ -88,17 +94,21 @@ class FilePresentationService {
   }
 
   /// Returns a [Stream] of the [FilePresentationServiceEventNames.fileConverted] events. By subscribing to the returned stream you will be notified about finished file conversions.
-  Stream<Event<FilePresentationServiceEventNames, FileConverted>> onFileConverted() {
-    return _nativeEventsReceiver.addListener([FilePresentationServiceEventNames.fileConverted]).map((map) {
+  Stream<Event<FilePresentationServiceEventNames, FileConverted>>
+      onFileConverted() {
+    return _nativeEventsReceiver.addListener(
+        [FilePresentationServiceEventNames.fileConverted]).map((map) {
       final event = map as Map<Object?, Object?>;
-      final key = FilePresentationServiceEventNames.valueOf(event["key"] as String);
+      final key =
+          FilePresentationServiceEventNames.valueOf(event["key"] as String);
       final data = event["body"] as Map<Object?, Object?>;
       return Event(key, FileConvertedMapper.fromMap(data));
     });
   }
 
   /// Returns a [Stream] of the [FilePresentationServiceEventNames.filePresentationStarted], [FilePresentationServiceEventNames.filePresentationStopped], and [FilePresentationServiceEventNames.filePresentationUpdated] events. By subscribing to the returned stream you will be notified about started, modified, and stopped file presentations.
-  Stream<Event<FilePresentationServiceEventNames, FilePresentation>> onFilePresentationChange() {
+  Stream<Event<FilePresentationServiceEventNames, FilePresentation>>
+      onFilePresentationChange() {
     var events = [
       FilePresentationServiceEventNames.filePresentationStarted,
       FilePresentationServiceEventNames.filePresentationStopped,
@@ -106,7 +116,8 @@ class FilePresentationService {
     ];
     return _nativeEventsReceiver.addListener(events).map((map) {
       final event = map as Map<Object?, Object?>;
-      final key = FilePresentationServiceEventNames.valueOf(event["key"] as String);
+      final key =
+          FilePresentationServiceEventNames.valueOf(event["key"] as String);
       final data = event["body"] as Map<Object?, Object?>;
       return Event(key, FilePresentationMapper.fromMap(data));
     });

@@ -4,7 +4,8 @@ class TwoColorText extends StatelessWidget {
   final String blackText;
   final String colorText;
 
-  const TwoColorText({Key? key, required this.blackText, required this.colorText})
+  const TwoColorText(
+      {Key? key, required this.blackText, required this.colorText})
       : super(key: key);
 
   @override
@@ -17,9 +18,7 @@ class TwoColorText extends StatelessWidget {
             style: const TextStyle(
                 color: Colors.deepPurple,
                 fontWeight: FontWeight.bold,
-                fontSize: 16
-            )
-        ),
+                fontSize: 16)),
       ],
     );
   }

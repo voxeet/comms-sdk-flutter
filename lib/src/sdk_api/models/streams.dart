@@ -18,11 +18,10 @@ class MediaStream {
   /// The media stream label.
   String label;
 
-  MediaStream(this.id, this.type, this.audioTracks, this.videoTracks,
-      this.label);
+  MediaStream(
+      this.id, this.type, this.audioTracks, this.videoTracks, this.label);
 
-  Map<String?, Object?> toJson() =>
-      {
+  Map<String?, Object?> toJson() => {
         "id": id,
         "type": type.encode(),
         "audioTracks": audioTracks,
@@ -35,8 +34,10 @@ class MediaStream {
 enum MediaStreamType {
   /// The camera media stream, either audio, video, or audio and video. This stream type is enabled by default.
   camera('CAMERA'),
+
   /// A media stream produced by an external device.
   custom('CUSTOM'),
+
   /// The screen-share media stream.
   screenShare('SCREEN_SHARE');
 
@@ -49,16 +50,13 @@ enum MediaStreamType {
       return null;
     }
     final lowerCaseValue = value.toLowerCase();
-    return MediaStreamType.values.firstWhere(
-      (element) {
-        return element._value.toLowerCase() == lowerCaseValue || 
+    return MediaStreamType.values.firstWhere((element) {
+      return element._value.toLowerCase() == lowerCaseValue ||
           element.name.toLowerCase() == lowerCaseValue;
-      } 
-    );
+    });
   }
 
   String encode() {
     return _value;
   }
 }
-

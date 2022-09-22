@@ -10,7 +10,8 @@ import '../mock/mock_method_channel.dart';
 void main() {
   var recordingService = DolbyioCommsSdk.instance.recording;
 
-  final MethodChannel channel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("recording_service");
+  final MethodChannel channel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel("recording_service");
   final mockMethodChannel = MockMethodChannel();
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -23,12 +24,18 @@ void main() {
 
   tearDown(() => channel.setMockMethodCallHandler(null));
 
-  test("test getCurrentRecording method and check if result is received", () async {
+  test("test getCurrentRecording method and check if result is received",
+      () async {
     var status = RecordingStatus.notRecording;
     var participantId = "1234";
     var startTimestamp = 1658483423;
-    var expected = {"recordingStatus": status.encode(), "participantId": participantId, "startTimestamp": startTimestamp};
-    when(channel.invokeMethod("currentRecording")).thenAnswer((_) => Future.value(expected));
+    var expected = {
+      "recordingStatus": status.encode(),
+      "participantId": participantId,
+      "startTimestamp": startTimestamp
+    };
+    when(channel.invokeMethod("currentRecording"))
+        .thenAnswer((_) => Future.value(expected));
 
     var result = await recordingService.currentRecording();
 

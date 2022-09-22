@@ -12,7 +12,8 @@ class RecordingInformation {
   /// The recording status that informs whether recording is ongoing.
   RecordingStatus? recordingStatus;
 
-  RecordingInformation(this.participantId, this.startTimestamp, this.recordingStatus);
+  RecordingInformation(
+      this.participantId, this.startTimestamp, this.recordingStatus);
 }
 
 /// The RecordingStatus enum gathers the possible statuses of recording.
@@ -28,7 +29,8 @@ enum RecordingStatus {
   const RecordingStatus(this._value);
 
   static RecordingStatus? decode(String? value) {
-    return RecordingStatus.values.firstWhereOrNull((element) => element._value == value);
+    return RecordingStatus.values
+        .firstWhereOrNull((element) => element._value == value);
   }
 
   String encode() {

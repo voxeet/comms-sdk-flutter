@@ -12,19 +12,18 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 /// A controller for the [VideoView] that is responsible for attaching a [Participant] and a
 /// [MediaStream] to the [VideoView], detaching them, and getting information about the
 /// [VideoView] state.
-/// 
-/// An instance of this class can be provided during the instantiation of the [VideoView] widget, 
+///
+/// An instance of this class can be provided during the instantiation of the [VideoView] widget,
 /// if this widget is constructed using [VideoView.forList].
 class VideoViewController {
-
-  _VideoViewState?  _state;
+  _VideoViewState? _state;
 
   Participant? _participant;
   MediaStream? _mediaStream;
-  
+
   /// Attaches a [Participant] and a [MediaStream] to the [VideoView]. This allows the
   /// [VideoView] to display the provided [MediaStream] if the media stream object belongs
-  /// to the provided [Participant]. 
+  /// to the provided [Participant].
   void attach(Participant participant, MediaStream? mediaStream) {
     _participant = participant;
     _mediaStream = mediaStream;
@@ -47,7 +46,8 @@ class VideoViewController {
     if (state != null) {
       return state._isAttached();
     }
-    developer.log("VideoViewController.isAttached(): The VideoView has not been instantiated yet.");
+    developer.log(
+        "VideoViewController.isAttached(): The VideoView has not been instantiated yet.");
     return Future.value(false);
   }
 
@@ -58,7 +58,8 @@ class VideoViewController {
     if (state != null) {
       return state._isScreenShare();
     }
-    developer.log("VideoViewController.isScreenShare(): The VideoView has not been instantiated yet.");
+    developer.log(
+        "VideoViewController.isScreenShare(): The VideoView has not been instantiated yet.");
     return Future.error("The VideoView has not been instantiated yet.");
   }
 
@@ -67,14 +68,13 @@ class VideoViewController {
   }
 }
 
-/// A widget that can display a [MediaStream] for a [Participant]. 
-/// 
+/// A widget that can display a [MediaStream] for a [Participant].
+///
 /// You can use [VideoView] in two ways, either as an item of a [GridView] or a [ListView] used
 /// with the [VideoView.forList] constructor or as a stand-alone widget outside of collection
 /// widgets, such as [GridView] or [ListView]. In this second option, you need to use the
 /// [VideoView] constructor and provide a [VideoViewController] to the constructor.
 class VideoView extends StatefulWidget {
-
   /// @internal
   final String viewType = 'video_view';
 
@@ -87,31 +87,28 @@ class VideoView extends StatefulWidget {
   /// @internal
   final VideoViewController? videoViewController;
 
-  /// A constructor that should be used when the [VideoView] is an element in a collection 
+  /// A constructor that should be used when the [VideoView] is an element in a collection
   /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the
   /// [Participant] for whom the [MediaStream] should be displayed, the [MediaStream], and an
-  /// optional [Key]. 
-  const VideoView.withMediaStream({required this.participant, required this.mediaStream, Key? key})
-    : videoViewController = null
-    , super(key: key)
-    ;
+  /// optional [Key].
+  const VideoView.withMediaStream(
+      {required this.participant, required this.mediaStream, Key? key})
+      : videoViewController = null,
+        super(key: key);
 
-  /// A constructor that shuold be used when the [VideoView] is used as a stand-alone widget 
+  /// A constructor that shuold be used when the [VideoView] is used as a stand-alone widget
   /// outside of collection widgets such as [GridView] or [ListView]. The constructor requires
   /// providing the [VideoViewController] and, optionally, a [Key].
   const VideoView({required this.videoViewController, Key? key})
-    : participant = null
-    , mediaStream = null
-    , super(key: key)
-    ;
+      : participant = null,
+        mediaStream = null,
+        super(key: key);
 
   @override
   State<VideoView> createState() => _VideoViewState();
-
 }
 
 class _VideoViewState extends State<VideoView> {
-
   static int _viewNumber = 0;
   static int _getNextViewNubmer() {
     _viewNumber += 1;
@@ -123,9 +120,7 @@ class _VideoViewState extends State<VideoView> {
   int viewNumber;
   MethodChannel? _methodChannel;
 
-  _VideoViewState()
-    : viewNumber = _getNextViewNubmer()
-    ;
+  _VideoViewState() : viewNumber = _getNextViewNubmer();
 
   @override
   void initState() {
@@ -143,8 +138,7 @@ class _VideoViewState extends State<VideoView> {
 
   @override
   Widget build(BuildContext context) {
-
-    final Map<String, String> creationParams = { };
+    final Map<String, String> creationParams = {};
 
     final participantId = _participant?.id;
     if (participantId != null) {
@@ -157,12 +151,11 @@ class _VideoViewState extends State<VideoView> {
     }
 
     final mediaStreamLabel = _mediaStream?.label;
-     if (mediaStreamLabel != null && mediaStreamLabel != "") {
+    if (mediaStreamLabel != null && mediaStreamLabel != "") {
       creationParams["media_stream_label"] = mediaStreamLabel;
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-
       _methodChannel?.invokeMethod("attach", creationParams);
 
       return PlatformViewLink(
@@ -171,7 +164,8 @@ class _VideoViewState extends State<VideoView> {
             return AndroidViewSurface(
               key: ValueKey('UIKitView_video_view_$viewNumber'),
               controller: controller as AndroidViewController,
-              gestureRecognizers: const <Factory<OneSequenceGestureRecognizer>>{},
+              gestureRecognizers: const <
+                  Factory<OneSequenceGestureRecognizer>>{},
               hitTestBehavior: PlatformViewHitTestBehavior.opaque,
             );
           },
@@ -187,17 +181,17 @@ class _VideoViewState extends State<VideoView> {
                 params.onFocusChanged(true);
               },
             )
-              ..addOnPlatformViewCreatedListener( (id) {
+              ..addOnPlatformViewCreatedListener((id) {
                 params.onPlatformViewCreated(id);
-                final channel = MethodChannel("video_view_${id}_method_channel");
+                final channel =
+                    MethodChannel("video_view_${id}_method_channel");
                 _methodChannel = channel;
                 channel.invokeMethod("attach", creationParams);
               })
               ..create();
           });
-    }  
+    }
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-
       _methodChannel?.invokeMethod("attach", creationParams);
 
       return UiKitView(
@@ -245,18 +239,18 @@ class _VideoViewState extends State<VideoView> {
     if (methodChannel != null) {
       return methodChannel.invokeMethod<bool>("isAttached").then((value) {
         return value ?? false;
-      }  );
+      });
     }
     return Future.error("The VideoView has not been instantiated yet.");
   }
 
   Future<bool> _isScreenShare() async {
     final methodChannel = _methodChannel;
-      if (methodChannel != null) {
-        return methodChannel.invokeMethod<bool>("isScreenShare").then((value) {
-          return value ?? false;
-        });
-      }
+    if (methodChannel != null) {
+      return methodChannel.invokeMethod<bool>("isScreenShare").then((value) {
+        return value ?? false;
+      });
+    }
     return Future.error("The VideoView has not been instantiated yet.");
   }
 }

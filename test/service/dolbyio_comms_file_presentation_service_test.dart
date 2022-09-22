@@ -17,7 +17,9 @@ final participant = Participant(
 void main() {
   var filePresentationService = DolbyioCommsSdk.instance.filePresentation;
 
-  final MethodChannel channel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("file_presentation_service");
+  final MethodChannel channel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel(
+          "file_presentation_service");
   final mockMethodChannel = MockMethodChannel();
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +40,13 @@ void main() {
     var presentationId = "1234";
     var imageCount = 12;
     when(channel.invokeMethod("convert", file.toJson())).thenAnswer(
-      (_) => Future.value({"id": presentationId, "imageCount": imageCount, "ownerId": ownerId, "size": size, "name": name}),
+      (_) => Future.value({
+        "id": presentationId,
+        "imageCount": imageCount,
+        "ownerId": ownerId,
+        "size": size,
+        "name": name
+      }),
     );
 
     var result = await filePresentationService.convert(file);
@@ -48,7 +56,8 @@ void main() {
     expect(result.name, name);
     expect(result.ownerId, ownerId);
     expect(result.size, size);
-    verify(channel.invokeMethod("convert", {"uri": "some uri to file"})).called(1);
+    verify(channel.invokeMethod("convert", {"uri": "some uri to file"}))
+        .called(1);
   });
 
   test("test get current file presentation method", () async {
@@ -56,7 +65,12 @@ void main() {
     var presentationId = "1234";
     var imageCount = 12;
     when(channel.invokeMethod("getCurrent")).thenAnswer(
-      (_) => Future.value({"id": presentationId, "imageCount": imageCount, "position": position, "owner": participant.toJson()}),
+      (_) => Future.value({
+        "id": presentationId,
+        "imageCount": imageCount,
+        "position": position,
+        "owner": participant.toJson()
+      }),
     );
 
     var result = await filePresentationService.getCurrent();
@@ -71,7 +85,8 @@ void main() {
   test("test getImage method", () async {
     var pageNumber = 1;
     var exampleUrl = "some image url";
-    when(channel.invokeMethod("getImage", {"page": pageNumber})).thenAnswer((_) => Future.value(exampleUrl));
+    when(channel.invokeMethod("getImage", {"page": pageNumber}))
+        .thenAnswer((_) => Future.value(exampleUrl));
 
     var result = await filePresentationService.getImage(pageNumber);
 
@@ -82,17 +97,20 @@ void main() {
   test("test getThumbnail method", () async {
     var pageNumber = 1;
     var exampleUrl = "some image url";
-    when(channel.invokeMethod("getThumbnail", {"page": pageNumber})).thenAnswer((_) => Future.value(exampleUrl));
+    when(channel.invokeMethod("getThumbnail", {"page": pageNumber}))
+        .thenAnswer((_) => Future.value(exampleUrl));
 
     var result = await filePresentationService.getThumbnail(pageNumber);
 
     expect(result, exampleUrl);
-    verify(channel.invokeMethod("getThumbnail", {"page": pageNumber})).called(1);
+    verify(channel.invokeMethod("getThumbnail", {"page": pageNumber}))
+        .called(1);
   });
 
   test("test setPage method", () async {
     var pageNumber = 1;
-    when(channel.invokeMethod("setPage", {"page": pageNumber})).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("setPage", {"page": pageNumber}))
+        .thenAnswer((_) => Future.value());
 
     await filePresentationService.setPage(pageNumber);
 

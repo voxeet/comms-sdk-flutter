@@ -11,7 +11,7 @@ class InputTextFormField extends StatefulWidget {
       required this.labelText,
       required this.controller,
       this.focusColor = Colors.blue,
-        this.initialValue})
+      this.initialValue})
       : super(key: key);
 
   @override
@@ -41,22 +41,19 @@ class _InputTextFormFieldState extends State<InputTextFormField> {
       initialValue: widget.initialValue,
       focusNode: myFocusNode,
       decoration: InputDecoration(
-          alignLabelWithHint: true,
-          labelText: widget.labelText,
-          labelStyle: TextStyle(
-              color: myFocusNode.hasFocus ? widget.focusColor : Colors.black
-          ),
-          border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12.0))
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-            borderSide: BorderSide(color: widget.focusColor, width: 2),
-          ),
-          suffixIcon: IconButton(
+        alignLabelWithHint: true,
+        labelText: widget.labelText,
+        labelStyle: TextStyle(
+            color: myFocusNode.hasFocus ? widget.focusColor : Colors.black),
+        border: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12.0))),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+          borderSide: BorderSide(color: widget.focusColor, width: 2),
+        ),
+        suffixIcon: IconButton(
             onPressed: widget.controller!.clear,
-            icon: const Icon(Icons.clear, color: Colors.grey)
-          ),
+            icon: const Icon(Icons.clear, color: Colors.grey)),
       ),
       validator: (value) => value!.isEmpty ? 'Please, fill this field.' : null,
       controller: widget.controller,
