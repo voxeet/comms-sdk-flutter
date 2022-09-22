@@ -420,16 +420,23 @@ class ConferenceServiceBinding: Binding {
                 throw BindingError.noConferenceId
             }
             
-            let replayOptions = DTO.ReplayOptions(
-                offset: try flutterArguments.asDictionary(argKey: "offset").decode(),
-                conferenceAccessToken: try flutterArguments.asDictionary(argKey: "conferenceAccessToken").decode()
-            )
+            let replayOptionsObject = try flutterArguments.asDictionary(argKey: "replayOptions").decode(type: DTO.ReplayOptions.self)
+            
+            let replayOptions = DTO.ReplayOptions(offset: replayOptionsObject?.offset,conferenceAccessToken: replayOptionsObject?.conferenceAccessToken)
             
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
                 VoxeetSDK.shared.conference.replay(
                     conference: conference,
                     options: replayOptions?.toSdkType()) { error in
-                        completionHandler.handleError(error)?.orSuccess({ DTO.Confrence(conference: conference) })
+                        if let error = error {
+                            completionHandler.failure(error)
+                            return
+                        }
+                        guard let conference = VoxeetSDK.shared.conference.current else {
+                            completionHandler.failure(BindingError.noCurrentConference)
+                            return
+                        }
+                        completionHandler.success(encodable: DTO.Confrence(conference: conference))
                     }
             }
         } catch {
