@@ -36,7 +36,7 @@ class ConferenceServiceBinding: Binding {
     func currentConference(completionHandler: FlutterMethodCallCompletionHandler) {
         do {
             guard let conference = VoxeetSDK.shared.conference.current else {
-                throw BindingError.noConference("ConferenceServiceBinding: current conference not set")
+                throw BindingError.noCurrentConference
             }
             completionHandler.success(encodable: DTO.Confrence(conference: conference))
         } catch {

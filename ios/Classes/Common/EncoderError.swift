@@ -12,6 +12,7 @@ internal enum EncoderError: Error {
     case castingToStringFailed(file: String = #filePath, lineNumber: Int = #line)
     case castingToNumberFailed(file: String = #filePath, lineNumber: Int = #line)
     case createObjectFailed(file: String = #filePath, lineNumber: Int = #line)
+    case keyNotFound(value: String, file: String = #filePath, lineNumber: Int = #line)
 }
 
 extension EncoderError: LocalizedError {
@@ -39,6 +40,8 @@ extension EncoderError: LocalizedError {
             return "Casting to NSNumber failed.".addErrorLocation(file, lineNumber)
         case let .createObjectFailed(file, lineNumber):
             return "Failed to create an object.".addErrorLocation(file, lineNumber)
+        case let .keyNotFound(value, file, lineNumber):
+            return "Key not found: \(value)".addErrorLocation(file, lineNumber)
         }
     }
 }
