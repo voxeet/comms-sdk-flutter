@@ -26,7 +26,7 @@ class _ReplayScreenState extends State<ReplayScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-                ParticipantScreenContent(conference: widget.conference)
+                ReplayScreenContent(conference: widget.conference)
               ]
           ),
         ),
@@ -35,15 +35,15 @@ class _ReplayScreenState extends State<ReplayScreen> {
   }
 }
 
-class ParticipantScreenContent extends StatefulWidget {
+class ReplayScreenContent extends StatefulWidget {
   final Conference conference;
-  const ParticipantScreenContent({Key? key, required this.conference}) : super(key: key);
+  const ReplayScreenContent({Key? key, required this.conference}) : super(key: key);
 
   @override
-  State<ParticipantScreenContent> createState() => _ParticipantScreenContentState();
+  State<ReplayScreenContent> createState() => _ReplayScreenContentState();
 }
 
-class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
+class _ReplayScreenContentState extends State<ReplayScreenContent> {
 
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? conferenceStatusChangeSubscription;
