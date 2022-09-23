@@ -5,9 +5,9 @@ import 'package:integration_test/integration_test.dart';
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized(); // NEW
 
-  setUp(() async { });
+  setUp(() async {});
 
-  testWidgets('Start app', (tester) async { 
+  testWidgets('Start app', (tester) async {
     await tester.pumpWidget(const MyApp());
   });
 }

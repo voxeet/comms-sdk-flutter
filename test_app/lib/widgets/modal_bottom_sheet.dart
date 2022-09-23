@@ -17,14 +17,11 @@ class ModalBottomSheet extends StatelessWidget {
           onPressed: () => showModalBottomSheet(
               isScrollControlled: true,
               shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16))
-              ),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(16))),
               context: context,
               builder: (context) {
-                return FractionallySizedBox(
-                    heightFactor: 0.8,
-                    child: child
-                );
+                return FractionallySizedBox(heightFactor: 0.8, child: child);
               }),
         ),
       ),

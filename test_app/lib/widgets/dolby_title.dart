@@ -4,7 +4,8 @@ class DolbyTitle extends StatefulWidget {
   final String title;
   final String subtitle;
 
-  const DolbyTitle({Key? key, required this.title, required this.subtitle}) : super(key: key);
+  const DolbyTitle({Key? key, required this.title, required this.subtitle})
+      : super(key: key);
 
   @override
   State<DolbyTitle> createState() => _DolbyTitleState();

@@ -12,7 +12,8 @@ import '../test_helpers.dart';
 void main() {
   var sessionService = DolbyioCommsSdk.instance.session;
 
-  final MethodChannel channel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("session_service");
+  final MethodChannel channel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel("session_service");
   final mockMethodChannel = MockMethodChannel();
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,11 @@ void main() {
 
     await sessionService.open(participantInfo);
 
-    verify(channel.invokeMethod("open", {"name": name, "avatarUrl": avatarUrl, "externalId": externalId})).called(1);
+    verify(channel.invokeMethod("open", {
+      "name": name,
+      "avatarUrl": avatarUrl,
+      "externalId": externalId
+    })).called(1);
   });
 
   test("test isOpen method", () async {
@@ -62,7 +67,8 @@ void main() {
       ParticipantStatus.connected,
       ParticipantType.user,
     );
-    when(channel.invokeMethod("getParticipant")).thenAnswer((_) => Future.value(participant.toJson()));
+    when(channel.invokeMethod("getParticipant"))
+        .thenAnswer((_) => Future.value(participant.toJson()));
 
     var result = await sessionService.getParticipant();
 

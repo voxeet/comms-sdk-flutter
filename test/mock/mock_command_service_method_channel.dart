@@ -4,9 +4,8 @@ import 'package:flutter/services.dart';
 import 'mock_event_method_channel.dart';
 
 class MockCommandServiceMethodChannel {
-
   Object? onMethodCall(MethodCall call) {
-    switch(call.method) {
+    switch (call.method) {
       case "send":
         var eventType = CommandServiceEventNames.messageReceived.value;
         var args = call.arguments as Map<Object?, Object?>?;

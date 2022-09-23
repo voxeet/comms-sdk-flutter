@@ -8,7 +8,8 @@ import '../mock/mock_method_channel.dart';
 
 void main() {
   var commandService = DolbyioCommsSdk.instance.command;
-  final MethodChannel channel =  DolbyioCommsSdkFlutterPlatform.createMethodChannel("command_service");
+  final MethodChannel channel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel("command_service");
 
   final mockMethodChannel = MockMethodChannel();
 

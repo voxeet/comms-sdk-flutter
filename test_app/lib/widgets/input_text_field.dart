@@ -5,12 +5,12 @@ class InputTextField extends StatefulWidget {
   final TextEditingController? controller;
   final Color focusColor;
 
-  const InputTextField({
-    Key? key,
-    required this.labelText,
-    required this.controller,
-    this.focusColor = Colors.deepPurple
-  }): super(key: key);
+  const InputTextField(
+      {Key? key,
+      required this.labelText,
+      required this.controller,
+      this.focusColor = Colors.deepPurple})
+      : super(key: key);
 
   @override
   State<InputTextField> createState() => _InputTextFieldState();
@@ -43,13 +43,11 @@ class _InputTextFieldState extends State<InputTextField> {
           labelStyle: TextStyle(
               color: myFocusNode.hasFocus ? widget.focusColor : Colors.black),
           border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12.0))
-          ),
+              borderRadius: BorderRadius.all(Radius.circular(12.0))),
           focusedBorder: OutlineInputBorder(
             borderRadius: const BorderRadius.all(Radius.circular(12.0)),
             borderSide: BorderSide(color: widget.focusColor, width: 2),
-          )
-      ),
+          )),
       controller: widget.controller,
     );
   }

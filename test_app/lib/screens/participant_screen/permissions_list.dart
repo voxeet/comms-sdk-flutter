@@ -6,8 +6,8 @@ typedef Permissions = void Function(List<ConferencePermission> permissions);
 class PermissionsList extends StatefulWidget {
   final Permissions permissionsCallback;
 
-  const PermissionsList({Key? key, required this.permissionsCallback}) : super(key: key);
-
+  const PermissionsList({Key? key, required this.permissionsCallback})
+      : super(key: key);
 
   @override
   State<PermissionsList> createState() => PermissionsListState();
@@ -30,10 +30,12 @@ class PermissionsListState extends State<PermissionsList> {
             title: Text(permissionsList[index].encode()),
             value: checkBoxValueList[index],
             onChanged: (bool? value) {
-              if(selectedPermissionsList.contains(permissionsList[index])) {
-                setState(() => selectedPermissionsList.remove(permissionsList[index]));
+              if (selectedPermissionsList.contains(permissionsList[index])) {
+                setState(() =>
+                    selectedPermissionsList.remove(permissionsList[index]));
               } else {
-                setState(() => selectedPermissionsList.add(permissionsList[index]));
+                setState(
+                    () => selectedPermissionsList.add(permissionsList[index]));
               }
               setState(() {
                 checkBoxValueList[index] = value!;

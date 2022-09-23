@@ -6,7 +6,7 @@ class MockDolbyioMediaServiceMethodChannel {
   var _isFrontCamera = false;
 
   Object? onMethodCall(MethodCall call) {
-    switch(call.method) {
+    switch (call.method) {
       case "getComfortNoiseLevel":
         return _comfortNoiseLevel.encode();
       case "setComfortNoiseLevel":

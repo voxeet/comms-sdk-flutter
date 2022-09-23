@@ -7,33 +7,37 @@ class VideoPresentationServiceTestButtons extends StatefulWidget {
   const VideoPresentationServiceTestButtons({Key? key}) : super(key: key);
 
   @override
-  State<VideoPresentationServiceTestButtons> createState() => _VideoPresentationServiceTestButtonsState();
+  State<VideoPresentationServiceTestButtons> createState() =>
+      _VideoPresentationServiceTestButtonsState();
 }
 
-class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationServiceTestButtons> {
+class _VideoPresentationServiceTestButtonsState
+    extends State<VideoPresentationServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   String url = '';
 
   @override
   void initState() {
-    _dolbyioCommsSdkFlutterPlugin.videoPresentation.onVideoPresentationChange()
+    _dolbyioCommsSdkFlutterPlugin.videoPresentation
+        .onVideoPresentationChange()
         .listen((event) {
-      if(event.type == VideoPresentationEventNames.videoPresentationStarted) {
+      if (event.type == VideoPresentationEventNames.videoPresentationStarted) {
         showAlertDialog(context, "VideoPresentationStarted", "On Event Change");
-      }
-      else if(event.type == VideoPresentationEventNames.videoPresentationPaused) {
+      } else if (event.type ==
+          VideoPresentationEventNames.videoPresentationPaused) {
         showAlertDialog(context, "VideoPresentationPaused", "On Event Change");
-      }
-      else if(event.type == VideoPresentationEventNames.videoPresentationPlayed) {
+      } else if (event.type ==
+          VideoPresentationEventNames.videoPresentationPlayed) {
         showAlertDialog(context, "VideoPresentationPlayed", "On Event Change");
-      }
-      else if(event.type == VideoPresentationEventNames.videoPresentationSought) {
+      } else if (event.type ==
+          VideoPresentationEventNames.videoPresentationSought) {
         showAlertDialog(context, "VideoPresentationSought", "On Event Change");
       }
     });
 
-    _dolbyioCommsSdkFlutterPlugin.videoPresentation.onVideoPresentationStopped()
-    .listen((event) {
+    _dolbyioCommsSdkFlutterPlugin.videoPresentation
+        .onVideoPresentationStopped()
+        .listen((event) {
       showAlertDialog(context, "VideoPresentationStopped", "On Event Change");
     });
 
@@ -57,7 +61,8 @@ class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationS
     );
   }
 
-  Future<void> showAlertDialog(BuildContext context, String title, String text) async {
+  Future<void> showAlertDialog(
+      BuildContext context, String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
       title: title,
@@ -72,31 +77,37 @@ class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationS
           return AlertDialog(
             title: const Text('Enter url'),
             content: TextField(
-              onChanged: (value) { setState(() => url = value); },
+              onChanged: (value) {
+                setState(() => url = value);
+              },
               decoration: const InputDecoration(hintText: "Url"),
             ),
             actions: <Widget>[
               TextButton(
                 child: const Text('Cancel'),
-                onPressed: () { setState(() => Navigator.pop(context)); },
+                onPressed: () {
+                  setState(() => Navigator.pop(context));
+                },
               ),
               TextButton(
                 child: const Text('Done'),
-                onPressed: () { setState(() => Navigator.pop(context)); },
+                onPressed: () {
+                  setState(() => Navigator.pop(context));
+                },
               ),
             ],
           );
-        }
-    );
+        });
   }
 
   void start() async {
     await showInputDialog(context);
-    if(url.isNotEmpty) {
+    if (url.isNotEmpty) {
       _dolbyioCommsSdkFlutterPlugin.videoPresentation
           .start(url)
           .then((value) => showAlertDialog(context, 'Success', "OK"))
-          .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
+          .onError((error, stackTrace) =>
+              showAlertDialog(context, 'Error', error.toString()));
     }
   }
 
@@ -104,49 +115,59 @@ class _VideoPresentationServiceTestButtonsState extends State<VideoPresentationS
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .state()
         .then((state) => showAlertDialog(context, 'Success', state.name))
-        .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showAlertDialog(context, 'Error', error.toString()));
   }
 
   void stop() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .stop()
         .then((value) => showAlertDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showAlertDialog(context, 'Error', error.toString()));
   }
 
   void play() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .play()
         .then((value) => showAlertDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showAlertDialog(context, 'Error', error.toString()));
   }
 
   void pause() {
-    _dolbyioCommsSdkFlutterPlugin.videoPresentation.currentVideo()
+    _dolbyioCommsSdkFlutterPlugin.videoPresentation
+        .currentVideo()
         .then((video) {
       _dolbyioCommsSdkFlutterPlugin.videoPresentation
           .pause(video!.timestamp)
           .then((value) => showAlertDialog(context, 'Success', "OK"))
-          .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
-        })
-        .onError((error, stackTrace) { showAlertDialog(context, 'Error', error.toString()); });
+          .onError((error, stackTrace) =>
+              showAlertDialog(context, 'Error', error.toString()));
+    }).onError((error, stackTrace) {
+      showAlertDialog(context, 'Error', error.toString());
+    });
   }
 
   void seek() {
-    _dolbyioCommsSdkFlutterPlugin.videoPresentation.currentVideo()
+    _dolbyioCommsSdkFlutterPlugin.videoPresentation
+        .currentVideo()
         .then((video) {
       _dolbyioCommsSdkFlutterPlugin.videoPresentation
           .seek(video!.timestamp)
           .then((value) => showAlertDialog(context, 'Success', "OK"))
-          .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
-        })
-        .onError((error, stackTrace) { showAlertDialog(context, 'Error', error.toString()); });
+          .onError((error, stackTrace) =>
+              showAlertDialog(context, 'Error', error.toString()));
+    }).onError((error, stackTrace) {
+      showAlertDialog(context, 'Error', error.toString());
+    });
   }
 
   void currentVideo() {
     _dolbyioCommsSdkFlutterPlugin.videoPresentation
         .currentVideo()
         .then((value) => showAlertDialog(context, 'Success', value.toString()))
-        .onError((error, stackTrace) => showAlertDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showAlertDialog(context, 'Error', error.toString()));
   }
 }

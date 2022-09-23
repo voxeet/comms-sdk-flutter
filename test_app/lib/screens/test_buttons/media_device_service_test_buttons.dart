@@ -12,10 +12,16 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var buttons = <Widget>[
-      SecondaryButton(text: 'Get comfort noise level', onPressed: () => getComfortNoiseLevel(context)),
-      SecondaryButton(text: 'Set comfort noise level', onPressed: () => setComfortNoiseLevel(context)),
-      SecondaryButton(text: 'Is front camera', onPressed: () => isFrontCamera(context)),
-      SecondaryButton(text: 'Switch camera', onPressed: () => switchCamera(context)),
+      SecondaryButton(
+          text: 'Get comfort noise level',
+          onPressed: () => getComfortNoiseLevel(context)),
+      SecondaryButton(
+          text: 'Set comfort noise level',
+          onPressed: () => setComfortNoiseLevel(context)),
+      SecondaryButton(
+          text: 'Is front camera', onPressed: () => isFrontCamera(context)),
+      SecondaryButton(
+          text: 'Switch camera', onPressed: () => switchCamera(context)),
     ];
     if (Platform.isIOS) {
       buttons.add(SecondaryButton(
@@ -28,7 +34,8 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
     );
   }
 
-  Future<void> showDialog(BuildContext context, String title, String text) async {
+  Future<void> showDialog(
+      BuildContext context, String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
       title: title,
@@ -39,35 +46,42 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
   void getComfortNoiseLevel(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.mediaDevice
         .getComfortNoiseLevel()
-        .then((comfortNoiseLevel) => showDialog(context, "Success", comfortNoiseLevel.toString()))
-        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
+        .then((comfortNoiseLevel) =>
+            showDialog(context, "Success", comfortNoiseLevel.toString()))
+        .onError((error, stackTrace) =>
+            showDialog(context, "Error", error.toString()));
   }
 
   void setComfortNoiseLevel(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.mediaDevice
         .setComfortNoiseLevel(ComfortNoiseLevel.medium)
         .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
+        .onError((error, stackTrace) =>
+            showDialog(context, "Error", error.toString()));
   }
 
   void isFrontCamera(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.mediaDevice
         .isFrontCamera()
-        .then((isFrontCamera) => showDialog(context, "Success", isFrontCamera.toString()))
-        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
+        .then((isFrontCamera) =>
+            showDialog(context, "Success", isFrontCamera.toString()))
+        .onError((error, stackTrace) =>
+            showDialog(context, "Error", error.toString()));
   }
 
   void switchCamera(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.mediaDevice
         .switchCamera()
         .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) => showDialog(context, "Error", error.toString()));
+        .onError((error, stackTrace) =>
+            showDialog(context, "Error", error.toString()));
   }
 
   void switchSpeaker(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.mediaDevice
         .switchSpeaker()
         .then((value) => showDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString() + stackTrace.toString()));
+        .onError((error, stackTrace) => showDialog(
+            context, 'Error', error.toString() + stackTrace.toString()));
   }
 }

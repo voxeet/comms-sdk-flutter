@@ -81,7 +81,8 @@ enum ConferenceStatus {
 
   /// @internal
   static ConferenceStatus? decode(String value) {
-    return ConferenceStatus.values.firstWhereOrNull((element) => element._value == value);
+    return ConferenceStatus.values
+        .firstWhereOrNull((element) => element._value == value);
   }
 
   /// @internal
@@ -176,7 +177,7 @@ enum Codec {
   const Codec(this._value);
 
   /// @internal
-  String encode() { 
+  String encode() {
     return _value;
   }
 }
@@ -439,7 +440,8 @@ enum ConferenceServiceEventNames implements EnumWithStringValue {
   const ConferenceServiceEventNames(this.value);
 
   static ConferenceServiceEventNames valueOf(String? value) {
-    final event = ConferenceServiceEventNames.values.firstWhereOrNull((element) => element.value == value);
+    final event = ConferenceServiceEventNames.values
+        .firstWhereOrNull((element) => element.value == value);
     if (event == null) {
       throw "Could not create ConferenceServiceEventNames from string: $value";
     }
@@ -473,6 +475,7 @@ class AudioProcessingSenderOptions {
 enum VideoForwardingStrategy {
   /// Selects participants based on their audio volume. This allows the local participant to receive video streams only from active speakers.
   lastSpeaker('LAST_SPEAKER'),
+
   /// Selects participants based on their distance from the local participant. This allows the local participant to receive video streams only from the nearest participants. This value is available only for participants who enabled spatial audio.
   closestUser('CLOSEST_USER');
 

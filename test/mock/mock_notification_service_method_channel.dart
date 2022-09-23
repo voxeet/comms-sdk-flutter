@@ -10,23 +10,28 @@ class MockNotificationServiceMethodChannel {
   var inviteMethodStatus = CallStatus.notCalled;
 
   Object? onMethodCall(MethodCall call) {
-    switch(call.method) {
-      case "invite": {
-        inviteParticipant(call.arguments as Map<Object?, Object?>?);
-        return null;
-      }
-      case "decline": {
-        decline(call.arguments as Map<Object?, Object?>?);
-        return null;
-      }
+    switch (call.method) {
+      case "invite":
+        {
+          inviteParticipant(call.arguments as Map<Object?, Object?>?);
+          return null;
+        }
+      case "decline":
+        {
+          decline(call.arguments as Map<Object?, Object?>?);
+          return null;
+        }
     }
     return null;
   }
 
   void inviteParticipant(Map<Object?, Object?>? args) {
-    if (args != null && args.containsKey("conference") && args.containsKey("participants")) {
+    if (args != null &&
+        args.containsKey("conference") &&
+        args.containsKey("participants")) {
       var eventType = NotificationServiceEventNames.invitationReceived.value;
-      final conference = ConferenceMapper.fromMap(args["conference"] as Map<Object?, Object?>);
+      final conference =
+          ConferenceMapper.fromMap(args["conference"] as Map<Object?, Object?>);
 
       final participants = (args["participants"] as List<Object?>).map((e) {
         final pMap = e as Map<Object?, Object?>;
@@ -36,17 +41,13 @@ class MockNotificationServiceMethodChannel {
       var listener = MockListeners.instance.listeners[eventType];
       if (listener != null) {
         for (var p in participants) {
-          var participant = conference.participants.firstWhere(
-                  (element) => element.info?.name == p.info.name);
-          InvitationReceivedNotificationData eventType = InvitationReceivedNotificationData(
-              conference.alias!,
-              conference.id!,
-              "",
-              participant
-          );
+          var participant = conference.participants
+              .firstWhere((element) => element.info?.name == p.info.name);
+          InvitationReceivedNotificationData eventType =
+              InvitationReceivedNotificationData(
+                  conference.alias!, conference.id!, "", participant);
           listener(eventType.toJson());
         }
-
       }
     } else {
       inviteMethodStatus = CallStatus.errorIncorrectArgument;

@@ -24,39 +24,36 @@ class _MyAppState extends State<MyApp> {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async { }
+  Future<void> initPlatformState() async {}
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body:Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              PrimaryButton(
-                  widgetText: const Text('Open example app'),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(
-                          settings: const RouteSettings(name: "LoginScreen"),
-                          builder: (context) => const LoginScreen()
-                        )
-                    );
-                  }),
-              PrimaryButton(
-                widgetText: const Text('Run playground'),
-                onPressed: () async {
-                  runPlayground(_dolbyioCommsSdkFlutterPlugin);
-                }),
-            ],
+          appBar: AppBar(
+            title: const Text('Plugin example app'),
           ),
-        )),
-      );
+          body: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PrimaryButton(
+                    widgetText: const Text('Open example app'),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          settings: const RouteSettings(name: "LoginScreen"),
+                          builder: (context) => const LoginScreen()));
+                    }),
+                PrimaryButton(
+                    widgetText: const Text('Run playground'),
+                    onPressed: () async {
+                      runPlayground(_dolbyioCommsSdkFlutterPlugin);
+                    }),
+              ],
+            ),
+          )),
+    );
   }
 
   void runPlayground(DolbyioCommsSdk dolbyioCommsSdkFlutterPlugin) async {

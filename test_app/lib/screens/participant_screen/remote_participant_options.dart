@@ -10,7 +10,8 @@ class RemoteParticipantOptions extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<RemoteParticipantOptions> createState() => _RemoteParticipantOptionsState();
+  State<RemoteParticipantOptions> createState() =>
+      _RemoteParticipantOptionsState();
 }
 
 class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
@@ -32,59 +33,63 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
         ),
         padding: const EdgeInsets.symmetric(vertical: 4),
         position: PopupMenuPosition.over,
-        icon: const Icon(Icons.more_vert, color: Colors.white,),
+        icon: const Icon(
+          Icons.more_vert,
+          color: Colors.white,
+        ),
         itemBuilder: (BuildContext context) {
           return [
             const PopupMenuItem<int>(
               textStyle: TextStyle(fontSize: 14, color: Colors.black),
               value: 0,
-              child: ListTile(title: Text('Kick'), leading: Icon(Icons.remove, color: Colors.deepPurple),),
+              child: ListTile(
+                title: Text('Kick'),
+                leading: Icon(Icons.remove, color: Colors.deepPurple),
+              ),
             ),
             PopupMenuItem<int>(
               textStyle: const TextStyle(fontSize: 14, color: Colors.black),
               value: 1,
               child: isRemoteMuted
                   ? const ListTile(
-                leading: Icon(Icons.mic_off, color: Colors.deepPurple),
-                title: Text('Unmute'),
-              )
+                      leading: Icon(Icons.mic_off, color: Colors.deepPurple),
+                      title: Text('Unmute'),
+                    )
                   : const ListTile(
-                leading: Icon(Icons.mic, color: Colors.deepPurple),
-                title: Text('Mute'),
-              ),
+                      leading: Icon(Icons.mic, color: Colors.deepPurple),
+                      title: Text('Mute'),
+                    ),
             ),
             const PopupMenuItem<int>(
-              textStyle: TextStyle(fontSize: 14, color: Colors.black),
-              value: 2,
-              child: ListTile(
-                title: Text('Update permissions'),
-                leading: Icon(Icons.perm_camera_mic_outlined, color: Colors.deepPurple)
-              )
-            ),
+                textStyle: TextStyle(fontSize: 14, color: Colors.black),
+                value: 2,
+                child: ListTile(
+                    title: Text('Update permissions'),
+                    leading: Icon(Icons.perm_camera_mic_outlined,
+                        color: Colors.deepPurple))),
             const PopupMenuItem<int>(
-              textStyle: TextStyle(fontSize: 14, color: Colors.black),
-              value: 3,
-              child: ListTile(
-                title: Text('Set spatial position'),
-                leading: Icon(Icons.spatial_audio, color: Colors.deepPurple)
-              )
-            )
+                textStyle: TextStyle(fontSize: 14, color: Colors.black),
+                value: 3,
+                child: ListTile(
+                    title: Text('Set spatial position'),
+                    leading:
+                        Icon(Icons.spatial_audio, color: Colors.deepPurple)))
           ];
         },
         onSelected: (value) {
           switch (value) {
             case 0:
-                kickParticipant();
-                break;
+              kickParticipant();
+              break;
             case 1:
-                muteRemoteParticipant();
-                break;
+              muteRemoteParticipant();
+              break;
             case 2:
-                showPermissionsDialog();
-                break;
+              showPermissionsDialog();
+              break;
             case 3:
-                setSpatialPosition();
-                break;
+              setSpatialPosition();
+              break;
           }
         });
   }
@@ -108,27 +113,24 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
   Future<void> updatePermissions() async {
     try {
       final participant = await _upToDateParticipant();
-      await _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions([
-        ParticipantPermissions(participant, permissionsList)
-      ]);
+      await _dolbyioCommsSdkFlutterPlugin.conference.updatePermissions(
+          [ParticipantPermissions(participant, permissionsList)]);
       await showDialogWindow('Success', "OK");
-    } catch(error) {
-      showDialogWindow(
-        'Error',
-        "$error\nThis method is only available  for protected conferences"
-      );
+    } catch (error) {
+      showDialogWindow('Error',
+          "$error\nThis method is only available  for protected conferences");
     }
   }
 
   Future<void> setSpatialPosition() async {
     try {
       final participant = await _upToDateParticipant();
-        _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
-          participant: participant,
-          position: SpatialPosition(1.0, 1.0, 1.0),
-        );
+      _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+        participant: participant,
+        position: SpatialPosition(1.0, 1.0, 1.0),
+      );
       await showDialogWindow('Success', 'OK');
-    } catch(error) {
+    } catch (error) {
       showDialogWindow('Error', error.toString());
     }
   }
@@ -142,7 +144,8 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
   }
 
   Future<Participant> _upToDateParticipant() async {
-    return _dolbyioCommsSdkFlutterPlugin.conference.getParticipant(widget.participant.id);
+    return _dolbyioCommsSdkFlutterPlugin.conference
+        .getParticipant(widget.participant.id);
   }
 
   Future<void> showPermissionsDialog() async {
@@ -152,9 +155,8 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
           return AlertDialog(
             title: const Text("Update permissions"),
             actionsOverflowButtonSpacing: 20,
-            content: PermissionsList(
-                permissionsCallback: updatePermissionsList
-            ),
+            content:
+                PermissionsList(permissionsCallback: updatePermissionsList),
             actions: [
               ElevatedButton(
                   onPressed: () {
@@ -162,19 +164,16 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                  child: const Text("Update")
-              ),
+                  child: const Text("Update")),
               ElevatedButton(
                   onPressed: () {
                     permissionsList.clear();
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                  child: const Text("Cancel")
-              ),
+                  child: const Text("Cancel")),
             ],
           );
-        }
-    );
+        });
   }
 }

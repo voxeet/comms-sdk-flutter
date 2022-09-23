@@ -56,7 +56,8 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
     final lowerCaseValue = value?.toLowerCase();
     return FilePresentationServiceEventNames.values.firstWhere(
       (element) {
-        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+        return element.value == value ||
+            element.name.toLowerCase() == lowerCaseValue;
       },
       orElse: () => throw Exception("Invalid enum name"),
     );
@@ -76,8 +77,9 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
   static NotificationServiceEventNames valueOf(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return NotificationServiceEventNames.values.firstWhere(
-      (element) { 
-        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+      (element) {
+        return element.value == value ||
+            element.name.toLowerCase() == lowerCaseValue;
       },
       orElse: () => throw Exception("Invalid enum name"),
     );
@@ -98,7 +100,8 @@ enum CommandServiceEventNames implements EnumWithStringValue {
     final lowerCaseValue = value?.toLowerCase();
     return CommandServiceEventNames.values.firstWhere(
       (element) {
-        return element.value == value || element.name.toLowerCase() == lowerCaseValue;
+        return element.value == value ||
+            element.name.toLowerCase() == lowerCaseValue;
       },
       orElse: () => throw Exception("Invalid enum name"),
     );
@@ -154,7 +157,9 @@ enum VideoPresentationEventNames implements EnumWithStringValue {
   static VideoPresentationEventNames valueOf(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return VideoPresentationEventNames.values.firstWhere(
-      (element) => element.value == value || element.name.toLowerCase() == lowerCaseValue,
+      (element) =>
+          element.value == value ||
+          element.name.toLowerCase() == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
