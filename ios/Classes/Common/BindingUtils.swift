@@ -57,7 +57,7 @@ struct FlutterMethodCallArguments {
         return Argument(argArray[argIndex])
     }
 
-    func asDictionary(argKey: String, optional: Bool = false, file: String = #filePath, lineNumber: Int = #line) throws -> Argument {
+    func asDictionary(argKey: String, optional: Bool = true, file: String = #filePath, lineNumber: Int = #line) throws -> Argument {
         guard let argDictionary = methodCallArguments as? [String: Any] else {
             throw EncoderError.notDictionary(file: file, lineNumber: lineNumber)
         }
