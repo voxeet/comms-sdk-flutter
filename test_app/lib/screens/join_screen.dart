@@ -157,51 +157,55 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 children: [
                   const Text("Observe Conference Status"),
                   CupertinoSwitch(
-                      value: switchConferenceStatus,
-                      onChanged: (value) {
-                        setState(() {
-                          switchConferenceStatus = value;
-                          observeConferenceStatus(switchConferenceStatus);
-                        });
-                      }),
+                    value: switchConferenceStatus,
+                    onChanged: (value) {
+                      setState(() {
+                        switchConferenceStatus = value;
+                        observeConferenceStatus(switchConferenceStatus);
+                      });
+                    },
+                  ),
                 ],
               ),
               Row(
                 children: [
                   const Text("Spatial Audio"),
                   CupertinoSwitch(
-                      value: switchSpatialAudio,
-                      onChanged: (value) {
-                        setState(() {
-                          switchSpatialAudio = value;
-                        });
-                      }),
+                    value: switchSpatialAudio,
+                    onChanged: (value) {
+                      setState(() {
+                        switchSpatialAudio = value;
+                      });
+                    },
+                  ),
                 ],
               ),
               Row(
                 children: [
                   const Text("Dolby Voice"),
                   CupertinoSwitch(
-                      value: switchDolbyVoice,
-                      onChanged: (value) {
-                        setState(() {
-                          switchDolbyVoice = value;
-                        });
-                      }),
+                    value: switchDolbyVoice,
+                    onChanged: (value) {
+                      setState(() {
+                        switchDolbyVoice = value;
+                      });
+                    },
+                  ),
                 ],
               ),
               PrimaryButton(
-                  widgetText: isJoining
-                      ? const WhiteCircularProgressIndicator()
-                      : const Text('Join'),
-                  onPressed: () {
-                    if (defaultTargetPlatform == TargetPlatform.android) {
-                      checkPermissions();
-                      return;
-                    }
-                    onJoinButtonPressed();
-                  },
-                  color: Colors.deepPurple),
+                widgetText: isJoining
+                    ? const WhiteCircularProgressIndicator()
+                    : const Text('Join'),
+                onPressed: () {
+                  if (defaultTargetPlatform == TargetPlatform.android) {
+                    checkPermissions();
+                    return;
+                  }
+                  onJoinButtonPressed();
+                },
+                color: Colors.deepPurple,
+              ),
               const SizedBox(height: 16),
               Form(
                 key: formKeyId,
@@ -209,17 +213,16 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 child: InputTextFormField(
                     labelText: 'Conference ID with record',
                     controller: conferenceIdTextController,
-                    focusColor: Colors.deepPurple,
-                ),
+                    focusColor: Colors.deepPurple),
               ),
               PrimaryButton(
-                  widgetText: isReplaying
-                      ? const WhiteCircularProgressIndicator()
-                      : const Text('Replay conference'),
-                  onPressed: () {
-                    onReplayButtonPressed();
-                  },
-                  color: Colors.deepPurple
+                widgetText: isReplaying
+                    ? const WhiteCircularProgressIndicator()
+                    : const Text('Replay conference'),
+                onPressed: () {
+                  onReplayButtonPressed();
+                },
+                color: Colors.deepPurple,
               ),
             ],
           ),
@@ -352,10 +355,15 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   void replay() {
     _dolbyioCommsSdkFlutterPlugin.conference
-        .fetch(conferenceIdTextController.text).then((conference) =>
-        _dolbyioCommsSdkFlutterPlugin.conference.replay(conference: conference)
-        .then((conference) => checkReplayConferenceResult(conference)))
-        .onError((error, stackTrace) => developer.log(error.toString()));
+        .fetch(conferenceIdTextController.text)
+        .then(
+          (conference) => _dolbyioCommsSdkFlutterPlugin.conference
+              .replay(conference: conference)
+              .then((conference) => checkReplayConferenceResult(conference)),
+        )
+        .onError(
+          (error, stackTrace) => developer.log(error.toString()),
+        );
   }
 
   void checkReplayConferenceResult(Conference conference) {
@@ -366,16 +374,21 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     }
   }
 
-  Future navigateToReplayScreen(BuildContext context, Conference conference) async {
+  Future navigateToReplayScreen(
+    BuildContext context,
+    Conference conference,
+  ) async {
     await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => ReplayScreen(conference: conference))
+      MaterialPageRoute(
+          builder: (context) => ReplayScreen(conference: conference)),
     );
     setState(() => isReplaying = false);
   }
 
   Future navigateToParticipantScreen(BuildContext context) async {
     await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const ParticipantScreen()));
+      MaterialPageRoute(builder: (context) => const ParticipantScreen()),
+    );
     setState(() => isJoining = false);
   }
 

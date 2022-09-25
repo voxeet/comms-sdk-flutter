@@ -74,16 +74,18 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               child: const Text('YES'),
               onPressed: () {
                 widget.updateCloseSessionFlag(true);
-                Navigator.of(context)
-                    .popUntil(ModalRoute.withName("LoginScreen"));
+                Navigator.of(context).popUntil(
+                  ModalRoute.withName("LoginScreen"),
+                );
               },
             ),
             TextButton(
               child: const Text('NO'),
               onPressed: () {
                 widget.updateCloseSessionFlag(false);
-                Navigator.of(context)
-                    .popUntil(ModalRoute.withName("JoinConferenceScreen"));
+                Navigator.of(context).popUntil(
+                  ModalRoute.withName("JoinConferenceScreen"),
+                );
               },
             ),
             TextButton(

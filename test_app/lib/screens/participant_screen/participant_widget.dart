@@ -16,32 +16,37 @@ class ParticipantWidget extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-            flex: 5,
-            child: VideoView.withMediaStream(
-                participant: participant,
-                mediaStream: participant.streams
-                    ?.firstWhereOrNull((s) => s.type == MediaStreamType.camera),
-                key: ValueKey('video_view_tile_${participant.id}'))),
+          flex: 5,
+          child: VideoView.withMediaStream(
+            participant: participant,
+            mediaStream: participant.streams?.firstWhereOrNull(
+              (s) => s.type == MediaStreamType.camera,
+            ),
+            key: ValueKey('video_view_tile_${participant.id}'),
+          ),
+        ),
         Expanded(
-            flex: 1,
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius:
-                      BorderRadius.vertical(bottom: Radius.circular(12))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(left: 12),
-                      child: Text(
-                          '${getParticipantName()}: ${getParticipantStatus()!}',
-                          style: const TextStyle(color: Colors.white))),
-                  if (!isLocal)
-                    RemoteParticipantOptions(participant: participant),
-                ],
-              ),
-            ))
+          flex: 1,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.deepPurple,
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                      '${getParticipantName()}: ${getParticipantStatus()!}',
+                      style: const TextStyle(color: Colors.white)),
+                ),
+                if (!isLocal)
+                  RemoteParticipantOptions(participant: participant),
+              ],
+            ),
+          ),
+        )
       ],
     );
   }

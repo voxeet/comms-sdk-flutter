@@ -29,11 +29,12 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
           constraints: const BoxConstraints.expand(),
           decoration: const BoxDecoration(color: Colors.deepPurple),
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-                ParticipantScreenContent()
-              ]),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
+              ParticipantScreenContent()
+            ],
+          ),
         ),
       ),
     );
@@ -118,24 +119,28 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           children: [
             ConferenceTitle(conference: getCurrentConference()),
             Expanded(
-                child: Stack(children: [
-              const ParticipantGrid(),
-              Positioned(
-                  left: 10,
-                  bottom: 10,
-                  width: 100,
-                  height: 140,
-                  child: Container(
-                    decoration: const BoxDecoration(color: Colors.blueGrey),
-                    child: videoView,
-                  )),
-            ])),
+              child: Stack(
+                children: [
+                  const ParticipantGrid(),
+                  Positioned(
+                    left: 10,
+                    bottom: 10,
+                    width: 100,
+                    height: 140,
+                    child: Container(
+                        decoration: const BoxDecoration(color: Colors.blueGrey),
+                        child: videoView),
+                  ),
+                ],
+              ),
+            ),
             const ModalBottomSheet(child: TestButtons()),
             ConferenceControls(
-                conference: getCurrentConference(),
-                updateCloseSessionFlag: (shouldCloseSession) {
-                  shouldCloseSessionOnLeave = shouldCloseSession;
-                }),
+              conference: getCurrentConference(),
+              updateCloseSessionFlag: (shouldCloseSession) {
+                shouldCloseSessionOnLeave = shouldCloseSession;
+              },
+            ),
           ],
         ),
       ),

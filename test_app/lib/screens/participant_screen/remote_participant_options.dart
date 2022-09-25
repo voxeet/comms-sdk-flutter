@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '../../widgets/dialogs.dart';
 import 'permissions_list.dart';
+import '/widgets/dialogs.dart';
 
 class RemoteParticipantOptions extends StatefulWidget {
   final Participant participant;
@@ -43,9 +43,8 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
               textStyle: TextStyle(fontSize: 14, color: Colors.black),
               value: 0,
               child: ListTile(
-                title: Text('Kick'),
-                leading: Icon(Icons.remove, color: Colors.deepPurple),
-              ),
+                  title: Text('Kick'),
+                  leading: Icon(Icons.remove, color: Colors.deepPurple)),
             ),
             PopupMenuItem<int>(
               textStyle: const TextStyle(fontSize: 14, color: Colors.black),
@@ -53,27 +52,27 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
               child: isRemoteMuted
                   ? const ListTile(
                       leading: Icon(Icons.mic_off, color: Colors.deepPurple),
-                      title: Text('Unmute'),
-                    )
+                      title: Text('Unmute'))
                   : const ListTile(
                       leading: Icon(Icons.mic, color: Colors.deepPurple),
-                      title: Text('Mute'),
-                    ),
+                      title: Text('Mute')),
             ),
             const PopupMenuItem<int>(
-                textStyle: TextStyle(fontSize: 14, color: Colors.black),
-                value: 2,
-                child: ListTile(
-                    title: Text('Update permissions'),
-                    leading: Icon(Icons.perm_camera_mic_outlined,
-                        color: Colors.deepPurple))),
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 2,
+              child: ListTile(
+                title: Text('Update permissions'),
+                leading: Icon(Icons.perm_camera_mic_outlined,
+                    color: Colors.deepPurple),
+              ),
+            ),
             const PopupMenuItem<int>(
-                textStyle: TextStyle(fontSize: 14, color: Colors.black),
-                value: 3,
-                child: ListTile(
-                    title: Text('Set spatial position'),
-                    leading:
-                        Icon(Icons.spatial_audio, color: Colors.deepPurple)))
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 3,
+              child: ListTile(
+                  title: Text('Set spatial position'),
+                  leading: Icon(Icons.spatial_audio, color: Colors.deepPurple)),
+            )
           ];
         },
         onSelected: (value) {
