@@ -131,10 +131,10 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
                         decoration: const BoxDecoration(color: Colors.blueGrey),
                         child: videoView),
                   ),
+                  const ModalBottomSheet(child: TestButtons()),
                 ],
               ),
             ),
-            const ModalBottomSheet(child: TestButtons()),
             ConferenceControls(
               conference: getCurrentConference(),
               updateCloseSessionFlag: (shouldCloseSession) {
