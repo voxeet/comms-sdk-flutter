@@ -8,7 +8,9 @@ import 'dart:developer' as developer;
 
 class ParticipantGrid extends StatefulWidget {
   final bool remoteOptionsFlag;
-  const ParticipantGrid({Key? key, required this.remoteOptionsFlag}) : super(key: key);
+
+  const ParticipantGrid({Key? key, required this.remoteOptionsFlag})
+      : super(key: key);
 
   @override
   State<ParticipantGrid> createState() => _ParticipantGridState();
@@ -71,19 +73,18 @@ class _ParticipantGridState extends State<ParticipantGrid> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: GridView.builder(
-          itemCount: participants.length,
-          scrollDirection: Axis.vertical,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12),
-          itemBuilder: (context, index) {
-            var participant = participants[index];
-            return ParticipantWidget(
-                participant: participant, remoteOptionsFlag: index == 0? false: widget.remoteOptionsFlag);
-          }),
-    );
+    return GridView.builder(
+        itemCount: participants.length,
+        scrollDirection: Axis.vertical,
+        padding: const EdgeInsets.fromLTRB(12, 12, 12, 160),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, mainAxisSpacing: 12, crossAxisSpacing: 12),
+        itemBuilder: (context, index) {
+          var participant = participants[index];
+          return ParticipantWidget(
+              participant: participant,
+              remoteOptionsFlag: index == 0 ? false : widget.remoteOptionsFlag);
+        });
   }
 
   Future<void> initParticipantsList() async {
@@ -92,9 +93,18 @@ class _ParticipantGridState extends State<ParticipantGrid> {
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin
         .conference
         .getParticipants(currentConference);
-    final availableParticipants = conferenceParticipants;
-    // .where((element) => element.status != ParticipantStatus.left);
-    setState(() => participants = availableParticipants.toList());
+    conferenceParticipants.sort((item1, item2) {
+      if (item1.status == ParticipantStatus.onAir ||
+          item1.status == ParticipantStatus.connected) {
+        return -1;
+      } else if (item2.status == ParticipantStatus.onAir ||
+          item2.status == ParticipantStatus.connected) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    setState(() => participants = conferenceParticipants.toList());
     return Future.value();
   }
 }
