@@ -94,9 +94,11 @@ class _ParticipantGridState extends State<ParticipantGrid> {
         .conference
         .getParticipants(currentConference);
     conferenceParticipants.sort((item1, item2) {
-      if (item1.status == ParticipantStatus.onAir) {
+      if (item1.status == ParticipantStatus.onAir ||
+          item1.status == ParticipantStatus.connected) {
         return -1;
-      } else if (item2.status == ParticipantStatus.onAir) {
+      } else if (item2.status == ParticipantStatus.onAir ||
+          item2.status == ParticipantStatus.connected) {
         return 1;
       } else {
         return 0;
