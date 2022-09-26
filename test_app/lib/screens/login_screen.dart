@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+import 'join_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,8 +8,6 @@ import '/widgets/dolby_title.dart';
 import '/widgets/input_text_field.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/text_form_field.dart';
-import 'join_screen.dart';
-import 'dart:developer' as developer;
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({
@@ -20,19 +20,18 @@ class LoginScreen extends StatelessWidget {
       left: false,
       right: false,
       child: Scaffold(
-          body: Container(
-              constraints: const BoxConstraints.expand(),
-              decoration: const BoxDecoration(color: Colors.deepPurple),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  DolbyTitle(
-                    title: 'Dolby.io',
-                    subtitle: 'Flutter SDK',
-                  ),
-                  LoginScreenContent()
-                ],
-              ))),
+        body: Container(
+          constraints: const BoxConstraints.expand(),
+          decoration: const BoxDecoration(color: Colors.deepPurple),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
+              LoginScreenContent()
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -111,13 +110,14 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
               ),
               const SizedBox(height: 16),
               PrimaryButton(
-                  color: Colors.deepPurple,
-                  widgetText: isLogging
-                      ? const WhiteCircularProgressIndicator()
-                      : const Text('Login'),
-                  onPressed: () {
-                    onLoginButtonPressed();
-                  })
+                color: Colors.deepPurple,
+                widgetText: isLogging
+                    ? const WhiteCircularProgressIndicator()
+                    : const Text('Login'),
+                onPressed: () {
+                  onLoginButtonPressed();
+                },
+              )
             ],
           ),
         ),
@@ -167,11 +167,14 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   }
 
   void navigateToJoinConference() async {
-    await Navigator.of(context).push(MaterialPageRoute(
+    await Navigator.of(context).push(
+      MaterialPageRoute(
         settings: const RouteSettings(name: "JoinConferenceScreen"),
         builder: (context) => JoinConference(
             username: usernameTextController.text,
-            externalId: externalIdTextController.text)));
+            externalId: externalIdTextController.text),
+      ),
+    );
     setState(() => isLogging = false);
   }
 
