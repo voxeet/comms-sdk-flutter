@@ -589,6 +589,11 @@ void main() {
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setFetchConferenceReturn",
         args: {"type": 4});
+    
+    await runNative(
+        methodChannel: conferenceServiceAssertsMethodChannel,
+        label: "setCurrentConference",
+        args: {"type": 4});
 
     var conference = Conference(
         "conference_alias",
