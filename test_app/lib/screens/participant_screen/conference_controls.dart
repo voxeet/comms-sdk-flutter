@@ -1,4 +1,5 @@
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/bottom_tool_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/conference_action_icon_button.dart';
@@ -26,45 +27,38 @@ class _ConferenceControlsState extends State<ConferenceControls> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            boxShadow: [
-              BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 0.8)
-            ]),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-          ConferenceActionIconButton(
-            onPressedIcon: () {
-              muteLocalParticipant();
-            },
-            backgroundIconColor: Colors.deepPurple,
-            iconWidget: isMicOff
-                ? const Icon(Icons.mic_off, size: 30)
-                : const Icon(Icons.mic, size: 30),
-          ),
-          ConferenceActionIconButton(
-            onPressedIcon: () {
-              if (isVideoOff) {
-                onStartVideo();
-              } else {
-                onStopVideo();
-              }
-              setState(() => isVideoOff = !isVideoOff);
-            },
-            backgroundIconColor: Colors.deepPurple,
-            iconWidget: isVideoOff
-                ? const Icon(Icons.videocam_off)
-                : const Icon(Icons.videocam),
-          ),
-          ConferenceActionIconButton(
-              onPressedIcon: () {
-                leaveConferenceDialog(context);
-              },
-              iconWidget: const Icon(Icons.phone),
-              backgroundIconColor: Colors.red),
-        ]));
+    return BottomToolBar(children: [
+      ConferenceActionIconButton(
+        onPressedIcon: () {
+          muteLocalParticipant();
+        },
+        backgroundIconColor: Colors.deepPurple,
+        iconWidget: isMicOff
+            ? const Icon(Icons.mic_off, size: 30)
+            : const Icon(Icons.mic, size: 30),
+      ),
+      ConferenceActionIconButton(
+        onPressedIcon: () {
+          if (isVideoOff) {
+            onStartVideo();
+          } else {
+            onStopVideo();
+          }
+          setState(() => isVideoOff = !isVideoOff);
+        },
+        backgroundIconColor: Colors.deepPurple,
+        iconWidget: isVideoOff
+            ? const Icon(Icons.videocam_off)
+            : const Icon(Icons.videocam),
+      ),
+      ConferenceActionIconButton(
+        onPressedIcon: () {
+          leaveConferenceDialog(context);
+        },
+        iconWidget: const Icon(Icons.phone),
+        backgroundIconColor: Colors.red,
+      ),
+    ]);
   }
 
   Future<void> leaveConferenceDialog(BuildContext context) async {
