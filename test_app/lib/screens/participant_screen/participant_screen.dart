@@ -167,11 +167,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         .getParticipants(currentConference);
     final localParticipant =
         await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
-    if (localParticipant.status == ParticipantStatus.left ||
-        localParticipant.status == ParticipantStatus.kicked) {
-      navigator.popUntil(ModalRoute.withName("JoinConferenceScreen"));
-      return Future.value();
-    }
     final availableParticipants = conferenceParticipants
         .where((element) => element.status != ParticipantStatus.left);
     if (availableParticipants.isNotEmpty) {
