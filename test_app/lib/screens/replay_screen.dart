@@ -90,7 +90,7 @@ class _ReplayScreenContentState extends State<ReplayScreenContent> {
                     style: const TextStyle(fontSize: 16)),
               ),
             ),
-            const Expanded(child: ParticipantGrid()),
+            const Expanded(child: ParticipantGrid(remoteOptionsFlag: false,)),
             const ReplayControllsWidget(),
           ],
         ),

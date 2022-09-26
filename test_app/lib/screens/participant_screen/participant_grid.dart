@@ -7,7 +7,8 @@ import 'participant_widget.dart';
 import 'dart:developer' as developer;
 
 class ParticipantGrid extends StatefulWidget {
-  const ParticipantGrid({Key? key}) : super(key: key);
+  final bool remoteOptionsFlag;
+  const ParticipantGrid({Key? key, required this.remoteOptionsFlag}) : super(key: key);
 
   @override
   State<ParticipantGrid> createState() => _ParticipantGridState();
@@ -80,7 +81,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
           itemBuilder: (context, index) {
             var participant = participants[index];
             return ParticipantWidget(
-                participant: participant, isLocal: index == 0);
+                participant: participant, remoteOptionsFlag: index == 0? false: widget.remoteOptionsFlag);
           }),
     );
   }
