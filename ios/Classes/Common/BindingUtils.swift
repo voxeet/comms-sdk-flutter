@@ -19,14 +19,14 @@ struct FlutterMethodCallArguments {
         }
         
         func decode<T: Decodable>(type: T.Type) throws -> T? {
-            guard let argument = argument else {
+            guard let argument = argument, !(argument is NSNull) else {
                 return nil
             }
             return try FlutterValueDecoder(value: argument).decode(type: type)
         }
         
         func decode<T: FlutterConvertible>() throws -> T? {
-            guard let argument = argument else {
+            guard let argument = argument, !(argument is NSNull) else {
                 return nil
             }
             return try T.fromFlutterValue(argument)
