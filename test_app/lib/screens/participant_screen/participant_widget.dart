@@ -5,10 +5,10 @@ import 'remote_participant_options.dart';
 
 class ParticipantWidget extends StatelessWidget {
   final Participant participant;
-  final bool isLocal;
+  final bool remoteOptionsFlag;
 
   const ParticipantWidget(
-      {Key? key, required this.participant, required this.isLocal})
+      {Key? key, required this.participant, required this.remoteOptionsFlag})
       : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class ParticipantWidget extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-          flex: 5,
+          flex: 8,
           child: VideoView.withMediaStream(
             participant: participant,
             mediaStream: participant.streams?.firstWhereOrNull(
@@ -26,7 +26,7 @@ class ParticipantWidget extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
+          flex: 2,
           child: Container(
             decoration: const BoxDecoration(
               color: Colors.deepPurple,
@@ -38,10 +38,10 @@ class ParticipantWidget extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(left: 12),
                   child: Text(
-                      '${getParticipantName()}: ${getParticipantStatus()!}',
+                      '${getParticipantName()}\n${getParticipantStatus()!}',
                       style: const TextStyle(color: Colors.white)),
                 ),
-                if (!isLocal)
+                if (remoteOptionsFlag)
                   RemoteParticipantOptions(participant: participant),
               ],
             ),

@@ -121,7 +121,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
             Expanded(
               child: Stack(
                 children: [
-                  const ParticipantGrid(),
+                  const ParticipantGrid(remoteOptionsFlag: true,),
                   Positioned(
                     left: 10,
                     bottom: 10,
