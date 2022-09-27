@@ -82,43 +82,45 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
         decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Form(
-                  key: formKey,
-                  autovalidateMode: AutovalidateMode.disabled,
-                  child: Column(
-                    children: [
-                      InputTextFormField(
-                          labelText: 'Access token',
-                          controller: accessTokenTextController,
-                          focusColor: Colors.deepPurple),
-                      const SizedBox(height: 16),
-                      InputTextFormField(
-                          labelText: 'Username',
-                          controller: usernameTextController,
-                          focusColor: Colors.deepPurple),
-                    ],
-                  )),
-              const SizedBox(height: 16),
-              InputTextField(
-                labelText: 'External ID (optional)',
-                controller: externalIdTextController,
-              ),
-              const SizedBox(height: 16),
-              PrimaryButton(
-                color: Colors.deepPurple,
-                widgetText: isLogging
-                    ? const WhiteCircularProgressIndicator()
-                    : const Text('Login'),
-                onPressed: () {
-                  onLoginButtonPressed();
-                },
-              )
-            ],
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Form(
+                    key: formKey,
+                    autovalidateMode: AutovalidateMode.disabled,
+                    child: Column(
+                      children: [
+                        InputTextFormField(
+                            labelText: 'Access token',
+                            controller: accessTokenTextController,
+                            focusColor: Colors.deepPurple),
+                        const SizedBox(height: 16),
+                        InputTextFormField(
+                            labelText: 'Username',
+                            controller: usernameTextController,
+                            focusColor: Colors.deepPurple),
+                      ],
+                    )),
+                const SizedBox(height: 16),
+                InputTextField(
+                  labelText: 'External ID (optional)',
+                  controller: externalIdTextController,
+                ),
+                const SizedBox(height: 16),
+                PrimaryButton(
+                  color: Colors.deepPurple,
+                  widgetText: isLogging
+                      ? const WhiteCircularProgressIndicator()
+                      : const Text('Login'),
+                  onPressed: () {
+                    onLoginButtonPressed();
+                  },
+                )
+              ],
+            ),
           ),
         ),
       ),
