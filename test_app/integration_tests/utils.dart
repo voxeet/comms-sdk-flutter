@@ -12,7 +12,8 @@ const recordingServiceAssertsMethodChannel =
 const commandServiceAssertsMethodChannel =
     MethodChannel('IntegrationTesting.CommandServiceAsserts');
 const mediaDeviceServiceAssertsMethodChannel =
-    MethodChannel('IntegrationTesting.MediaDeviceServiceAsserts');
+    MethodChannel('IntegrationTesting.'
+        'MediaDeviceServiceAsserts');
 const videoPresentationServiceAssertsMethodChannel =
     MethodChannel('IntegrationTesting.VideoPresentationServiceAsserts');
 const notificationServiceAssertsMethodChannel =
