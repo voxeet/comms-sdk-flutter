@@ -24,25 +24,29 @@ class Participant {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "id": id,
-    "info": info?.toJson(),
-    "status": status?.encode(),
-    "type": type?.encode(),
-    "streams": streams?.map((e) => e.toJson()).toList()
-  };
+        "id": id,
+        "info": info?.toJson(),
+        "status": status?.encode(),
+        "type": type?.encode(),
+        "streams": streams?.map((e) => e.toJson()).toList()
+      };
 }
 
 /// The ParticipantPermissions class gathers information about the invited participants and their conference permissions.
 class ParticipantPermissions {
   /// The invited participant.
   Participant participant;
+
   /// The participant permissions.
   List<ConferencePermission> permissions;
 
   ParticipantPermissions(this.participant, this.permissions);
 
   /// Returns a representation of this object as a JSON object.
-  Map<String, Object?> toJson() => {"participant": participant.toJson(), "permissions": permissions.map((e) => e.encode()).toList()};
+  Map<String, Object?> toJson() => {
+        "participant": participant.toJson(),
+        "permissions": permissions.map((e) => e.encode()).toList()
+      };
 }
 
 /// The ParticipantStatus enum gathers the possible statuses of a conference participant.
@@ -56,7 +60,7 @@ enum ParticipantStatus {
   /// The participant has received a conference invitation and is connecting to the conference.
   connecting('CONNECTING'),
 
-  /// The invited participant has declined a conference invitation. 
+  /// The invited participant has declined a conference invitation.
   decline('DECLINE'),
 
   /// A peer connection has failed and the participant cannot connect to a conference.
@@ -75,14 +79,18 @@ enum ParticipantStatus {
   reserved('RESERVED'),
 
   /// The participant has encountered a peer connection problem that may result in the Error or Connected status.
-  warning('WARNING');
+  warning('WARNING'),
+
+  /// The participant status is undefined
+  unknow('UNKNOWN');
 
   final String _value;
 
   const ParticipantStatus(this._value);
 
   static ParticipantStatus? decode(String? value) {
-    return ParticipantStatus.values.firstWhereOrNull((element) => element._value == value);
+    return ParticipantStatus.values
+        .firstWhereOrNull((element) => element._value == value);
   }
 
   String encode() {
@@ -108,7 +116,8 @@ enum ParticipantType {
   static ParticipantType? decode(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return ParticipantType.values
-      .firstWhereOrNull((element) => element._value == lowerCaseValue) ?? ParticipantType.unknown;
+            .firstWhereOrNull((element) => element._value == lowerCaseValue) ??
+        ParticipantType.unknown;
   }
 
   String encode() {
@@ -120,11 +129,15 @@ enum ParticipantType {
 class ParticipantInvited {
   /// Information about the invited participant.
   ParticipantInfo info;
+
   /// The participant permissions.
   List<ConferencePermission>? permissions;
 
   ParticipantInvited(this.info, this.permissions);
 
   /// Returns a representation of this object as a JSON object.
-  Map<String, Object?> toJson() => {"info": info.toJson(), "permisions": permissions?.map((e) => e.encode()).toList()};
+  Map<String, Object?> toJson() => {
+        "info": info.toJson(),
+        "permisions": permissions?.map((e) => e.encode()).toList()
+      };
 }

@@ -9,11 +9,15 @@ import 'package:mockito/mockito.dart';
 
 import '../mock/mock_method_channel.dart';
 
-final userToInvite =
-    Participant("my_id2", ParticipantInfo("userToInvite", null, null), ParticipantStatus.connected, ParticipantType.user);
+final userToInvite = Participant(
+    "my_id2",
+    ParticipantInfo("userToInvite", null, null),
+    ParticipantStatus.connected,
+    ParticipantType.user);
 
 var participants = [
-  Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.user),
+  Participant("my_id", ParticipantInfo("test", null, null),
+      ParticipantStatus.connected, ParticipantType.user),
   userToInvite
 ];
 
@@ -21,12 +25,15 @@ var participantsInvitation = [
   ParticipantInvited(userToInvite.info!, [ConferencePermission.sendAudio])
 ];
 
-var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.joined);
+var conference = Conference(
+    "test_conf", "test_id", true, participants, ConferenceStatus.joined);
 
 void main() {
   var notificationService = DolbyioCommsSdk.instance.notification;
 
-  final MethodChannel channel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("notification_service");
+  final MethodChannel channel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel(
+          "notification_service");
   final mockMethodChannel = MockMethodChannel();
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -46,7 +53,10 @@ void main() {
 
     verify(channel.invokeMethod(
       "invite",
-      {"conference": conference.toJson(), "participants": participantsInvitation.map((e) => e.toJson()).toList()},
+      {
+        "conference": conference.toJson(),
+        "participants": participantsInvitation.map((e) => e.toJson()).toList()
+      },
     )).called(1);
   });
 

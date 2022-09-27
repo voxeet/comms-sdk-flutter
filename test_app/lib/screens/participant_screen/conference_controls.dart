@@ -1,12 +1,21 @@
+import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/bottom_tool_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/conference_action_icon_button.dart';
 import 'dart:developer' as developer;
 
+typedef ParticipantConferenceStatus = void Function(
+    bool closeSessionOnDeactivate);
+
 class ConferenceControls extends StatefulWidget {
   final Future<Conference?> conference;
-
-  const ConferenceControls({Key? key, required this.conference}) : super(key: key);
+  final ParticipantConferenceStatus updateCloseSessionFlag;
+  const ConferenceControls(
+      {Key? key,
+      required this.conference,
+      required this.updateCloseSessionFlag})
+      : super(key: key);
 
   @override
   State<ConferenceControls> createState() => _ConferenceControlsState();
@@ -18,41 +27,38 @@ class _ConferenceControlsState extends State<ConferenceControls> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: const BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            boxShadow: [BoxShadow(color: Colors.black12, spreadRadius: 1, blurRadius: 0.8)]
-        ),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ConferenceActionIconButton(
-                onPressedIcon: () { muteLocalParticipant(); },
-                backgroundIconColor: Colors.deepPurple,
-                iconWidget: isMicOff ? const Icon(Icons.mic_off, size: 30) : const Icon(Icons.mic, size: 30),
-              ),
-              ConferenceActionIconButton(
-                onPressedIcon: () {
-                  if (isVideoOff) {
-                    onStartVideo();
-                  } else {
-                    onStopVideo();
-                  }
-                  setState(() => isVideoOff = !isVideoOff);
-                },
-                backgroundIconColor: Colors.deepPurple,
-                iconWidget: isVideoOff ? const Icon(Icons.videocam_off) : const Icon(Icons.videocam),
-              ),
-              ConferenceActionIconButton(
-                  onPressedIcon: () { leaveConferenceDialog(context); },
-                  iconWidget: const Icon(Icons.phone),
-                  backgroundIconColor: Colors.red
-              ),
-            ]
-        )
-    );
+    return BottomToolBar(children: [
+      ConferenceActionIconButton(
+        onPressedIcon: () {
+          muteLocalParticipant();
+        },
+        backgroundIconColor: Colors.deepPurple,
+        iconWidget: isMicOff
+            ? const Icon(Icons.mic_off, size: 30)
+            : const Icon(Icons.mic, size: 30),
+      ),
+      ConferenceActionIconButton(
+        onPressedIcon: () {
+          if (isVideoOff) {
+            onStartVideo();
+          } else {
+            onStopVideo();
+          }
+          setState(() => isVideoOff = !isVideoOff);
+        },
+        backgroundIconColor: Colors.deepPurple,
+        iconWidget: isVideoOff
+            ? const Icon(Icons.videocam_off)
+            : const Icon(Icons.videocam),
+      ),
+      ConferenceActionIconButton(
+        onPressedIcon: () {
+          leaveConferenceDialog(context);
+        },
+        iconWidget: const Icon(Icons.phone),
+        backgroundIconColor: Colors.red,
+      ),
+    ]);
   }
 
   Future<void> leaveConferenceDialog(BuildContext context) async {
@@ -61,20 +67,25 @@ class _ConferenceControlsState extends State<ConferenceControls> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Leaving options'),
-          content: const Text('Do you want to close session while leaving conference?'),
+          content: const Text(
+              'Do you want to close session while leaving conference?'),
           actions: <TextButton>[
             TextButton(
               child: const Text('YES'),
               onPressed: () {
-                leaveConference(closeSession: true);
-                Navigator.of(context).pop();
+                widget.updateCloseSessionFlag(true);
+                Navigator.of(context).popUntil(
+                  ModalRoute.withName("LoginScreen"),
+                );
               },
             ),
             TextButton(
               child: const Text('NO'),
               onPressed: () {
-                leaveConference(closeSession: false);
-                Navigator.of(context).pop();
+                widget.updateCloseSessionFlag(false);
+                Navigator.of(context).popUntil(
+                  ModalRoute.withName("JoinConferenceScreen"),
+                );
               },
             ),
             TextButton(
@@ -92,18 +103,24 @@ class _ConferenceControlsState extends State<ConferenceControls> {
   void muteLocalParticipant() {
     if (isMicOff == false) {
       widget.conference.then((current) {
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .mute(current!.participants.first, true)
-            .then((value) => developer.log('Local participant has been muted.'))
-            .onError((error, stackTrace) => onError('Error during mutting.', error));
+        _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+            (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+                .mute(participant, true)
+                .then((value) =>
+                    developer.log('Local participant has been muted.'))
+                .onError((error, stackTrace) =>
+                    onError('Error during mutting.', error)));
       });
       setState(() => isMicOff = true);
     } else {
-        widget.conference.then((current) {
-          _dolbyioCommsSdkFlutterPlugin.conference
-          .mute(current!.participants.first, false)
-          .then((value) => developer.log('Local participant has been unmuted.'))
-          .onError((error, stackTrace) => onError('Error during unmutting.', error));
+      widget.conference.then((current) {
+        _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+            (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+                .mute(participant, false)
+                .then((value) =>
+                    developer.log('Local participant has been unmuted.'))
+                .onError((error, stackTrace) =>
+                    onError('Error during unmutting.', error)));
       });
       setState(() => isMicOff = false);
     }
@@ -111,42 +128,26 @@ class _ConferenceControlsState extends State<ConferenceControls> {
 
   void onStopVideo() {
     widget.conference.then((current) {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .stopVideo(current!.participants.first)
-          .then((value) => developer.log('Local participant video has been stopped.'))
-          .onError((error, stackTrace) => onError('Error during stopping video.', error));
+      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+          (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+              .stopVideo(participant)
+              .then((value) =>
+                  developer.log('Local participant video has been stopped.'))
+              .onError((error, stackTrace) =>
+                  onError('Error during stopping video.', error)));
     });
   }
 
   void onStartVideo() {
     widget.conference.then((current) {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .startVideo(current!.participants.first)
-          .then((value) => developer.log('Local participant video has been started.'))
-          .onError((error, stackTrace) => onError('Error during starting video.', error));
+      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+          (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+              .startVideo(participant)
+              .then((value) =>
+                  developer.log('Local participant video has been started.'))
+              .onError((error, stackTrace) =>
+                  onError('Error during starting video.', error)));
     });
-  }
-
-  void leaveConference({required bool closeSession})  {
-    if(closeSession) {
-        var options = ConferenceLeaveOptions(true);
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .leave(options: options)
-            .then((value) {
-              Navigator.of(context).popUntil(ModalRoute.withName("LoginScreen"));
-            })
-            .onError((error, stackTrace) { onError('Error during leaving', error); });
-      } else {
-        var options = ConferenceLeaveOptions(false);
-        widget.conference.then((current) {
-          _dolbyioCommsSdkFlutterPlugin.conference
-              .leave(options: options)
-              .then((value) {
-                Navigator.of(context).popUntil(ModalRoute.withName("JoinConferenceScreen"));
-              })
-              .onError((error, stackTrace) {onError('Error during leaving', error);});
-        });
-      }
   }
 
   void onError(String message, Object? error) {

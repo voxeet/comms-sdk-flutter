@@ -14,24 +14,27 @@ class ViewDialogs {
       await showDialog(
         context: context,
         builder: (_) {
-          List<TextButton> cancelButton = cancelText != null ? [
-              TextButton(
-                onPressed: () {
-                  result?.call(false);
-                  Navigator.pop(context);
-                },
-                child: Text(cancelText),
-              )
-            ] : [];
-          var buttons = cancelButton + [
-            TextButton(
-              onPressed: () {
-                result?.call(true);
-                Navigator.pop(context);
-              },
-              child: Text(okText),
-            )
-          ];
+          List<TextButton> cancelButton = cancelText != null
+              ? [
+                  TextButton(
+                    onPressed: () {
+                      result?.call(false);
+                      Navigator.pop(context);
+                    },
+                    child: Text(cancelText),
+                  )
+                ]
+              : [];
+          var buttons = cancelButton +
+              [
+                TextButton(
+                  onPressed: () {
+                    result?.call(true);
+                    Navigator.pop(context);
+                  },
+                  child: Text(okText),
+                )
+              ];
 
           return AlertDialog(
             shape: RoundedRectangleBorder(

@@ -156,7 +156,7 @@ extension DTO {
             case "SEND_MESSAGE": conferencePermission = .sendMessage
             case "RECORD": conferencePermission = .record
             case "STREAM": conferencePermission = .stream
-            default: fatalError("TODO: Throw actual error here")
+            default: throw EncoderError.decoderFailed()
             }
         }
 
@@ -176,7 +176,7 @@ extension DTO {
             case .sendMessage: try container.encode("SEND_MESSAGE")
             case .record: try container.encode("RECORD")
             case .stream: try container.encode("STREAM")
-            @unknown default: fatalError("TODO: Throw actual error here")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
 
@@ -207,7 +207,7 @@ extension DTO {
             case "ENDED": status = .ended
             case "DESTROYED": status = .destroyed
             case "ERROR": status = .error
-            default: fatalError("TODO: Throw actual error here")
+            default: throw EncoderError.decoderFailed()
             }
         }
 
@@ -224,7 +224,7 @@ extension DTO {
             case .ended: try container.encode("ENDED")
             case .destroyed: try container.encode("DESTROYED")
             case .error: try container.encode("ERROR")
-            @unknown default: fatalError("TODO: Throw actual error here")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
 
@@ -339,7 +339,7 @@ extension DTO {
         }
         
         static func fromFlutterValue(_ value: Any) throws -> LocalStatsFlutterConvertible {
-            fatalError("Not implemented")
+            throw EncoderError.notImplemented()
         }
         
         func toFlutterValue() -> Any {

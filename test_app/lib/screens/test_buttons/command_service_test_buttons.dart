@@ -10,10 +10,12 @@ class CommandServiceTestButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SecondaryButton(text: 'Send message', onPressed: () => send(context));
+    return SecondaryButton(
+        text: 'Send message', onPressed: () => send(context));
   }
 
-  Future<void> showDialog(BuildContext context, String title, String text) async {
+  Future<void> showDialog(
+      BuildContext context, String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
       title: title,
@@ -25,6 +27,7 @@ class CommandServiceTestButtons extends StatelessWidget {
     _dolbyioCommsSdkFlutterPlugin.command
         .send("Test message")
         .then((value) => showDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
   }
 }

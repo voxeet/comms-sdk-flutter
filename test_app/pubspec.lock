@@ -70,7 +70,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "3.6.0-beta.1"
+    version: "3.6.0-beta.2"
   fake_async:
     dependency: transitive
     description:
@@ -124,7 +124,7 @@ packages:
     source: hosted
     version: "2.0.7"
   flutter_spinkit:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_spinkit
       url: "https://pub.dartlang.org"

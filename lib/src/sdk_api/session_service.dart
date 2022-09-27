@@ -6,10 +6,9 @@ import 'models/participant_info.dart';
 
 /// The SessionService allows connecting the SDK with the Dolby.io backend via the [open] method. Opening a session is mandatory before interacting with any service.
 class SessionService {
-
   /// @internal
   final _methodChannel =
-  DolbyioCommsSdkFlutterPlatform.createMethodChannel("session_service");
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel("session_service");
 
   /// Opens a new session to connect the SDK with the Dolby.io backend. The [participantInfo] parameter refers to an additional information about the local participant.
   Future<void> open(ParticipantInfo participantInfo) async {
@@ -30,7 +29,8 @@ class SessionService {
 
   /// Provides the local participant object that belongs to the current session.
   Future<Participant?> getParticipant() async {
-    final result = await _methodChannel.invokeMethod<Map<Object?, Object?>>('getParticipant');
+    final result = await _methodChannel
+        .invokeMethod<Map<Object?, Object?>>('getParticipant');
     return result != null ? ParticipantMapper.fromMap(result) : null;
   }
 

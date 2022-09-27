@@ -18,15 +18,16 @@ extension NativeEventsListener on Stream {
 }
 
 class DolbyioCommsSdkNativeEventsReceiver<T extends EnumWithStringValue> {
-
   // final EventChannel _eventChannel;
   final Stream<dynamic> _stream;
 
   DolbyioCommsSdkNativeEventsReceiver(this._stream);
 
-  factory DolbyioCommsSdkNativeEventsReceiver.forModuleNamed(String moduleName) {
+  factory DolbyioCommsSdkNativeEventsReceiver.forModuleNamed(
+      String moduleName) {
     final eventChannel = EventChannel('dolbyio_${moduleName}_event_channel');
-    return DolbyioCommsSdkNativeEventsReceiver(eventChannel.receiveBroadcastStream());
+    return DolbyioCommsSdkNativeEventsReceiver(
+        eventChannel.receiveBroadcastStream());
   }
 
   Stream<dynamic> addListener(List<T> events) {
@@ -36,15 +37,13 @@ class DolbyioCommsSdkNativeEventsReceiver<T extends EnumWithStringValue> {
       return eventNames.contains(eventData["key"]);
     });
   }
-
 }
 
-/// Describes a generic event. 
-/// 
-/// The generic [T] is the type of the event and is usually an enum, while [B] is the body of 
+/// Describes a generic event.
+///
+/// The generic [T] is the type of the event and is usually an enum, while [B] is the body of
 /// the event which is typically a class for which some change has happened.
 class Event<T, B> {
-
   /// The type of the event that is usually an element of an enum.
   T type;
 

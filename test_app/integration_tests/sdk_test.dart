@@ -13,24 +13,27 @@ void main() {
   });
 
   testWidgets('VoxeetSDK: initilise', (tester) async {
-
-    dolbyioCommsSdkFlutterPlugin.initialize("test_consumer_key", "test_consumer_secret");
+    dolbyioCommsSdkFlutterPlugin.initialize(
+        "test_consumer_key", "test_consumer_secret");
     await expectNative(
-      methodChannel: voxeetSDKAsertsMethodChannel,
-      assertLabel: "assertInitializeConsumerKeyAndSecret", 
-      expected: {
-        "consumerKey": "test_consumer_key", 
-        "consumerSecret": "test_consumer_secret"});
+        methodChannel: voxeetSDKAsertsMethodChannel,
+        assertLabel: "assertInitializeConsumerKeyAndSecret",
+        expected: {
+          "consumerKey": "test_consumer_key",
+          "consumerSecret": "test_consumer_secret"
+        });
 
     await resetSDK();
 
-    dolbyioCommsSdkFlutterPlugin.initialize("test_consumer_key1", "test_consumer_secret2");
+    dolbyioCommsSdkFlutterPlugin.initialize(
+        "test_consumer_key1", "test_consumer_secret2");
     await expectNative(
-      methodChannel: voxeetSDKAsertsMethodChannel,
-      assertLabel: "assertInitializeConsumerKeyAndSecret", 
-      expected: { 
-        "consumerKey": "test_consumer_key1", 
-        "consumerSecret": "test_consumer_secret2" });
+        methodChannel: voxeetSDKAsertsMethodChannel,
+        assertLabel: "assertInitializeConsumerKeyAndSecret",
+        expected: {
+          "consumerKey": "test_consumer_key1",
+          "consumerSecret": "test_consumer_secret2"
+        });
   });
 
   testWidgets('VoxeetSDK: initializeToken', (tester) async {

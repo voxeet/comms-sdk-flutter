@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 
-class StatusSnackbar{
-
-  static const snackBarDisplayDuration = Duration(milliseconds: 700);
-
-  static buildSnackbar(BuildContext context, String body) {
+class StatusSnackbar {
+  static buildSnackbar(BuildContext context, String body, Duration duration) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(body),
-      duration: snackBarDisplayDuration,
+      duration: duration,
       backgroundColor: Colors.deepPurple,
     ));
   }

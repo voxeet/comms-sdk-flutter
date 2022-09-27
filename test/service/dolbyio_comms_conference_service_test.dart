@@ -14,7 +14,8 @@ import '../mock/mock_method_channel.dart';
 import '../test_helpers.dart';
 import 'dolbyio_comms_conference_service_test.mocks.dart';
 
-var participant = Participant("my_id", ParticipantInfo("test", null, null), ParticipantStatus.connected, ParticipantType.user);
+var participant = Participant("my_id", ParticipantInfo("test", null, null),
+    ParticipantStatus.connected, ParticipantType.user);
 var participantMap = {
   "id": "my_id",
   "info": {
@@ -28,7 +29,8 @@ var participantMap = {
 };
 
 var participants = [participant];
-var conference = Conference("test_conf", "test_id", true, participants, ConferenceStatus.joined);
+var conference = Conference(
+    "test_conf", "test_id", true, participants, ConferenceStatus.joined);
 var conferenceMap = {
   "alias": "test_conf",
   "id": "test_id",
@@ -41,7 +43,8 @@ var conferenceMap = {
 void main() {
   var sessionService = MockSessionService();
   var conferenceService = ConferenceService(sessionService);
-  final MethodChannel channel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("conference_service");
+  final MethodChannel channel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel("conference_service");
 
   final mockMethodChannel = MockMethodChannel();
 
@@ -63,7 +66,8 @@ void main() {
       ..ttl = 1000
       ..videoCodec = Codec.h264;
     var createOptions = ConferenceCreateOption("conference", createParams, 1);
-    when(channel.invokeMethod("create", createOptions.toJson())).thenAnswer((_) => Future.value(conference.toJson()));
+    when(channel.invokeMethod("create", createOptions.toJson()))
+        .thenAnswer((_) => Future.value(conference.toJson()));
 
     var result = await conferenceService.create(createOptions);
 
@@ -82,7 +86,8 @@ void main() {
   });
 
   test("test current method", () async {
-    when(channel.invokeMethod("current")).thenAnswer((_) => Future.value(conference.toJson()));
+    when(channel.invokeMethod("current"))
+        .thenAnswer((_) => Future.value(conference.toJson()));
 
     var result = await conferenceService.current();
 
@@ -91,16 +96,19 @@ void main() {
   });
 
   test("test fetch method", () async {
-    when(channel.invokeMethod("fetch", {"conferenceId": conference.id})).thenAnswer((_) => Future.value(conference.toJson()));
+    when(channel.invokeMethod("fetch", {"conferenceId": conference.id}))
+        .thenAnswer((_) => Future.value(conference.toJson()));
 
     var result = await conferenceService.fetch(conference.id);
 
     expectConference(result, conference);
-    verify(channel.invokeMethod("fetch", {"conferenceId": "test_id"})).called(1);
+    verify(channel.invokeMethod("fetch", {"conferenceId": "test_id"}))
+        .called(1);
   });
 
   test("test getAudioLevel method", () async {
-    when(channel.invokeMethod("getAudioLevel", participant.toJson())).thenAnswer((_) => Future.value(1.0));
+    when(channel.invokeMethod("getAudioLevel", participant.toJson()))
+        .thenAnswer((_) => Future.value(1.0));
 
     var result = await conferenceService.getAudioLevel(participant);
 
@@ -119,8 +127,10 @@ void main() {
       ..simulcast = true
       ..spatialAudio = true;
 
-    when(channel.invokeMethod("join", {"conference": conference.toJson(), "options": joinOptions.toJson()}))
-        .thenAnswer((_) => Future.value(conference.toJson()));
+    when(channel.invokeMethod("join", {
+      "conference": conference.toJson(),
+      "options": joinOptions.toJson()
+    })).thenAnswer((_) => Future.value(conference.toJson()));
 
     var result = await conferenceService.join(conference, joinOptions);
 
@@ -172,7 +182,8 @@ void main() {
   });
 
   test("test kick method", () async {
-    when(channel.invokeMethod("kick", participant.toJson())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("kick", participant.toJson()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.kick(participant);
 
@@ -181,7 +192,8 @@ void main() {
 
   test("test getParticipants method", () async {
     when(channel.invokeMethod("getParticipants", conference.toJson()))
-        .thenAnswer((_) => Future.value(participants.map((e) => e.toJson()).toList()));
+        .thenAnswer(
+            (_) => Future.value(participants.map((e) => e.toJson()).toList()));
 
     var result = await conferenceService.getParticipants(conference);
 
@@ -190,7 +202,9 @@ void main() {
   });
 
   test("test mute method", () async {
-    when(channel.invokeMethod("mute", {"isMuted": true, "participant": participant.toJson()})).thenAnswer((_) => Future.value(true));
+    when(channel.invokeMethod(
+            "mute", {"isMuted": true, "participant": participant.toJson()}))
+        .thenAnswer((_) => Future.value(true));
 
     var result = await conferenceService.mute(participant, true);
 
@@ -202,7 +216,8 @@ void main() {
   });
 
   test("test muteOutput method", () async {
-    when(channel.invokeMethod("muteOutput", {"isMuted": true})).thenAnswer((_) => Future.value(true));
+    when(channel.invokeMethod("muteOutput", {"isMuted": true}))
+        .thenAnswer((_) => Future.value(true));
 
     var result = await conferenceService.muteOutput(true);
 
@@ -226,7 +241,8 @@ void main() {
       "participant": participant.toJson(),
     })).thenAnswer((_) => Future.value());
 
-    await conferenceService.setSpatialPosition(participant: participant, position: position);
+    await conferenceService.setSpatialPosition(
+        participant: participant, position: position);
 
     verify(channel.invokeMethod("setSpatialPosition", {
       "position": {"x": 1.0, "y": 2.0, "z": 3.0},
@@ -234,23 +250,9 @@ void main() {
     })).called(1);
   });
 
-  test("test setSpatialPosition method without participant passed", () async {
-    var position = SpatialPosition(1.0, 2.0, 3.0);
-    when(channel.invokeMethod("setSpatialPosition", {
-      "position": position.toJson(),
-      "participant": null,
-    })).thenAnswer((_) => Future.value());
-
-    await conferenceService.setSpatialPosition(position: position);
-
-    verify(channel.invokeMethod("setSpatialPosition", {
-      "position": {"x": 1.0, "y": 2.0, "z": 3.0},
-      "participant": null
-    })).called(1);
-  });
-
   test("test startAudio method", () async {
-    when(channel.invokeMethod("startAudio", participant.toJson())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("startAudio", participant.toJson()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.startAudio(participant);
 
@@ -258,7 +260,8 @@ void main() {
   });
 
   test("test startVideo method", () async {
-    when(channel.invokeMethod("startVideo", participant.toJson())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("startVideo", participant.toJson()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.startVideo(participant);
 
@@ -266,7 +269,8 @@ void main() {
   });
 
   test("test stopAudio method", () async {
-    when(channel.invokeMethod("stopAudio", participant.toJson())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("stopAudio", participant.toJson()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.stopAudio(participant);
 
@@ -274,7 +278,8 @@ void main() {
   });
 
   test("test stopVideo method", () async {
-    when(channel.invokeMethod("stopVideo", participant.toJson())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("stopVideo", participant.toJson()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.stopVideo(participant);
 
@@ -282,7 +287,8 @@ void main() {
   });
 
   test("test startScreenShare method", () async {
-    when(channel.invokeMethod("startScreenShare")).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("startScreenShare"))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.startScreenShare();
 
@@ -290,7 +296,8 @@ void main() {
   });
 
   test("test stopScreenShare method", () async {
-    when(channel.invokeMethod("stopScreenShare")).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("stopScreenShare"))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.stopScreenShare();
 
@@ -299,11 +306,13 @@ void main() {
 
   test("test setSpatialDirection method", () async {
     var direction = SpatialDirection(1.0, 2.0, 3.0);
-    when(channel.invokeMethod("setSpatialDirection", direction.toJson())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("setSpatialDirection", direction.toJson()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.setSpatialDirection(direction);
 
-    verify(channel.invokeMethod("setSpatialDirection", {"x": 1.0, "y": 2.0, "z": 3.0})).called(1);
+    verify(channel.invokeMethod(
+        "setSpatialDirection", {"x": 1.0, "y": 2.0, "z": 3.0})).called(1);
   });
 
   test("test setSpatialEnvironment method", () async {
@@ -335,7 +344,8 @@ void main() {
   });
 
   test("test isSpeaking method", () async {
-    when(channel.invokeMethod("isSpeaking", participant.toJson())).thenAnswer((_) => Future.value(true));
+    when(channel.invokeMethod("isSpeaking", participant.toJson()))
+        .thenAnswer((_) => Future.value(true));
 
     var result = await conferenceService.isSpeaking(participant);
 
@@ -344,7 +354,8 @@ void main() {
   });
 
   test("test getStatus method", () async {
-    when(channel.invokeMethod("getStatus", conference.toJson())).thenAnswer((_) => Future.value('JOINED'));
+    when(channel.invokeMethod("getStatus", conference.toJson()))
+        .thenAnswer((_) => Future.value('JOINED'));
 
     var result = await conferenceService.getStatus(conference);
 
@@ -353,7 +364,8 @@ void main() {
   });
 
   test("test getMaxVideoForwarding method", () async {
-    when(channel.invokeMethod("getMaxVideoForwarding")).thenAnswer((_) => Future.value(3));
+    when(channel.invokeMethod("getMaxVideoForwarding"))
+        .thenAnswer((_) => Future.value(3));
 
     var result = await conferenceService.getMaxVideoForwarding();
 
@@ -368,7 +380,8 @@ void main() {
       "prioritizedParticipants": [participant.toJson()],
     })).thenAnswer((_) => Future.value(true));
 
-    var result = await conferenceService.setMaxVideoForwarding(maxVideoForwarding, [participant]);
+    var result = await conferenceService
+        .setMaxVideoForwarding(maxVideoForwarding, [participant]);
 
     expect(result, true);
     verify(channel.invokeMethod("setMaxVideoForwarding", {
@@ -386,7 +399,8 @@ void main() {
       "prioritizedParticipants": [participant.toJson()],
     })).thenAnswer((_) => Future.value(true));
 
-    var result = await conferenceService.setVideoForwarding(strategy, maxVideoForwarding, [participant]);
+    var result = await conferenceService
+        .setVideoForwarding(strategy, maxVideoForwarding, [participant]);
 
     expect(result, true);
     verify(channel.invokeMethod("setVideoForwarding", {
@@ -405,7 +419,8 @@ void main() {
     var result = await conferenceService.getParticipant("my_id");
 
     expectParticipant(result, participant);
-    verify(channel.invokeMethod("getParticipant", {"participantId": "my_id"})).called(1);
+    verify(channel.invokeMethod("getParticipant", {"participantId": "my_id"}))
+        .called(1);
   });
 
   test("test replay method", () async {
@@ -416,26 +431,39 @@ void main() {
       "conferenceAccessToken": replayOptions.conferenceAccessToken
     })).thenAnswer((_) => Future.value(conference.toJson()));
 
-    var result = await conferenceService.replay(conference: conference, replayOptions: replayOptions);
+    var result = await conferenceService.replay(
+        conference: conference, replayOptions: replayOptions);
 
     expectConference(result, conference);
-    verify(channel.invokeMethod("replay", {"conference": conferenceMap, "offset": 100, "conferenceAccessToken": "token"})).called(1);
+    verify(channel.invokeMethod("replay", {
+      "conference": conferenceMap,
+      "offset": 100,
+      "conferenceAccessToken": "token"
+    })).called(1);
   });
 
   test("test replay method without replay options", () async {
-    when(channel.invokeMethod("replay", {"conference": conference.toJson(), "offset": null, "conferenceAccessToken": null}))
-        .thenAnswer((_) => Future.value(conference.toJson()));
+    when(channel.invokeMethod("replay", {
+      "conference": conference.toJson(),
+      "offset": null,
+      "conferenceAccessToken": null
+    })).thenAnswer((_) => Future.value(conference.toJson()));
 
     var result = await conferenceService.replay(conference: conference);
 
     expectConference(result, conference);
-    verify(channel.invokeMethod("replay", {"conference": conferenceMap, "offset": null, "conferenceAccessToken": null})).called(1);
+    verify(channel.invokeMethod("replay", {
+      "conference": conferenceMap,
+      "offset": null,
+      "conferenceAccessToken": null
+    })).called(1);
   });
 
   test("test setAudioProcessing method", () async {
     var senderOptions = AudioProcessingSenderOptions()..audioProcessing = true;
     var options = AudioProcessingOptions()..send = senderOptions;
-    when(channel.invokeMethod("setAudioProcessing", options.toJson())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod("setAudioProcessing", options.toJson()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.setAudioProcessing(options);
 
@@ -448,7 +476,9 @@ void main() {
     var permissions = [
       ParticipantPermissions(participant, [ConferencePermission.sendAudio])
     ];
-    when(channel.invokeMethod("updatePermissions", permissions.map((e) => e.toJson()).toList())).thenAnswer((_) => Future.value());
+    when(channel.invokeMethod(
+            "updatePermissions", permissions.map((e) => e.toJson()).toList()))
+        .thenAnswer((_) => Future.value());
 
     await conferenceService.updatePermissions(permissions);
 

@@ -5,7 +5,11 @@ class PrimaryButton extends StatefulWidget {
   final void Function()? onPressed;
   final Color color;
 
-  const PrimaryButton({super.key, required this.widgetText, required this.onPressed, this.color = Colors.blue});
+  const PrimaryButton(
+      {super.key,
+      required this.widgetText,
+      required this.onPressed,
+      this.color = Colors.blue});
 
   @override
   State<PrimaryButton> createState() => _PrimaryButtonState();
@@ -17,7 +21,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
     return ElevatedButton(
         onPressed: widget.onPressed,
         style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.maxFinite,40),
+            minimumSize: const Size(double.maxFinite, 40),
             primary: widget.color,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

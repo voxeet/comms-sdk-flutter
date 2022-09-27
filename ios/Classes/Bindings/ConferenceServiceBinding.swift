@@ -36,7 +36,7 @@ class ConferenceServiceBinding: Binding {
     func currentConference(completionHandler: FlutterMethodCallCompletionHandler) {
         do {
             guard let conference = VoxeetSDK.shared.conference.current else {
-                throw BindingError.noConference("ConferenceServiceBinding: current conference not set")
+                throw BindingError.noCurrentConference
             }
             completionHandler.success(encodable: DTO.Confrence(conference: conference))
         } catch {
@@ -420,16 +420,26 @@ class ConferenceServiceBinding: Binding {
                 throw BindingError.noConferenceId
             }
             
-            let replayOptions = DTO.ReplayOptions(
-                offset: try flutterArguments.asDictionary(argKey: "offset").decode(),
-                conferenceAccessToken: try flutterArguments.asDictionary(argKey: "conferenceAccessToken").decode()
-            )
+            let replayOptions = VTReplayOptions()
+            let offset: Int? = try flutterArguments.asDictionary(argKey: "offset").decode()
+            if let offset = offset {
+                replayOptions.offset = offset
+            }
+            replayOptions.conferenceAccessToken = try flutterArguments.asDictionary(argKey: "conferenceAccessToken").decode()
             
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
                 VoxeetSDK.shared.conference.replay(
                     conference: conference,
-                    options: replayOptions?.toSdkType()) { error in
-                        completionHandler.handleError(error)?.orSuccess({ DTO.Confrence(conference: conference) })
+                    options: replayOptions) { error in
+                        if let error = error {
+                            completionHandler.failure(error)
+                            return
+                        }
+                        guard let conference = VoxeetSDK.shared.conference.current else {
+                            completionHandler.failure(BindingError.noCurrentConference)
+                            return
+                        }
+                        completionHandler.success(encodable: DTO.Confrence(conference: conference))
                     }
             }
         } catch {
@@ -645,7 +655,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 body: DTO.ConferenceStatus(status: status)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -655,13 +665,13 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 event: EventKeys.permissionsUpdated,
                 body: permissions.map { (rawPermission: Int) -> DTO.ConferencePermission in
                     guard let vtConferencePermission = VTConferencePermission(rawValue: rawPermission) else {
-                        fatalError("TODO: Throw error here")
+                        throw EncoderError.createObjectFailed()
                     }
                     return DTO.ConferencePermission(conferencePermision: vtConferencePermission)
                 }
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -672,7 +682,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 body: DTO.Participant(participant: participant)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -683,7 +693,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 body: DTO.Participant(participant: participant)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -697,7 +707,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 )
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -711,7 +721,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 )
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -725,7 +735,7 @@ extension ConferenceServiceBinding: VTConferenceDelegate {
                 )
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
 }

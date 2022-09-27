@@ -5,61 +5,61 @@ import 'package:permission_handler/permission_handler.dart';
 // Step 3: Import the Dolby.io Communications SDK for Flutter
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
- 
+
 import 'dart:math';
 import 'dart:core';
 import 'dart:developer' as developer;
- 
+
 void main() {
   runApp(const MaterialApp(home: FlutterScreen()));
 }
- 
+
 class FlutterScreen extends StatefulWidget {
   const FlutterScreen({Key? key}) : super(key: key);
- 
+
   @override
   State<FlutterScreen> createState() => _FlutterScreenState();
 }
- 
+
 class _FlutterScreenState extends State<FlutterScreen> {
   // Step 3: Instantiate the SDK here
   final dolbyioCommsSdk = DolbyioCommsSdk.instance;
- 
+
   TextEditingController usernameController = TextEditingController();
   TextEditingController conferenceNameController = TextEditingController();
- 
+
   // Generate a client access token from the Dolby.io dashboard
   // and insert the token to the accessToken variable
   String accessToken = '';
- 
+
   bool isLeaving = false;
   bool isJoining = false;
   bool isInitializedList = false;
- 
+
   // Step 7: Store the participants list here
   List<Participant> participants = [];
- 
+
   @override
   void initState() {
     super.initState();
 
     // Step 2: Request the microphone and camera permissions
     [
-        Permission.bluetoothConnect,
-        Permission.microphone,
-        Permission.camera,
+      Permission.bluetoothConnect,
+      Permission.microphone,
+      Permission.camera,
     ].request();
- 
+
     // Step 3: Call initializeSdk()
     initializeSdk();
 
     // Step 4: Call openSession()
     openSession();
- 
+
     // Step 7: Call updateParticipantsList()
     updateParticipantsList();
   }
- 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +84,8 @@ class _FlutterScreenState extends State<FlutterScreen> {
                         ),
                         const SizedBox(height: 12),
                         TextField(
-                          decoration: const InputDecoration(hintText: 'Conference name'),
+                          decoration: const InputDecoration(
+                              hintText: 'Conference name'),
                           controller: conferenceNameController,
                         ),
                         const SizedBox(height: 12),
@@ -94,8 +95,8 @@ class _FlutterScreenState extends State<FlutterScreen> {
                             await joinConference();
                           },
                           child: isJoining
-                            ? const Text('Joining...')
-                            : const Text('Join the conference'),
+                              ? const Text('Joining...')
+                              : const Text('Join the conference'),
                         ),
                       ],
                     ),
@@ -136,7 +137,8 @@ class _FlutterScreenState extends State<FlutterScreen> {
                             itemCount: participants.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                title: Text("${participants[index].info!.name} (${participants[index].status?.name})"),
+                                title: Text(
+                                    "${participants[index].info!.name} (${participants[index].status?.name})"),
                                 leading: const Icon(
                                   Icons.person,
                                   color: Colors.black,
@@ -156,17 +158,19 @@ class _FlutterScreenState extends State<FlutterScreen> {
                             await leaveConference();
                           },
                           child: isJoining
-                            ? const Text('Leaving...')
-                            : const Text('Leave the conference'),
+                              ? const Text('Leaving...')
+                              : const Text('Leave the conference'),
                         )
                       ])
-                    : const Center(child: Text("Join the conference to see the list of participants.")))
+                    : const Center(
+                        child: Text(
+                            "Join the conference to see the list of participants.")))
           ],
         ),
       ),
     );
   }
- 
+
   // Step 3: Define the initializeSdk function
   Future<void> initializeSdk() async {
     // Initialize the SDK with the access token
@@ -181,7 +185,7 @@ class _FlutterScreenState extends State<FlutterScreen> {
     // Generate a random username
     int randomNumber = Random().nextInt(1000);
     usernameController.text = "user-$randomNumber";
-  
+
     // Open a new session for the local participant
     var participantInfo = ParticipantInfo(usernameController.text, null, null);
     await dolbyioCommsSdk.session.open(participantInfo);
@@ -194,7 +198,8 @@ class _FlutterScreenState extends State<FlutterScreen> {
     // Create conference options
     var params = ConferenceCreateParameters();
     params.dolbyVoice = true;
-    var createOptions = ConferenceCreateOption(conferenceNameController.text, params, 0);
+    var createOptions =
+        ConferenceCreateOption(conferenceNameController.text, params, 0);
 
     // Join the conference with audio and video
     var joinOptions = ConferenceJoinOptions();
@@ -218,24 +223,25 @@ class _FlutterScreenState extends State<FlutterScreen> {
     setState(() => isLeaving = true);
 
     await dolbyioCommsSdk.conference.leave(options: null);
-    
+
     setState(() => isInitializedList = true);
     setState(() => isLeaving = true);
   }
 
   // Step 7: Define the updateParticipantsList method
   void updateParticipantsList() {
-    dolbyioCommsSdk.conference.onParticipantsChange()
-      .listen((params) async {
-        try {
-          var conference = await dolbyioCommsSdk.conference.current();
-          var participantsList = await dolbyioCommsSdk.conference.getParticipants(conference);
-          
-          setState(() => participants = participantsList);
-          setState(() => isInitializedList = true);
-        } catch (error) {
-          developer.log("Error during initializing participant list.", error: error);
-        }
-      });
+    dolbyioCommsSdk.conference.onParticipantsChange().listen((params) async {
+      try {
+        var conference = await dolbyioCommsSdk.conference.current();
+        var participantsList =
+            await dolbyioCommsSdk.conference.getParticipants(conference);
+
+        setState(() => participants = participantsList);
+        setState(() => isInitializedList = true);
+      } catch (error) {
+        developer.log("Error during initializing participant list.",
+            error: error);
+      }
+    });
   }
 }

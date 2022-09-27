@@ -18,15 +18,20 @@ import io.dolby.comms.sdk.flutter.module.NotificationServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.RecordingServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.SessionServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.VideoPresentationServiceModule
+import io.dolby.comms.sdk.flutter.screenshare.ScreenShareHandler
 import io.dolby.comms.sdk.flutter.state.FilePresentationHolder
 import io.dolby.comms.sdk.flutter.state.VideoPresentationHolder
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
-class DolbyioCommsSdkFlutterPlugin : FlutterPlugin {
+class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
 
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
+    private val screenShareHandler = ScreenShareHandler()
 
     private lateinit var nativeModules: List<NativeModule>
     private lateinit var nativeEventEmitters: List<NativeEventEmitter>
@@ -82,5 +87,23 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin {
         const val NOTIFICATION = "dolbyio_notification_service_event_channel"
         const val VIDEO_PRESENTATION = "dolbyio_video_presentation_service_event_channel"
         const val FILE_PRESENTATION = "dolbyio_file_presentation_service_event_channel"
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        screenShareHandler.activity = binding.activity
+        binding.addActivityResultListener(screenShareHandler)
+        FlutterLifecycleAdapter.getActivityLifecycle(binding).addObserver(screenShareHandler)
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        screenShareHandler.activity = binding.activity
+    }
+
+    override fun onDetachedFromActivity() {
+        screenShareHandler.activity = null
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        screenShareHandler.activity = null
     }
 }

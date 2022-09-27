@@ -16,10 +16,15 @@ import '/permission_helper.dart';
 import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
 
+import 'replay_screen.dart';
+
 class JoinConference extends StatelessWidget {
   final String username;
+  final String externalId;
 
-  const JoinConference({Key? key, required this.username}) : super(key: key);
+  const JoinConference(
+      {Key? key, required this.username, required this.externalId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,45 +39,57 @@ class JoinConference extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-                  JoinConferenceContent(username: username)
+                  JoinConferenceContent(
+                      username: username, externalId: externalId)
                 ],
-              )
-          )
-      ),
+              ))),
     );
   }
 }
 
 class JoinConferenceContent extends StatefulWidget {
   final String username;
+  final String externalId;
 
-  const JoinConferenceContent({Key? key, required this.username}) : super(key: key);
+  const JoinConferenceContent(
+      {Key? key, required this.username, required this.externalId})
+      : super(key: key);
 
   @override
   State<JoinConferenceContent> createState() => _JoinConferenceContentState();
 }
 
 class _JoinConferenceContentState extends State<JoinConferenceContent> {
-  final TextEditingController conferenceAliasTextController = TextEditingController();
-  final TextEditingController conferenceIdTextController = TextEditingController();
+  final TextEditingController conferenceAliasTextController =
+      TextEditingController();
+  final TextEditingController conferenceIdTextController =
+      TextEditingController();
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  final formKey = GlobalKey<FormState>();
+  final formKeyAlias = GlobalKey<FormState>();
+  final formKeyId = GlobalKey<FormState>();
   bool isJoining = false;
-  bool switchValue = false;
-  StreamSubscription<Event<NotificationServiceEventNames, InvitationReceivedNotificationData>>? onInvitationReceivedSubscription;
-  StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>? onStatusChangeSubscription;
+  bool isReplaying = false;
+  bool switchConferenceStatus = false;
+  bool switchSpatialAudio = false;
+  bool switchDolbyVoice = false;
+  StreamSubscription<
+          Event<NotificationServiceEventNames,
+              InvitationReceivedNotificationData>>?
+      onInvitationReceivedSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>?
+      onStatusChangeSubscription;
 
   @override
   void initState() {
     super.initState();
 
-    onInvitationReceivedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+    onInvitationReceivedSubscription = _dolbyioCommsSdkFlutterPlugin
+        .notification
         .onInvitationReceived()
         .listen((params) {
-          showInvitationDialog(
-              context, params.body.toJson().toString(),
-              params.body.conferenceId.toString());
-        });
+      showInvitationDialog(context, params.body.toJson().toString(),
+          params.body.conferenceId.toString());
+    });
   }
 
   @override
@@ -82,7 +99,8 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     super.dispose();
   }
 
-  Future<void> showInvitationDialog(BuildContext context, String body, String conferenceId) async {
+  Future<void> showInvitationDialog(
+      BuildContext context, String body, String conferenceId) async {
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -97,20 +115,17 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                  child: const Text("Join")
-              ),
+                  child: const Text("Join")),
               ElevatedButton(
                   onPressed: () {
                     declineInvitation(conferenceId);
                     Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
-                  child: const Text("Decline")
-              ),
+                  child: const Text("Decline")),
             ],
           );
-        }
-    );
+        });
   }
 
   @override
@@ -119,55 +134,95 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       child: Container(
         decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16))
-        ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TwoColorText(
-                blackText: "Logged in as ",
-                colorText: widget.username
-              ),
+                  blackText: "Logged in as ", colorText: widget.username),
+              TwoColorText(
+                  blackText: "External ID  ", colorText: widget.externalId),
               const SizedBox(height: 16),
               Form(
-              key: formKey,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              child: InputTextFormField(
-                  labelText: 'Conference alias',
-                  controller: conferenceAliasTextController,
-                  focusColor: Colors.deepPurple
-                ),
+                key: formKeyAlias,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: InputTextFormField(
+                    labelText: 'Conference alias',
+                    controller: conferenceAliasTextController,
+                    focusColor: Colors.deepPurple),
               ),
               Row(
                 children: [
                   const Text("Observe Conference Status"),
                   CupertinoSwitch(
-                      value: switchValue,
-                      onChanged: (value) {
-                        setState(() {
-                          switchValue = value;
-                          observeConferenceStatus(switchValue);
-                          developer.log(switchValue.toString());
-                        });
-                      }
+                    value: switchConferenceStatus,
+                    onChanged: (value) {
+                      setState(() {
+                        switchConferenceStatus = value;
+                        observeConferenceStatus(switchConferenceStatus);
+                      });
+                    },
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              Row(
+                children: [
+                  const Text("Spatial Audio"),
+                  CupertinoSwitch(
+                    value: switchSpatialAudio,
+                    onChanged: (value) {
+                      setState(() {
+                        switchSpatialAudio = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text("Dolby Voice"),
+                  CupertinoSwitch(
+                    value: switchDolbyVoice,
+                    onChanged: (value) {
+                      setState(() {
+                        switchDolbyVoice = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
               PrimaryButton(
-                  widgetText: isJoining
+                widgetText: isJoining
                     ? const WhiteCircularProgressIndicator()
                     : const Text('Join'),
-                  onPressed: () { 
-                     if (defaultTargetPlatform == TargetPlatform.android) {
-                      checkPermissions();
-                      return;
-                     }
-                     onJoinButtonPressed();
-                  },
-                  color: Colors.deepPurple
+                onPressed: () {
+                  if (defaultTargetPlatform == TargetPlatform.android) {
+                    checkPermissions();
+                    return;
+                  }
+                  onJoinButtonPressed();
+                },
+                color: Colors.deepPurple,
+              ),
+              const SizedBox(height: 16),
+              Form(
+                key: formKeyId,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: InputTextFormField(
+                    labelText: 'Conference ID with record',
+                    controller: conferenceIdTextController,
+                    focusColor: Colors.deepPurple),
+              ),
+              PrimaryButton(
+                widgetText: isReplaying
+                    ? const WhiteCircularProgressIndicator()
+                    : const Text('Replay conference'),
+                onPressed: () {
+                  onReplayButtonPressed();
+                },
+                color: Colors.deepPurple,
               ),
             ],
           ),
@@ -178,26 +233,32 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   void checkPermissions() {
     Permissions.checkPermissions(
-      permissions: [Permission.camera, Permission.microphone],
+      permissions: [
+        Permission.camera,
+        Permission.microphone,
+        Permission.bluetoothConnect
+      ],
       onGranted: () => onJoinButtonPressed(),
       onPermanentlyDenied: (permissions) async {
         await ViewDialogs.dialog(
           context: context,
           title: 'Permissions missing',
-          body: 'Required permissions $permissions were denied. Please enable them manually.',
+          body:
+              'Required permissions $permissions were denied. Please enable them manually.',
           okText: 'Open settings',
           cancelText: 'Cancel',
           result: (value) => value ? openAppSettings() : null,
         );
       },
       onDenied: (permissions) {
-        Fluttertoast.showToast(msg: "Permissions $permissions missing, can't continue");
+        Fluttertoast.showToast(
+            msg: "Permissions $permissions missing, can't continue");
       },
-    );    
+    );
   }
 
   void onJoinButtonPressed() {
-    final isValidForm = formKey.currentState!.validate();
+    final isValidForm = formKeyAlias.currentState!.validate();
     if (isValidForm) {
       setState(() => isJoining = true);
       join();
@@ -206,23 +267,37 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     }
   }
 
+  void onReplayButtonPressed() {
+    final isValidForm = formKeyId.currentState!.validate();
+    if (isValidForm) {
+      setState(() => isReplaying = true);
+      replay();
+    } else {
+      developer.log('Cannot replay the conference due to error.');
+    }
+  }
+
   void join() {
     create().then((value) {
-      _dolbyioCommsSdkFlutterPlugin.conference.join(value, conferenceJoinOptions())
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .join(value, conferenceJoinOptions())
           .then((value) => checkJoinConferenceResult(value))
-          .onError((error, stackTrace) => onError('Error during joining conference.', error));
+          .onError((error, stackTrace) =>
+              onError('Error during joining conference.', error));
     });
   }
 
   Future<Conference> create() {
-    var conference = _dolbyioCommsSdkFlutterPlugin.conference.create(conferenceCreateOptions());
+    var conference = _dolbyioCommsSdkFlutterPlugin.conference
+        .create(conferenceCreateOptions());
     return conference;
   }
 
   ConferenceCreateOption conferenceCreateOptions() {
     var conferenceName = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
-    params.dolbyVoice = false;
+    params.dolbyVoice = switchDolbyVoice;
+    params.liveRecording = true;
     var createOptions = ConferenceCreateOption(conferenceName, params, 0);
     return createOptions;
   }
@@ -231,7 +306,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var joinOptions = ConferenceJoinOptions();
     joinOptions.constraints = ConferenceConstraints(true, true);
     joinOptions.maxVideoForwarding = 4;
-    joinOptions.spatialAudio = false;
+    joinOptions.spatialAudio = switchSpatialAudio;
     return joinOptions;
   }
 
@@ -244,25 +319,33 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   void joinInvitation(String conferenceId) {
-    _dolbyioCommsSdkFlutterPlugin.conference.fetch(conferenceId).then((value) => {
-      _dolbyioCommsSdkFlutterPlugin.conference.join(value, conferenceJoinOptions())
-          .then((value) => checkJoinConferenceResult(value))
-          .onError((error, stackTrace) => onError('Error during joining conference.', error))
-    });
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .fetch(conferenceId)
+        .then((value) => {
+              _dolbyioCommsSdkFlutterPlugin.conference
+                  .join(value, conferenceJoinOptions())
+                  .then((value) => checkJoinConferenceResult(value))
+                  .onError((error, stackTrace) =>
+                      onError('Error during joining conference.', error))
+            });
   }
-  
+
   void declineInvitation(String conferenceId) {
-    _dolbyioCommsSdkFlutterPlugin.conference.fetch(conferenceId)
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
-        .onError((error, stackTrace) => onError('Error during declining.', error));
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .fetch(conferenceId)
+        .then((conference) =>
+            _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
+        .onError(
+            (error, stackTrace) => onError('Error during declining.', error));
   }
 
   void observeConferenceStatus(bool switchValue) {
-    if(switchValue == true) {
+    if (switchValue == true) {
       onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
           .onStatusChange()
           .listen((params) {
-        StatusSnackbar.buildSnackbar(context, params.body.name.toString());
+        StatusSnackbar.buildSnackbar(context, params.body.name.toString(),
+            const Duration(milliseconds: 700));
       });
     } else {
       onStatusChangeSubscription?.cancel();
@@ -270,9 +353,41 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     }
   }
 
+  void replay() {
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .fetch(conferenceIdTextController.text)
+        .then(
+          (conference) => _dolbyioCommsSdkFlutterPlugin.conference
+              .replay(conference: conference)
+              .then((conference) => checkReplayConferenceResult(conference)),
+        )
+        .onError(
+          (error, stackTrace) => developer.log(error.toString()),
+        );
+  }
+
+  void checkReplayConferenceResult(Conference conference) {
+    if (conference.id != null) {
+      navigateToReplayScreen(context, conference);
+    } else {
+      developer.log('Cannot replay the conference.');
+    }
+  }
+
+  Future navigateToReplayScreen(
+    BuildContext context,
+    Conference conference,
+  ) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => ReplayScreen(conference: conference)),
+    );
+    setState(() => isReplaying = false);
+  }
+
   Future navigateToParticipantScreen(BuildContext context) async {
     await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const ParticipantScreen())
+      MaterialPageRoute(builder: (context) => const ParticipantScreen()),
     );
     setState(() => isJoining = false);
   }

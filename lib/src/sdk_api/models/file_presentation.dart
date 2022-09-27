@@ -8,8 +8,8 @@ class File {
   File(this.uri);
 
   Map<String, Object?> toJson() => {
-    "uri": uri,
-  };
+        "uri": uri,
+      };
 }
 
 /// The FileConverted class gathers information about a converted file.
@@ -32,31 +32,34 @@ class FileConverted {
   FileConverted(this.id, this.imageCount, this.name, this.ownerId, this.size);
 
   Map<String, Object?> toJson() => {
-    "id": id,
-    "imageCount": imageCount,
-    "name": name,
-    "ownerId": ownerId,
-    "size": size
-  };
+        "id": id,
+        "imageCount": imageCount,
+        "name": name,
+        "ownerId": ownerId,
+        "size": size
+      };
 }
 
 /// The FilePresentation class gathers information about a file presentation.
 class FilePresentation {
   /// The file ID.
   String id;
+
   /// The number of images within the file presentation.
   int imageCount;
+
   /// The file owner.
   Participant owner;
+
   /// The number of the currently displayed image.
   int position;
 
   FilePresentation(this.id, this.imageCount, this.owner, this.position);
 
   Map<String, Object?> toJson() => {
-    "id": id,
-    "imageCount": imageCount,
-    "owner": owner.toJson(),
-    "position": position,
-  };
+        "id": id,
+        "imageCount": imageCount,
+        "owner": owner.toJson(),
+        "position": position,
+      };
 }

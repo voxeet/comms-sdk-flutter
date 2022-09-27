@@ -19,14 +19,14 @@ struct FlutterMethodCallArguments {
         }
         
         func decode<T: Decodable>(type: T.Type) throws -> T? {
-            guard let argument = argument else {
+            guard let argument = argument, !(argument is NSNull) else {
                 return nil
             }
             return try FlutterValueDecoder(value: argument).decode(type: type)
         }
         
         func decode<T: FlutterConvertible>() throws -> T? {
-            guard let argument = argument else {
+            guard let argument = argument, !(argument is NSNull) else {
                 return nil
             }
             return try T.fromFlutterValue(argument)
@@ -34,7 +34,7 @@ struct FlutterMethodCallArguments {
         
         func decode<T: FlutterConvertible>() throws -> T {
             guard let argument = argument else {
-                fatalError("TODO: Throw actual error here")
+                throw EncoderError.notExist()
             }
             return try T.fromFlutterValue(argument)
         }
@@ -49,17 +49,20 @@ struct FlutterMethodCallArguments {
     
     func asArray(argIndex: Int) throws -> Argument {
         guard let argArray = methodCallArguments as? [Any] else {
-            fatalError("TODO: Throw actual error here")
+            throw EncoderError.notArray()
         }
         guard 0 <= argIndex, argIndex < argArray.count else {
-            fatalError("TODO: Throw actual error here")
+            throw EncoderError.outOfRange()
         }
         return Argument(argArray[argIndex])
     }
 
-    func asDictionary(argKey: String) throws -> Argument {
+    func asDictionary(argKey: String, optional: Bool = true, file: String = #filePath, lineNumber: Int = #line) throws -> Argument {
         guard let argDictionary = methodCallArguments as? [String: Any] else {
-            fatalError("TODO: Throw actual error here")
+            throw EncoderError.notDictionary(file: file, lineNumber: lineNumber)
+        }
+        guard argDictionary.keys.contains(argKey) || optional else {
+            throw EncoderError.keyNotFound(value: argKey, file: file, lineNumber: lineNumber)
         }
         return Argument(argDictionary[argKey])
     }

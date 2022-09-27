@@ -5,10 +5,10 @@ import 'remote_participant_options.dart';
 
 class ParticipantWidget extends StatelessWidget {
   final Participant participant;
-  final int participantIndex;
+  final bool remoteOptionsFlag;
 
   const ParticipantWidget(
-      {Key? key, required this.participant, required this.participantIndex})
+      {Key? key, required this.participant, required this.remoteOptionsFlag})
       : super(key: key);
 
   @override
@@ -16,43 +16,48 @@ class ParticipantWidget extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-            flex: 5,
-            child: VideoView.withMediaStream(
-              participant: participant, 
-              mediaStream:participant.streams?.firstWhereOrNull(
-                (s) => s.type == MediaStreamType.camera
-              ),
-              key: ValueKey('video_view_tile_${participant.id}')
-            )
+          flex: 8,
+          child: VideoView.withMediaStream(
+            participant: participant,
+            mediaStream: participant.streams?.firstWhereOrNull(
+              (s) => s.type == MediaStreamType.camera,
+            ),
+            key: ValueKey('video_view_tile_${participant.id}'),
+          ),
         ),
         Expanded(
-            flex: 1,
-            child: Container(
-              decoration: const BoxDecoration(
-                  color: Colors.deepPurple,
-                  borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(12))
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                      padding: const EdgeInsets.only(left: 12),
-                      child: Text(
-                          getParticipantName(),
-                          style: const TextStyle(color: Colors.white))
-                  ),
-                  if (participantIndex != 0) RemoteParticipantOptions(index: participantIndex),
-                ],
-              ),
-            )
+          flex: 2,
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Colors.deepPurple,
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                      '${getParticipantName()}\n${getParticipantStatus()!}',
+                      style: const TextStyle(color: Colors.white)),
+                ),
+                if (remoteOptionsFlag)
+                  RemoteParticipantOptions(participant: participant),
+              ],
+            ),
+          ),
         )
       ],
     );
   }
 
   String getParticipantName() {
-    String participantName = participant.info!.name;
+    String participantName = participant.info?.name ?? "";
     return participantName;
+  }
+
+  String? getParticipantStatus() {
+    String? participantStatus = participant.status?.encode();
+    return participantStatus;
   }
 }

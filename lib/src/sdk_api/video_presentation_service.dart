@@ -23,16 +23,19 @@ import 'models/video_presentation.dart';
 ///
 class VideoPresentationService {
   /// @internal */
-  final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("video_presentation_service");
+  final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
+      "video_presentation_service");
 
   /// @internal
-  late final _nativeEventsReceiver =
-      DolbyioCommsSdkNativeEventsReceiver<VideoPresentationEventNames>.forModuleNamed("video_presentation_service");
+  late final _nativeEventsReceiver = DolbyioCommsSdkNativeEventsReceiver<
+      VideoPresentationEventNames>.forModuleNamed("video_presentation_service");
 
   /// Returns information about the current video presentation.
   Future<VideoPresentation?> currentVideo() async {
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("currentVideo");
-    return Future.value(result != null ? VideoPresentationMapper.fromMap(result) : null);
+    var result = await _methodChannel
+        .invokeMethod<Map<Object?, Object?>>("currentVideo");
+    return Future.value(
+        result != null ? VideoPresentationMapper.fromMap(result) : null);
   }
 
   /// Starts a video presentation. The [file] parameter refers to a video file that the local participant would like to share.
@@ -69,11 +72,13 @@ class VideoPresentationService {
   /// Provides the current state of a video presentation.
   Future<VideoPresentationState> state() async {
     var result = await _methodChannel.invokeMethod<String>("state");
-    return Future.value(result != null ? VideoPresentationState.decode(result) : null);
+    return Future.value(
+        result != null ? VideoPresentationState.decode(result) : null);
   }
 
   /// Returns a [Stream] of the [VideoPresentationEventNames.videoPresentationStarted], [VideoPresentationEventNames.videoPresentationPaused], [VideoPresentationEventNames.videoPresentationPlayed], and [VideoPresentationEventNames.videoPresentationSought] events. By subscribing to the returned stream you will be notified about status changes of video presentations.
-  Stream<Event<VideoPresentationEventNames, VideoPresentation>> onVideoPresentationChange() {
+  Stream<Event<VideoPresentationEventNames, VideoPresentation>>
+      onVideoPresentationChange() {
     var events = [
       VideoPresentationEventNames.videoPresentationStarted,
       VideoPresentationEventNames.videoPresentationPaused,
@@ -87,10 +92,12 @@ class VideoPresentationService {
       return Event(key, VideoPresentationMapper.fromMap(data));
     });
   }
-  
+
   /// Returns a [Stream] of the [VideoPresentationEventNames.videoPresentationStopped] events. By subscribing to the returned stream you will be notified each time a video presentation ends.
-  Stream<Event<VideoPresentationEventNames, void>> onVideoPresentationStopped() {
-    return _nativeEventsReceiver.addListener([VideoPresentationEventNames.videoPresentationStopped]).map((map) {
+  Stream<Event<VideoPresentationEventNames, void>>
+      onVideoPresentationStopped() {
+    return _nativeEventsReceiver.addListener(
+        [VideoPresentationEventNames.videoPresentationStopped]).map((map) {
       final event = map as Map<Object?, Object?>;
       final key = VideoPresentationEventNames.valueOf(event["key"] as String);
       return Event(key, null);

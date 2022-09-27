@@ -12,11 +12,12 @@ import 'session_service.dart';
 /// The ConferenceService allows an application to manage a conference life-cycle and interact with the conference. The service allows creating, joining, and leaving conferences and managing the audio, video, and screen-share streams.
 class ConferenceService {
   /// @internal
-  final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("conference_service");
+  final _methodChannel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel("conference_service");
 
   /// @internal */
-  late final _nativeEventsReceiver =
-      DolbyioCommsSdkNativeEventsReceiver<ConferenceServiceEventNames>.forModuleNamed("conference_service");
+  late final _nativeEventsReceiver = DolbyioCommsSdkNativeEventsReceiver<
+      ConferenceServiceEventNames>.forModuleNamed("conference_service");
 
   final SessionService _sessionService;
 
@@ -24,36 +25,48 @@ class ConferenceService {
 
   /// Creates a conference and returns the Conference object. The [options] parameter allows setting the conference preferences.
   Future<Conference> create(ConferenceCreateOption options) async {
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("create", options.toJson()) ?? <String, Object?>{};
+    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>(
+            "create", options.toJson()) ??
+        <String, Object?>{};
     return ConferenceMapper.fromMap(result);
   }
 
   /// Returns the Conference object for the current conference.
   Future<Conference> current() async {
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("current") ?? <String, Object?>{};
+    var result =
+        await _methodChannel.invokeMethod<Map<Object?, Object?>>("current") ??
+            <String, Object?>{};
     return ConferenceMapper.fromMap(result);
   }
 
   /// Returns the Conference object that you can use to join the conference. If the [conferenceId] parameter is not provided, the method returns the current Conference object.
   Future<Conference> fetch(String? conferenceId) async {
-    var result =
-        await _methodChannel.invokeMethod<Map<Object?, Object?>>("fetch", {"conferenceId": conferenceId}) ?? <String, Object?>{};
+    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>(
+            "fetch", {"conferenceId": conferenceId}) ??
+        <String, Object?>{};
     return ConferenceMapper.fromMap(result);
   }
 
   /// Returns the participant's audio level. Audio level values are in the range 0 to 1.
   /// The [participant] parameter refers to the participant whose audio level should be returned.
   Future<AudioLevel> getAudioLevel(Participant participant) async {
-    var result = await _methodChannel.invokeMethod<num>("getAudioLevel", participant.toJson());
+    var result = await _methodChannel.invokeMethod<num>(
+        "getAudioLevel", participant.toJson());
     return result as AudioLevel;
   }
 
   /// Joins a conference as a user who can send media to the conference.
   /// The [conference] parameter refers to the conference that tha local participant wants to join.
   /// The [options] parameter allows setting additional options for the joining participant.
-  Future<Conference> join(Conference conference, ConferenceJoinOptions options) async {
-    var arguments = {"conference": conference.toJson(), "options": options.toJson()};
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("join", arguments) ?? <String, Object?>{};
+  Future<Conference> join(
+      Conference conference, ConferenceJoinOptions options) async {
+    var arguments = {
+      "conference": conference.toJson(),
+      "options": options.toJson()
+    };
+    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>(
+            "join", arguments) ??
+        <String, Object?>{};
     return ConferenceMapper.fromMap(result);
   }
 
@@ -70,14 +83,20 @@ class ConferenceService {
 
   /// Kicks a participant out of the current conference. This method is available only for conference owners or participants who have the adequate permissions to kick a participant. The [participant] parameter refers to the participant who should be kicked out of the conference.
   Future<void> kick(Participant participant) async {
-    return await _methodChannel.invokeMethod<void>("kick", participant.toJson());
+    return await _methodChannel.invokeMethod<void>(
+        "kick", participant.toJson());
   }
 
   /// Gets a list of participants who are present at a specific conference defined in the [conference] parameter.
   /// **Note**: If a session is closed and reopened, the list obtained from the getParticipants method can sometimes get corrupted. This can result in no preview video being displayed for the local participant or the local participant appearing twice on the list.
   Future<List<Participant>> getParticipants(Conference conference) async {
-    var result = await _methodChannel.invokeMethod<List<Object?>>("getParticipants", conference.toJson());
-    return result != null ? result.map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>)).toList() : List.empty();
+    var result = await _methodChannel.invokeMethod<List<Object?>>(
+        "getParticipants", conference.toJson());
+    return result != null
+        ? result
+            .map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>))
+            .toList()
+        : List.empty();
   }
 
   /// Stops playing a specific remote participant's audio to the local participant or stops playing the local participant's audio to the conference. The [participant] parameter refers to the participant who should be muted. The [isMuted] parameter enables and disables audio; true indicates that the SDK should mute the participant, false indicates that the participant should not be muted.
@@ -91,7 +110,8 @@ class ConferenceService {
   /// Note: This API is only supported when the client connects to a Dolby Voice conference.
   /// The [isMuted] parameter enables and disables audio.
   Future<bool> muteOutput(bool isMuted) async {
-    var result = await _methodChannel.invokeMethod<bool>("muteOutput", {"isMuted": isMuted});
+    var result = await _methodChannel
+        .invokeMethod<bool>("muteOutput", {"isMuted": isMuted});
     return Future.value(result);
   }
 
@@ -112,9 +132,11 @@ class ConferenceService {
   ///
   /// <img src="https://files.readme.io/d4d9f7a-05_Axis_People_v04_220202.png" width="700">
   ///
-  Future<void> setSpatialPosition({Participant? participant, required SpatialPosition position}) async {
-    await _methodChannel
-        .invokeMethod<void>("setSpatialPosition", {"participant": participant?.toJson(), "position": position.toJson()});
+  Future<void> setSpatialPosition(
+      {required Participant participant,
+      required SpatialPosition position}) async {
+    await _methodChannel.invokeMethod<void>("setSpatialPosition",
+        {"participant": participant.toJson(), "position": position.toJson()});
     return Future.value();
   }
 
@@ -175,7 +197,8 @@ class ConferenceService {
   ///
   /// For more information, see the [SpatialDirection] model.
   Future<void> setSpatialDirection(SpatialDirection direction) async {
-    await _methodChannel.invokeMethod<void>("setSpatialDirection", direction.toJson());
+    await _methodChannel.invokeMethod<void>(
+        "setSpatialDirection", direction.toJson());
     return Future.value();
   }
 
@@ -198,7 +221,11 @@ class ConferenceService {
   ///
   /// <img src="https://files.readme.io/e43475b-defaultEnv.png" width="700">
   ///
-  Future<void> setSpatialEnvironment(SpatialScale scale, SpatialPosition forward, SpatialPosition up, SpatialPosition right) async {
+  Future<void> setSpatialEnvironment(
+      SpatialScale scale,
+      SpatialPosition forward,
+      SpatialPosition up,
+      SpatialPosition right) async {
     await _methodChannel.invokeMethod<void>("setSpatialEnvironment", {
       "scale": scale.toJson(),
       "forward": forward.toJson(),
@@ -210,19 +237,23 @@ class ConferenceService {
 
   /// Returns the participant's current speaking status for the active talker indicator. The [participant] parameter refers to the participant whose speaking status the local participant would like to receive.
   Future<bool> isSpeaking(Participant participant) async {
-    return Future.value(await _methodChannel.invokeMethod<bool>("isSpeaking", participant.toJson()));
+    return Future.value(await _methodChannel.invokeMethod<bool>(
+        "isSpeaking", participant.toJson()));
   }
 
   /// Gets the status of a specific [conference].
   Future<ConferenceStatus> getStatus(Conference conference) async {
-    var result = await _methodChannel.invokeMethod<String>("getStatus", conference.toJson());
-    return Future.value(result != null ? ConferenceStatus.decode(result) : null);
+    var result = await _methodChannel.invokeMethod<String>(
+        "getStatus", conference.toJson());
+    return Future.value(
+        result != null ? ConferenceStatus.decode(result) : null);
   }
 
   /// Gets the [standard WebRTC statistics](https://www.w3.org/TR/webrtc-stats/#dom-rtcstatstype).
   Future<Map<String, dynamic>> getLocalStats() async {
-    final result = await _methodChannel.invokeMapMethod<String, String>("getLocalStats");
-    if(result != null) {
+    final result =
+        await _methodChannel.invokeMapMethod<String, String>("getLocalStats");
+    if (result != null) {
       final map = <String, dynamic>{};
       result.forEach((key, value) {
         map[key] = jsonDecode(value);
@@ -234,7 +265,8 @@ class ConferenceService {
 
   /// Returns the maximum number of video streams that can be transmitted to the local participant.
   Future<MaxVideoForwarding> getMaxVideoForwarding() async {
-    var result = await _methodChannel.invokeMethod<num>("getMaxVideoForwarding");
+    var result =
+        await _methodChannel.invokeMethod<num>("getMaxVideoForwarding");
     return Future.value(result as MaxVideoForwarding);
   }
 
@@ -243,9 +275,13 @@ class ConferenceService {
   /// This method uses the following parameters:
   /// - [max]: The maximum number of video streams that may be transmitted to the local participant. The valid parameter values are between 0 and 4. By default, the parameter is set to 4.
   /// - [prioritizedParticipants]: The list of the prioritized participants. This parameter allows using a pin option to prioritize specific participant's video streams and display their videos even when these participants do not talk.
-  Future<bool?> setMaxVideoForwarding(MaxVideoForwarding max, List<Participant> prioritizedParticipants) async {
-    return await _methodChannel.invokeMethod<bool>(
-        "setMaxVideoForwarding", {"max": max, "prioritizedParticipants": prioritizedParticipants.map((e) => e.toJson()).toList()});
+  Future<bool?> setMaxVideoForwarding(
+      MaxVideoForwarding max, List<Participant> prioritizedParticipants) async {
+    return await _methodChannel.invokeMethod<bool>("setMaxVideoForwarding", {
+      "max": max,
+      "prioritizedParticipants":
+          prioritizedParticipants.map((e) => e.toJson()).toList()
+    });
   }
 
   ///Sets the maximum number of video streams that may be transmitted to the local participant.
@@ -270,86 +306,116 @@ class ConferenceService {
   ) async {
     return await _methodChannel.invokeMethod<bool>(
       "setVideoForwarding",
-      {"strategy": strategy.encode(), "max": max, "prioritizedParticipants": prioritizedParticipants.map((e) => e.toJson()).toList()},
+      {
+        "strategy": strategy.encode(),
+        "max": max,
+        "prioritizedParticipants":
+            prioritizedParticipants.map((e) => e.toJson()).toList()
+      },
     );
   }
 
   /// Gets the Participant object based on the [participantId].
   Future<Participant> getParticipant(String participantId) async {
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("getParticipant", {"participantId": participantId});
-    return Future.value(result != null ? ParticipantMapper.fromMap(result) : null);
+    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>(
+        "getParticipant", {"participantId": participantId});
+    return Future.value(
+        result != null ? ParticipantMapper.fromMap(result) : null);
   }
 
   /// Replays a recorded [conference]. The [replayOptions] parameter refers to additional replay options that you can define. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
-  Future<Conference> replay({required Conference conference, ConferenceReplayOptions? replayOptions}) async {
+  Future<Conference> replay(
+      {required Conference conference,
+      ConferenceReplayOptions? replayOptions}) async {
     var arguments = {
       "conference": conference.toJson(),
       "offset": replayOptions?.offset,
       "conferenceAccessToken": replayOptions?.conferenceAccessToken
     };
-    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>("replay", arguments);
-    return Future.value(result != null ? ConferenceMapper.fromMap(result) : null);
+    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>(
+        "replay", arguments);
+    return Future.value(
+        result != null ? ConferenceMapper.fromMap(result) : null);
   }
 
   /// Enables and disables audio processing for the local participant. The [options] parameter refers to additional audio processing options.
   Future<void> setAudioProcessing(AudioProcessingOptions options) async {
-    await _methodChannel.invokeMethod<void>("setAudioProcessing", options.toJson());
+    await _methodChannel.invokeMethod<void>(
+        "setAudioProcessing", options.toJson());
     return Future.value();
   }
 
   /// Updates the participant's conference permissions. The [participantPermissions] parameter allows assigning the required permissions to specific participants.
-  Future<void> updatePermissions(List<ParticipantPermissions> participantPermissions) async {
-    await _methodChannel.invokeMethod<void>("updatePermissions", participantPermissions.map((e) => e.toJson()).toList());
+  Future<void> updatePermissions(
+      List<ParticipantPermissions> participantPermissions) async {
+    await _methodChannel.invokeMethod<void>("updatePermissions",
+        participantPermissions.map((e) => e.toJson()).toList());
     return Future.value();
   }
-  
+
   /// Returns a [Stream] of the [ConferenceServiceEventNames.statusUpdated] events. By subscribing to the returned stream you will be notified about conference status changes.
-  Stream<Event<ConferenceServiceEventNames, ConferenceStatus>> onStatusChange() {
-    return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.statusUpdated]).map((event) {
+  Stream<Event<ConferenceServiceEventNames, ConferenceStatus>>
+      onStatusChange() {
+    return _nativeEventsReceiver
+        .addListener([ConferenceServiceEventNames.statusUpdated]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
-      final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
-      final status = ConferenceStatus.decode(eventMap["body"] as String) ?? ConferenceStatus.defaultStatus;
+      final eventType =
+          ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
+      final status = ConferenceStatus.decode(eventMap["body"] as String) ??
+          ConferenceStatus.defaultStatus;
       return Event(eventType, status);
     });
   }
-  
+
   /// Returns a [Stream] of the [ConferenceServiceEventNames.permissionsUpdated] events. By subscribing to the returned stream you will be notified about conference permissions changes.
-  Stream<Event<ConferenceServiceEventNames, List<ConferencePermission>>> onPermissionsChange() {
-    return _nativeEventsReceiver.addListener([ConferenceServiceEventNames.permissionsUpdated]).map((event) {
+  Stream<Event<ConferenceServiceEventNames, List<ConferencePermission>>>
+      onPermissionsChange() {
+    return _nativeEventsReceiver.addListener(
+        [ConferenceServiceEventNames.permissionsUpdated]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
-      final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
-      final permissions = PermissionsUpdatedMapper.fromList(eventMap["body"] as List<Object?>);
+      final eventType =
+          ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
+      final permissions =
+          PermissionsUpdatedMapper.fromList(eventMap["body"] as List<Object?>);
       return Event(eventType, permissions);
     });
   }
-  
+
   /// Returns a [Stream] of the [ConferenceServiceEventNames.participantAdded] and [ConferenceServiceEventNames.participantUpdated] events. By subscribing to the returned stream you will be notified about changed statuses of conference participants and new participants in a conference.
-  Stream<Event<ConferenceServiceEventNames, Participant>> onParticipantsChange() {
+  Stream<Event<ConferenceServiceEventNames, Participant>>
+      onParticipantsChange() {
     return _nativeEventsReceiver.addListener([
       ConferenceServiceEventNames.participantAdded,
       ConferenceServiceEventNames.participantUpdated,
     ]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
-      final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
-      final participant = ParticipantMapper.fromMap(eventMap["body"] as Map<Object?, Object?>);
+      final eventType =
+          ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
+      final participant =
+          ParticipantMapper.fromMap(eventMap["body"] as Map<Object?, Object?>);
       return Event(eventType, participant);
     });
   }
-  
+
   /// Returns a [Stream] of the [ConferenceServiceEventNames.streamAdded], [ConferenceServiceEventNames.streamUpdated], and [ConferenceServiceEventNames.streamRemoved] events. By subscribing to the returned stream you will be notified about new, changed, and removed streams of conference participants.
-  Stream<Event<ConferenceServiceEventNames, StreamsChangeData>> onStreamsChange() {
+  Stream<Event<ConferenceServiceEventNames, StreamsChangeData>>
+      onStreamsChange() {
     return _nativeEventsReceiver.addListener([
       ConferenceServiceEventNames.streamAdded,
       ConferenceServiceEventNames.streamUpdated,
       ConferenceServiceEventNames.streamRemoved
     ]).map((event) {
       final eventMap = event as Map<Object?, Object?>;
-      final eventType = ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
+      final eventType =
+          ConferenceServiceEventNames.valueOf(eventMap["key"] as String);
       final streamsChangeData = eventMap["body"] as Map<Object?, Object?>;
       return Event(
           eventType,
-          StreamsChangeData(ParticipantMapper.fromMap(streamsChangeData["participant"] as Map<Object?, Object?>),
-              MediaStreamMapper.fromMap(streamsChangeData["stream"] as Map<Object?, Object?>)));
+          StreamsChangeData(
+              ParticipantMapper.fromMap(
+                  streamsChangeData["participant"] as Map<Object?, Object?>),
+              MediaStreamMapper.fromMap(
+                  streamsChangeData["stream"] as Map<Object?, Object?>)));
     });
   }
 }

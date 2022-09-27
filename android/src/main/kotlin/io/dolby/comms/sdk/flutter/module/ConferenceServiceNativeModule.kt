@@ -18,7 +18,7 @@ import io.dolby.comms.sdk.flutter.mapper.ParticipantPermissionsMapper
 import io.dolby.comms.sdk.flutter.mapper.SpatialDirectionMapper
 import io.dolby.comms.sdk.flutter.mapper.SpatialPositionMapper
 import io.dolby.comms.sdk.flutter.mapper.SpatialScaleMapper
-import io.dolby.comms.sdk.flutter.permissions.ScreenSharePermissions
+import io.dolby.comms.sdk.flutter.screenshare.ScreenShareHandler
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -271,7 +271,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         onError = result::error,
         onSuccess = {
             VoxeetSDK.screenShare().sendRequestStartScreenShare()
-            ScreenSharePermissions.permissionResult().await().let { result.success(it) }
+            ScreenShareHandler.permissionResult().await().let { result.success(it) }
         }
     )
 

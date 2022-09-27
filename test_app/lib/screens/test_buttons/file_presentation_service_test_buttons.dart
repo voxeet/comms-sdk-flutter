@@ -9,10 +9,12 @@ class FilePresentationServiceTestButtons extends StatefulWidget {
   const FilePresentationServiceTestButtons({Key? key}) : super(key: key);
 
   @override
-  State<FilePresentationServiceTestButtons> createState() => _FilePresentationServiceTestButtonsState();
+  State<FilePresentationServiceTestButtons> createState() =>
+      _FilePresentationServiceTestButtonsState();
 }
 
-class _FilePresentationServiceTestButtonsState extends State<FilePresentationServiceTestButtons> {
+class _FilePresentationServiceTestButtonsState
+    extends State<FilePresentationServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   FileConverted? fileConverted;
   int selectedPage = 0;
@@ -23,18 +25,34 @@ class _FilePresentationServiceTestButtonsState extends State<FilePresentationSer
       spacing: 8.0,
       runSpacing: 4.0,
       children: <Widget>[
-        SecondaryButton(text: 'Convert', onPressed: () => convert(), fillWidth: false),
-        SecondaryButton(text: 'Start', onPressed: () => startFilePresentation(), fillWidth: false),
-        SecondaryButton(text: 'Stop', onPressed: () => stopFilePresentation(), fillWidth: false),
-        SecondaryButton(text: 'getCurrent', onPressed: () => getCurrent(), fillWidth: false),
-        SecondaryButton(text: 'setPage', onPressed: () => setPage(), fillWidth: false),
-        SecondaryButton(text: 'getImage', onPressed: () => getImage(), fillWidth: false),
-        SecondaryButton(text: 'getThumbnail', onPressed: () => getThumbnail(), fillWidth: false),
+        SecondaryButton(
+            text: 'Convert', onPressed: () => convert(), fillWidth: false),
+        SecondaryButton(
+            text: 'Start',
+            onPressed: () => startFilePresentation(),
+            fillWidth: false),
+        SecondaryButton(
+            text: 'Stop',
+            onPressed: () => stopFilePresentation(),
+            fillWidth: false),
+        SecondaryButton(
+            text: 'getCurrent',
+            onPressed: () => getCurrent(),
+            fillWidth: false),
+        SecondaryButton(
+            text: 'setPage', onPressed: () => setPage(), fillWidth: false),
+        SecondaryButton(
+            text: 'getImage', onPressed: () => getImage(), fillWidth: false),
+        SecondaryButton(
+            text: 'getThumbnail',
+            onPressed: () => getThumbnail(),
+            fillWidth: false),
       ],
     );
   }
 
-  Future<void> showDialog(BuildContext context, String title, String text) async {
+  Future<void> showDialog(
+      BuildContext context, String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
       title: title,
@@ -50,10 +68,13 @@ class _FilePresentationServiceTestButtonsState extends State<FilePresentationSer
     String? path = result?.files.single.path;
 
     if (path != null) {
-      _dolbyioCommsSdkFlutterPlugin.filePresentation.convert(File(path)).then((value) {
+      _dolbyioCommsSdkFlutterPlugin.filePresentation
+          .convert(File(path))
+          .then((value) {
         fileConverted = value;
         return showDialog(context, 'Success', value.toJson().toString());
-      }).onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+      }).onError((error, stackTrace) =>
+              showDialog(context, 'Error', error.toString()));
     } else {
       Fluttertoast.showToast(msg: "File not selected");
     }
@@ -64,7 +85,8 @@ class _FilePresentationServiceTestButtonsState extends State<FilePresentationSer
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .start(fileConverted!)
           .then((value) => showDialog(context, 'Success', "OK"))
-          .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+          .onError((error, stackTrace) =>
+              showDialog(context, 'Error', error.toString()));
     } else {
       Fluttertoast.showToast(msg: "You must convert file first!");
     }
@@ -74,15 +96,18 @@ class _FilePresentationServiceTestButtonsState extends State<FilePresentationSer
     _dolbyioCommsSdkFlutterPlugin.filePresentation
         .stop()
         .then((value) => showDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
   }
 
   void getCurrent() {
     if (fileConverted != null) {
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .getCurrent()
-          .then((value) => showDialog(context, 'Success', value.toJson().toString()))
-          .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+          .then((value) =>
+              showDialog(context, 'Success', value.toJson().toString()))
+          .onError((error, stackTrace) =>
+              showDialog(context, 'Error', error.toString()));
     } else {
       Fluttertoast.showToast(msg: "You must start presentation first!");
     }
@@ -93,7 +118,8 @@ class _FilePresentationServiceTestButtonsState extends State<FilePresentationSer
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .setPage(0)
           .then((value) => showDialog(context, 'Success', "OK"))
-          .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+          .onError((error, stackTrace) =>
+              showDialog(context, 'Error', error.toString()));
     } else {
       Fluttertoast.showToast(msg: "You must start presentation first!");
     }
@@ -104,7 +130,8 @@ class _FilePresentationServiceTestButtonsState extends State<FilePresentationSer
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .getImage(0)
           .then((value) => showDialog(context, 'Success', value))
-          .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+          .onError((error, stackTrace) =>
+              showDialog(context, 'Error', error.toString()));
     } else {
       Fluttertoast.showToast(msg: "You must start presentation first!");
     }
@@ -115,7 +142,8 @@ class _FilePresentationServiceTestButtonsState extends State<FilePresentationSer
       _dolbyioCommsSdkFlutterPlugin.filePresentation
           .getThumbnail(0)
           .then((value) => showDialog(context, 'Success', value))
-          .onError((error, stackTrace) => showDialog(context, 'Error', error.toString()));
+          .onError((error, stackTrace) =>
+              showDialog(context, 'Error', error.toString()));
     } else {
       Fluttertoast.showToast(msg: "You must start presentation first!");
     }

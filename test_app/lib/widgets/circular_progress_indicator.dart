@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class WhiteCircularProgressIndicator extends StatelessWidget {
-
   const WhiteCircularProgressIndicator({Key? key}) : super(key: key);
 
   @override
@@ -12,7 +11,6 @@ class WhiteCircularProgressIndicator extends StatelessWidget {
         child: CircularProgressIndicator(
           color: Colors.white,
           strokeWidth: 2,
-        )
-    );
+        ));
   }
 }

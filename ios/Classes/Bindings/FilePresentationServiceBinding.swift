@@ -174,7 +174,7 @@ extension FilePresentationServiceBinding: VTFilePresentationDelegate {
                 body: DTO.FileConverted(fileConverted: fileConverted)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -185,7 +185,7 @@ extension FilePresentationServiceBinding: VTFilePresentationDelegate {
                 body: DTO.FilePresentation(filePresentation: filePresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -196,7 +196,7 @@ extension FilePresentationServiceBinding: VTFilePresentationDelegate {
                 body: DTO.FilePresentation(filePresentation: filePresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     
@@ -207,7 +207,7 @@ extension FilePresentationServiceBinding: VTFilePresentationDelegate {
                 body: DTO.FilePresentation(filePresentation: filePresentation)
             )
         } catch {
-            fatalError("TODO: Throw error here")
+            fatalError(error.localizedDescription)
         }
     }
     

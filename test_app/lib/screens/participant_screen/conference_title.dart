@@ -23,8 +23,7 @@ class _ConferenceTitleState extends State<ConferenceTitle> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Center(
-          child: Text(conferenceName, style: const TextStyle(fontSize: 16))
-      ),
+          child: Text(conferenceName, style: const TextStyle(fontSize: 16))),
     );
   }
 

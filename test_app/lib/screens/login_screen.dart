@@ -1,3 +1,5 @@
+import 'dart:developer' as developer;
+import 'join_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,12 +8,11 @@ import '/widgets/dolby_title.dart';
 import '/widgets/input_text_field.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/text_form_field.dart';
-import 'join_screen.dart';
-import 'dart:developer' as developer;
 
 class LoginScreen extends StatelessWidget {
-
-  const LoginScreen({Key? key,}) : super(key: key);
+  const LoginScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,24 +20,23 @@ class LoginScreen extends StatelessWidget {
       left: false,
       right: false,
       child: Scaffold(
-          body: Container(
-              constraints: const BoxConstraints.expand(),
-              decoration: const BoxDecoration(color: Colors.deepPurple),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK',),
-                  LoginScreenContent()
-                ],
-              )
-          )
+        body: Container(
+          constraints: const BoxConstraints.expand(),
+          decoration: const BoxDecoration(color: Colors.deepPurple),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
+              LoginScreenContent()
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
 class LoginScreenContent extends StatefulWidget {
-
   const LoginScreenContent({Key? key}) : super(key: key);
 
   @override
@@ -78,53 +78,51 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16))
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Form(
-                    key: formKey,
-                    autovalidateMode: AutovalidateMode.disabled,
-                    child: Column(
-                      children: [
-                        InputTextFormField(
-                            labelText: 'Access token',
-                            controller: accessTokenTextController,
-                            focusColor: Colors.deepPurple
-                        ),
-                        const SizedBox(height: 16),
-                        InputTextFormField(
-                            labelText: 'Username',
-                            controller: usernameTextController,
-                            focusColor: Colors.deepPurple
-                        ),
-                      ],
-                    )
-                ),
-                const SizedBox(height: 16),
-                InputTextField(
-                    labelText: 'External ID (optional)',
-                    controller: externalIdTextController,
-                ),
-                const SizedBox(height: 16),
-                PrimaryButton(
-                    color: Colors.deepPurple,
-                    widgetText: isLogging
-                        ? const WhiteCircularProgressIndicator()
-                        : const Text('Login'),
-                    onPressed: () { onLoginButtonPressed(); }
-                )
-              ],
-            ),
+      child: Container(
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Form(
+                  key: formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(
+                    children: [
+                      InputTextFormField(
+                          labelText: 'Access token',
+                          controller: accessTokenTextController,
+                          focusColor: Colors.deepPurple),
+                      const SizedBox(height: 16),
+                      InputTextFormField(
+                          labelText: 'Username',
+                          controller: usernameTextController,
+                          focusColor: Colors.deepPurple),
+                    ],
+                  )),
+              const SizedBox(height: 16),
+              InputTextField(
+                labelText: 'External ID (optional)',
+                controller: externalIdTextController,
+              ),
+              const SizedBox(height: 16),
+              PrimaryButton(
+                color: Colors.deepPurple,
+                widgetText: isLogging
+                    ? const WhiteCircularProgressIndicator()
+                    : const Text('Login'),
+                onPressed: () {
+                  onLoginButtonPressed();
+                },
+              )
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 
   void onLoginButtonPressed() async {
@@ -132,7 +130,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     if (isValidForm) {
       setState(() => isLogging = true);
       await initializeSdk();
-      if(isInitialized){
+      if (isInitialized) {
         openSession();
       }
     } else {
@@ -145,12 +143,14 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     await _dolbyioCommsSdkFlutterPlugin
         .initializeToken(_accessToken, () => getRefreshToken())
         .then((value) => setState(() => isInitialized = true))
-        .onError((error, stackTrace) => onError('Error during initializing sdk', error));
+        .onError((error, stackTrace) =>
+            onError('Error during initializing sdk', error));
     _preferences.setString(keyAccessToken, _accessToken ?? '');
   }
 
   void openSession() {
-    var participantInfo = ParticipantInfo(usernameTextController.text, null, externalIdTextController.text);
+    var participantInfo = ParticipantInfo(
+        usernameTextController.text, null, externalIdTextController.text);
     _dolbyioCommsSdkFlutterPlugin.session
         .open(participantInfo)
         .then((value) => checkSessionStatus())
@@ -168,10 +168,12 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
 
   void navigateToJoinConference() async {
     await Navigator.of(context).push(
-        MaterialPageRoute(
-          settings: const RouteSettings(name: "JoinConferenceScreen"),
-          builder: (context) => JoinConference(username: usernameTextController.text)
-        )
+      MaterialPageRoute(
+        settings: const RouteSettings(name: "JoinConferenceScreen"),
+        builder: (context) => JoinConference(
+            username: usernameTextController.text,
+            externalId: externalIdTextController.text),
+      ),
     );
     setState(() => isLogging = false);
   }

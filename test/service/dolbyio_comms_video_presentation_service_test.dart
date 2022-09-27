@@ -10,7 +10,9 @@ import '../mock/mock_models.dart';
 void main() {
   var videoPresentationService = DolbyioCommsSdk.instance.videoPresentation;
 
-  final MethodChannel channel = DolbyioCommsSdkFlutterPlatform.createMethodChannel("video_presentation_service");
+  final MethodChannel channel =
+      DolbyioCommsSdkFlutterPlatform.createMethodChannel(
+          "video_presentation_service");
   final mockMethodChannel = MockMethodChannel();
 
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +56,8 @@ void main() {
 
     await videoPresentationService.pause(exampleTimestamp);
 
-    verify(channel.invokeMethod("pause", {"timestamp": exampleTimestamp})).called(1);
+    verify(channel.invokeMethod("pause", {"timestamp": exampleTimestamp}))
+        .called(1);
   });
 
   test("test seek video presentation method", () async {
@@ -63,12 +66,14 @@ void main() {
 
     await videoPresentationService.seek(exampleTimestamp);
 
-    verify(channel.invokeMethod("seek", {"timestamp": exampleTimestamp})).called(1);
+    verify(channel.invokeMethod("seek", {"timestamp": exampleTimestamp}))
+        .called(1);
   });
 
   test("test video presentation state method", () async {
     var expectedState = VideoPresentationState.paused;
-    when(channel.invokeMethod("state")).thenAnswer((_) => Future.value("paused"));
+    when(channel.invokeMethod("state"))
+        .thenAnswer((_) => Future.value("paused"));
 
     var result = await videoPresentationService.state();
 

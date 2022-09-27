@@ -56,36 +56,28 @@ void main() {
 
   testWidgets('FilePresentationService: getImage', (tester) async {
     runNative(
-      methodChannel: filePresentationServiceAssertsMethodChannel,
-      label: "setGetImageReturn",
-      args: {
-        "hasRun": true,
-        "url": 'https://dolby.io/image_url'
-      });
+        methodChannel: filePresentationServiceAssertsMethodChannel,
+        label: "setGetImageReturn",
+        args: {"hasRun": true, "url": 'https://dolby.io/image_url'});
 
     var url = await dolbyioCommsSdkFlutterPlugin.filePresentation.getImage(5);
 
     await expectNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
         assertLabel: "assertGetImageArgs",
-        expected: {
-          "hasRun": true, 
-          "page": 5
-        });
-    
+        expected: {"hasRun": true, "page": 5});
+
     expect(url, 'https://dolby.io/image_url');
   });
 
   testWidgets('FilePresentationService: getThumbnail', (tester) async {
     runNative(
-      methodChannel: filePresentationServiceAssertsMethodChannel,
-      label: "setGetThumbnailReturn",
-      args: {
-        "hasRun": true,
-        "url": 'https://dolby.io/thumbnail_url'
-      });
+        methodChannel: filePresentationServiceAssertsMethodChannel,
+        label: "setGetThumbnailReturn",
+        args: {"hasRun": true, "url": 'https://dolby.io/thumbnail_url'});
 
-    var url = await dolbyioCommsSdkFlutterPlugin.filePresentation.getThumbnail(3);
+    var url =
+        await dolbyioCommsSdkFlutterPlugin.filePresentation.getThumbnail(3);
 
     await expectNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
