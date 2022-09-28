@@ -21,15 +21,15 @@ class NotificationServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            guard let conference = try flutterArguments.asDictionary(argKey: "conference").decode(type: DTO.Confrence.self),
-                  let conferenceId = conference.id else {
-                      throw BindingError.noConferenceId
-                  }
+            let conference = try flutterArguments.asDictionary(argKey: "conference").decode(type: DTO.Confrence.self)
+            guard let conferenceId = conference.id else {
+                throw BindingError.noConferenceId
+            }
             let participantInvited = try flutterArguments.asDictionary(argKey: "participants").decode(type: [DTO.ParticipantInvited].self)
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
                 VoxeetSDK.shared.notification.invite(
                     conference: conference,
-                    participantsInvited: participantInvited?.map { $0.toSdkType() } ?? []
+                    participantsInvited: participantInvited.map { $0.toSdkType() }
                 ) { error in
                     completionHandler.handleError(error)?.orSuccess()
                 }
@@ -48,8 +48,8 @@ class NotificationServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            guard let conference = try flutterArguments.asDictionary(argKey: "conference").decode(type: DTO.Confrence.self),
-                  let conferenceId = conference.id else {
+            let conference = try flutterArguments.asDictionary(argKey: "conference").decode(type: DTO.Confrence.self)
+            guard let conferenceId = conference.id else {
                       throw BindingError.noConferenceId
                   }
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in

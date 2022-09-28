@@ -108,7 +108,7 @@ class DolbyioCommsSdk {
   /// - [accessToken]:  The access token provided by the customer's backend.
   /// - [refreshAccessToken]:  A callback that is called when the access token needs to be refreshed.
   Future<void> initializeToken(
-      String? accessToken, RefreshAccessTokenType refreshAccessToken) async {
+      String accessToken, RefreshAccessTokenType refreshAccessToken) async {
     _methodChannel.setMethodCallHandler((call) async {
       if (call.method == 'getRefreshToken') {
         return await refreshAccessToken.call();

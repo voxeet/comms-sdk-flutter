@@ -143,7 +143,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   Future<void> initializeSdk() async {
     _accessToken = accessTokenTextController.text;
     await _dolbyioCommsSdkFlutterPlugin
-        .initializeToken(_accessToken, () => getRefreshToken())
+        .initializeToken(_accessToken ?? "", () => getRefreshToken())
         .then((value) => setState(() => isInitialized = true))
         .onError((error, stackTrace) =>
             onError('Error during initializing sdk', error));

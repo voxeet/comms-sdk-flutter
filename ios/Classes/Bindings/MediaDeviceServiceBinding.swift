@@ -30,9 +30,6 @@ class MediaDeviceServiceBinding: Binding {
 	) {
 		do {
 			let noiseLevel = try flutterArguments.asDictionary(argKey: "noiseLevel").decode(type: DTO.ComfortNoiseLevel.self)
-			guard let noiseLevel = noiseLevel else {
-				throw BindingError.noNoiseLevel
-			}
 			VoxeetSDK.shared.mediaDevice.setComfortNoiseLevel(comfortNoise: noiseLevel.toSdkType()) { error in
 				completionHandler.handleError(error)?.orSuccess()
 			}
