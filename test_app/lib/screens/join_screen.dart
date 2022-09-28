@@ -135,96 +135,98 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
         decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TwoColorText(
-                  blackText: "Logged in as ", colorText: widget.username),
-              TwoColorText(
-                  blackText: "External ID  ", colorText: widget.externalId),
-              const SizedBox(height: 16),
-              Form(
-                key: formKeyAlias,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: InputTextFormField(
-                    labelText: 'Conference alias',
-                    controller: conferenceAliasTextController,
-                    focusColor: Colors.deepPurple),
-              ),
-              Row(
-                children: [
-                  const Text("Observe Conference Status"),
-                  CupertinoSwitch(
-                    value: switchConferenceStatus,
-                    onChanged: (value) {
-                      setState(() {
-                        switchConferenceStatus = value;
-                        observeConferenceStatus(switchConferenceStatus);
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text("Spatial Audio"),
-                  CupertinoSwitch(
-                    value: switchSpatialAudio,
-                    onChanged: (value) {
-                      setState(() {
-                        switchSpatialAudio = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text("Dolby Voice"),
-                  CupertinoSwitch(
-                    value: switchDolbyVoice,
-                    onChanged: (value) {
-                      setState(() {
-                        switchDolbyVoice = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
-              PrimaryButton(
-                widgetText: isJoining
-                    ? const WhiteCircularProgressIndicator()
-                    : const Text('Join'),
-                onPressed: () {
-                  if (defaultTargetPlatform == TargetPlatform.android) {
-                    checkPermissions();
-                    return;
-                  }
-                  onJoinButtonPressed();
-                },
-                color: Colors.deepPurple,
-              ),
-              const SizedBox(height: 16),
-              Form(
-                key: formKeyId,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: InputTextFormField(
-                    labelText: 'Conference ID with record',
-                    controller: conferenceIdTextController,
-                    focusColor: Colors.deepPurple),
-              ),
-              PrimaryButton(
-                widgetText: isReplaying
-                    ? const WhiteCircularProgressIndicator()
-                    : const Text('Replay conference'),
-                onPressed: () {
-                  onReplayButtonPressed();
-                },
-                color: Colors.deepPurple,
-              ),
-            ],
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TwoColorText(
+                    blackText: "Logged in as ", colorText: widget.username),
+                TwoColorText(
+                    blackText: "External ID  ", colorText: widget.externalId),
+                const SizedBox(height: 16),
+                Form(
+                  key: formKeyAlias,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: InputTextFormField(
+                      labelText: 'Conference alias',
+                      controller: conferenceAliasTextController,
+                      focusColor: Colors.deepPurple),
+                ),
+                Row(
+                  children: [
+                    const Text("Observe Conference Status"),
+                    CupertinoSwitch(
+                      value: switchConferenceStatus,
+                      onChanged: (value) {
+                        setState(() {
+                          switchConferenceStatus = value;
+                          observeConferenceStatus(switchConferenceStatus);
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text("Spatial Audio"),
+                    CupertinoSwitch(
+                      value: switchSpatialAudio,
+                      onChanged: (value) {
+                        setState(() {
+                          switchSpatialAudio = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    const Text("Dolby Voice"),
+                    CupertinoSwitch(
+                      value: switchDolbyVoice,
+                      onChanged: (value) {
+                        setState(() {
+                          switchDolbyVoice = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                PrimaryButton(
+                  widgetText: isJoining
+                      ? const WhiteCircularProgressIndicator()
+                      : const Text('Join'),
+                  onPressed: () {
+                    if (defaultTargetPlatform == TargetPlatform.android) {
+                      checkPermissions();
+                      return;
+                    }
+                    onJoinButtonPressed();
+                  },
+                  color: Colors.deepPurple,
+                ),
+                const SizedBox(height: 16),
+                Form(
+                  key: formKeyId,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: InputTextFormField(
+                      labelText: 'Conference ID with record',
+                      controller: conferenceIdTextController,
+                      focusColor: Colors.deepPurple),
+                ),
+                PrimaryButton(
+                  widgetText: isReplaying
+                      ? const WhiteCircularProgressIndicator()
+                      : const Text('Replay conference'),
+                  onPressed: () {
+                    onReplayButtonPressed();
+                  },
+                  color: Colors.deepPurple,
+                ),
+              ],
+            ),
           ),
         ),
       ),
