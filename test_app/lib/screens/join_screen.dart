@@ -314,7 +314,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   void checkJoinConferenceResult(Conference conference) {
     if (conference.status == ConferenceStatus.joined) {
-      navigateToParticipantScreen(context);
+      navigateToParticipantScreen(context, conference);
     } else {
       developer.log('Cannot join to conference.');
     }
@@ -387,9 +387,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     setState(() => isReplaying = false);
   }
 
-  Future navigateToParticipantScreen(BuildContext context) async {
+  Future navigateToParticipantScreen(
+      BuildContext context, Conference conference) async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const ParticipantScreen()),
+      MaterialPageRoute(
+          builder: (context) => ParticipantScreen(conference: conference)),
     );
     setState(() => isJoining = false);
   }

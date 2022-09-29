@@ -9,7 +9,7 @@ typedef ParticipantConferenceStatus = void Function(
     bool closeSessionOnDeactivate);
 
 class ConferenceControls extends StatefulWidget {
-  final Future<Conference?> conference;
+  final Conference conference;
   final ParticipantConferenceStatus updateCloseSessionFlag;
   const ConferenceControls(
       {Key? key,
@@ -102,52 +102,44 @@ class _ConferenceControlsState extends State<ConferenceControls> {
 
   void muteLocalParticipant() {
     if (isMicOff == false) {
-      widget.conference.then((current) {
-        _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-            (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-                .mute(participant, true)
-                .then((value) =>
-                    developer.log('Local participant has been muted.'))
-                .onError((error, stackTrace) =>
-                    onError('Error during mutting.', error)));
-      });
+      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+          (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+              .mute(participant, true)
+              .then(
+                  (value) => developer.log('Local participant has been muted.'))
+              .onError((error, stackTrace) =>
+                  onError('Error during mutting.', error)));
       setState(() => isMicOff = true);
     } else {
-      widget.conference.then((current) {
-        _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-            (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-                .mute(participant, false)
-                .then((value) =>
-                    developer.log('Local participant has been unmuted.'))
-                .onError((error, stackTrace) =>
-                    onError('Error during unmutting.', error)));
-      });
+      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+          (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+              .mute(participant, false)
+              .then((value) =>
+                  developer.log('Local participant has been unmuted.'))
+              .onError((error, stackTrace) =>
+                  onError('Error during unmutting.', error)));
       setState(() => isMicOff = false);
     }
   }
 
   void onStopVideo() {
-    widget.conference.then((current) {
-      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-          (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-              .stopVideo(participant)
-              .then((value) =>
-                  developer.log('Local participant video has been stopped.'))
-              .onError((error, stackTrace) =>
-                  onError('Error during stopping video.', error)));
-    });
+    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+            .stopVideo(participant)
+            .then((value) =>
+                developer.log('Local participant video has been stopped.'))
+            .onError((error, stackTrace) =>
+                onError('Error during stopping video.', error)));
   }
 
   void onStartVideo() {
-    widget.conference.then((current) {
-      _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-          (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-              .startVideo(participant)
-              .then((value) =>
-                  developer.log('Local participant video has been started.'))
-              .onError((error, stackTrace) =>
-                  onError('Error during starting video.', error)));
-    });
+    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
+        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
+            .startVideo(participant)
+            .then((value) =>
+                developer.log('Local participant video has been started.'))
+            .onError((error, stackTrace) =>
+                onError('Error during starting video.', error)));
   }
 
   void onError(String message, Object? error) {
