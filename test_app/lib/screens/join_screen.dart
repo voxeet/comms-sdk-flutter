@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -154,46 +153,45 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                       controller: conferenceAliasTextController,
                       focusColor: Colors.deepPurple),
                 ),
-                Row(
-                  children: [
-                    const Text("Observe Conference Status"),
-                    CupertinoSwitch(
-                      value: switchConferenceStatus,
-                      onChanged: (value) {
-                        setState(() {
-                          switchConferenceStatus = value;
-                          observeConferenceStatus(switchConferenceStatus);
-                        });
-                      },
-                    ),
-                  ],
+                SwitchListTile(
+                  activeColor: Colors.deepPurple,
+                  title: const Text("Observe Conference Status"),
+                  value: switchConferenceStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      switchConferenceStatus = value;
+                      observeConferenceStatus(switchConferenceStatus);
+                    });
+                  },
                 ),
-                Row(
-                  children: [
-                    const Text("Spatial Audio"),
-                    CupertinoSwitch(
-                      value: switchSpatialAudio,
-                      onChanged: (value) {
-                        setState(() {
-                          switchSpatialAudio = value;
-                        });
-                      },
-                    ),
-                  ],
+                SwitchListTile(
+                  activeColor: Colors.deepPurple,
+                  title: const Text("Dolby voice"),
+                  value: switchDolbyVoice,
+                  onChanged: (value) {
+                    if(value == false) {
+                      setState(() {
+                        switchDolbyVoice = value;
+                        switchSpatialAudio = value;
+                      });
+                    } else {
+                      setState(() {
+                        switchDolbyVoice = value;
+                      });
+                    }
+                  },
                 ),
-                Row(
-                  children: [
-                    const Text("Dolby Voice"),
-                    CupertinoSwitch(
-                      value: switchDolbyVoice,
-                      onChanged: (value) {
-                        setState(() {
-                          switchDolbyVoice = value;
-                        });
-                      },
-                    ),
-                  ],
-                ),
+                SwitchListTile(
+                    activeColor: Colors.deepPurple,
+                    title: const Text("Spatial audio"),
+                    value: switchSpatialAudio,
+                    onChanged: switchDolbyVoice
+                        ? (value) {
+                            setState(() {
+                              switchSpatialAudio = value;
+                            });
+                          }
+                        : null),
                 PrimaryButton(
                   widgetText: isJoining
                       ? const WhiteCircularProgressIndicator()
@@ -391,7 +389,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       BuildContext context, Conference conference) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => ParticipantScreen(conference: conference)),
+          builder: (context) => ParticipantScreen(
+              conference: conference,
+              isSpatialAudio: switchSpatialAudio)),
     );
     setState(() => isJoining = false);
   }
