@@ -8,8 +8,10 @@ import 'dart:developer' as developer;
 
 class ParticipantGrid extends StatefulWidget {
   final bool remoteOptionsFlag;
+  final Conference conference;
 
-  const ParticipantGrid({Key? key, required this.remoteOptionsFlag})
+  const ParticipantGrid(
+      {Key? key, required this.remoteOptionsFlag, required this.conference})
       : super(key: key);
 
   @override
@@ -88,11 +90,9 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   }
 
   Future<void> initParticipantsList() async {
-    final currentConference =
-        await _dolbyioCommsSdkFlutterPlugin.conference.current();
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin
         .conference
-        .getParticipants(currentConference);
+        .getParticipants(widget.conference);
     conferenceParticipants.sort((item1, item2) {
       if (item1.status == ParticipantStatus.onAir ||
           item1.status == ParticipantStatus.connected) {

@@ -2,7 +2,7 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
 
 class ConferenceTitle extends StatefulWidget {
-  final Future<Conference?> conference;
+  final Conference conference;
   const ConferenceTitle({Key? key, required this.conference}) : super(key: key);
 
   @override
@@ -28,9 +28,7 @@ class _ConferenceTitleState extends State<ConferenceTitle> {
   }
 
   String getConferenceName() {
-    widget.conference.then((current) {
-      setState(() => conferenceName = current!.alias.toString());
-    });
+    setState(() => conferenceName = widget.conference.alias.toString());
     return conferenceName;
   }
 }
