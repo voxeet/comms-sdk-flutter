@@ -4,8 +4,10 @@
 import 'package:permission_handler/permission_handler.dart';
 // Step 3: Import the Dolby.io Communications SDK for Flutter
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
+import 'dart:async';
 import 'dart:math';
 import 'dart:core';
 import 'dart:developer' as developer;
@@ -39,6 +41,12 @@ class _FlutterScreenState extends State<FlutterScreen> {
   // Step 7: Store the participants list here
   List<Participant> participants = [];
 
+  // Step 7: Define StreamSubscriptions here
+  StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
+      onParticipantsChangeSubscription;
+  StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>?
+      onStreamsChangeSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -56,119 +64,126 @@ class _FlutterScreenState extends State<FlutterScreen> {
     // Step 4: Call openSession()
     openSession();
 
-    // Step 7: Call updateParticipantsList()
-    updateParticipantsList();
+    // Step 7: Call updateParticipantsList() with StreamSubscriptions
+    onParticipantsChangeSubscription =
+        dolbyioCommsSdk.conference.onParticipantsChange().listen((params) {
+      updateParticipantsList();
+    });
+
+    onStreamsChangeSubscription =
+        dolbyioCommsSdk.conference.onStreamsChange().listen((params) {
+      updateParticipantsList();
+    });
+  }
+
+  // Step 7: Cancel StreamSubscriptions
+  @override
+  void dispose() {
+    onParticipantsChangeSubscription?.cancel();
+    onStreamsChangeSubscription?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter SDK'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (!isInitializedList) ...[
-              Expanded(
-                  flex: 2,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: usernameController,
-                          readOnly: true,
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
+        appBar: AppBar(title: const Text('Flutter SDK'), centerTitle: true),
+        body: Padding(
+            padding: const EdgeInsets.all(16),
+            child: !isInitializedList
+                ? Column(
+                    children: [
+                      TextField(controller: usernameController, readOnly: true),
+                      const SizedBox(height: 12),
+                      TextField(
                           decoration: const InputDecoration(
                               hintText: 'Conference name'),
-                          controller: conferenceNameController,
-                        ),
-                        const SizedBox(height: 12),
-                        ElevatedButton(
+                          controller: conferenceNameController),
+                      const SizedBox(height: 12),
+                      ElevatedButton(
                           onPressed: () async {
                             // Step 5: Call joinConference()
                             await joinConference();
                           },
                           child: isJoining
                               ? const Text('Joining...')
-                              : const Text('Join the conference'),
-                        ),
-                      ],
-                    ),
-                  )),
-              const Divider(
-                thickness: 2,
-              ),
-            ],
-            Expanded(
-                flex: 5,
-                child: isInitializedList
-                    ? Column(children: [
-                        Text(
-                          'Conference name: ${conferenceNameController.text}',
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
+                              : const Text('Join the conference')),
+                      const Divider(thickness: 2),
+                      const Text(
+                          "Join the conference to see the list of participants.")
+                    ],
+                  )
+                : Column(children: [
+                    Text('Conference name: ${conferenceNameController.text}',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400, fontSize: 16)),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: Column(children: [
                         const Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              'List of participants:',
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w600),
-                            )),
-                        const SizedBox(
-                          height: 16,
-                        ),
+                            child: Text('List of participants:',
+                                style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w600))),
+                        const SizedBox(height: 16),
 
                         // Step 7: Display the list of participants
-                        Material(
-                          elevation: 8,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: participants.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(
-                                    "${participants[index].info!.name} (${participants[index].status?.name})"),
-                                leading: const Icon(
-                                  Icons.person,
-                                  color: Colors.black,
-                                ),
-                              );
-                            },
-                          ),
+                        Expanded(
+                          child: ListView.separated(
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return const SizedBox(height: 5);
+                              },
+                              shrinkWrap: true,
+                              itemCount: participants.length,
+                              itemBuilder: (context, index) {
+                                var participant = participants[index];
+                                return Padding(
+                                  padding: const EdgeInsets.all(4),
+                                  child: Row(children: [
+                                    Expanded(
+                                        flex: 1,
+                                        child: SizedBox(
+                                            height: 150,
+                                            width: 150,
+                                            child: VideoView.withMediaStream(
+                                                participant: participant,
+                                                mediaStream: participant.streams
+                                                    ?.firstWhereOrNull((s) =>
+                                                        s.type ==
+                                                        MediaStreamType.camera),
+                                                key: ValueKey(
+                                                    'video_view_tile_${participant.id}')))),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                                "${participant.info?.name.toString()}"),
+                                            Text(
+                                                "status: ${participant.status?.name}")
+                                          ]),
+                                    ),
+                                  ]),
+                                );
+                              }),
                         ),
-
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(primary: Colors.red),
-                          onPressed: () async {
-                            // Step 6: Call leaveConference()
-                            await leaveConference();
-                          },
-                          child: isJoining
-                              ? const Text('Leaving...')
-                              : const Text('Leave the conference'),
-                        )
-                      ])
-                    : const Center(
-                        child: Text(
-                            "Join the conference to see the list of participants.")))
-          ],
-        ),
-      ),
-    );
+                      ]),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(primary: Colors.red),
+                        onPressed: () async {
+                          // Step 6: Call leaveConference()
+                          await leaveConference();
+                        },
+                        child: isJoining
+                            ? const Text('Leaving...')
+                            : const Text('Leave the conference'))
+                  ])));
   }
 
   // Step 3: Define the initializeSdk function
@@ -224,24 +239,26 @@ class _FlutterScreenState extends State<FlutterScreen> {
 
     await dolbyioCommsSdk.conference.leave(options: null);
 
-    setState(() => isInitializedList = true);
-    setState(() => isLeaving = true);
+    setState(() => isInitializedList = false);
+    setState(() => isLeaving = false);
   }
 
   // Step 7: Define the updateParticipantsList method
-  void updateParticipantsList() {
-    dolbyioCommsSdk.conference.onParticipantsChange().listen((params) async {
-      try {
-        var conference = await dolbyioCommsSdk.conference.current();
-        var participantsList =
-            await dolbyioCommsSdk.conference.getParticipants(conference);
+  Future<void> updateParticipantsList() async {
+    try {
+      var conference = await dolbyioCommsSdk.conference.current();
+      var participantsList =
+          await dolbyioCommsSdk.conference.getParticipants(conference);
+      final availableParticipants = participantsList
+          .where((element) => element.status != ParticipantStatus.left);
 
-        setState(() => participants = participantsList);
-        setState(() => isInitializedList = true);
-      } catch (error) {
-        developer.log("Error during initializing participant list.",
-            error: error);
-      }
-    });
+      setState(() {
+        participants = availableParticipants.toList();
+        isInitializedList = true;
+      });
+    } catch (error) {
+      developer.log("Error during initializing participant list.",
+          error: error);
+    }
   }
 }
