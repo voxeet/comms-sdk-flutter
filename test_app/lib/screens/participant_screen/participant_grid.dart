@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/dialogs.dart';
@@ -21,6 +21,7 @@ class ParticipantGrid extends StatefulWidget {
 class _ParticipantGridState extends State<ParticipantGrid> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   List<Participant> participants = [];
+  Participant? localParticipant;
 
   StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
       onParticipantsChangeSubscription;
@@ -42,6 +43,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   void initState() {
     super.initState();
     initParticipantsList();
+    getLocalParticipant();
 
     onParticipantsChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
         .onParticipantsChange()
@@ -84,9 +86,19 @@ class _ParticipantGridState extends State<ParticipantGrid> {
         itemBuilder: (context, index) {
           var participant = participants[index];
           return ParticipantWidget(
-              participant: participant,
-              remoteOptionsFlag: index == 0 ? false : widget.remoteOptionsFlag);
+            participant: participant,
+            remoteOptionsFlag: localParticipant?.id == participant.id
+                ? false
+                : widget.remoteOptionsFlag,
+          );
         });
+  }
+
+  Future<void> getLocalParticipant() async {
+    setState(() async {
+      localParticipant =
+          await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+    });
   }
 
   Future<void> initParticipantsList() async {
