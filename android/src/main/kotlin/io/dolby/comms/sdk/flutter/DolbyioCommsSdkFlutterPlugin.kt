@@ -18,6 +18,10 @@ import io.dolby.comms.sdk.flutter.module.NotificationServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.RecordingServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.SessionServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.VideoPresentationServiceModule
+import io.dolby.comms.sdk.flutter.module.audio.LocalAudioNativeModule
+import io.dolby.comms.sdk.flutter.module.audio.RemoteAudioNativeModule
+import io.dolby.comms.sdk.flutter.module.video.LocalVideoNativeModule
+import io.dolby.comms.sdk.flutter.module.video.RemoteVideoNativeModule
 import io.dolby.comms.sdk.flutter.screenshare.ScreenShareHandler
 import io.dolby.comms.sdk.flutter.state.FilePresentationHolder
 import io.dolby.comms.sdk.flutter.state.VideoPresentationHolder
@@ -51,6 +55,10 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
         )
 
         nativeModules = listOf(
+            LocalAudioNativeModule(scope),
+            RemoteAudioNativeModule(scope),
+            LocalVideoNativeModule(scope),
+            RemoteVideoNativeModule(scope),
             CommandServiceNativeModule(scope),
             NotificationServiceNativeModule(scope),
             CommsSdkNativeModule(scope),
