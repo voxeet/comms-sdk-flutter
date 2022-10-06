@@ -228,41 +228,48 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     private fun startAudio(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStartAudio = ParticipantMapper
+            ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let { VoxeetSDK.conference().startAudio(it).await() }
+                ?.let { require(it) { "Could not start audio" } }
                 ?: throw IllegalStateException("Could not find participant")
-            result.success(didStartAudio)
+            result.success(null)
         }
     )
 
     private fun stopAudio(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStopAudio = ParticipantMapper
+            ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let { VoxeetSDK.conference().stopAudio(it).await() }
+                ?.let { require(it) { "Could not stop audio" } }
                 ?: throw IllegalStateException("Could not find participant")
-            result.success(didStopAudio)
+            result.success(null)
         }
     )
 
     private fun startVideo(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStartVideo = ParticipantMapper
+            ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let { VoxeetSDK.conference().startVideo(it).await() }
+                ?.let { require(it) { "Could not start video" } }
                 ?: throw IllegalStateException("Could not find participant")
-            result.success(didStartVideo)
+            result.success(null)
         }
     )
 
     private fun stopVideo(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStopVideo = ParticipantMapper.fromMap(call.arguments as? Map<String, Any?>)
-            result.success(didStopVideo)
+            ParticipantMapper
+                .fromMap(call.arguments as? Map<String, Any?>)
+                ?.let { VoxeetSDK.conference().stopVideo(it).await() }
+                ?.let { require(it) { "Could not stop video" } }
+                ?: throw IllegalStateException("Could not find participant")
+            result.success(null)
         }
     )
 
