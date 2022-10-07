@@ -3,6 +3,7 @@ import Foundation
 internal enum EncoderError: Error {
     case notImplemented(file: String = #filePath, lineNumber: Int = #line)
     case notExist(file: String = #filePath, lineNumber: Int = #line)
+    case argumentNotFound(key: String?, type: String, file: String = #filePath, lineNumber: Int = #line)
     case notArray(file: String = #filePath, lineNumber: Int = #line)
     case notDictionary(file: String = #filePath, lineNumber: Int = #line)
     case outOfRange(file: String = #filePath, lineNumber: Int = #line)
@@ -12,7 +13,6 @@ internal enum EncoderError: Error {
     case castingToStringFailed(file: String = #filePath, lineNumber: Int = #line)
     case castingToNumberFailed(file: String = #filePath, lineNumber: Int = #line)
     case createObjectFailed(file: String = #filePath, lineNumber: Int = #line)
-    case keyNotFound(value: String, file: String = #filePath, lineNumber: Int = #line)
 }
 
 extension EncoderError: LocalizedError {
@@ -22,6 +22,11 @@ extension EncoderError: LocalizedError {
             return "Not implemented.".addErrorLocation(file, lineNumber)
         case let .notExist(file, lineNumber):
             return "Element doesn't exist.".addErrorLocation(file, lineNumber)
+        case let .argumentNotFound(key, type, file, lineNumber):
+            guard let key = key else {
+                return "Element of type: \(type) doesn't exist".addErrorLocation(file, lineNumber)
+            }
+            return "Element for key: \(key) of type: \(type) doesn't exist".addErrorLocation(file, lineNumber)
         case let .notArray(file, lineNumber):
             return "Element is not an array.".addErrorLocation(file, lineNumber)
         case let .outOfRange(file, lineNumber):
@@ -40,8 +45,6 @@ extension EncoderError: LocalizedError {
             return "Casting to NSNumber failed.".addErrorLocation(file, lineNumber)
         case let .createObjectFailed(file, lineNumber):
             return "Failed to create an object.".addErrorLocation(file, lineNumber)
-        case let .keyNotFound(value, file, lineNumber):
-            return "Key not found: \(value)".addErrorLocation(file, lineNumber)
         }
     }
 }

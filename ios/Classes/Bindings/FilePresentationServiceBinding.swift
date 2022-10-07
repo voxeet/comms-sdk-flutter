@@ -37,7 +37,7 @@ class FilePresentationServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            guard let uri: String = try (flutterArguments.asSingle().decode(type: DTO.File.self)?.uri),
+            guard let uri: String = try (flutterArguments.asSingle().decode(type: DTO.File.self).uri),
                   let url = URL(string: uri)
             else {
                 throw BindingError.noUrlProvided
@@ -85,10 +85,7 @@ class FilePresentationServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            guard let fileConverted = try flutterArguments.asSingle().decode(type: DTO.FileConverted.self) else {
-                throw BindingError.noFileConverted
-            }
-            
+            let fileConverted = try flutterArguments.asSingle().decode(type: DTO.FileConverted.self)
             VoxeetSDK.shared.filePresentation.start(fileConverted: fileConverted.toSdkType()) { error in
                 completionHandler.handleError(error)?.orSuccess()
             }
