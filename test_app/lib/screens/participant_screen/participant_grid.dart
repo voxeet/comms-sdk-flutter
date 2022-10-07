@@ -95,10 +95,9 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   }
 
   Future<void> getLocalParticipant() async {
-    setState(() async {
-      localParticipant =
-          await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
-    });
+    final localParticipant =
+        await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+    setState(() => this.localParticipant = localParticipant);
   }
 
   Future<void> initParticipantsList() async {
