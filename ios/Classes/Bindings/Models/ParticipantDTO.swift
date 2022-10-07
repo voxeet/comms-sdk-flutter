@@ -168,7 +168,7 @@ extension DTO {
     typealias AudioTrack = String
     typealias VideoTrack = String
     
-    struct Participant: Codable, Debug {
+    struct Participant: Codable {
         
         let id: String?
         let info: ParticipantInfo
