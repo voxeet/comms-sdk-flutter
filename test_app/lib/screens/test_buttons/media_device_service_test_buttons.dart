@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '/widgets/secondary_button.dart';
+import 'package:flutter/material.dart';
+
 import '/widgets/dialogs.dart';
-import "dart:io" show Platform;
+import '/widgets/secondary_button.dart';
 
 class MediaDeviceServiceTestButtons extends StatelessWidget {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
@@ -22,11 +22,9 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
           text: 'Is front camera', onPressed: () => isFrontCamera(context)),
       SecondaryButton(
           text: 'Switch camera', onPressed: () => switchCamera(context)),
+      SecondaryButton(
+          text: 'Switch speaker', onPressed: () => switchSpeaker(context))
     ];
-    if (Platform.isIOS) {
-      buttons.add(SecondaryButton(
-          text: 'Switch speaker', onPressed: () => switchSpeaker(context)));
-    }
     return Wrap(
       spacing: 8.0,
       runSpacing: 4.0,
