@@ -3,8 +3,12 @@ import VoxeetSDK
 
 class RecordingServiceBinding: Binding {
 
-    private var currentRecording: DTO.RecordingInformation?
-
+    private var currentRecording: DTO.RecordingInformation = .init(
+        participantId: nil,
+        startTimestamp: nil,
+        recordingStatus: .init(recordingStatus: .notRecording)
+    )
+    
     /// Provides the current recording.
     /// - Parameters:
     ///   - completionHandler: Call methods on this instance when execution has finished.
@@ -65,8 +69,10 @@ extension RecordingServiceBinding: VTRecordingDelegate {
         participant: VTParticipant?,
         startTimestamp: NSNumber?
     ) {
-        currentRecording = .init(participantId: participant?.id,
-                                 startTimestamp: startTimestamp?.intValue,
-                                 recordingStatus: .init(recordingStatus: status))
+        currentRecording = .init(
+            participantId: participant?.id,
+            startTimestamp: startTimestamp?.intValue,
+            recordingStatus: .init(recordingStatus: status)
+        )
     }
 }
