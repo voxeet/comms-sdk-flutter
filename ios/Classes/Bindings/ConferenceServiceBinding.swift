@@ -131,7 +131,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.kick(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -163,7 +163,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             completionHandler.success(
                 flutterConvertible: VoxeetSDK.shared.conference.audioLevel(participant: participantObject)
@@ -194,7 +194,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.startAudio(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -215,7 +215,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.stopAudio(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -236,7 +236,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.startVideo(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -257,7 +257,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.stopVideo(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -324,7 +324,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asDictionary(argKey: "participant").decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             let isMuted: Bool = try flutterArguments.asDictionary(argKey: "isMuted").decode() ?? false
             VoxeetSDK.shared.conference.mute(participant: participantObject, isMuted: isMuted) { error in
@@ -379,7 +379,7 @@ class ConferenceServiceBinding: Binding {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
             guard let participantObject = current?.findParticipant(with: participant.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             completionHandler.success(flutterConvertible: VoxeetSDK.shared.conference.isSpeaking(participant: participantObject))
         } catch {
