@@ -25,10 +25,10 @@ public class AssertUtils {
             throw new ClassCastException(errorMsg);
         }
         if (expected.getClass().isPrimitive() && expected != actual ) {
-            throw new MethodDelegate.AssertionFailed(actual, expected, errorMsg, null, null, null);
+            throw new MethodDelegate.AssertionFailed(actual, expected, errorMsg, "", "", 0);
         }
         if (!expected.equals(actual)) {
-            throw new MethodDelegate.AssertionFailed(actual, expected, errorMsg, null, null, null);
+            throw new MethodDelegate.AssertionFailed(actual, expected, errorMsg, "", "", 0);
         }
 
     }
