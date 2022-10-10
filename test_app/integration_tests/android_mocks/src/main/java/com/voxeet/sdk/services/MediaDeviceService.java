@@ -10,12 +10,14 @@ import com.voxeet.promise.Promise;
 import org.jetbrains.annotations.NotNull;
 
 public class MediaDeviceService {
-    private ComfortNoiseLevel level = ComfortNoiseLevel.OFF;
+    public ComfortNoiseLevel level = ComfortNoiseLevel.DEFAULT;
     public void setComfortNoiseLevel(ComfortNoiseLevel level) throws MediaEngineException {
         this.level = level;
     }
 
+    public Boolean getComfortNoiseLevelHasRun = false;
     public ComfortNoiseLevel getComfortNoiseLevel() throws MediaEngineException {
+        getComfortNoiseLevelHasRun = true;
         return level;
     }
 
@@ -24,7 +26,9 @@ public class MediaDeviceService {
         return new CameraContext();
     }
 
+    public Boolean switchCameraHasRun = false;
     public Promise<Boolean> switchCamera() {
+        switchCameraHasRun = true;
         return Promise.resolve(true);
     }
 }
