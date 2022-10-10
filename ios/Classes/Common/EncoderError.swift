@@ -16,7 +16,7 @@ internal enum EncoderError: Error {
 }
 
 extension EncoderError: LocalizedError {
-    var localizedDescription: String? {
+    var errorDescription: String? {
         switch self {
         case let .notImplemented(file, lineNumber):
             return "Not implemented.".addErrorLocation(file, lineNumber)

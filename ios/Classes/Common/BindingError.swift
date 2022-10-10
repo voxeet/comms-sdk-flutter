@@ -14,7 +14,7 @@ internal enum BindingError: Error {
 
 extension BindingError: LocalizedError {
     
-    var localizedDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .noRefreshTokenProvided:
             return "Refresh token is empty"
