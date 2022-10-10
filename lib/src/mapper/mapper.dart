@@ -141,13 +141,19 @@ class FileConvertedMapper {
 
 class RecordingInformationMapper {
   static RecordingInformation fromMap(Map<Object?, Object?> map) {
-    var participantId = map["participantId"] as String;
-    var startTimestamp = map["startTimestamp"] as num;
-    var status = map.containsKey("recordingStatus")
-        ? map["recordingStatus"] as String
+    final participantId = map.containsKey("participantId")
+        ? map["participantId"] as String?
+        : null;
+    final startTimestamp =
+        map.containsKey("startTimestamp") ? map["startTimestamp"] as num? : null;
+    final status = map.containsKey("recordingStatus")
+        ? map["recordingStatus"] as String?
         : null;
     return RecordingInformation(
-        participantId, startTimestamp, RecordingStatus.decode(status));
+      participantId: participantId,
+      startTimestamp: startTimestamp,
+      recordingStatus: RecordingStatus.decode(status),
+    );
   }
 }
 

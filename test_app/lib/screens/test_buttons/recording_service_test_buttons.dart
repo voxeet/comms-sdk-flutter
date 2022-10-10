@@ -53,8 +53,12 @@ class RecordingServiceTestButtons extends StatelessWidget {
   void currentRecording(BuildContext context) {
     _dolbyioCommsSdkFlutterPlugin.recording
         .currentRecording()
-        .then((recordingInformation) =>
-            showDialog(context, 'Success', recordingInformation.toString()))
+        .then((recordingInformation) => showDialog(
+            context,
+            'Success',
+            "Recording ${recordingInformation.recordingStatus}"
+                " by: ${recordingInformation.participantId}"
+                " start time stamp: ${recordingInformation.startTimestamp}"))
         .onError((error, stackTrace) =>
             showDialog(context, 'Error', error.toString()));
   }
