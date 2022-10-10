@@ -1,5 +1,3 @@
-import 'dart:developer' as developer;
-import "dart:io" show Platform;
 import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'models/enums.dart';
 
@@ -34,12 +32,6 @@ class MediaDeviceService {
 
   /// Switches the current speaker to a different speaker that is available. The method is available only on iOS. Using the method on Android triggers an error.
   Future<void> switchSpeaker() async {
-    if (Platform.isAndroid) {
-      developer.log('Switching speaker is not available on Android devices');
-      return await Future.error(
-          'Switching speaker is not available on Android devices');
-    } else {
-      return await _methodChannel.invokeMethod<void>("switchSpeaker");
-    }
+    return await _methodChannel.invokeMethod<void>("switchSpeaker");
   }
 }
