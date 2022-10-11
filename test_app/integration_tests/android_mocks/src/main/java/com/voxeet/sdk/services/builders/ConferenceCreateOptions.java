@@ -13,6 +13,10 @@ public class ConferenceCreateOptions {
         return alias;
     }
 
+    public ParamsHolder getParams() {
+        return paramsHolder;
+    }
+
     public static class Builder {
         private final ConferenceCreateOptions options = new ConferenceCreateOptions();
         @NotNull

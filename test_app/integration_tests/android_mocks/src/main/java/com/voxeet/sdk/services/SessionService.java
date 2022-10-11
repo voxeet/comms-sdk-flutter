@@ -13,6 +13,8 @@ public class SessionService {
     @Nullable
     private Participant localParticipant = null;
 
+    public boolean closeHasRun = false;
+
     private int counter = 0;
 
     public Promise<Boolean> open(@NotNull ParticipantInfo participantInfo) {
@@ -21,6 +23,7 @@ public class SessionService {
     }
 
     public Promise<Boolean> close() {
+        closeHasRun = true;
         localParticipant = null;
         return Promise.resolve(true);
     }

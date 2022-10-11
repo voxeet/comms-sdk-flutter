@@ -1,5 +1,7 @@
 package com.voxeet.sdk.json;
 
+import com.voxeet.sdk.models.v1.ConferenceParticipantStatus;
+
 public class ParticipantInfo {
 
     private String name;
@@ -9,9 +11,9 @@ public class ParticipantInfo {
     public ParticipantInfo() {
         this.name = "";
 
-        this.externalId = "";
+        this.externalId = null;
 
-        this.avatarUrl = "";
+        this.avatarUrl = null;
     }
 
     public ParticipantInfo(String name, String externalId, String avatarUrl) {
