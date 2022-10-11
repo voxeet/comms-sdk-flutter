@@ -1,8 +1,8 @@
 package com.voxeet.sdk.media.constraints;
 
 public class Constraints {
-    private boolean audio;
-    private boolean video;
+    public boolean audio;
+    public boolean video;
 
     public Constraints(boolean audio, boolean video) {
 

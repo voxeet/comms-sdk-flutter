@@ -1,9 +1,6 @@
 package io.dolby.comms.sdk.flutter
 
-import com.voxeet.asserts.VoxeetSDKAssert
-import com.voxeet.asserts.MethodDelegate
-import com.voxeet.asserts.ConferenceServiceAsserts
-import com.voxeet.asserts.MediaDeviceServiceAsserts
+import com.voxeet.asserts.*
 import io.dolby.comms.sdk.flutter.extension.error
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.BinaryMessenger
@@ -14,8 +11,10 @@ object MockAssertionClasses {
     private val assertsClasses = mutableListOf<DelegateMethodHandler>()
 
     fun init(flutterEngine: FlutterEngine) {
+        android.util.Log.d("[KB]", "init mocks")
         val messenger = flutterEngine.dartExecutor.binaryMessenger
         assertsClasses.add(DelegateMethodHandler.createChannelFor(VoxeetSDKAssert.create(), messenger))
+        assertsClasses.add(DelegateMethodHandler.createChannelFor(SessionServiceAsserts(), messenger))
         assertsClasses.add(DelegateMethodHandler.createChannelFor(ConferenceServiceAsserts(), messenger))
         assertsClasses.add(DelegateMethodHandler.createChannelFor(MediaDeviceServiceAsserts(), messenger))
     }
