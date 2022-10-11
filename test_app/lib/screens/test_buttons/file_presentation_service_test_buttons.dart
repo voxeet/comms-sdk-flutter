@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/secondary_button.dart';
 import 'package:file_picker/file_picker.dart';
@@ -18,6 +19,58 @@ class _FilePresentationServiceTestButtonsState
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   FileConverted? fileConverted;
   int selectedPage = 0;
+
+  final _eventListeners = <StreamSubscription<dynamic>>{};
+
+  @override
+  void initState() {
+    super.initState();
+
+    _eventListeners.add(_dolbyioCommsSdkFlutterPlugin.filePresentation
+        .onFileConverted()
+        .listen((event) {
+      switch (event.type) {
+        case FilePresentationServiceEventNames.fileConverted:
+          showDialog(context, "File presentation evet: fileConverted",
+              "On Event Change");
+          break;
+        case FilePresentationServiceEventNames.filePresentationStarted:
+        case FilePresentationServiceEventNames.filePresentationStopped:
+        case FilePresentationServiceEventNames.filePresentationUpdated:
+          break;
+      }
+    }));
+
+    _eventListeners.add(_dolbyioCommsSdkFlutterPlugin.filePresentation
+        .onFilePresentationChange()
+        .listen((event) {
+      switch (event.type) {
+        case FilePresentationServiceEventNames.fileConverted:
+          break;
+        case FilePresentationServiceEventNames.filePresentationStarted:
+          showDialog(context, "File presentation evet: filePresentationStarted",
+              "On Event Change");
+          break;
+        case FilePresentationServiceEventNames.filePresentationStopped:
+          showDialog(context, "File presentation evet: filePresentationStopped",
+              "On Event Change");
+          break;
+        case FilePresentationServiceEventNames.filePresentationUpdated:
+          showDialog(context, "File presentation evet: filePresentationUpdated",
+              "On Event Change");
+          break;
+      }
+    }));
+  }
+
+  @override
+  void dispose() {
+    for (final element in _eventListeners) {
+      element.cancel();
+    }
+    _eventListeners.clear();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
