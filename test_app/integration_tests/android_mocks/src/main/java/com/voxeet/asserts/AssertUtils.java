@@ -20,7 +20,10 @@ public class AssertUtils {
         return true;
     }
 
-    public static void compareWithExpectedValue(Object actual, Object expected, String errorMsg) throws MethodDelegate.AssertionFailed {
+    public static<T> void compareWithExpectedValue(T actual, T expected, String errorMsg) throws MethodDelegate.AssertionFailed {
+        if (actual == null && expected != actual) {
+            throw new MethodDelegate.AssertionFailed(actual, expected, errorMsg, "", "", 0);
+        }
         if (!actual.getClass().isInstance(expected)) {
             throw new ClassCastException(errorMsg);
         }
