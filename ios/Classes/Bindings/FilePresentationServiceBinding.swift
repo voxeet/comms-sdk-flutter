@@ -38,8 +38,15 @@ class FilePresentationServiceBinding: Binding {
     ) {
         do {
             guard let uri: String = try (flutterArguments.asSingle().decode(type: DTO.File.self).uri),
-                  let url = URL(string: uri)
+                  var urlComponents = URLComponents(string: uri)
             else {
+                throw BindingError.noUrlProvided
+            }
+            
+            if urlComponents.scheme == nil {
+                urlComponents.scheme = "file"
+            }
+            guard let url = urlComponents.url else {
                 throw BindingError.noUrlProvided
             }
             
