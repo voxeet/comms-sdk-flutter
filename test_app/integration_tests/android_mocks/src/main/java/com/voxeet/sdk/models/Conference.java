@@ -17,7 +17,7 @@ import java.util.List;
 
 public class Conference {
     private List<Participant> participants = new ArrayList<>();
-    private ConferenceStatus state = ConferenceStatus.UNINITIALIZED;
+    private ConferenceStatus state = ConferenceStatus.ENDED;
     @NonNull
     private String id;
 
@@ -26,7 +26,7 @@ public class Conference {
 
     @androidx.annotation.Nullable
     private RecordingInformation recordingInformation;
-    private boolean isNew = true;
+    private boolean isNew = false;
 
 
     public List<Participant> getParticipants() {
@@ -37,8 +37,9 @@ public class Conference {
         return state;
     }
 
-    public void setState(ConferenceStatus status) {
+    public Conference setState(ConferenceStatus status) {
         state = status;
+        return this;
     }
 
     @Nullable
@@ -69,6 +70,11 @@ public class Conference {
         return isNew;
     }
 
+    public Conference setIsNew(boolean isNew) {
+        this.isNew = isNew;
+        return this;
+    }
+
     public void setRecordingInformation(@androidx.annotation.Nullable RecordingInformation recordingInformation) {
         this.recordingInformation = recordingInformation;
     }
@@ -88,9 +94,12 @@ public class Conference {
         return recordingInformation;
     }
 
-    public void addParticipant(Participant participant) {
-        setState(ConferenceStatus.JOINING);
+    public Conference addParticipant(Participant participant) {
         participants.add(participant);
+        if (participant.getStatus() == ConferenceParticipantStatus.ON_AIR) {
+            setState(ConferenceStatus.JOINED);
+        }
+        return this;
     }
 
     public static class RecordingInformation {

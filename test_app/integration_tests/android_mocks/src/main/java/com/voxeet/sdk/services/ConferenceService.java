@@ -34,16 +34,21 @@ import java.util.UUID;
 
 public class ConferenceService {
 
-    public static Conference setMockConference(int type) {
-        switch (type) {
-            case 1:
-
-        }
-        return null;
-    }
-
+    public Conference joinReturn = null;
     @Nullable
-    private Conference currentConference = null;
+    public Conference current = null;
+
+    public Conference fetchReturn = null;
+    public String fetchArgs = null;
+    public Conference createReturn = null;
+    public ConferenceJoinOptions joinArgs = null;
+    public Participant kickArgs = null;
+    public boolean leaveHasRun = false;
+    public boolean kickReturn = false;
+    public Participant audioLevelArgs = null;
+    public Float audioLevelReturn;
+    public Integer maxVideoForwardingReturn;
+    public Participant startAudioArgs;
 
     private String mConferenceId = null;
     private boolean localUserLeft = false;
@@ -54,16 +59,17 @@ public class ConferenceService {
     public Promise<Conference> create(@NotNull ConferenceCreateOptions conferenceCreateOption) {
         createArgs = conferenceCreateOption;
         return new Promise<>(solver -> {
-            currentConference = fromConferenceOptions(conferenceCreateOption);
-            mConferenceId = currentConference.getId();
-            currentConference.setState(ConferenceStatus.CREATED);
-            solver.resolve(currentConference);
+//            currentConference = fromConferenceOptions(conferenceCreateOption);
+//            mConferenceId = currentConference.getId();
+//            currentConference.setState(ConferenceStatus.CREATED);
+//            solver.resolve(currentConference);
+            solver.resolve(createReturn);
         });
     }
 
     @Nullable
     public Conference getConference() {
-        return currentConference;
+        return current;
     }
 
     @Nullable
@@ -73,38 +79,42 @@ public class ConferenceService {
 
     @NonNull
     public Conference getConference(@NonNull String conferenceId) {
-        if (currentConference != null && conferenceId.equals(currentConference.getId())) {
-            return currentConference;
+        if (current != null && conferenceId.equals(current.getId())) {
+            return current;
         }
-        return null;
+        return new Conference().setConferenceId(conferenceId);
     }
 
     @NotNull
     public Promise<Conference> fetchConference(@NotNull String conferenceId) {
         return new Promise<>(solver -> {
-           solver.resolve(fetchInternal(conferenceId));
+            fetchArgs = conferenceId;
+            solver.resolve(fetchReturn);
         });
     }
 
     @NotNull
     public Promise<Conference> join(@NonNull ConferenceJoinOptions options)  {
         return new Promise<>(solver -> {
-            String id = Opt.of(options).then(ConferenceJoinOptions::getConferenceId).or("");
-            if (id.equals("") || currentConference == null) {
-                solver.reject(new NullPointerException("Conference is null or id is empty"));
-            } else {
-                joinInternal(options);
-                solver.resolve(currentConference);
-            }
+            joinArgs = options;
+//            String id = Opt.of(options).then(ConferenceJoinOptions::getConferenceId).or("");
+//            if (id.equals("") || currentConference == null) {
+//                solver.reject(new NullPointerException("Conference is null or id is empty"));
+//            } else {
+//                joinInternal(options);
+//                solver.resolve(currentConference);
+//            }
+            solver.resolve(joinReturn);
         });
     }
 
     public Promise<Boolean> leave() {
         return new Promise(solver -> {
+            leaveHasRun = true;
             Participant p = VoxeetSDK.session().getParticipant();
             boolean result = false;
-            if (currentConference != null && p != null) {
-                Participant participant = currentConference.findParticipantById(p.getId());
+            if (current != null && p != null) {
+                Participant participant = current.findParticipantById(p.getId());
                 result = participant != null && participant.getStatus() == ConferenceParticipantStatus.ON_AIR;
                 p.setStatus(ConferenceParticipantStatus.LEFT);
 
@@ -114,11 +124,8 @@ public class ConferenceService {
     }
 
     public double audioLevel(@Nullable Participant participant) {
-        if (currentConference != null && participant != null) {
-            Participant p = currentConference.findParticipantById(participant.getId());
-            return p != null ? 1 : 0;
-        }
-        return 0;
+        audioLevelArgs = participant;
+        return audioLevelReturn;
     }
 
     @Nullable
@@ -127,7 +134,7 @@ public class ConferenceService {
     }
 
     public List<Participant> getParticipants() {
-        return currentConference != null ? currentConference.getParticipants() : new ArrayList<>();
+        return current != null ? current.getParticipants() : new ArrayList<>();
     }
 
     public boolean isMuted() {
@@ -144,7 +151,9 @@ public class ConferenceService {
 
     @NotNull
     public Promise<Boolean> kick(@NotNull Participant p) {
-        return Promise.resolve(true);
+        kickArgs = p;
+        kickReturn = current != null && current.findParticipantById(p.getId()) != null;
+        return Promise.resolve(kickReturn);
     }
 
     @NotNull
@@ -154,6 +163,7 @@ public class ConferenceService {
 
     @NotNull
     public Promise<Boolean> startAudio(@NotNull Participant p) {
+        audioLevelArgs = p;
         return Promise.resolve(true);
     }
 
@@ -230,7 +240,7 @@ public class ConferenceService {
 
     @Nullable
     public Integer getMaxVideoForwarding() {
-        return 0;
+        return maxVideoForwardingReturn;
     }
 
     @NotNull
@@ -282,16 +292,12 @@ public class ConferenceService {
         });
     }
 
-    private Conference fetchInternal(String conferenceId) {
-        return new Conference().setConferenceId(conferenceId);
-    }
-
     private void joinInternal(ConferenceJoinOptions options) {
         Participant localP = VoxeetSDK.session().getParticipant();
-        if (currentConference != null && localP != null) {
-            currentConference.addParticipant(localP);
+        if (current != null && localP != null) {
+            current.addParticipant(localP);
             localP.setStatus(ConferenceParticipantStatus.ON_AIR);
-            currentConference.setState(ConferenceStatus.JOINED);
+            current.setState(ConferenceStatus.JOINED);
         }
     }
 

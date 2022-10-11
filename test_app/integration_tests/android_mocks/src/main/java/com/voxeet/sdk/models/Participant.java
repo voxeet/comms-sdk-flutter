@@ -16,14 +16,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Participant {
     @Nullable
-    private ParticipantInfo participantInfo;
+    public ParticipantInfo participantInfo;
     private String id;
     @NonNull
     private ConferenceParticipantStatus status;
     private final List<MediaStream> streams;
     private final ParticipantMediaStreamHandler streamsHandler;
     @NonNull
-    private ParticipantType participantType = ParticipantType.USER;
+    private ParticipantType participantType = ParticipantType.UNKNOWN;
 
     private Participant() {
         status = ConferenceParticipantStatus.UNKNOWN;
@@ -58,8 +58,9 @@ public class Participant {
         return status;
     }
 
-    public void setStatus(@NonNull ConferenceParticipantStatus status) {
+    public Participant setStatus(@NonNull ConferenceParticipantStatus status) {
         this.status = status;
+        return this;
     }
 
     @NonNull
@@ -87,5 +88,10 @@ public class Participant {
     @NonNull
     public ParticipantMediaStreamHandler streamsHandler() {
         return streamsHandler;
+    }
+
+    public Participant setType(ParticipantType type) {
+        this.participantType = type;
+        return this;
     }
 }
