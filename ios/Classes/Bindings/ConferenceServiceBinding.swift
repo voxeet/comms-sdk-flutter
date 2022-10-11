@@ -621,6 +621,36 @@ class ConferenceServiceBinding: Binding {
             completionHandler.failure(error)
         }
     }
+    
+    /// Joins a conference as a listener.
+    /// - Parameters:
+    ///   - flutterArguments: Method arguments passed from Flutter.
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func listen(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        
+        do {
+            let options = try flutterArguments.asDictionary(argKey: "options")
+                .decode(type: DTO.ListenOptions.self)
+            let conference = try flutterArguments.asDictionary(argKey: "conference")
+                .decode(type: DTO.Confrence.self)
+            guard let conferenceId = conference.id else {
+                throw BindingError.noConferenceId
+            }
+            
+            VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
+                VoxeetSDK.shared.conference.listen(conference: conference, options: options.toSdkType()) { conference in
+                    completionHandler.success(encodable: DTO.Confrence(conference: conference))
+                } fail: { error in
+                    completionHandler.failure(error)
+                }
+            }
+        } catch {
+            
+        }
+    }
 }
 
 extension ConferenceServiceBinding: VTConferenceDelegate {
@@ -781,6 +811,8 @@ extension ConferenceServiceBinding: FlutterBinding {
             muteOutput(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "updatePermissions":
             updatePermissions(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "listen":
+            listen(flutterArguments: flutterArguments, completionHandler: completionHandler)
             
         default:
             completionHandler.methodNotImplemented()

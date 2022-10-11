@@ -346,4 +346,29 @@ extension DTO {
             return map
         }
     }
+    
+    struct ListenOptions: Codable {
+        
+        let maxVideoForwarding: Int?
+        let conferenceAccessToken: String?
+        let spatialAudio: Bool?
+        
+        init(conferenceListenOptions: VTListenOptions) {
+
+            self.maxVideoForwarding = conferenceListenOptions.maxVideoForwarding?.intValue
+            self.conferenceAccessToken = conferenceListenOptions.conferenceAccessToken
+            self.spatialAudio = conferenceListenOptions.spatialAudio
+        }
+        
+        func toSdkType() -> VTListenOptions {
+            let listenOptions = VTListenOptions()
+            listenOptions.maxVideoForwarding = maxVideoForwarding.map { NSNumber(value: $0) }
+            listenOptions.conferenceAccessToken = conferenceAccessToken
+            if let spatialAudio = spatialAudio {
+                listenOptions.spatialAudio = spatialAudio
+            }
+
+            return listenOptions
+        }
+    }
 }

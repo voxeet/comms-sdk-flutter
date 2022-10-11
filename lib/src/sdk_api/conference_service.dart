@@ -353,6 +353,20 @@ class ConferenceService {
     return Future.value();
   }
 
+  /// Joins a conference as a listener.
+  /// The [conference] parameter refers to the conference that tha local participant wants to join as a listener.
+  /// The [options] parameter allows setting additional options for the joining participant.
+  Future<Conference> listen(Conference conference, ConferenceListenOptions options) async {
+    var arguments = {
+      "conference": conference.toJson(),
+      "options": options.toJson()
+    };
+    var result = await _methodChannel.invokeMethod<Map<Object?, Object?>>(
+            "listen", arguments) ??
+        <String, Object?>{};
+    return ConferenceMapper.fromMap(result);
+  }
+
   /// Returns a [Stream] of the [ConferenceServiceEventNames.statusUpdated] events. By subscribing to the returned stream you will be notified about conference status changes.
   Stream<Event<ConferenceServiceEventNames, ConferenceStatus>>
       onStatusChange() {
