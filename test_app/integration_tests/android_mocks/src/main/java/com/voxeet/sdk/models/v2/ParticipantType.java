@@ -13,5 +13,6 @@ public enum ParticipantType {
     ROBOT_LISTENER,
     ROBOT_PSTN,
     ROBOT_MIXER,
-    ROBOT_NONE;
+    ROBOT_NONE,
+    UNKNOWN;
 }
