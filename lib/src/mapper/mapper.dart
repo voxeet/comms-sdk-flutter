@@ -144,8 +144,9 @@ class RecordingInformationMapper {
     final participantId = map.containsKey("participantId")
         ? map["participantId"] as String?
         : null;
-    final startTimestamp =
-        map.containsKey("startTimestamp") ? map["startTimestamp"] as num? : null;
+    final startTimestamp = map.containsKey("startTimestamp")
+        ? map["startTimestamp"] as num?
+        : null;
     final status = map.containsKey("recordingStatus")
         ? map["recordingStatus"] as String?
         : null;

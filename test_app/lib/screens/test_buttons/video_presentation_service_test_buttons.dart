@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/secondary_button.dart';
@@ -16,9 +17,12 @@ class _VideoPresentationServiceTestButtonsState
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   String url = '';
 
+  final _eventListeners = <StreamSubscription<dynamic>>{};
+
   @override
   void initState() {
-    _dolbyioCommsSdkFlutterPlugin.videoPresentation
+    super.initState();
+    _eventListeners.add(_dolbyioCommsSdkFlutterPlugin.videoPresentation
         .onVideoPresentationChange()
         .listen((event) {
       if (event.type == VideoPresentationEventNames.videoPresentationStarted) {
@@ -33,15 +37,23 @@ class _VideoPresentationServiceTestButtonsState
           VideoPresentationEventNames.videoPresentationSought) {
         showAlertDialog(context, "VideoPresentationSought", "On Event Change");
       }
-    });
+    }));
 
-    _dolbyioCommsSdkFlutterPlugin.videoPresentation
+    _eventListeners.add(_dolbyioCommsSdkFlutterPlugin.videoPresentation
         .onVideoPresentationStopped()
         .listen((event) {
       showAlertDialog(context, "VideoPresentationStopped", "On Event Change");
-    });
+    }));
 
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    for (final element in _eventListeners) {
+      element.cancel();
+    }
+    _eventListeners.clear();
+    super.dispose();
   }
 
   @override

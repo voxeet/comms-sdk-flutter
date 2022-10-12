@@ -15,6 +15,11 @@ private enum EventKeys: String, CaseIterable {
 
 class FilePresentationServiceBinding: Binding {
     
+    override func onInit() {
+        super.onInit()
+        VoxeetSDK.shared.filePresentation.delegate = self
+    }
+    
     /// Returns information about the current state of the file presentation.
     /// - Parameters:
     ///   - completionHandler: Call methods on this instance when execution has finished.
