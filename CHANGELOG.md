@@ -1,3 +1,15 @@
+## 3.6.0-beta.4
+
+### Bug fixes
+
+- Fixed an issue where the start and stop methods of the [VideoPresentationService](./lib/src/sdk_api/video_presentation_service.dart) did not work properly.
+- Improved error reporting on iOS.
+- Fixed a crash that occurred when accessing the current recording.
+- Fixed an issue with [converting](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/FilePresentationService/convert.html) files on iOS devices.
+- Fixed an issue with receiving events from the [FilePresentationService](./lib/src/sdk_api/file_presentation_service.dart) and [VideoPresentationService](./lib/src/sdk_api/video_presentation_service.dart) on iOS devices.
+- Added an option to switch speakers on Android devices.
+- Unified error messages on iOS and Android devices.
+
 ## 3.6.0-beta.3
 
 ### Bug fixes:
