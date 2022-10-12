@@ -2,7 +2,7 @@ import 'participant.dart';
 
 /// The File class gathers information about a file that a presenter wants to share during a conference.
 class File {
-  /// The URL of a file.
+  /// The local path of a file.
   String uri;
 
   File(this.uri);
