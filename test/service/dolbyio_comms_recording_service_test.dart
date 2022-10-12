@@ -39,7 +39,7 @@ void main() {
 
     var result = await recordingService.currentRecording();
 
-    expect(result!.startTimestamp, startTimestamp);
+    expect(result.startTimestamp, startTimestamp);
     expect(result.participantId, participantId);
     expect(result.recordingStatus, status);
   });

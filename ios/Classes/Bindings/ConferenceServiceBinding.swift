@@ -55,7 +55,7 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let options = try flutterArguments.asSingle().decode(type: DTO.ConferenceOptions.self)
-            VoxeetSDK.shared.conference.create(options: options?.toSdkType()) { conference in
+            VoxeetSDK.shared.conference.create(options: options.toSdkType()) { conference in
                 completionHandler.success(encodable: DTO.Confrence(conference: conference))
             } fail: { error in
                 completionHandler.failure(error)
@@ -74,7 +74,11 @@ class ConferenceServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            let conferenceId: String = try flutterArguments.asDictionary(argKey: "conferenceId").decode()
+            let conferenceId: String? = try flutterArguments.asDictionary(argKey: "conferenceId").decode()
+            guard let conferenceId = conferenceId else {
+                currentConference(completionHandler:completionHandler)
+                return
+            }
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
                 completionHandler.success(encodable: DTO.Confrence(conference: conference))
             }
@@ -96,19 +100,16 @@ class ConferenceServiceBinding: Binding {
             
             let options = try flutterArguments.asDictionary(argKey: "options")
                 .decode(type: DTO.JoinOptions.self)
-            
-            guard
-                let conference = try flutterArguments.asDictionary(argKey: "conference")
-                    .decode(type: DTO.Confrence.self),
-                let conferenceId = conference.id
-            else {
+            let conference = try flutterArguments.asDictionary(argKey: "conference")
+                .decode(type: DTO.Confrence.self)
+            guard let conferenceId = conference.id else {
                 throw BindingError.noConferenceId
             }
             
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
                 VoxeetSDK.shared.conference.join(
                     conference: conference,
-                    options: options?.toSdkType()) { conference in
+                    options: options.toSdkType()) { conference in
                         completionHandler.success(encodable: DTO.Confrence(conference: conference))
                     } fail: { error in
                         completionHandler.failure(error)
@@ -129,8 +130,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.kick(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -161,8 +162,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             completionHandler.success(
                 flutterConvertible: VoxeetSDK.shared.conference.audioLevel(participant: participantObject)
@@ -192,8 +193,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.startAudio(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -213,8 +214,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.stopAudio(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -234,8 +235,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.startVideo(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -255,8 +256,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             VoxeetSDK.shared.conference.stopVideo(participant: participantObject) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -295,7 +296,7 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let conference = try flutterArguments.asSingle().decode(type: DTO.Confrence.self)
-            guard let conferenceId = conference?.id else {
+            guard let conferenceId = conference.id else {
                 throw BindingError.noConferenceId
             }
             if let current = current, current.id == conferenceId {
@@ -322,8 +323,8 @@ class ConferenceServiceBinding: Binding {
     {
         do {
             let participant = try flutterArguments.asDictionary(argKey: "participant").decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             let isMuted: Bool = try flutterArguments.asDictionary(argKey: "isMuted").decode() ?? false
             VoxeetSDK.shared.conference.mute(participant: participantObject, isMuted: isMuted) { error in
@@ -345,7 +346,7 @@ class ConferenceServiceBinding: Binding {
         
         do {
             let conference = try flutterArguments.asSingle().decode(type: DTO.Confrence.self)
-            guard let conferenceId = conference?.id else {
+            guard let conferenceId = conference.id else {
                 throw BindingError.noConferenceId
             }
             VoxeetSDK.shared.conference.fetch(conferenceID: conferenceId) { conference in
@@ -377,8 +378,8 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let participant = try flutterArguments.asSingle().decode(type: DTO.Participant.self)
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipant(participant.debugDescription)
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipant(String(reflecting: participant))
             }
             completionHandler.success(flutterConvertible: VoxeetSDK.shared.conference.isSpeaking(participant: participantObject))
         } catch {
@@ -396,9 +397,6 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let audioProcessing = try flutterArguments.asSingle().decode(type: DTO.AudioProcessingOptions.self)
-            guard let audioProcessing = audioProcessing else {
-                throw BindingError.noAudioProcessing
-            }
             VoxeetSDK.shared.conference.audioProcessing(enable: audioProcessing.send?.audioProcessing ?? false)
             completionHandler.success()
         } catch {
@@ -416,7 +414,7 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let conference = try flutterArguments.asDictionary(argKey: "conference").decode(type: DTO.Confrence.self)
-            guard let conferenceId = conference?.id else {
+            guard let conferenceId = conference.id else {
                 throw BindingError.noConferenceId
             }
             
@@ -459,9 +457,6 @@ class ConferenceServiceBinding: Binding {
     ) {
         do {
             let permissions = try flutterArguments.asSingle().decode(type: [DTO.ParticipantPermissions].self)
-            guard let permissions =  permissions else {
-                throw BindingError.noPermission
-            }
             VoxeetSDK.shared.conference.updatePermissions(
                 participantPermissions: (try permissions.map { try $0.toSdkType() })
             ) { error in
@@ -499,7 +494,7 @@ class ConferenceServiceBinding: Binding {
             let participants = try flutterArguments.asDictionary(argKey: "prioritizedParticipants").decode(type: [DTO.Participant].self)
             VoxeetSDK.shared.conference.videoForwarding(
                 max: max,
-                participants: participants?.compactMap { current?.findParticipant(with: $0.id) }
+                participants: participants.compactMap { current?.findParticipant(with: $0.id) }
             ) { error in
                 completionHandler.handleError(error)?.orSuccess()
             }
@@ -568,10 +563,6 @@ class ConferenceServiceBinding: Binding {
                 throw BindingError.noCurrentParticipant
             }
             
-            guard let direction = direction else {
-                throw BindingError.noSpatialDirection
-            }
-            
             VoxeetSDK.shared.conference.setSpatialDirection(participant: participantObject,
                                                             direction: direction.toSdkType()) { error in
                 completionHandler.handleError(error)?.orSuccess()
@@ -594,18 +585,7 @@ class ConferenceServiceBinding: Binding {
             let forward = try flutterArguments.asDictionary(argKey: "forward").decode(type: DTO.SpatialPosition.self)
             let up = try flutterArguments.asDictionary(argKey: "up").decode(type: DTO.SpatialPosition.self)
             let right = try flutterArguments.asDictionary(argKey: "right").decode(type: DTO.SpatialPosition.self)
-            
-            guard let scale = scale else {
-                throw BindingError.noSpatialScale
-            }
-            
-            guard let forward = forward,
-                  let up = up,
-                  let right = right
-            else {
-                throw BindingError.noSpatialPosition
-            }
-            
+
             VoxeetSDK.shared.conference.setSpatialEnvironment(scale: scale.toSdkType(),
                                                               forward: forward.toSdkType(),
                                                               up: up.toSdkType(),
@@ -629,12 +609,8 @@ class ConferenceServiceBinding: Binding {
             let participant = try flutterArguments.asDictionary(argKey: "participant").decode(type: DTO.Participant.self)
             let position = try flutterArguments.asDictionary(argKey: "position").decode(type: DTO.SpatialPosition.self)
             
-            guard let participantObject = current?.findParticipant(with: participant?.id) else {
-                throw BindingError.noParticipantId(participant?.id ?? "")
-            }
-            
-            guard let position = position else {
-                throw BindingError.noSpatialPosition
+            guard let participantObject = current?.findParticipant(with: participant.id) else {
+                throw BindingError.noParticipantId(participant.id ?? "")
             }
             
             VoxeetSDK.shared.conference.setSpatialPosition(participant: participantObject,

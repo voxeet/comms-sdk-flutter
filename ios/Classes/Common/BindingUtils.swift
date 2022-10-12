@@ -13,14 +13,23 @@ struct FlutterMethodCallArguments {
     struct Argument {
         
         private let argument: Any?
+        private let key: String?
         
-        init(_ argument: Any?) {
+        init(_ argument: Any?, _ key: String? = nil) {
             self.argument = argument
+            self.key = key
         }
         
-        func decode<T: Decodable>(type: T.Type) throws -> T? {
+        func decodeOptional<T: Decodable>(type: T.Type) throws -> T? {
             guard let argument = argument, !(argument is NSNull) else {
                 return nil
+            }
+            return try FlutterValueDecoder(value: argument).decode(type: type)
+        }
+
+        func decode<T: Decodable>(type: T.Type, file: String = #filePath, lineNumber: Int = #line) throws -> T {
+            guard let argument = argument, !(argument is NSNull) else {
+                throw EncoderError.argumentNotFound(key: key, type: String(describing: type), file: file, lineNumber: lineNumber)
             }
             return try FlutterValueDecoder(value: argument).decode(type: type)
         }
@@ -32,9 +41,9 @@ struct FlutterMethodCallArguments {
             return try T.fromFlutterValue(argument)
         }
         
-        func decode<T: FlutterConvertible>() throws -> T {
+        func decode<T: FlutterConvertible>(file: String = #filePath, lineNumber: Int = #line) throws -> T {
             guard let argument = argument else {
-                throw EncoderError.notExist()
+                throw EncoderError.argumentNotFound(key: key, type: String(describing: T.Type.self), file: file, lineNumber: lineNumber)
             }
             return try T.fromFlutterValue(argument)
         }
@@ -57,14 +66,11 @@ struct FlutterMethodCallArguments {
         return Argument(argArray[argIndex])
     }
 
-    func asDictionary(argKey: String, optional: Bool = true, file: String = #filePath, lineNumber: Int = #line) throws -> Argument {
+    func asDictionary(argKey: String, file: String = #filePath, lineNumber: Int = #line) throws -> Argument {
         guard let argDictionary = methodCallArguments as? [String: Any] else {
             throw EncoderError.notDictionary(file: file, lineNumber: lineNumber)
         }
-        guard argDictionary.keys.contains(argKey) || optional else {
-            throw EncoderError.keyNotFound(value: argKey, file: file, lineNumber: lineNumber)
-        }
-        return Argument(argDictionary[argKey])
+        return Argument(argDictionary[argKey], argKey)
     }
 
     func asSingle() -> Argument {

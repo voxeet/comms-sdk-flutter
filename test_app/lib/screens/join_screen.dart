@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -135,96 +134,97 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
         decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TwoColorText(
-                  blackText: "Logged in as ", colorText: widget.username),
-              TwoColorText(
-                  blackText: "External ID  ", colorText: widget.externalId),
-              const SizedBox(height: 16),
-              Form(
-                key: formKeyAlias,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: InputTextFormField(
-                    labelText: 'Conference alias',
-                    controller: conferenceAliasTextController,
-                    focusColor: Colors.deepPurple),
-              ),
-              Row(
-                children: [
-                  const Text("Observe Conference Status"),
-                  CupertinoSwitch(
-                    value: switchConferenceStatus,
-                    onChanged: (value) {
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TwoColorText(
+                    blackText: "Logged in as ", colorText: widget.username),
+                TwoColorText(
+                    blackText: "External ID  ", colorText: widget.externalId),
+                const SizedBox(height: 16),
+                Form(
+                  key: formKeyAlias,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: InputTextFormField(
+                      labelText: 'Conference alias',
+                      controller: conferenceAliasTextController,
+                      focusColor: Colors.deepPurple),
+                ),
+                SwitchListTile(
+                  activeColor: Colors.deepPurple,
+                  title: const Text("Observe Conference Status"),
+                  value: switchConferenceStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      switchConferenceStatus = value;
+                      observeConferenceStatus(switchConferenceStatus);
+                    });
+                  },
+                ),
+                SwitchListTile(
+                  activeColor: Colors.deepPurple,
+                  title: const Text("Dolby voice"),
+                  value: switchDolbyVoice,
+                  onChanged: (value) {
+                    if(value == false) {
                       setState(() {
-                        switchConferenceStatus = value;
-                        observeConferenceStatus(switchConferenceStatus);
-                      });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text("Spatial Audio"),
-                  CupertinoSwitch(
-                    value: switchSpatialAudio,
-                    onChanged: (value) {
-                      setState(() {
+                        switchDolbyVoice = value;
                         switchSpatialAudio = value;
                       });
-                    },
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  const Text("Dolby Voice"),
-                  CupertinoSwitch(
-                    value: switchDolbyVoice,
-                    onChanged: (value) {
+                    } else {
                       setState(() {
                         switchDolbyVoice = value;
                       });
-                    },
-                  ),
-                ],
-              ),
-              PrimaryButton(
-                widgetText: isJoining
-                    ? const WhiteCircularProgressIndicator()
-                    : const Text('Join'),
-                onPressed: () {
-                  if (defaultTargetPlatform == TargetPlatform.android) {
-                    checkPermissions();
-                    return;
-                  }
-                  onJoinButtonPressed();
-                },
-                color: Colors.deepPurple,
-              ),
-              const SizedBox(height: 16),
-              Form(
-                key: formKeyId,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: InputTextFormField(
-                    labelText: 'Conference ID with record',
-                    controller: conferenceIdTextController,
-                    focusColor: Colors.deepPurple),
-              ),
-              PrimaryButton(
-                widgetText: isReplaying
-                    ? const WhiteCircularProgressIndicator()
-                    : const Text('Replay conference'),
-                onPressed: () {
-                  onReplayButtonPressed();
-                },
-                color: Colors.deepPurple,
-              ),
-            ],
+                    }
+                  },
+                ),
+                SwitchListTile(
+                    activeColor: Colors.deepPurple,
+                    title: const Text("Spatial audio"),
+                    value: switchSpatialAudio,
+                    onChanged: switchDolbyVoice
+                        ? (value) {
+                            setState(() {
+                              switchSpatialAudio = value;
+                            });
+                          }
+                        : null),
+                PrimaryButton(
+                  widgetText: isJoining
+                      ? const WhiteCircularProgressIndicator()
+                      : const Text('Join'),
+                  onPressed: () {
+                    if (defaultTargetPlatform == TargetPlatform.android) {
+                      checkPermissions();
+                      return;
+                    }
+                    onJoinButtonPressed();
+                  },
+                  color: Colors.deepPurple,
+                ),
+                const SizedBox(height: 16),
+                Form(
+                  key: formKeyId,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: InputTextFormField(
+                      labelText: 'Conference ID with record',
+                      controller: conferenceIdTextController,
+                      focusColor: Colors.deepPurple),
+                ),
+                PrimaryButton(
+                  widgetText: isReplaying
+                      ? const WhiteCircularProgressIndicator()
+                      : const Text('Replay conference'),
+                  onPressed: () {
+                    onReplayButtonPressed();
+                  },
+                  color: Colors.deepPurple,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -312,7 +312,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   void checkJoinConferenceResult(Conference conference) {
     if (conference.status == ConferenceStatus.joined) {
-      navigateToParticipantScreen(context);
+      navigateToParticipantScreen(context, conference);
     } else {
       developer.log('Cannot join to conference.');
     }
@@ -385,9 +385,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     setState(() => isReplaying = false);
   }
 
-  Future navigateToParticipantScreen(BuildContext context) async {
+  Future navigateToParticipantScreen(
+      BuildContext context, Conference conference) async {
     await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const ParticipantScreen()),
+      MaterialPageRoute(
+          builder: (context) => ParticipantScreen(
+              conference: conference,
+              isSpatialAudio: switchSpatialAudio)),
     );
     setState(() => isJoining = false);
   }

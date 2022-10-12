@@ -3,17 +3,17 @@ package io.dolby.comms.sdk.flutter.module
 import com.voxeet.VoxeetSDK
 import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
 import io.dolby.comms.sdk.flutter.extension.await
-import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.dolby.comms.sdk.flutter.extension.error
 import io.dolby.comms.sdk.flutter.extension.launch
 import io.dolby.comms.sdk.flutter.mapper.ComfortNoiseLevelMapper
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 
-class MediaDeviceServiceNativeModule(private val scope: CoroutineScope): NativeModule {
+class MediaDeviceServiceNativeModule(private val scope: CoroutineScope) : NativeModule {
 
     private lateinit var channel: MethodChannel
 
@@ -23,6 +23,7 @@ class MediaDeviceServiceNativeModule(private val scope: CoroutineScope): NativeM
             ::setComfortNoiseLevel.name -> setComfortNoiseLevel(call, result)
             ::isFrontCamera.name -> isFrontCamera(result)
             ::switchCamera.name -> switchCamera(result)
+            ::switchSpeaker.name -> switchSpeaker(result)
         }
     }
 
@@ -70,6 +71,13 @@ class MediaDeviceServiceNativeModule(private val scope: CoroutineScope): NativeM
             VoxeetSDK.mediaDevice().switchCamera().await().let {
                 result.success(it)
             }
+        }
+    )
+
+    private fun switchSpeaker(result: Result) = scope.launch(
+        onError = result::error,
+        onSuccess = {
+            VoxeetSDK.audio().setSpeakerMode(!VoxeetSDK.audio().isSpeakerOn).also { result.success(null) }
         }
     )
 }

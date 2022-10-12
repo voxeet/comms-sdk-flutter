@@ -14,7 +14,7 @@ class SessionServiceBinding: Binding {
 	) {
         do {
             let participantInfo = try flutterArguments.asSingle().decode(type: DTO.ParticipantInfo.self)
-            VoxeetSDK.shared.session.open(info: participantInfo?.toSdkType()) { error in
+            VoxeetSDK.shared.session.open(info: participantInfo.toSdkType()) { error in
                 completionHandler.handleError(error)?.orSuccess()
             }
         } catch {

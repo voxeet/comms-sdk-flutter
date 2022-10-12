@@ -2,7 +2,6 @@ package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.internal.ParamsHolder
-import com.voxeet.sdk.models.Participant
 import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.VideoForwardingOptions
@@ -139,8 +138,10 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
 
     private fun getAudioLevel(call: MethodCall, result: Result) = try {
         call.argumentOrThrow<String>("id")
-            .let { VoxeetSDK.conference().audioLevel(VoxeetSDK.conference().findParticipantById(it)) }
-            .let { result.success(it) }
+            .let { VoxeetSDK.conference().findParticipantById(it) }
+            ?.let { VoxeetSDK.conference().audioLevel(it) }
+            ?.let { result.success(it) }
+            ?: throw IllegalStateException("Could not find participant")
     } catch (exception: Exception) {
         result.error(exception)
     }
@@ -194,7 +195,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                         .conference()
                         .findParticipantById(id)
                         ?.let { VoxeetSDK.conference().mute(it, muteValue) }
-                        ?: VoxeetSDK.conference().mute(muteValue)
+                        ?: throw IllegalStateException("Could not find participant")
                 }
             }.let { result.success(it) }
         }
@@ -204,11 +205,12 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         onError = result::error,
         onSuccess = {
             val participantId = call.argument<Map<Any, Any?>?>("id") as? String
-            participantId?.let{ id ->
+            participantId?.let { id ->
                 VoxeetSDK
                     .conference()
                     .findParticipantById(id)
                     ?.let { p -> VoxeetSDK.conference().kick(p).await() }
+                    ?: throw IllegalStateException("Could not find participant")
             }.let { r -> result.success(r ?: false) }
         }
     )
@@ -226,44 +228,48 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     private fun startAudio(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStartAudio = ParticipantMapper
+            ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let { VoxeetSDK.conference().startAudio(it).await() }
-                ?: VoxeetSDK.conference().startAudio().await()
-            result.success(didStartAudio)
+                ?.let { require(it) { "Could not start audio" } }
+                ?: throw IllegalStateException("Could not find participant")
+            result.success(null)
         }
     )
 
     private fun stopAudio(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStopAudio = ParticipantMapper
+            ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let { VoxeetSDK.conference().stopAudio(it).await() }
-                ?: VoxeetSDK.conference().stopAudio().await()
-            result.success(didStopAudio)
+                ?.let { require(it) { "Could not stop audio" } }
+                ?: throw IllegalStateException("Could not find participant")
+            result.success(null)
         }
     )
 
     private fun startVideo(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStartVideo = ParticipantMapper
+            ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let { VoxeetSDK.conference().startVideo(it).await() }
-                ?: VoxeetSDK.conference().startVideo().await()
-            result.success(didStartVideo)
+                ?.let { require(it) { "Could not start video" } }
+                ?: throw IllegalStateException("Could not find participant")
+            result.success(null)
         }
     )
 
     private fun stopVideo(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val didStopVideo = ParticipantMapper
+            ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let { VoxeetSDK.conference().stopVideo(it).await() }
-                ?: VoxeetSDK.conference().stopVideo().await()
-            result.success(didStopVideo)
+                ?.let { require(it) { "Could not stop video" } }
+                ?: throw IllegalStateException("Could not find participant")
+            result.success(null)
         }
     )
 
@@ -285,7 +291,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         onSuccess = {
             val participant = ParticipantMapper.fromMap(call.argument("participant"))
             val spatialPosition = SpatialPositionMapper.fromMap(call.argument("position"))
-                ?: throw IllegalArgumentException("Spatial position cannot be null")
+                ?: throw IllegalArgumentException("Spatial position was not provided")
             participant?.let {
                 VoxeetSDK.conference().setSpatialPosition(participant, spatialPosition)
             } ?: VoxeetSDK.conference().setSpatialPosition(spatialPosition)
@@ -300,8 +306,11 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
             val forward = SpatialPositionMapper.fromMap(call.argument("forward"))
             val up = SpatialPositionMapper.fromMap(call.argument("up"))
             val right = SpatialPositionMapper.fromMap(call.argument("right"))
-            if (scale == null || forward == null || up == null || right == null) {
-                throw java.lang.IllegalArgumentException("At least one argument is missing: scale: $scale, forward: $forward, up: $up, right: $right")
+            if (scale == null) {
+                throw IllegalArgumentException("Spatial scale was not provided")
+            }
+            if (forward == null || up == null || right == null) {
+                throw IllegalArgumentException("Spatial position was not provided")
             }
             VoxeetSDK.conference().setSpatialEnvironment(scale, forward, up, right)
             result.success(null)
@@ -312,7 +321,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         onError = result::error,
         onSuccess = {
             val spatialDirection = SpatialDirectionMapper.fromMap(call.arguments())
-                ?: throw java.lang.IllegalArgumentException("Spatial direction cannot be null")
+                ?: throw IllegalArgumentException("Spatial direction was not provided")
 
             VoxeetSDK.conference().setSpatialDirection(spatialDirection)
             result.success(null)

@@ -15,6 +15,11 @@ private enum EventKeys: String, CaseIterable {
 
 class FilePresentationServiceBinding: Binding {
     
+    override func onInit() {
+        super.onInit()
+        VoxeetSDK.shared.filePresentation.delegate = self
+    }
+    
     /// Returns information about the current state of the file presentation.
     /// - Parameters:
     ///   - completionHandler: Call methods on this instance when execution has finished.
@@ -37,9 +42,16 @@ class FilePresentationServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            guard let uri: String = try (flutterArguments.asSingle().decode(type: DTO.File.self)?.uri),
-                  let url = URL(string: uri)
+            guard let uri: String = try (flutterArguments.asSingle().decode(type: DTO.File.self).uri),
+                  var urlComponents = URLComponents(string: uri)
             else {
+                throw BindingError.noUrlProvided
+            }
+            
+            if urlComponents.scheme == nil {
+                urlComponents.scheme = "file"
+            }
+            guard let url = urlComponents.url else {
                 throw BindingError.noUrlProvided
             }
             
@@ -85,10 +97,7 @@ class FilePresentationServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         do {
-            guard let fileConverted = try flutterArguments.asSingle().decode(type: DTO.FileConverted.self) else {
-                throw BindingError.noFileConverted
-            }
-            
+            let fileConverted = try flutterArguments.asSingle().decode(type: DTO.FileConverted.self)
             VoxeetSDK.shared.filePresentation.start(fileConverted: fileConverted.toSdkType()) { error in
                 completionHandler.handleError(error)?.orSuccess()
             }

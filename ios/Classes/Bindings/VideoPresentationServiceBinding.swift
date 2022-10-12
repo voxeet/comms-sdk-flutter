@@ -17,6 +17,11 @@ private enum EventKeys: String, CaseIterable {
 
 class VideoPresentationServiceBinding: Binding {
     
+    override init(name: String, registrar: FlutterPluginRegistrar) {
+        super.init(name: name, registrar: registrar)
+        VoxeetSDK.shared.videoPresentation.delegate = self
+    }
+    
     /// Returns information about the current video presentation.
     /// - Parameters:
     ///   - completionHandler: Call methods on this instance when execution has finished.
@@ -114,7 +119,8 @@ class VideoPresentationServiceBinding: Binding {
     func state(
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
-        completionHandler.success(encodable: DTO.VideoPresentationState(state: VoxeetSDK.shared.videoPresentation.state))
+        let state = DTO.VideoPresentationState(state: VoxeetSDK.shared.videoPresentation.state)
+        completionHandler.success(encodable: state)
     }
 }
 

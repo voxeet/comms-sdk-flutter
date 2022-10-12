@@ -12,7 +12,11 @@ import '/widgets/dolby_title.dart';
 import '/widgets/modal_bottom_sheet.dart';
 
 class ParticipantScreen extends StatefulWidget {
-  const ParticipantScreen({Key? key}) : super(key: key);
+  final Conference conference;
+  final bool isSpatialAudio;
+  const ParticipantScreen(
+      {Key? key, required this.isSpatialAudio, required this.conference})
+      : super(key: key);
 
   @override
   State<ParticipantScreen> createState() => _ParticipantScreenState();
@@ -30,9 +34,11 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
           decoration: const BoxDecoration(color: Colors.deepPurple),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-              ParticipantScreenContent()
+            children: [
+              const DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
+              ParticipantScreenContent(
+                  isSpatialAudio: widget.isSpatialAudio,
+                  conference: widget.conference),
             ],
           ),
         ),
@@ -42,7 +48,11 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
 }
 
 class ParticipantScreenContent extends StatefulWidget {
-  const ParticipantScreenContent({Key? key}) : super(key: key);
+  final Conference conference;
+  final bool isSpatialAudio;
+  const ParticipantScreenContent(
+      {Key? key, required this.isSpatialAudio, required this.conference})
+      : super(key: key);
 
   @override
   State<ParticipantScreenContent> createState() =>
@@ -68,10 +78,12 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   @override
   void initState() {
     super.initState();
+    setDefaultSpatialPosition;
     _participantsChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
         .onParticipantsChange()
         .listen((event) {
       _updateLocalView();
+      updateDefaultSpatialPosition(event.body);
       StatusSnackbar.buildSnackbar(
           context,
           "${event.body.info?.name}: ${event.body.status?.encode()}",
@@ -117,11 +129,11 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(12))),
         child: Column(
           children: [
-            ConferenceTitle(conference: getCurrentConference()),
+            ConferenceTitle(conference: widget.conference),
             Expanded(
               child: Stack(
                 children: [
-                  const ParticipantGrid(remoteOptionsFlag: true,),
+                  ParticipantGrid(remoteOptionsFlag: true, conference: widget.conference),
                   Positioned(
                     left: 10,
                     bottom: 10,
@@ -136,7 +148,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
               ),
             ),
             ConferenceControls(
-              conference: getCurrentConference(),
+              conference: widget.conference,
               updateCloseSessionFlag: (shouldCloseSession) {
                 shouldCloseSessionOnLeave = shouldCloseSession;
               },
@@ -145,6 +157,28 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         ),
       ),
     );
+  }
+
+  Future<void> setDefaultSpatialPosition() async {
+    if (widget.isSpatialAudio) {
+      final currentConference = await getCurrentConference();
+      final availableParticipants = currentConference?.participants
+          .where((element) => element.status != ParticipantStatus.left);
+      for (var participant in availableParticipants!) {
+        _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+            participant: participant, position: SpatialPosition(0.0, 0.0, 0.0));
+      }
+    }
+  }
+
+  void updateDefaultSpatialPosition(Participant participant) {
+    if (widget.isSpatialAudio) {
+      if (participant.status == ParticipantStatus.onAir
+          || participant.status == ParticipantStatus.connected) {
+        _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+            participant: participant, position: SpatialPosition(0.0, 0.0, 0.0));
+      }
+    }
   }
 
   Future<Conference?> getCurrentConference() async {
@@ -164,7 +198,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     }
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin
         .conference
-        .getParticipants(currentConference);
+        .getParticipants(widget.conference);
     final localParticipant =
         await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
     final availableParticipants = conferenceParticipants

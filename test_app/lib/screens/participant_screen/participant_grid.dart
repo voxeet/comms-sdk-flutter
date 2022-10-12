@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/dialogs.dart';
@@ -8,8 +8,10 @@ import 'dart:developer' as developer;
 
 class ParticipantGrid extends StatefulWidget {
   final bool remoteOptionsFlag;
+  final Conference conference;
 
-  const ParticipantGrid({Key? key, required this.remoteOptionsFlag})
+  const ParticipantGrid(
+      {Key? key, required this.remoteOptionsFlag, required this.conference})
       : super(key: key);
 
   @override
@@ -19,6 +21,7 @@ class ParticipantGrid extends StatefulWidget {
 class _ParticipantGridState extends State<ParticipantGrid> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   List<Participant> participants = [];
+  Participant? localParticipant;
 
   StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
       onParticipantsChangeSubscription;
@@ -40,6 +43,7 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   void initState() {
     super.initState();
     initParticipantsList();
+    getLocalParticipant();
 
     onParticipantsChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
         .onParticipantsChange()
@@ -82,17 +86,24 @@ class _ParticipantGridState extends State<ParticipantGrid> {
         itemBuilder: (context, index) {
           var participant = participants[index];
           return ParticipantWidget(
-              participant: participant,
-              remoteOptionsFlag: index == 0 ? false : widget.remoteOptionsFlag);
+            participant: participant,
+            remoteOptionsFlag: localParticipant?.id == participant.id
+                ? false
+                : widget.remoteOptionsFlag,
+          );
         });
   }
 
+  Future<void> getLocalParticipant() async {
+    final localParticipant =
+        await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+    setState(() => this.localParticipant = localParticipant);
+  }
+
   Future<void> initParticipantsList() async {
-    final currentConference =
-        await _dolbyioCommsSdkFlutterPlugin.conference.current();
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin
         .conference
-        .getParticipants(currentConference);
+        .getParticipants(widget.conference);
     conferenceParticipants.sort((item1, item2) {
       if (item1.status == ParticipantStatus.onAir ||
           item1.status == ParticipantStatus.connected) {

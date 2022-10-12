@@ -1,3 +1,4 @@
+import 'spatial_position_dialog_content.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'permissions_list.dart';
@@ -87,7 +88,7 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
               showPermissionsDialog();
               break;
             case 3:
-              setSpatialPosition();
+              showSpatialPositionDialog(context);
               break;
           }
         });
@@ -118,19 +119,6 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
     } catch (error) {
       showDialogWindow('Error',
           "$error\nThis method is only available  for protected conferences");
-    }
-  }
-
-  Future<void> setSpatialPosition() async {
-    try {
-      final participant = await _upToDateParticipant();
-      _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
-        participant: participant,
-        position: SpatialPosition(1.0, 1.0, 1.0),
-      );
-      await showDialogWindow('Success', 'OK');
-    } catch (error) {
-      showDialogWindow('Error', error.toString());
     }
   }
 
@@ -172,6 +160,21 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
                   style: ElevatedButton.styleFrom(primary: Colors.deepPurple),
                   child: const Text("Cancel")),
             ],
+          );
+        });
+  }
+
+  Future<void> showSpatialPositionDialog(BuildContext context) async {
+    final participant = await _upToDateParticipant();
+    return showDialog(
+        context: context,
+        builder: (BuildContext spatialPositionContext) {
+          return AlertDialog(
+            title: const Text("Spatial position"),
+            content: SpatialPosiotionDialogContent(
+                participant: participant,
+                spatialPositiontDialogContext: spatialPositionContext,
+                resultDialogContext: context),
           );
         });
   }
