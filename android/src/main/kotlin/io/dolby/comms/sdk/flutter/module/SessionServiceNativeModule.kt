@@ -2,6 +2,7 @@ package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.ParticipantInfo
+import com.voxeet.sdk.services.clearConferences
 import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
 import io.dolby.comms.sdk.flutter.extension.await
 import io.dolby.comms.sdk.flutter.extension.error
@@ -52,7 +53,10 @@ class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModu
 
     private fun close(result: Result) = scope.launch(
         onError = result::error,
-        onSuccess = { VoxeetSDK.session().close().await().let { result.success(it) } }
+        onSuccess = {
+            VoxeetSDK.session().close().await().let { result.success(it) }
+            VoxeetSDK.conference().clearConferences()
+        }
     )
 
     private fun isOpen(result: Result) = result.success(VoxeetSDK.session().isOpen)
