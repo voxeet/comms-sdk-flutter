@@ -182,9 +182,7 @@ public class ConferenceServiceAsserts implements MethodDelegate {
             AssertUtils.compareWithExpectedValue(mockConference.isNew(), args.get("isNew"), "Conference isNew is incorrect");
         }
 
-        if (!args.containsKey("status")) {
-            throw new KeyNotFoundException("Key: conference status not found");
-        } else {
+        if (args.containsKey("status")) {
             AssertUtils.compareWithExpectedValue(mockConference.getState(), args.get("status"), "Conference status is incorrect");
         }
     }
@@ -274,10 +272,12 @@ public class ConferenceServiceAsserts implements MethodDelegate {
         } else {
             AssertUtils.compareWithExpectedValue(createArgs.getParams().getTtl(), args.get("params_ttl"), "Ttl is incorrect");
         }
-        if (!args.containsKey("params_videoCodec")) {
-            throw new KeyNotFoundException("Key: params_videoCodec not found");
-        } else {
+        if (args.containsKey("params_videoCodec")) {
             AssertUtils.compareWithExpectedValue(createArgs.getParams().getVideoCodec(), args.get("params_videoCodec"), "VideoCodec is incorrect");
+        }
+
+        if (args.containsKey("params_videoCodec2")) {
+            AssertUtils.compareWithExpectedValue(createArgs.getParams().getVideoCodec(), args.get("params_videoCodec2"), "VideoCodec is incorrect");
         }
     }
 
