@@ -1,3 +1,9 @@
+## 3.6.0-beta.5
+
+### Bug fixes
+
+Fixed an issue that occurred on Android devices where participants who left a conference, closed a session, and rejoined the conference could not see themselves on the participants list.
+
 ## 3.6.0-beta.4
 
 ### Bug fixes
