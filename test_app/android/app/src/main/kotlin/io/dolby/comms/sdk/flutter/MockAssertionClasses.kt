@@ -17,6 +17,7 @@ object MockAssertionClasses {
         assertsClasses.add(DelegateMethodHandler.createChannelFor(SessionServiceAsserts(), messenger))
         assertsClasses.add(DelegateMethodHandler.createChannelFor(ConferenceServiceAsserts(), messenger))
         assertsClasses.add(DelegateMethodHandler.createChannelFor(MediaDeviceServiceAsserts(), messenger))
+        assertsClasses.add(DelegateMethodHandler.createChannelFor(NotificationServiceAsserts(), messenger))
     }
 
     fun clear() {
