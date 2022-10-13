@@ -105,7 +105,7 @@ public class ConferenceServiceAsserts implements MethodDelegate {
         assertParticipant(args, mockArgs);
     }
 
-    private void assertParticipant(Map<String, Object> args, Participant mockArgs) throws KeyNotFoundException, AssertionFailed {
+    public void assertParticipant(Map<String, Object> args, Participant mockArgs) throws KeyNotFoundException, AssertionFailed {
         if (args.containsKey("id")) {
             AssertUtils.compareWithExpectedValue(mockArgs.getId(), args.get("id"), "Participant id is incorrect");
         }
@@ -164,7 +164,7 @@ public class ConferenceServiceAsserts implements MethodDelegate {
         }
     }
 
-    private void assertConference(Map<String, Object> args, Conference mockConference) throws KeyNotFoundException, AssertionFailed {
+    public static void assertConference(Map<String, Object> args, Conference mockConference) throws KeyNotFoundException, AssertionFailed {
         if (!args.containsKey("id")) {
             throw new KeyNotFoundException("Key: conference id not found");
         } else {
