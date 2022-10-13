@@ -24,4 +24,4 @@ jobs:
         }
         EOF
     - name: Publish package
-      run: flutter pub publish
+      run: pub publish -f
