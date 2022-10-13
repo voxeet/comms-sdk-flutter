@@ -94,16 +94,10 @@ public class ConferenceService {
     }
 
     @NotNull
-    public Promise<Conference> join(@NonNull ConferenceJoinOptions options)  {
+    public Promise<Conference> join(@NonNull ConferenceJoinOptions options) {
         return new Promise<>(solver -> {
             joinArgs = options;
-//            String id = Opt.of(options).then(ConferenceJoinOptions::getConferenceId).or("");
-//            if (id.equals("") || currentConference == null) {
-//                solver.reject(new NullPointerException("Conference is null or id is empty"));
-//            } else {
-//                joinInternal(options);
-//                solver.resolve(currentConference);
-//            }
+
             solver.resolve(joinReturn);
         });
     }
