@@ -5,11 +5,14 @@ import android.content.Intent;
 
 import com.voxeet.promise.Promise;
 
+import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
 public class ScreenShareService {
-    public void sendRequestStartScreenShare() {
+    public boolean broadcast = false;
 
+    public void sendRequestStartScreenShare() {
+        EventBus.getDefault().post(new SimulateOnActivityResult());
     }
 
     @NotNull
@@ -21,8 +24,11 @@ public class ScreenShareService {
     }
 
     public boolean onActivityResult(int requestCode, int resultCode, @NotNull Intent data) {
-                return false;
+        broadcast = true;
+        return true;
     }
 
     public void sendUserPermissionRequest(@NotNull Activity it) {}
+
+    public class SimulateOnActivityResult {}
 }
