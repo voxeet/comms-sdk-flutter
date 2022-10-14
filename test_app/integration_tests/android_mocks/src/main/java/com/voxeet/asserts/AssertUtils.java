@@ -21,10 +21,6 @@ public class AssertUtils {
     }
 
     public static<T> void compareWithExpectedValue(T actual, T expected, String errorMsg) throws MethodDelegate.AssertionFailed {
-//        StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
-//        for (int i = 0; i < stackTraceElements.length; ++i) {
-//            android.util.Log.d("[KB]", String.format("method: %s, line: %d", stackTraceElements[i].getMethodName(), stackTraceElements[i].getLineNumber()));
-//        }
         StackTraceElement caller = Thread.currentThread().getStackTrace()[3];
         if (actual == null && expected != actual) {
             throw new MethodDelegate.AssertionFailed(actual, expected, errorMsg, caller.getFileName(), caller.getMethodName(), caller.getLineNumber());
@@ -39,5 +35,19 @@ public class AssertUtils {
             throw new MethodDelegate.AssertionFailed(actual, expected, errorMsg, caller.getFileName(), caller.getMethodName(), caller.getLineNumber());
         }
 
+    }
+
+    public static double getDouble(Object x) {
+        if (x instanceof Integer) {
+            return ((Integer) x).doubleValue();
+        } else if(x instanceof Float){
+            return ((Float) x).doubleValue();
+        } else if(x instanceof Long){
+            return ((Long) x).doubleValue();
+        } else if(x instanceof Double){
+            return (Double) x;
+        } else {
+            throw new NumberFormatException("Wrong number format of object:" + x);
+        }
     }
 }
