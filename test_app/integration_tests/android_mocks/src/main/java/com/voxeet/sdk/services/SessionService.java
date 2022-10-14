@@ -11,33 +11,29 @@ import java.util.UUID;
 
 public class SessionService {
     @Nullable
-    private Participant localParticipant = null;
+    public Participant participant = null;
 
     public boolean closeHasRun = false;
 
     private int counter = 0;
 
     public Promise<Boolean> open(@NotNull ParticipantInfo participantInfo) {
-        localParticipant = new Participant(getNextId(), participantInfo);
+        participant = new Participant(getNextId(), participantInfo);
         return Promise.resolve(participantInfo != null);
     }
 
     public Promise<Boolean> close() {
         closeHasRun = true;
-        localParticipant = null;
+        participant = null;
         return Promise.resolve(true);
     }
 
     public boolean isOpen() {
-        return localParticipant != null;
-    }
-
-    public Participant getParticipant() {
-        return localParticipant;
+        return participant != null;
     }
 
     public String getParticipantId() {
-        return isOpen() ? localParticipant.getId() : null;
+        return isOpen() ? participant.getId() : null;
     }
 
     private String getNextId() {

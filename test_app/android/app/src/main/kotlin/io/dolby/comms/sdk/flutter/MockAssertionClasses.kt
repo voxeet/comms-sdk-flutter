@@ -11,7 +11,6 @@ object MockAssertionClasses {
     private val assertsClasses = mutableListOf<DelegateMethodHandler>()
 
     fun init(flutterEngine: FlutterEngine) {
-        android.util.Log.d("[KB]", "init mocks")
         val messenger = flutterEngine.dartExecutor.binaryMessenger
         assertsClasses.add(DelegateMethodHandler.createChannelFor(VoxeetSDKAssert.create(), messenger))
         assertsClasses.add(DelegateMethodHandler.createChannelFor(SessionServiceAsserts(), messenger))

@@ -7,6 +7,8 @@ import com.voxeet.sdk.models.v1.ConferenceParticipantStatus;
 import com.voxeet.sdk.models.v2.ParticipantType;
 import com.voxeet.sdk.services.conference.information.ConferenceStatus;
 
+import java.util.Map;
+
 public class ConferenceServiceAssertUtils {
     public static Conference createConference(Integer type) {
         switch (type) {
@@ -51,6 +53,7 @@ public class ConferenceServiceAssertUtils {
                 return new Conference()
                         .setConferenceId("setCreateConferenceReturn_id_5")
                         .setConferenceAlias("setCreateConferenceReturn_alias_5")
+                        .setState(ConferenceStatus.CREATED)
                         .addParticipant(new Participant("participant_id_5_1", new ParticipantInfo(
                                 "participant_info_name_2",
                                 "participant_info_external_id_5_1",
@@ -64,13 +67,37 @@ public class ConferenceServiceAssertUtils {
                                 .setStatus(ConferenceParticipantStatus.ON_AIR)
                                 .setType(ParticipantType.LISTENER)
                         );
+            case 6:
+                return new Conference()
+                        .setConferenceId("setCreateConferenceReturn_id_6")
+                        .setConferenceAlias("setCreateConferenceReturn_alias_6")
+                        .setState(ConferenceStatus.DESTROYED)
+                        .addParticipant(new Participant("participant_id_6_1", new ParticipantInfo(
+                                "participant_info_name_1",
+                                "participant_info_external_id_6_1",
+                                "participant_info_avatar_url_6_1"))
+                                .setStatus(ConferenceParticipantStatus.ON_AIR)
+                                .setType(ParticipantType.LISTENER))
+                        .addParticipant(new Participant("participant_id_6_2", new ParticipantInfo(
+                                "participant_info_name_2",
+                                "participant_info_external_id_6_2",
+                                "participant_info_avatar_url_6_2"))
+                                .setStatus(ConferenceParticipantStatus.INACTIVE)
+                                .setType(ParticipantType.LISTENER))
+                        .addParticipant(new Participant("participant_id_6_3", new ParticipantInfo(
+                                "participant_info_name_3",
+                                "participant_info_external_id_6_3",
+                                "participant_info_avatar_url_6_3"))
+                                .setStatus(ConferenceParticipantStatus.KICKED)
+                                .setType(ParticipantType.LISTENER)
+                        );
             default:
                 break;
         }
         return new Conference();
     }
 
-    private static Participant createParticipant(ConferenceParticipantStatus status, ParticipantType participantType, int type) {
+    public static Participant createParticipant(ConferenceParticipantStatus status, ParticipantType participantType, int type) {
         return new Participant("participant_id_2",
                 new ParticipantInfo(
                 "participant_info_name_2",
@@ -81,5 +108,9 @@ public class ConferenceServiceAssertUtils {
                 .setStatus(ConferenceParticipantStatus.DECLINE);
 //        participant.audioReceivingFrom = true
 //        participant.audioTransmitting = true);
+    }
+
+    public static Participant createParticipant(Map<String, Object> args) {
+        return new Participant(args.get("id").toString(), new ParticipantInfo());
     }
 }
