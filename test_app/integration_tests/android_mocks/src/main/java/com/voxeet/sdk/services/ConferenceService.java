@@ -1,5 +1,7 @@
 package com.voxeet.sdk.services;
 
+import android.util.Pair;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -7,6 +9,7 @@ import com.voxeet.VoxeetSDK;
 import com.voxeet.android.media.errors.SpatialArgumentException;
 import com.voxeet.android.media.errors.SpatialAudioException;
 import com.voxeet.android.media.spatialisation.SpatialDirection;
+import com.voxeet.android.media.spatialisation.SpatialEnvironment;
 import com.voxeet.android.media.spatialisation.SpatialPosition;
 import com.voxeet.android.media.spatialisation.SpatialScale;
 import com.voxeet.promise.Promise;
@@ -49,11 +52,26 @@ public class ConferenceService {
     public Float audioLevelReturn;
     public Integer maxVideoForwardingReturn;
     public Participant startAudioArgs;
+    public Participant stopAudioArgs;
+    public Participant startVideoArgs;
+    public Participant stopVideoArgs;
+    public Pair<Participant, SpatialPosition> spatialPositionArgs;
+    public SpatialDirection spatialDirectionArgs;
+    public boolean muteOutputArgs = false;
+    public Pair<Participant, Boolean> muteArgs;
+    public boolean isSpeakingReturn;
+    public boolean isMutedReturn;
+    public Participant speakingArgs;
+    public Pair<List<Participant>, Integer> videoForwardingArgs;
+    public AudioProcessing audioProcessingArgs;
 
     private String mConferenceId = null;
     private boolean localUserLeft = false;
 
     public ConferenceCreateOptions createArgs;
+    public Pair<Conference, Long> replayArgs;
+    public SpatialEnvironment spatialEnvironmentArgs;
+    public List<ParticipantPermissions> updatePermissionsArgs;
 
     @NotNull
     public Promise<Conference> create(@NotNull ConferenceCreateOptions conferenceCreateOption) {
@@ -82,7 +100,16 @@ public class ConferenceService {
         if (current != null && conferenceId.equals(current.getId())) {
             return current;
         }
-        return new Conference().setConferenceId(conferenceId);
+        if (fetchReturn != null && conferenceId.equals(fetchReturn.getId())) {
+            return fetchReturn;
+        }
+        if (joinReturn != null && conferenceId.equals(joinReturn.getId())) {
+            return joinReturn;
+        }
+        return new Conference()
+                .setConferenceId(conferenceId)
+                .setConferenceAlias("conference_alias")
+                .setState(ConferenceStatus.CREATED);
     }
 
     @NotNull
@@ -97,7 +124,9 @@ public class ConferenceService {
     public Promise<Conference> join(@NonNull ConferenceJoinOptions options) {
         return new Promise<>(solver -> {
             joinArgs = options;
-
+            if (joinReturn != null) {
+                joinReturn.setState(ConferenceStatus.JOINED);
+            }
             solver.resolve(joinReturn);
         });
     }
@@ -105,7 +134,7 @@ public class ConferenceService {
     public Promise<Boolean> leave() {
         return new Promise(solver -> {
             leaveHasRun = true;
-            Participant p = VoxeetSDK.session().getParticipant();
+            Participant p = VoxeetSDK.session().participant;
             boolean result = false;
             if (current != null && p != null) {
                 Participant participant = current.findParticipantById(p.getId());
@@ -132,15 +161,16 @@ public class ConferenceService {
     }
 
     public boolean isMuted() {
-        return false;
+        return isMutedReturn;
     }
 
     public boolean mute(@NonNull Participant participant, boolean mute) {
+        muteArgs = new Pair<>(participant, mute);
         return true;
     }
 
     public boolean mute(boolean mute) {
-        return true;
+        return mute(VoxeetSDK.session().participant, mute);
     }
 
     @NotNull
@@ -152,56 +182,60 @@ public class ConferenceService {
 
     @NotNull
     public boolean muteOutput(boolean mute) {
+        muteOutputArgs = mute;
         return true;
     }
 
     @NotNull
     public Promise<Boolean> startAudio(@NotNull Participant p) {
-        audioLevelArgs = p;
+        startAudioArgs = p;
         return Promise.resolve(true);
     }
 
     @NotNull
     public Promise<Boolean> startAudio() {
-        return startAudio(VoxeetSDK.session().getParticipant());
+        return startAudio(VoxeetSDK.session().participant);
     }
 
     @NotNull
-    public Promise<Boolean> stopAudio(@NotNull Participant it) {
+    public Promise<Boolean> stopAudio(@NotNull Participant p) {
+        stopAudioArgs = p;
         return Promise.resolve(true);
     }
 
     @NotNull
     public Promise<Boolean> stopAudio() {
-        return stopAudio(VoxeetSDK.session().getParticipant());
+        return stopAudio(VoxeetSDK.session().participant);
     }
 
     @NotNull
     public Promise<Boolean> startVideo(@NotNull Participant p) {
+        startVideoArgs = p;
         return Promise.resolve(true);
     }
 
     @NotNull
     public Promise<Boolean> startVideo() {
-        return startVideo(VoxeetSDK.session().getParticipant());
+        return startVideo(VoxeetSDK.session().participant);
     }
 
     @NotNull
-    public Promise<Boolean> stopVideo(@NotNull Participant it) {
+    public Promise<Boolean> stopVideo(@NotNull Participant p) {
+        stopVideoArgs = p;
         return Promise.resolve(true);
     }
 
     @NotNull
     public Promise<Boolean> stopVideo() {
-        return stopVideo(VoxeetSDK.session().getParticipant());
+        return stopVideo(VoxeetSDK.session().participant);
     }
 
     public void setSpatialPosition(@NonNull Participant participant, @NonNull SpatialPosition position) throws SpatialAudioException {
-        throw new SpatialAudioException("not implemented");
+        spatialPositionArgs = new Pair<>(participant, position);
     }
 
     public void setSpatialPosition(@NonNull SpatialPosition position) throws SpatialAudioException {
-        setSpatialPosition(VoxeetSDK.session().getParticipant(), position);
+        setSpatialPosition(VoxeetSDK.session().participant, position);
     }
 
     public void setSpatialEnvironment(@NonNull SpatialScale scale,
@@ -209,11 +243,11 @@ public class ConferenceService {
                                       @NonNull SpatialPosition up,
                                       @NonNull SpatialPosition right) throws SpatialArgumentException, SpatialAudioException {
         // will throw SpatialAudioException in non dvc or listener
-
+        spatialEnvironmentArgs = new SpatialEnvironment(scale, forward, up, right);
     }
 
     public void setSpatialDirection(@NonNull SpatialDirection direction) throws SpatialAudioException {
-
+        spatialDirectionArgs = direction;
     }
 
     @NotNull
@@ -224,6 +258,7 @@ public class ConferenceService {
     @NotNull
     @Deprecated
     public Promise<Boolean> videoForwarding(int max, @Nullable List<Participant> participants) {
+        videoForwardingArgs = new Pair<>(participants, max);
         return Promise.resolve(true);
     }
 
@@ -239,23 +274,27 @@ public class ConferenceService {
 
     @NotNull
     public boolean setAudioProcessing(@NonNull AudioProcessing audioProcessing) {
+        audioProcessingArgs = audioProcessing;
         return false;
     }
 
     @NonNull
     public Promise<Conference> replay(@NonNull final Conference conference, final long offset) {
+        replayArgs = new Pair<>(conference, offset);
         return Promise.resolve(conference);
     }
 
     @NonNull
     public Promise<Boolean> updatePermissions(@NonNull List<ParticipantPermissions> participantPermissions) {
+        updatePermissionsArgs = participantPermissions;
         return new Promise<>(solver -> {
             solver.resolve(true);
         });
     }
 
     public boolean isSpeaking(@NotNull Participant p) {
-        return true;
+        speakingArgs = p;
+        return isSpeakingReturn;
     }
 
     public Promise<List<Participant>> inviteWithPermissions(final String conferenceId, final List<ParticipantInvited> participantsInvited) {
@@ -287,7 +326,7 @@ public class ConferenceService {
     }
 
     private void joinInternal(ConferenceJoinOptions options) {
-        Participant localP = VoxeetSDK.session().getParticipant();
+        Participant localP = VoxeetSDK.session().participant;
         if (current != null && localP != null) {
             current.addParticipant(localP);
             localP.setStatus(ConferenceParticipantStatus.ON_AIR);

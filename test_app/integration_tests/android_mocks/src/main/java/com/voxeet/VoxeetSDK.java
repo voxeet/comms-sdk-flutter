@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.voxeet.sdk.authent.token.RefreshTokenCallback;
+import com.voxeet.sdk.services.AudioService;
 import com.voxeet.sdk.services.CommandService;
 import com.voxeet.sdk.services.ConferenceService;
 import com.voxeet.sdk.services.FilePresentationService;
@@ -30,6 +31,7 @@ public class VoxeetSDK {
     private final VideoPresentationService videoPresentationService;
     private final ScreenShareService screenShareService;
     private final LocalStatsService localStatsService;
+    private final AudioService audioService;
 
     private static final VoxeetSDK currentInstance = new VoxeetSDK();
 
@@ -43,6 +45,11 @@ public class VoxeetSDK {
             @NotNull RefreshTokenCallback callback
     ) {
 
+    }
+
+    @NotNull
+    public static AudioService audio() {
+        return instance().audioService;
     }
 
     @NotNull
@@ -105,6 +112,7 @@ public class VoxeetSDK {
         videoPresentationService = new VideoPresentationService();
         screenShareService = new ScreenShareService();
         localStatsService = new LocalStatsService();
+        audioService = new AudioService();
     }
 
     @NotNull

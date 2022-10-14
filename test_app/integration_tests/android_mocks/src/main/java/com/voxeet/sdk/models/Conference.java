@@ -52,7 +52,7 @@ public class Conference {
 
         String localParticipantId = sessionService.getParticipantId();
         if (null != localParticipantId && localParticipantId.equals(participantId)) {
-            return sessionService.getParticipant();
+            return sessionService.participant;
         }
         return null;
     }
@@ -96,9 +96,6 @@ public class Conference {
 
     public Conference addParticipant(Participant participant) {
         participants.add(participant);
-        if (participant.getStatus() == ConferenceParticipantStatus.ON_AIR) {
-            setState(ConferenceStatus.JOINED);
-        }
         return this;
     }
 

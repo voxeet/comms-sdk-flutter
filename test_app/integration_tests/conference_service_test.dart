@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:integration_test/integration_test.dart';
@@ -209,33 +211,52 @@ void main() {
     var returnedConference = await dolbyioCommsSdkFlutterPlugin.conference
         .join(conference, conferenceJoinOptions);
 
-    await expectNative(
-        methodChannel: conferenceServiceAssertsMethodChannel,
-        assertLabel: "assertFetchConferenceArgs",
-        expected: {"conferenceId": "conference_id"});
-
-    await expectNative(
-        methodChannel: conferenceServiceAssertsMethodChannel,
-        assertLabel: "assertJoinConfrenceArgs",
-        expected: {
-          "conference": {
-            "id": "setCreateConferenceReturn_id_4",
-            "alias": "setCreateConferenceReturn_alias_4"
-          },
-          "joinOptions": {
-            "conferenceAccessToken": "conference_access_token",
-            "constraints": {"audio": true, "video": true},
-            "maxVideoForwarding": 15,
-            "spatialAudio": true
-          }
-        });
+    if (Platform.isIOS) {
+      await expectNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          assertLabel: "assertFetchConferenceArgs",
+          expected: {"conferenceId": "conference_id"});
+      await expectNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          assertLabel: "assertJoinConfrenceArgs",
+          expected: {
+            "conference": {
+              "id": "setCreateConferenceReturn_id_4",
+              "alias": "setCreateConferenceReturn_alias_4"
+            },
+            "joinOptions": {
+              "conferenceAccessToken": "conference_access_token",
+              "constraints": {"audio": true, "video": true},
+              "maxVideoForwarding": 15,
+              "spatialAudio": true
+            }
+          });
+    } else if (Platform.isAndroid) {
+      await expectNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          assertLabel: "assertJoinConfrenceArgs",
+          expected: {
+            "conference": {
+              "id": "conference_id",
+              "alias": "conference_alias"
+            },
+            "joinOptions": {
+              "conferenceAccessToken": "conference_access_token",
+              "constraints": {"audio": true, "video": true},
+              "maxVideoForwarding": 15,
+              "spatialAudio": true
+            }
+          });
+    } else {
+      fail("Platform unsupported");
+    }
 
     expect(returnedConference.id, "setCreateConferenceReturn_id_1");
     expect(returnedConference.alias, "setCreateConferenceReturn_alias_1");
   });
 
   testWidgets('ConferenceService: startScreenShare', (tester) async {
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -429,7 +450,7 @@ void main() {
         ParticipantStatus.connected,
         ParticipantType.listner);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -449,7 +470,7 @@ void main() {
         ParticipantStatus.connected,
         ParticipantType.listner);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -587,7 +608,7 @@ void main() {
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setFetchConferenceReturn",
         args: {"type": 4});
-    
+
     await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
@@ -611,6 +632,10 @@ void main() {
     await dolbyioCommsSdkFlutterPlugin.conference
         .replay(conference: conference, replayOptions: replayOptions);
 
+    if (Platform.isAndroid) {
+      await dolbyioCommsSdkFlutterPlugin.conference.fetch("conference_id");
+    }
+
     await expectNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         assertLabel: "assertFetchConferenceArgs",
@@ -627,7 +652,7 @@ void main() {
   });
 
   testWidgets('ConferenceService: getParticipant', (tester) async {
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -638,7 +663,7 @@ void main() {
 
     await resetSDK();
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -652,7 +677,7 @@ void main() {
     var conference = Conference("setCreateConferenceReturn_alias_5",
         "setCreateConferenceReturn_id_5", true, [], ConferenceStatus.created);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -668,12 +693,12 @@ void main() {
     conference = Conference("setCreateConferenceReturn_alias_6",
         "setCreateConferenceReturn_id_6", true, [], ConferenceStatus.created);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setFetchConferenceReturn",
         args: {"type": 6});
@@ -782,7 +807,7 @@ void main() {
     var conference = Conference("setCreateConferenceReturn_alias_5",
         "setCreateConferenceReturn_id_5", true, [], ConferenceStatus.creating);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setFetchConferenceReturn",
         args: {"type": 5});
@@ -790,10 +815,12 @@ void main() {
     var status =
         await dolbyioCommsSdkFlutterPlugin.conference.getStatus(conference);
 
-    await expectNative(
-        methodChannel: conferenceServiceAssertsMethodChannel,
-        assertLabel: "assertFetchConferenceArgs",
-        expected: {"conferenceId": "setCreateConferenceReturn_id_5"});
+    if (Platform.isIOS) {
+      await expectNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          assertLabel: "assertFetchConferenceArgs",
+          expected: {"conferenceId": "setCreateConferenceReturn_id_5"});
+    }
 
     expect(status, ConferenceStatus.created);
 
@@ -802,7 +829,7 @@ void main() {
     conference = Conference("setCreateConferenceReturn_alias_6",
         "setCreateConferenceReturn_id_6", true, [], ConferenceStatus.created);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setFetchConferenceReturn",
         args: {"type": 6});
@@ -810,10 +837,12 @@ void main() {
     status =
         await dolbyioCommsSdkFlutterPlugin.conference.getStatus(conference);
 
-    await expectNative(
-        methodChannel: conferenceServiceAssertsMethodChannel,
-        assertLabel: "assertFetchConferenceArgs",
-        expected: {"conferenceId": "setCreateConferenceReturn_id_6"});
+    if (Platform.isIOS) {
+      await expectNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          assertLabel: "assertFetchConferenceArgs",
+          expected: {"conferenceId": "setCreateConferenceReturn_id_6"});
+    }
 
     expect(status, ConferenceStatus.destroyed);
   });
@@ -847,12 +876,12 @@ void main() {
         ParticipantStatus.connected,
         ParticipantType.listner);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setIsSpeaking",
         args: {"isSpeaking": true});
@@ -875,12 +904,12 @@ void main() {
         ParticipantStatus.inactive,
         ParticipantType.user);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setIsSpeaking",
         args: {"isSpeaking": false});
@@ -897,7 +926,7 @@ void main() {
   });
 
   testWidgets('ConferenceService: setMaxVideoForwarding', (tester) async {
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -974,7 +1003,7 @@ void main() {
         ParticipantStatus.connected,
         ParticipantType.listner);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
@@ -1006,7 +1035,7 @@ void main() {
         ParticipantStatus.connected,
         ParticipantType.listner);
 
-    runNative(
+    await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});

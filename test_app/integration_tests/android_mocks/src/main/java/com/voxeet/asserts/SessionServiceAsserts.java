@@ -9,6 +9,9 @@ public class SessionServiceAsserts implements MethodDelegate {
     public void onAction(String methodName, Map<String, Object> args, Result result) {
         try {
             switch (methodName) {
+                case "setLocalParticipantArgs":
+                    setLocalParticipantArgs(args);
+                    break;
                 case "assertCloseArgs":
                     assertCloseArgs(args);
                     break;
@@ -22,6 +25,10 @@ public class SessionServiceAsserts implements MethodDelegate {
         } catch (Exception ex) {
             result.error( ex);
         }
+    }
+
+    private void setLocalParticipantArgs(Map<String, Object> args) {
+        VoxeetSDK.session().participant = ConferenceServiceAssertUtils.createParticipant(args);
     }
 
     private void assertCloseArgs(Map<String, Object> args) throws KeyNotFoundException, AssertionFailed {
