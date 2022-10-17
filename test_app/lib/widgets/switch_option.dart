@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SwitchOption extends StatefulWidget {
+class SwitchOption extends StatelessWidget {
   final String title;
   final bool value;
   final void Function(bool)? onChanged;
@@ -13,16 +13,11 @@ class SwitchOption extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<SwitchOption> createState() => _SwitchOptionState();
-}
-
-class _SwitchOptionState extends State<SwitchOption> {
-  @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-        title: Text(widget.title),
+        title: Text(title),
         activeColor: Colors.deepPurple,
-        value: widget.value,
-        onChanged: widget.onChanged);
+        value: value,
+        onChanged: onChanged);
   }
 }
