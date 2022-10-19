@@ -69,8 +69,10 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   bool isJoining = false;
   bool isReplaying = false;
   bool switchConferenceStatus = false;
-  bool switchSpatialAudio = false;
-  bool switchDolbyVoice = false;
+  bool switchSpatialAudioWithIndividual = false;
+  bool switchSpatialAudioWithShared = false;
+  bool switchDolbyVoiceWithoutMixer = false;
+  bool switchDolbyVoiceWithMixer = false;
   StreamSubscription<
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
@@ -167,26 +169,63 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                         });
                       }),
                   SwitchOption(
-                      title: 'Dolby Voice',
-                      value: switchDolbyVoice,
+                      title: 'Dolby Voice without mixer recording',
+                      value: switchDolbyVoiceWithoutMixer,
                       onChanged: (value) {
                         if (value == false) {
                           setState(() {
-                            switchDolbyVoice = value;
-                            switchSpatialAudio = value;
+                            switchDolbyVoiceWithoutMixer = value;
+                            switchDolbyVoiceWithMixer = value;
+                            switchSpatialAudioWithIndividual = value;
+                            switchSpatialAudioWithShared = value;
                           });
                         } else {
-                          setState(() => switchDolbyVoice = value);
+                          setState(() {
+                            switchDolbyVoiceWithoutMixer = value;
+                            switchDolbyVoiceWithMixer = false;
+                          });
                         }
                       }),
                   SwitchOption(
-                      title: 'Spatial audio',
-                      value: switchSpatialAudio,
-                      onChanged: switchDolbyVoice
+                      title: 'Dolby Voice with mixer recording',
+                      value: switchDolbyVoiceWithMixer,
+                      onChanged: (value) {
+                        if (value == false) {
+                          setState(() {
+                            switchDolbyVoiceWithoutMixer = value;
+                            switchDolbyVoiceWithMixer = value;
+                            switchSpatialAudioWithIndividual = value;
+                            switchSpatialAudioWithShared = value;
+                          });
+                        } else {
+                          setState(() {
+                            switchDolbyVoiceWithMixer = value;
+                            switchDolbyVoiceWithoutMixer = false;
+                          });
+                        }
+                      }),
+                  SwitchOption(
+                      title: 'Spatial audio with Individual Scene',
+                      value: switchSpatialAudioWithIndividual,
+                      onChanged: switchDolbyVoiceWithoutMixer || switchDolbyVoiceWithMixer
                             ? (value) {
-                                setState(() => switchSpatialAudio = value);
+                                setState(() {
+                                  switchSpatialAudioWithIndividual = value;
+                                  switchSpatialAudioWithShared = false;
+                                });
                               }
-                            : null)
+                            : null),
+                  SwitchOption(
+                      title: 'Spatial audio with Shared Scene',
+                      value: switchSpatialAudioWithShared,
+                      onChanged: switchDolbyVoiceWithoutMixer || switchDolbyVoiceWithMixer
+                            ? (value) {
+                                setState(() {
+                                  switchSpatialAudioWithShared = value;
+                                  switchSpatialAudioWithIndividual = false;
+                                });
+                              }
+                            : null),
                   ]),
               PrimaryButton(
                 widgetText: isJoining
@@ -292,8 +331,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   ConferenceCreateOption conferenceCreateOptions() {
     var conferenceName = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
-    params.dolbyVoice = switchDolbyVoice;
+    params.dolbyVoice = switchDolbyVoiceWithoutMixer;
     params.liveRecording = true;
+    if (switchSpatialAudioWithIndividual == true) {
+      params.spatialAudioStyle = SpatialAudioStyle.individual;
+    } else if (switchSpatialAudioWithShared == true) {
+      params.spatialAudioStyle = SpatialAudioStyle.shared;
+    }
     var createOptions = ConferenceCreateOption(conferenceName, params, 0);
     return createOptions;
   }
@@ -302,7 +346,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var joinOptions = ConferenceJoinOptions();
     joinOptions.constraints = ConferenceConstraints(true, true);
     joinOptions.maxVideoForwarding = 4;
-    joinOptions.spatialAudio = switchSpatialAudio;
+    joinOptions.spatialAudio = switchSpatialAudioWithIndividual;
     return joinOptions;
   }
 
@@ -387,7 +431,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       MaterialPageRoute(
           builder: (context) => ParticipantScreen(
               conference: conference,
-              isSpatialAudio: switchSpatialAudio)),
+              isSpatialAudio: switchSpatialAudioWithIndividual)),
     );
     setState(() => isJoining = false);
   }
