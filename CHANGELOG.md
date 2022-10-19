@@ -1,3 +1,9 @@
+## 3.6.0
+
+### Features
+
+Introduced the Flutter SDK that allows creating high-quality applications for video conferencing. With Flutter, you can write a single codebase in [Dart](https://dart.dev/) that you can natively compile and use for building, testing, and deploying applications across multiple platforms. Currently, the Flutter SDK supports creating applications for iOS and Android devices. The SDK offers the same [functionalities](https://docs.dolby.io/communications-apis/docs/overview-introduction) that are available in Android and iOS SDK.
+
 ## 3.6.0-beta.5
 
 ### Bug fixes
