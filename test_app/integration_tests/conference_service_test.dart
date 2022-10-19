@@ -25,7 +25,7 @@ void main() {
     parameters.rtcpMode = RTCPMode.best;
     parameters.ttl = 15;
     parameters.videoCodec = Codec.h264;
-    var options = ConferenceCreateOption("test_alias", parameters, 1234);
+    var options = ConferenceCreateOption("test_alias", parameters, 1234, SpatialAudioStyle.individual);
     var conference =
         await dolbyioCommsSdkFlutterPlugin.conference.create(options);
     await expectNative(
@@ -38,7 +38,8 @@ void main() {
           "params_rtcpMode": "best",
           "params_ttl": 15,
           "params_videoCodec": "H264",
-          "pin": 1234
+          "pin": 1234,
+          "spatialAudioStyle": "INDIVIDUAL"
         });
 
     expect(conference.id, "setCreateConferenceReturn_id_1");
@@ -57,7 +58,7 @@ void main() {
     parameters.rtcpMode = RTCPMode.worst;
     parameters.ttl = 30;
     parameters.videoCodec = Codec.vp8;
-    options = ConferenceCreateOption("test_alias2", parameters, 4321);
+    options = ConferenceCreateOption("test_alias2", parameters, 4321, SpatialAudioStyle.individual);
     conference = await dolbyioCommsSdkFlutterPlugin.conference.create(options);
     await expectNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -69,7 +70,8 @@ void main() {
           "params_rtcpMode": "worst",
           "params_ttl": 30,
           "params_videoCodec2": "VP8",
-          "pin": 4321
+          "pin": 4321,
+          "spatialAudioStyle": "INDIVIDUAL"
         });
   });
 
@@ -197,7 +199,8 @@ void main() {
               ParticipantStatus.connected,
               ParticipantType.listner)
         ],
-        ConferenceStatus.created);
+        ConferenceStatus.created,
+        SpatialAudioStyle.individual);
 
     var conferenceJoinOptions = ConferenceJoinOptions();
     conferenceJoinOptions.conferenceAccessToken = "conference_access_token";
@@ -604,7 +607,8 @@ void main() {
               ParticipantStatus.connected,
               ParticipantType.listner)
         ],
-        ConferenceStatus.created);
+        ConferenceStatus.created,
+        SpatialAudioStyle.individual);
 
     var replayOptions = ConferenceReplayOptions("token", 1);
 
@@ -650,7 +654,7 @@ void main() {
 
   testWidgets('ConferenceService: getParticipants', (tester) async {
     var conference = Conference("setCreateConferenceReturn_alias_5",
-        "setCreateConferenceReturn_id_5", true, [], ConferenceStatus.created);
+        "setCreateConferenceReturn_id_5", true, [], ConferenceStatus.created, SpatialAudioStyle.individual);
 
     runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -666,7 +670,7 @@ void main() {
     await resetSDK();
 
     conference = Conference("setCreateConferenceReturn_alias_6",
-        "setCreateConferenceReturn_id_6", true, [], ConferenceStatus.created);
+        "setCreateConferenceReturn_id_6", true, [], ConferenceStatus.created, SpatialAudioStyle.individual);
 
     runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -780,7 +784,7 @@ void main() {
 
   testWidgets('ConferenceService: getStatus', (tester) async {
     var conference = Conference("setCreateConferenceReturn_alias_5",
-        "setCreateConferenceReturn_id_5", true, [], ConferenceStatus.creating);
+        "setCreateConferenceReturn_id_5", true, [], ConferenceStatus.creating, SpatialAudioStyle.individual);
 
     runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -800,7 +804,7 @@ void main() {
     await resetSDK();
 
     conference = Conference("setCreateConferenceReturn_alias_6",
-        "setCreateConferenceReturn_id_6", true, [], ConferenceStatus.created);
+        "setCreateConferenceReturn_id_6", true, [], ConferenceStatus.created, SpatialAudioStyle.individual);
 
     runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
@@ -1053,7 +1057,8 @@ void main() {
               ParticipantStatus.connected,
               ParticipantType.listner)
         ],
-        ConferenceStatus.created);
+        ConferenceStatus.created,
+        SpatialAudioStyle.individual);
 
     var conferenceListenOptions = ConferenceListenOptions();
     conferenceListenOptions.conferenceAccessToken = "conference_access_token";
