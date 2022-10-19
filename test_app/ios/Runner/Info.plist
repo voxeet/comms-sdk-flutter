@@ -28,6 +28,8 @@
 	<string>For video conferencing</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>For video and audio conferencing.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We will like to access your photo library to presnt photos in conferences.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>voip</string>
