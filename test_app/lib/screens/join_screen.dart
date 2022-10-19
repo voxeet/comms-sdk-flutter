@@ -11,10 +11,10 @@ import '/widgets/dolby_title.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/dialogs.dart';
 import '/widgets/circular_progress_indicator.dart';
+import '/widgets/switch_option.dart';
 import '/permission_helper.dart';
 import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
-
 import 'replay_screen.dart';
 
 class JoinConference extends StatelessWidget {
@@ -153,67 +153,63 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                       controller: conferenceAliasTextController,
                       focusColor: Colors.deepPurple),
                 ),
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Observe Conference Status"),
-                  value: switchConferenceStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      switchConferenceStatus = value;
-                      observeConferenceStatus(switchConferenceStatus);
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Dolby voice"),
-                  value: switchDolbyVoice,
-                  onChanged: (value) {
-                    if(value == false) {
-                      setState(() {
-                        switchDolbyVoice = value;
-                        switchSpatialAudio = value;
-                      });
-                    } else {
-                      setState(() {
-                        switchDolbyVoice = value;
-                      });
-                    }
-                  },
-                ),
-                SwitchListTile(
-                    activeColor: Colors.deepPurple,
-                    title: const Text("Spatial audio"),
-                    value: switchSpatialAudio,
-                    onChanged: switchDolbyVoice
-                        ? (value) {
-                            setState(() {
-                              switchSpatialAudio = value;
-                            });
-                          }
-                        : null),
-                PrimaryButton(
-                  widgetText: isJoining
-                      ? const WhiteCircularProgressIndicator()
-                      : const Text('Join'),
-                  onPressed: () {
-                    if (defaultTargetPlatform == TargetPlatform.android) {
-                      checkPermissions();
-                      return;
-                    }
-                    onJoinButtonPressed();
-                  },
-                  color: Colors.deepPurple,
-                ),
-                const SizedBox(height: 16),
-                Form(
+                ExpansionTile(title: const Text('Options'),
+                    textColor: Colors.black,
+                    iconColor: Colors.deepPurple,
+                    children: [
+                  SwitchOption(
+                      title: 'Observe Conference Status',
+                      value: switchConferenceStatus,
+                      onChanged: (value) {
+                        setState(() {
+                          switchConferenceStatus = value;
+                          observeConferenceStatus(switchConferenceStatus);
+                        });
+                      }),
+                  SwitchOption(
+                      title: 'Dolby Voice',
+                      value: switchDolbyVoice,
+                      onChanged: (value) {
+                        if (value == false) {
+                          setState(() {
+                            switchDolbyVoice = value;
+                            switchSpatialAudio = value;
+                          });
+                        } else {
+                          setState(() => switchDolbyVoice = value);
+                        }
+                      }),
+                  SwitchOption(
+                      title: 'Spatial audio',
+                      value: switchSpatialAudio,
+                      onChanged: switchDolbyVoice
+                            ? (value) {
+                                setState(() => switchSpatialAudio = value);
+                              }
+                            : null)
+                  ]),
+              PrimaryButton(
+                widgetText: isJoining
+                    ? const WhiteCircularProgressIndicator()
+                    : const Text('Join'),
+                onPressed: () {
+                  if (defaultTargetPlatform == TargetPlatform.android) {
+                    checkPermissions();
+                    return;
+                  }
+                  onJoinButtonPressed();
+                },
+                color: Colors.deepPurple,
+              ),
+              const SizedBox(height: 16),
+              Form(
                   key: formKeyId,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: InputTextFormField(
                       labelText: 'Conference ID with record',
                       controller: conferenceIdTextController,
-                      focusColor: Colors.deepPurple),
-                ),
+                      focusColor: Colors.deepPurple)),
+                const SizedBox(height: 16),
                 PrimaryButton(
                   widgetText: isReplaying
                       ? const WhiteCircularProgressIndicator()
