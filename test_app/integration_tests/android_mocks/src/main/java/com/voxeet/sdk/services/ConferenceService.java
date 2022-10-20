@@ -39,7 +39,7 @@ public class ConferenceService {
 
     public Conference joinReturn = null;
     @Nullable
-    public Conference current = null;
+    public Conference current = new Conference().setConferenceId("conference_id").setConferenceAlias("conference_alias");
 
     public Conference fetchReturn = null;
     public String fetchArgs = null;
@@ -92,7 +92,7 @@ public class ConferenceService {
 
     @Nullable
     public String getConferenceId() {
-        return mConferenceId;
+        return getConference().getId();
     }
 
     @NonNull
