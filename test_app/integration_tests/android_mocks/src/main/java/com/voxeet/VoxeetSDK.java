@@ -1,5 +1,7 @@
 package com.voxeet;
 
+import android.util.Pair;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -21,6 +23,8 @@ import org.greenrobot.eventbus.EventBusException;
 import org.jetbrains.annotations.NotNull;
 
 public class VoxeetSDK {
+    public static Pair<String, String> initializeArgs;
+    public static Pair<String, RefreshTokenCallback> initializeWithTokenArgs;
     private final SessionService sessionService;
     private final ConferenceService conferenceService;
     private final CommandService commandService;
@@ -38,13 +42,14 @@ public class VoxeetSDK {
 
     @Deprecated
     public static void initialize(@NotNull String appKey, @NotNull String secretKey) {
+        initializeArgs = new Pair<>(appKey, secretKey);
     }
 
     public static void initialize(
             @NotNull String accessToken,
             @NotNull RefreshTokenCallback callback
     ) {
-
+        initializeWithTokenArgs = new Pair<>(accessToken, callback);
     }
 
     @NotNull
