@@ -1,6 +1,9 @@
 package com.voxeet.asserts;
 
+import android.util.Pair;
+
 import com.voxeet.VoxeetSDK;
+import com.voxeet.sdk.authent.token.RefreshTokenCallback;
 import com.voxeet.sdk.models.Conference;
 
 import java.util.Map;
@@ -14,14 +17,44 @@ public class VoxeetSDKAssert implements MethodDelegate {
 
     @Override
     public void onAction(String methodName, Map<String, Object> args, MethodDelegate.Result result) {
-        switch (methodName) {
-            case "resetVoxeetSDK":
-                resetVoxeetSDK();
-                result.success();
-                break;
-            default:
-                result.error(new NoSuchMethodError());
-                return;
+        try {
+            switch (methodName) {
+                case "resetVoxeetSDK":
+                    resetVoxeetSDK();
+                    break;
+                case "assertInitializeConsumerKeyAndSecret":
+                    assertInitializeConsumerKeyAndSecret(args);
+                    break;
+                case "assertInitializeToken":
+                    assertInitializeToken(args);
+                    break;
+                default:
+                    result.error(new NoSuchMethodError("Method: " + methodName + " not found in " + getName() + " method channel"));
+                    return;
+            }
+            result.success();
+        } catch (AssertionFailed exception) {
+            result.failed(exception);
+        } catch (Exception ex) {
+            result.error(ex);
+        }
+    }
+
+    private void assertInitializeToken(Map<String, Object> args) throws AssertionFailed {
+        Pair<String, RefreshTokenCallback> initializeWithTokenArgs = VoxeetSDK.initializeWithTokenArgs;
+        if (args.containsKey("accessToken")) {
+            AssertUtils.compareWithExpectedValue(initializeWithTokenArgs.first, args.get("accessToken"), "Incorrect accessToken");
+        }
+    }
+
+    private void assertInitializeConsumerKeyAndSecret(Map<String, Object> args) throws AssertionFailed {
+        Pair<String, String> initializeArgs = VoxeetSDK.initializeArgs;
+        if (args.containsKey("consumerKey")) {
+            AssertUtils.compareWithExpectedValue(initializeArgs.first, args.get("consumerKey"), "ConsumerKey is incorrect");
+        }
+
+        if (args.containsKey("consumerSecret")) {
+            AssertUtils.compareWithExpectedValue(initializeArgs.second, args.get("consumerSecret"), "ConsumerSecret is incorrect");
         }
     }
 
