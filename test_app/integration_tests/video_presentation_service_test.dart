@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:integration_test/integration_test.dart';
-
 import 'utils.dart';
 
 void main() {
@@ -14,7 +15,7 @@ void main() {
   });
 
   testWidgets('VideoPresentationService: start', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.videoPresentation
+    await dolbyioCommsSdkFlutterPlugin.videoPresentation
         .start('https://dolby.io/video_url');
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,
@@ -23,7 +24,7 @@ void main() {
   });
 
   testWidgets('VideoPresentationService: stop', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.videoPresentation.stop();
+    await dolbyioCommsSdkFlutterPlugin.videoPresentation.stop();
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,
         assertLabel: "assertStopArgs",
@@ -31,7 +32,7 @@ void main() {
   });
 
   testWidgets('VideoPresentationService: play', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.videoPresentation.play();
+    await dolbyioCommsSdkFlutterPlugin.videoPresentation.play();
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,
         assertLabel: "assertPlayArgs",
@@ -39,7 +40,7 @@ void main() {
   });
 
   testWidgets('VideoPresentationService: pause', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.videoPresentation.pause(1);
+    await dolbyioCommsSdkFlutterPlugin.videoPresentation.pause(1);
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,
         assertLabel: "assertPauseArgs",
@@ -47,7 +48,7 @@ void main() {
   });
 
   testWidgets('VideoPresentationService: seek', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.videoPresentation.seek(1);
+    await dolbyioCommsSdkFlutterPlugin.videoPresentation.seek(1);
     await expectNative(
         methodChannel: videoPresentationServiceAssertsMethodChannel,
         assertLabel: "assertSeekArgs",
@@ -55,7 +56,7 @@ void main() {
   });
 
   testWidgets('VideoPresentationService: state', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.videoPresentation.play();
+    await dolbyioCommsSdkFlutterPlugin.videoPresentation.play();
     var statePlay =
         await dolbyioCommsSdkFlutterPlugin.videoPresentation.state();
     expect(statePlay, VideoPresentationState.play);
@@ -67,19 +68,21 @@ void main() {
 
     await resetSDK();
 
-    dolbyioCommsSdkFlutterPlugin.videoPresentation.stop();
-    var stateStop =
-        await dolbyioCommsSdkFlutterPlugin.videoPresentation.state();
-    expect(stateStop, VideoPresentationState.stopped);
+    if (!Platform.isAndroid) {
+      await dolbyioCommsSdkFlutterPlugin.videoPresentation.stop();
+      var stateStop =
+      await dolbyioCommsSdkFlutterPlugin.videoPresentation.state();
+      expect(stateStop, VideoPresentationState.stopped);
 
-    await expectNative(
-        methodChannel: videoPresentationServiceAssertsMethodChannel,
-        assertLabel: "assertStateArgs",
-        expected: {"hasRun": true, "state": 0});
+      await expectNative(
+          methodChannel: videoPresentationServiceAssertsMethodChannel,
+          assertLabel: "assertStateArgs",
+          expected: {"hasRun": true, "state": 0});
 
-    await resetSDK();
+      await resetSDK();
+    }
 
-    dolbyioCommsSdkFlutterPlugin.videoPresentation.pause(0);
+    await dolbyioCommsSdkFlutterPlugin.videoPresentation.pause(0);
     var statePause =
         await dolbyioCommsSdkFlutterPlugin.videoPresentation.state();
     expect(statePause, VideoPresentationState.paused);
