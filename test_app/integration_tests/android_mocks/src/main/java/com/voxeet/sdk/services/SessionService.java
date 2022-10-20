@@ -16,8 +16,10 @@ public class SessionService {
     public boolean closeHasRun = false;
 
     private int counter = 0;
+    private boolean openHasRun = false;
 
     public Promise<Boolean> open(@NotNull ParticipantInfo participantInfo) {
+        openHasRun = true;
         participant = new Participant(getNextId(), participantInfo);
         return Promise.resolve(participantInfo != null);
     }
@@ -25,11 +27,12 @@ public class SessionService {
     public Promise<Boolean> close() {
         closeHasRun = true;
         participant = null;
+        openHasRun = false;
         return Promise.resolve(true);
     }
 
     public boolean isOpen() {
-        return participant != null;
+        return openHasRun;
     }
 
     public String getParticipantId() {
