@@ -1,6 +1,6 @@
 package io.dolby.comms.sdk.flutter
 
-import com.voxeet.asserts.*
+import io.dolby.asserts.MethodDelegate
 import io.dolby.comms.sdk.flutter.extension.error
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.BinaryMessenger
@@ -12,15 +12,62 @@ object MockAssertionClasses {
 
     fun init(flutterEngine: FlutterEngine) {
         val messenger = flutterEngine.dartExecutor.binaryMessenger
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(VoxeetSDKAssert.create(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(SessionServiceAsserts(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(ConferenceServiceAsserts(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(MediaDeviceServiceAsserts(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(NotificationServiceAsserts(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(RecordingServiceAsserts(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(VideoPresentationServiceAsserts(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(FilePresentationServiceAsserts(), messenger))
-        assertsClasses.add(DelegateMethodHandler.createChannelFor(CommandServiceAsserts(), messenger))
+        try {
+            DelegateMethodHandler.createChannelFor("com.voxeet.asserts.VoxeetSDKAssert", messenger)
+                ?.let {
+                    assertsClasses.add(it)
+                }
+            DelegateMethodHandler.createChannelFor(
+                "com.voxeet.asserts.SessionServiceAsserts",
+                messenger
+            )?.let {
+                assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                    "com.voxeet.asserts.ConferenceServiceAsserts",
+                    messenger
+                )?.let {
+                    assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                    "com.voxeet.asserts.MediaDeviceServiceAsserts",
+                    messenger
+                )?.let {
+                    assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                    "com.voxeet.asserts.NotificationServiceAsserts",
+                    messenger
+                )?.let {
+                assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                    "com.voxeet.asserts.RecordingServiceAsserts",
+                    messenger
+            )?.let {
+                assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                    "com.voxeet.asserts.VideoPresentationServiceAsserts",
+                    messenger
+                )?.let {
+                assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                    "com.voxeet.asserts.FilePresentationServiceAsserts",
+                    messenger
+                )?.let {
+                assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                    "com.voxeet.asserts.CommandServiceAsserts",
+                    messenger
+                )?.let {
+                assertsClasses.add(it)
+            }
+        } catch (e: ClassNotFoundException) {
+            android.util.Log.d("[KB]", "missing assertion classed, for mock it will be a problem")
+        }
     }
 
     fun clear() {
@@ -30,7 +77,7 @@ object MockAssertionClasses {
     }
 }
 
-class DelegateMethodHandler private  constructor(private val methodDelegator: MethodDelegate) : MethodChannel.MethodCallHandler {
+class DelegateMethodHandler private constructor(private val methodDelegator: MethodDelegate) : MethodChannel.MethodCallHandler {
     private lateinit var methodChannel: MethodChannel
 
     fun createChannel(messenger: BinaryMessenger) {
@@ -43,10 +90,12 @@ class DelegateMethodHandler private  constructor(private val methodDelegator: Me
     }
 
     companion object {
-        fun createChannelFor(delegate: MethodDelegate, messenger: BinaryMessenger) : DelegateMethodHandler {
-            val delegator = DelegateMethodHandler(delegate)
-            delegator.createChannel(messenger)
-            return DelegateMethodHandler(delegate)
+        fun createChannelFor(delegateClass: String, messenger: BinaryMessenger) : DelegateMethodHandler? {
+            return Class.forName(delegateClass).let { delegate ->
+                val delegator = DelegateMethodHandler(delegate.newInstance() as MethodDelegate)
+                delegator.createChannel(messenger)
+                delegator
+            }
         }
     }
 

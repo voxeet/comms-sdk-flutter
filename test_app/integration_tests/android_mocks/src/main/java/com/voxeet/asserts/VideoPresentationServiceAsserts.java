@@ -5,7 +5,10 @@ import com.voxeet.sdk.services.presentation.PresentationState;
 
 import java.util.Map;
 
-public class VideoPresentationServiceAsserts implements MethodDelegate{
+import io.dolby.asserts.AssertUtils;
+import io.dolby.asserts.MethodDelegate;
+
+public class VideoPresentationServiceAsserts implements MethodDelegate {
     @Override
     public void onAction(String methodName, Map<String, Object> args, Result result) {
         try {

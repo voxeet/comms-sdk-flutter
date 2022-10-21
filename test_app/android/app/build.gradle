@@ -51,7 +51,9 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        buildConfigField "boolean", "USE_MOCKS", project.properties.containsKey("useMockSDK") ? project.properties.get("useMockSDK") : false
+        if (project.properties.containsKey("useMockSDK")) {
+            buildConfigField "boolean", "USE_MOCKS", project.properties.get("useMockSDK")
+        }
     }
 
     buildTypes {
@@ -69,6 +71,10 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(":dolbyMock")
+    def useMockSDK = project.properties.containsKey("useMockSDK") ? project.properties.get("useMockSDK") : false
+    implementation project(":app_utils")
+    if (useMockSDK) {
+        implementation project(":dolbyMock")
+    }
     implementation "org.greenrobot:eventbus:3.1.1"
 }

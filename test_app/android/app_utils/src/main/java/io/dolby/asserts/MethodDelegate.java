@@ -1,19 +1,16 @@
-package com.voxeet.asserts;
+package io.dolby.asserts;
 
-import androidx.annotation.NonNull;
-
-import java.util.List;
 import java.util.Map;
 
 public interface MethodDelegate {
-    void onAction(String methodName, Map<String, Object> args, MethodDelegate.Result result);
+    void onAction(String methodName, Map<String, Object> args, Result result);
 
     String getName();
 
     interface Result {
         void success();
-        void failed(@NonNull AssertionFailed failed);
-        void error(@NonNull Throwable throwable);
+        void failed(AssertionFailed failed);
+        void error(Throwable throwable);
     }
 
     class AssertionFailed extends Exception {

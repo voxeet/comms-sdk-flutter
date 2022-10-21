@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import com.voxeet.sdk.services.ScreenShareService
+import io.dolby.SimulateOnActivityResult
 import io.dolby.comms.sdk.flutter.MockAssertionClasses
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -31,25 +31,34 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        if (BuildConfig.USE_MOCKS) {
+        if (isMockSet()) {
             MockAssertionClasses.init(flutterEngine)
         }
     }
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
         super.cleanUpFlutterEngine(flutterEngine)
-        if (BuildConfig.USE_MOCKS) {
+        if (isMockSet()) {
             MockAssertionClasses.clear()
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun forceOnActivityResult(action: ScreenShareService.SimulateOnActivityResult) {
+    fun forceOnActivityResult(action: SimulateOnActivityResult) {
         handler.postDelayed({
             val requestCode = 1
             val resultCode = 1
             val data = Intent()
             onActivityResult(requestCode, resultCode, data)
         }, 100)
+    }
+
+    private fun isMockSet(): Boolean {
+        try {
+            val field = BuildConfig::class.java.getField("USE_MOCKS")
+            return field.getBoolean(null)
+        } catch (e: NoSuchFieldException) {
+            return false
+        }
     }
 }

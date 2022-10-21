@@ -25,7 +25,7 @@ void main() {
 
     await resetSDK();
 
-    dolbyioCommsSdkFlutterPlugin.initialize(
+    await dolbyioCommsSdkFlutterPlugin.initialize(
         "test_consumer_key1", "test_consumer_secret2");
     await expectNative(
         methodChannel: voxeetSDKAsertsMethodChannel,

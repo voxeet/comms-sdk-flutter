@@ -5,7 +5,10 @@ import com.voxeet.sdk.models.Participant;
 
 import java.util.Map;
 
-public class RecordingServiceAsserts implements MethodDelegate{
+import io.dolby.asserts.AssertUtils;
+import io.dolby.asserts.MethodDelegate;
+
+public class RecordingServiceAsserts implements MethodDelegate {
     @Override
     public void onAction(String methodName, Map<String, Object> args, Result result) {
         try {

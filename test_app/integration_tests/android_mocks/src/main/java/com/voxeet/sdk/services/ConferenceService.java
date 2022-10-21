@@ -342,4 +342,6 @@ public class ConferenceService {
         conference.setState(ConferenceStatus.CREATING);
         return conference;
     }
+
+    void clearConferencesInformation() {}
 }

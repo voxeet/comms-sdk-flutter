@@ -36,7 +36,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
-//    implementation project(":mocks")
+    implementation project(":app_utils")
     implementation "com.voxeet.sdk:promise:2.7.1"
     implementation "org.greenrobot:eventbus:3.1.1"
     implementation "com.voxeet.sdk:utils:3.6.0"
