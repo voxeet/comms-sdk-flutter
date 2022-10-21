@@ -77,7 +77,9 @@ class MediaDeviceServiceNativeModule(private val scope: CoroutineScope) : Native
     private fun switchSpeaker(result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            VoxeetSDK.audio().setSpeakerMode(!VoxeetSDK.audio().isSpeakerOn).also { result.success(null) }
+            VoxeetSDK.audio().local.soundManager
+                .setSpeakerMode(!VoxeetSDK.audio().local.soundManager.isSpeakerOn)
+                .also { result.success(null) }
         }
     )
 }
