@@ -8,6 +8,8 @@ import com.voxeet.promise.Promise;
 import org.greenrobot.eventbus.EventBus;
 import org.jetbrains.annotations.NotNull;
 
+import io.dolby.SimulateOnActivityResult;
+
 public class ScreenShareService {
     public boolean broadcast = false;
 
@@ -29,6 +31,4 @@ public class ScreenShareService {
     }
 
     public void sendUserPermissionRequest(@NotNull Activity it) {}
-
-    public class SimulateOnActivityResult {}
 }

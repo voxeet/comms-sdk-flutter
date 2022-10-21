@@ -1,6 +1,4 @@
-package com.voxeet.asserts;
-
-import org.jetbrains.annotations.Nullable;
+package io.dolby.asserts;
 
 public class AssertUtils {
     public static boolean isString(Object obj) {
@@ -79,11 +77,5 @@ public class AssertUtils {
         } else {
             throw new NumberFormatException("Wrong number format of object:" + x);
         }
-    }
-
-    @Nullable
-    public static String getStackInfo() {
-        StackTraceElement caller = Thread.currentThread().getStackTrace()[3];
-        return "where: " + caller.getFileName() + " method: " + caller.getMethodName() + " line: " + caller.getLineNumber();
     }
 }
