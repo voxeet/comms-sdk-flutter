@@ -20,6 +20,7 @@ object MockAssertionClasses {
         assertsClasses.add(DelegateMethodHandler.createChannelFor(RecordingServiceAsserts(), messenger))
         assertsClasses.add(DelegateMethodHandler.createChannelFor(VideoPresentationServiceAsserts(), messenger))
         assertsClasses.add(DelegateMethodHandler.createChannelFor(FilePresentationServiceAsserts(), messenger))
+        assertsClasses.add(DelegateMethodHandler.createChannelFor(CommandServiceAsserts(), messenger))
     }
 
     fun clear() {
