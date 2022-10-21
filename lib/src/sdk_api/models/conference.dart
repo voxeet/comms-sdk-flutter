@@ -22,7 +22,9 @@ class Conference {
   /// The current conference status.
   ConferenceStatus status;
 
-  Conference(this.alias, this.id, this.isNew, this.participants, this.status);
+  SpatialAudioStyle? spatialAudioStyle;
+
+  Conference(this.alias, this.id, this.isNew, this.participants, this.status, this.spatialAudioStyle);
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
@@ -31,6 +33,7 @@ class Conference {
         "isNew": isNew,
         "participants": participants.map((e) => e.toJson()).toList(),
         "status": status.encode(),
+        "spatialAudioStyle": spatialAudioStyle?.encode(),
       };
 }
 
@@ -108,13 +111,17 @@ class ConferenceCreateOption {
   /// The PIN code of a conference.
   num pinCode;
 
-  ConferenceCreateOption(this.alias, this.params, this.pinCode);
+  /// Defines how the spatial location should be communicated between the SDK and the Dolby.io server. Setting the spatial audio style is supported only on SDK 3.6 and later. The earlier SDK versions support only the individual mode.
+  SpatialAudioStyle? spatialAudioStyle;
+
+  ConferenceCreateOption(this.alias, this.params, this.pinCode, this.spatialAudioStyle);
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
         "alias": alias,
         "params": params?.toJson(),
         "pinCode": pinCode,
+        "spatialAudioStyle": spatialAudioStyle?.encode(),
       };
 }
 
@@ -141,9 +148,6 @@ class ConferenceCreateParameters {
   /// The preferred video codec, either H264 or VP8. By default, the SDK uses the H264 codec.
   Codec? videoCodec;
 
-  /// Defines how the spatial location should be communicated between the SDK and the Dolby.io server. Setting the spatial audio style is supported only on SDK 3.6 and later. The earlier SDK versions support only the individual mode.
-  SpatialAudioStyle? spatialAudioStyle;
-
   /// Returns a representation of this object as a JSON object.
   Map<String, dynamic> toJson() => {
         "dolbyVoice": dolbyVoice,
@@ -151,7 +155,6 @@ class ConferenceCreateParameters {
         "rtcpMode": rtcpMode?.encode(),
         "ttl": ttl,
         "videoCodec": videoCodec?.encode(),
-        "spatialAudioStyle": spatialAudioStyle?.encode(),
       };
 }
 

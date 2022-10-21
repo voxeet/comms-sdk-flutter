@@ -331,14 +331,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   ConferenceCreateOption conferenceCreateOptions() {
     var conferenceName = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
-    params.dolbyVoice = switchDolbyVoiceWithoutMixer;
+    params.dolbyVoice = switchDolbyVoiceWithMixer || switchDolbyVoiceWithoutMixer;
     params.liveRecording = true;
+    var createOptions = ConferenceCreateOption(conferenceName, params, 0, SpatialAudioStyle.disabled);
     if (switchSpatialAudioWithIndividual == true) {
-      params.spatialAudioStyle = SpatialAudioStyle.individual;
+      createOptions.spatialAudioStyle = SpatialAudioStyle.individual;
     } else if (switchSpatialAudioWithShared == true) {
-      params.spatialAudioStyle = SpatialAudioStyle.shared;
+      createOptions.spatialAudioStyle = SpatialAudioStyle.shared;
     }
-    var createOptions = ConferenceCreateOption(conferenceName, params, 0);
     return createOptions;
   }
 
@@ -346,7 +346,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var joinOptions = ConferenceJoinOptions();
     joinOptions.constraints = ConferenceConstraints(true, true);
     joinOptions.maxVideoForwarding = 4;
-    joinOptions.spatialAudio = switchSpatialAudioWithIndividual;
+    joinOptions.spatialAudio = switchSpatialAudioWithShared || switchSpatialAudioWithIndividual;
     return joinOptions;
   }
 
@@ -431,7 +431,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       MaterialPageRoute(
           builder: (context) => ParticipantScreen(
               conference: conference,
-              isSpatialAudio: switchSpatialAudioWithIndividual)),
+              isSpatialAudio: switchSpatialAudioWithIndividual || switchSpatialAudioWithShared)),
     );
     setState(() => isJoining = false);
   }

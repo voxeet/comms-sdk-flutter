@@ -30,13 +30,14 @@ var participantMap = {
 
 var participants = [participant];
 var conference = Conference(
-    "test_conf", "test_id", true, participants, ConferenceStatus.joined);
+    "test_conf", "test_id", true, participants, ConferenceStatus.joined, SpatialAudioStyle.individual);
 var conferenceMap = {
   "alias": "test_conf",
   "id": "test_id",
   "isNew": true,
   "participants": participants.map((e) => e.toJson()).toList(),
-  "status": ConferenceStatus.joined.encode()
+  "status": ConferenceStatus.joined.encode(),
+  "spatialAudioStyle": SpatialAudioStyle.individual.encode()
 };
 
 @GenerateMocks([SessionService])
@@ -65,7 +66,7 @@ void main() {
       ..rtcpMode = RTCPMode.best
       ..ttl = 1000
       ..videoCodec = Codec.h264;
-    var createOptions = ConferenceCreateOption("conference", createParams, 1);
+    var createOptions = ConferenceCreateOption("conference", createParams, 1, SpatialAudioStyle.individual);
     when(channel.invokeMethod("create", createOptions.toJson()))
         .thenAnswer((_) => Future.value(conference.toJson()));
 
@@ -81,7 +82,8 @@ void main() {
         "ttl": 1000,
         "videoCodec": Codec.h264.encode(),
       },
-      "pinCode": 1
+      "pinCode": 1,
+      "spatialAudioStyle": "INDIVIDUAL"
     })).called(1);
   });
 

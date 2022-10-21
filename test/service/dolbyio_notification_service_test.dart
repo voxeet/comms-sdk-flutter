@@ -26,7 +26,7 @@ var participantsInvitation = [
 ];
 
 var conference = Conference(
-    "test_conf", "test_id", true, participants, ConferenceStatus.joined);
+    "test_conf", "test_id", true, participants, ConferenceStatus.joined, SpatialAudioStyle.individual);
 
 void main() {
   var notificationService = DolbyioCommsSdk.instance.notification;
