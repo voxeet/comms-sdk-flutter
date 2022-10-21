@@ -21,7 +21,7 @@ class MediaDeviceService {
         await _methodChannel.invokeMethod<bool>("isFrontCamera"));
   }
 
-  /// Sets the [comfort noise level] for output devices in Dolby Voice conferences.
+  /// Sets the comfort noise level ([noiseLevel]) for output devices in Dolby Voice conferences.
   Future<void> setComfortNoiseLevel(ComfortNoiseLevel noiseLevel) async {
     return await _methodChannel.invokeMethod<void>(
         "setComfortNoiseLevel", {"noiseLevel": noiseLevel.encode()});
