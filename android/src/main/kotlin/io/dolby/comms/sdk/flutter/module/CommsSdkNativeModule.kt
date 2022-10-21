@@ -1,5 +1,7 @@
 package io.dolby.comms.sdk.flutter.module
 
+import android.os.Handler
+import android.os.Looper
 import com.voxeet.VoxeetSDK
 import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
 import io.dolby.comms.sdk.flutter.extension.error
@@ -12,6 +14,7 @@ import kotlinx.coroutines.cancelChildren
 
 class CommsSdkNativeModule(private val scope: CoroutineScope) : NativeModule {
 
+    private val mainHandler: Handler = Handler(Looper.getMainLooper())
     private lateinit var channel: MethodChannel
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -46,19 +49,21 @@ class CommsSdkNativeModule(private val scope: CoroutineScope) : NativeModule {
         onError = result::error,
         onSuccess = {
             VoxeetSDK.initialize(call.argumentOrThrow("accessToken")) { _, callback ->
-                channel.invokeMethod("getRefreshToken", null, object : MethodChannel.Result {
-                    override fun success(result: Any?) {
-                        (result as? String)?.let { callback.ok(it) } ?: error(Throwable("Refresh token is empty"))
-                    }
+                mainHandler.post {
+                    channel.invokeMethod("getRefreshToken", null, object : MethodChannel.Result {
+                        override fun success(result: Any?) {
+                            (result as? String)?.let { callback.ok(it) } ?: error(Throwable("Refresh token is empty"))
+                        }
 
-                    override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
-                        callback.error(Throwable("$errorCode: $errorMessage, $errorDetails"))
-                    }
+                        override fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+                            callback.error(Throwable("$errorCode: $errorMessage, $errorDetails"))
+                        }
 
-                    override fun notImplemented() {
-                        throw IllegalStateException("Method not implemented")
-                    }
-                })
+                        override fun notImplemented() {
+                            throw IllegalStateException("Method not implemented")
+                        }
+                    })
+                }
             }
             result.success(null)
         }
