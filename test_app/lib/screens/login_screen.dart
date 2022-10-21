@@ -51,6 +51,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   TextEditingController externalIdTextController = TextEditingController();
   late String? _sessionStatus;
   late String _accessToken;
+  late String _username;
   bool isSessionOpen = false, isLogging = false, isInitialized = false;
 
   @override
@@ -149,8 +150,9 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   }
 
   void openSession() {
+    _username = usernameTextController.text;
     var participantInfo = ParticipantInfo(
-        usernameTextController.text, null, externalIdTextController.text);
+        _username, null, externalIdTextController.text);
     _dolbyioCommsSdkFlutterPlugin.session
         .open(participantInfo)
         .then((value) => checkSessionStatus())
@@ -187,10 +189,12 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
 
   void initSharedPreferences() {
     accessTokenTextController.text = sharedPreferences.accessToken;
+    usernameTextController.text = sharedPreferences.username;
   }
 
   void saveToSharedPreferences() {
     sharedPreferences.accessToken = _accessToken;
+    sharedPreferences.username = _username;
   }
 
   void onError(String message, Object? error) {
