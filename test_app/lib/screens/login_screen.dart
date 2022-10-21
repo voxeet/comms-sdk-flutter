@@ -2,12 +2,12 @@ import 'dart:developer' as developer;
 import 'join_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '/widgets/circular_progress_indicator.dart';
 import '/widgets/dolby_title.dart';
 import '/widgets/input_text_field.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/text_form_field.dart';
+import '../shared_preferences_helper.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({
@@ -49,9 +49,8 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   TextEditingController accessTokenTextController = TextEditingController();
   TextEditingController usernameTextController = TextEditingController();
   TextEditingController externalIdTextController = TextEditingController();
-  late String? _sessionStatus, _accessToken;
-  late SharedPreferences _preferences;
-  String keyAccessToken = 'access token';
+  late String? _sessionStatus;
+  late String _accessToken;
   bool isSessionOpen = false, isLogging = false, isInitialized = false;
 
   @override
@@ -143,11 +142,10 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   Future<void> initializeSdk() async {
     _accessToken = accessTokenTextController.text;
     await _dolbyioCommsSdkFlutterPlugin
-        .initializeToken(_accessToken ?? "", () => getRefreshToken())
+        .initializeToken(_accessToken, () => getRefreshToken())
         .then((value) => setState(() => isInitialized = true))
         .onError((error, stackTrace) =>
             onError('Error during initializing sdk', error));
-    _preferences.setString(keyAccessToken, _accessToken ?? '');
   }
 
   void openSession() {
@@ -165,7 +163,10 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   void checkSessionStatus() async {
     await initSessionStatus();
     developer.log('Session is: $_sessionStatus');
-    if (isSessionOpen) navigateToJoinConference();
+    if (isSessionOpen) {
+      saveToSharedPreferences();
+      navigateToJoinConference();
+    }
   }
 
   void navigateToJoinConference() async {
@@ -184,14 +185,15 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     return _accessToken;
   }
 
-  void onError(String message, Object? error) {
-    developer.log(message, error: error);
+  void initSharedPreferences() {
+    accessTokenTextController.text = sharedPreferences.accessToken;
   }
 
-  Future initSharedPreferences() async {
-    _preferences = await SharedPreferences.getInstance();
+  void saveToSharedPreferences() {
+    sharedPreferences.accessToken = _accessToken;
+  }
 
-    _accessToken = _preferences.getString(keyAccessToken);
-    setState(() => accessTokenTextController.text = _accessToken ?? '');
+  void onError(String message, Object? error) {
+    developer.log(message, error: error);
   }
 }
