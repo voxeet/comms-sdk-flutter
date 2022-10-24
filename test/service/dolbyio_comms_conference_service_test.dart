@@ -122,8 +122,6 @@ void main() {
       ..constraints = ConferenceConstraints(true, true)
       ..maxVideoForwarding = 2
       ..mixing = ConferenceMixingOptions(true)
-      ..preferRecvMono = true
-      ..preferSendMono = true
       ..simulcast = true
       ..spatialAudio = true;
 
@@ -142,8 +140,6 @@ void main() {
         "conferenceAccessToken": joinOptions.conferenceAccessToken,
         "maxVideoForwarding": joinOptions.maxVideoForwarding,
         "mixing": joinOptions.mixing?.toJson(),
-        "preferRecvMono": joinOptions.preferRecvMono,
-        "preferSendMono": joinOptions.preferSendMono,
         "simulcast": joinOptions.simulcast,
         "spatialAudio": joinOptions.spatialAudio,
       }

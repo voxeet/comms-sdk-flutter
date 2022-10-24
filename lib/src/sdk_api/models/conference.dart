@@ -210,11 +210,8 @@ class ConferenceJoinOptions {
   /// Allows joining a conference as a special participant called Mixer. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
   ConferenceMixingOptions? mixing;
 
-  /// Indicates whether a participant wants to receive mono sound. By default, participants receive stereo audio. This configuration is only applicable when using the Opus codec.
-  bool? preferRecvMono;
-
-  /// Indicates whether a participant wants to send mono sound to a conference. By default, when using the Opus codec, participants' audio is sent as stereo. This configuration is only applicable when using the Opus codec.
-  bool? preferSendMono;
+  /// Defines how the SDK should select conference participants whose videos will be transmitted to the local participant.
+  VideoForwardingStrategy? strategy;
 
   /// Enables sending the Simulcast video streams to other conference participants.
   bool? simulcast;
@@ -228,8 +225,7 @@ class ConferenceJoinOptions {
         "conferenceAccessToken": conferenceAccessToken,
         "maxVideoForwarding": maxVideoForwarding,
         "mixing": mixing?.toJson(),
-        "preferRecvMono": preferRecvMono,
-        "preferSendMono": preferSendMono,
+        "videoForwardingStrategy": strategy?.encode(),
         "simulcast": simulcast,
         "spatialAudio": spatialAudio,
       };
@@ -534,11 +530,8 @@ class ConferenceListenOptions {
   /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 4 for mobile browsers. By default, the parameter is set to 4.
   num? maxVideoForwarding;
 
-  /// Indicates whether a participant wants to receive mono sound. By default, participants receive stereo audio. This configuration is only applicable when using the Opus codec.
-  bool? preferRecvMono;
-
-  /// Indicates whether a participant wants to send mono sound to a conference. By default, when using the Opus codec, participants' audio is sent as stereo. This configuration is only applicable when using the Opus codec.
-  bool? preferSendMono;
+  /// Defines how the SDK should select conference participants whose videos will be transmitted to the local participant.
+  VideoForwardingStrategy? strategy;
 
   /// Enables spatial audio for the local participant who joins a Dolby Voice conference. By default, this parameter is set to false. When set to true in a conference that uses the individual [SpatialAudioStyle], the application must place remote participants in a 3D space using the [ConferenceService.setSpatialPosition] method.
   bool? spatialAudio;
@@ -547,8 +540,7 @@ class ConferenceListenOptions {
   Map<String, Object?> toJson() => {
         "conferenceAccessToken": conferenceAccessToken,
         "maxVideoForwarding": maxVideoForwarding,
-        "preferRecvMono": preferRecvMono,
-        "preferSendMono": preferSendMono,
+        "videoForwardingStrategy": strategy?.encode(),
         "spatialAudio": spatialAudio,
       };
 }
