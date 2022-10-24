@@ -28,7 +28,11 @@ export 'src/sdk_api/models/conference.dart'
         AudioProcessingSenderOptions,
         RTCStatsType,
         VideoForwardingStrategy,
+<<<<<<< HEAD
         SpatialAudioStyle;
+=======
+        ConferenceListenOptions;
+>>>>>>> dd71f51 (Implement listen conference method for Flutter (#129))
 export 'src/sdk_api/models/enums.dart'
     show
         ComfortNoiseLevel,
