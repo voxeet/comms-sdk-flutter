@@ -21,6 +21,7 @@ import 'models/video_presentation.dart';
 ///
 /// 6. The presenter calls the [stop] method to stop the video presentation.
 ///
+/// {@category Services}
 class VideoPresentationService {
   /// @internal */
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(

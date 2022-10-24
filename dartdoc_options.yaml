@@ -1,3 +1,14 @@
 dartdoc:
   footerText: ['./documentation_assets/footer_text.txt']
   favicon: ./documentation_assets/dolby_favicon.png
+  categories:
+    "Services":
+      markdown: documentation_assets/services.md
+      name: Services
+    "Models":
+      markdown: documentation_assets/models.md
+      name: Models
+    "Widgets":
+      markdown: documentation_assets/widgets.md
+      name: Widgets
+  categoryOrder: ["Services", Widgets, "Models"]

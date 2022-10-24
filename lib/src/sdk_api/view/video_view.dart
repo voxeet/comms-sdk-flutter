@@ -15,6 +15,8 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 ///
 /// An instance of this class can be provided during the instantiation of the [VideoView] widget,
 /// if this widget is constructed using [VideoView.forList].
+/// 
+/// {@category Widgets}
 class VideoViewController {
   _VideoViewState? _state;
 
@@ -74,6 +76,8 @@ class VideoViewController {
 /// with the [VideoView.forList] constructor or as a stand-alone widget outside of collection
 /// widgets, such as [GridView] or [ListView]. In this second option, you need to use the
 /// [VideoView] constructor and provide a [VideoViewController] to the constructor.
+/// 
+/// {@category Widgets}
 class VideoView extends StatefulWidget {
   /// @internal
   final String viewType = 'video_view';

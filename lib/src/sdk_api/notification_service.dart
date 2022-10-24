@@ -9,6 +9,8 @@ import 'models/events.dart';
 import 'models/participant.dart';
 
 /// The NotificationService allows inviting participants to a conference.
+/// 
+/// {@category Services}
 class NotificationService {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
