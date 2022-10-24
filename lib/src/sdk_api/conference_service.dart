@@ -10,6 +10,8 @@ import 'models/spatial.dart';
 import 'session_service.dart';
 
 /// The ConferenceService allows an application to manage a conference life-cycle and interact with the conference. The service allows creating, joining, and leaving conferences and managing the audio, video, and screen-share streams.
+/// 
+/// {@category Services}
 class ConferenceService {
   /// @internal
   final _methodChannel =

@@ -26,7 +26,8 @@ import 'models/file_presentation.dart';
 /// 8. The presenter calls the [stop] method to end the file presentation.
 ///
 /// 9. The presenter and the viewers receive the [FilePresentationServiceEventNames.filePresentationStopped] event that informs about the end of the file presentation.
-///
+/// 
+/// {@category Services}
 class FilePresentationService {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
