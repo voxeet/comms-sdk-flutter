@@ -37,17 +37,19 @@ class SdkBinding: Binding {
             VoxeetSDK.shared.initialize(
                 accessToken: try flutterArguments.asDictionary(argKey: "accessToken").decode(),
                 refreshTokenClosureWithParam: { [weak self] closure, _ in
-                    self?.channel.invokeMethod("getRefreshToken", arguments: nil, result: { result -> Void in
-                        do {
-                            guard let token = result as? String else {
-                                throw BindingError.noRefreshTokenProvided
+                    DispatchQueue.main.async {
+                        self?.channel.invokeMethod("getRefreshToken", arguments: nil, result: { result -> Void in
+                            do {
+                                guard let token = result as? String else {
+                                    throw BindingError.noRefreshTokenProvided
+                                }
+                                closure(token)
+                            } catch {
+                                closure(nil)
+                                // TODO: we need to find a better way dealing with the reporting the error.
                             }
-                            closure(token)
-                        } catch {
-                            closure(nil)
-                            // TODO: we need to find a better way dealing with the reporting the error.
-                        }
-                    })
+                        })
+                    }
                 }
             )
             completionHandler.success()
