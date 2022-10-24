@@ -211,7 +211,7 @@ class ConferenceJoinOptions {
   ConferenceMixingOptions? mixing;
 
   /// Defines how the SDK should select conference participants whose videos will be transmitted to the local participant.
-  VideoForwardingStrategy? strategy;
+  VideoForwardingStrategy? videoForwardingStrategy;
 
   /// Enables sending the Simulcast video streams to other conference participants.
   bool? simulcast;
@@ -225,7 +225,7 @@ class ConferenceJoinOptions {
         "conferenceAccessToken": conferenceAccessToken,
         "maxVideoForwarding": maxVideoForwarding,
         "mixing": mixing?.toJson(),
-        "videoForwardingStrategy": strategy?.encode(),
+        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
         "simulcast": simulcast,
         "spatialAudio": spatialAudio,
       };
@@ -531,7 +531,7 @@ class ConferenceListenOptions {
   num? maxVideoForwarding;
 
   /// Defines how the SDK should select conference participants whose videos will be transmitted to the local participant.
-  VideoForwardingStrategy? strategy;
+  VideoForwardingStrategy? videoForwardingStrategy;
 
   /// Enables spatial audio for the local participant who joins a Dolby Voice conference. By default, this parameter is set to false. When set to true in a conference that uses the individual [SpatialAudioStyle], the application must place remote participants in a 3D space using the [ConferenceService.setSpatialPosition] method.
   bool? spatialAudio;
@@ -540,7 +540,7 @@ class ConferenceListenOptions {
   Map<String, Object?> toJson() => {
         "conferenceAccessToken": conferenceAccessToken,
         "maxVideoForwarding": maxVideoForwarding,
-        "videoForwardingStrategy": strategy?.encode(),
+        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
         "spatialAudio": spatialAudio,
       };
 }
