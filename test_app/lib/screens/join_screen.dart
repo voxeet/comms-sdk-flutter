@@ -69,6 +69,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   bool isJoining = false;
   bool isReplaying = false;
   bool switchConferenceStatus = false;
+<<<<<<< HEAD
   bool spatialAudio = false;
   bool switchDolbyVoice = true;
   String? spatialAudioStyleDropDownText;
@@ -78,6 +79,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   static const String spatialAudioWithSharedScene =
       "Spatial Audio with Shared Scene";
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
+=======
+  bool switchSpatialAudio = false;
+  bool switchDolbyVoice = false;
+  bool joinAsListener = false;
+>>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
   StreamSubscription<
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
@@ -160,6 +166,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                       controller: conferenceAliasTextController,
                       focusColor: Colors.deepPurple),
                 ),
+<<<<<<< HEAD
                 SwitchListTile(
                   activeColor: Colors.deepPurple,
                   title: const Text("Observe Conference Status"),
@@ -243,6 +250,56 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     }
                   },
                 ),
+=======
+                ExpansionTile(
+                    title: const Text('Options'),
+                    textColor: Colors.black,
+                    iconColor: Colors.deepPurple,
+                    children: [
+                      SwitchOption(
+                          title: 'Observe Conference Status',
+                          value: switchConferenceStatus,
+                          onChanged: (value) {
+                            setState(() {
+                              switchConferenceStatus = value;
+                              observeConferenceStatus(switchConferenceStatus);
+                            });
+                          }),
+                      SwitchOption(
+                          title: 'Dolby Voice',
+                          value: switchDolbyVoice,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                switchDolbyVoice = value;
+                                switchSpatialAudio = value;
+                              });
+                            } else {
+                              setState(() => switchDolbyVoice = value);
+                            }
+                          }),
+                      SwitchOption(
+                          title: 'Spatial audio',
+                          value: switchSpatialAudio,
+                          onChanged: switchDolbyVoice
+                              ? (value) {
+                                  setState(() => switchSpatialAudio = value);
+                                }
+                              : null),
+                      SwitchOption(
+                          title: 'Join as listener',
+                          value: joinAsListener,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                joinAsListener = value;
+                              });
+                            } else {
+                              setState(() => joinAsListener = value);
+                            }
+                          }),
+                    ]),
+>>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
                 PrimaryButton(
                   widgetText: isJoining
                       ? const WhiteCircularProgressIndicator()
@@ -258,6 +315,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 ),
                 const SizedBox(height: 16),
                 Form(
+<<<<<<< HEAD
                   key: formKeyId,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: InputTextFormField(
@@ -265,6 +323,15 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                       controller: conferenceIdTextController,
                       focusColor: Colors.deepPurple),
                 ),
+=======
+                    key: formKeyId,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: InputTextFormField(
+                        labelText: 'Conference ID with record',
+                        controller: conferenceIdTextController,
+                        focusColor: Colors.deepPurple)),
+                const SizedBox(height: 16),
+>>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
                 PrimaryButton(
                   widgetText: isReplaying
                       ? const WhiteCircularProgressIndicator()
@@ -312,7 +379,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     final isValidForm = formKeyAlias.currentState!.validate();
     if (isValidForm) {
       setState(() => isJoining = true);
-      join();
+      if (joinAsListener) {
+        listen();
+      } else {
+        join();
+      }
     } else {
       developer.log('Cannot join to conference due to error.');
     }
@@ -332,6 +403,16 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     create().then((value) {
       _dolbyioCommsSdkFlutterPlugin.conference
           .join(value, conferenceJoinOptions())
+          .then((value) => checkJoinConferenceResult(value))
+          .onError((error, stackTrace) =>
+              onError('Error during joining conference.', error));
+    });
+  }
+
+  void listen() {
+    create().then((value) {
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .listen(value, conferenceListenOptions())
           .then((value) => checkJoinConferenceResult(value))
           .onError((error, stackTrace) =>
               onError('Error during joining conference.', error));
@@ -362,6 +443,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     joinOptions.spatialAudio = spatialAudio;
     joinOptions.mixing = ConferenceMixingOptions(switchDolbyVoice);
     return joinOptions;
+  }
+
+  ConferenceListenOptions conferenceListenOptions() {
+    var listenOptions = ConferenceListenOptions();
+    listenOptions.maxVideoForwarding = 4;
+    listenOptions.spatialAudio = switchSpatialAudio;
+    return listenOptions;
   }
 
   void checkJoinConferenceResult(Conference conference) {
@@ -444,7 +532,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => ParticipantScreen(
+<<<<<<< HEAD
               conference: conference, isSpatialAudio: spatialAudio)),
+=======
+              conference: conference, isSpatialAudio: switchSpatialAudio)),
+>>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
     );
     setState(() => isJoining = false);
   }

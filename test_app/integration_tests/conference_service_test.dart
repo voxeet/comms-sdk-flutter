@@ -207,8 +207,6 @@ void main() {
     conferenceJoinOptions.constraints = ConferenceConstraints(true, true);
     conferenceJoinOptions.maxVideoForwarding = 15;
     conferenceJoinOptions.mixing = ConferenceMixingOptions(true);
-    conferenceJoinOptions.preferRecvMono = true;
-    conferenceJoinOptions.preferSendMono = true;
     conferenceJoinOptions.simulcast = true;
     conferenceJoinOptions.spatialAudio = true;
     var returnedConference = await dolbyioCommsSdkFlutterPlugin.conference
@@ -1065,8 +1063,6 @@ void main() {
     var conferenceListenOptions = ConferenceListenOptions();
     conferenceListenOptions.conferenceAccessToken = "conference_access_token";
     conferenceListenOptions.maxVideoForwarding = 15;
-    conferenceListenOptions.preferRecvMono = true;
-    conferenceListenOptions.preferSendMono = true;
     conferenceListenOptions.spatialAudio = true;
     var returnedConference = await dolbyioCommsSdkFlutterPlugin.conference
         .listen(conference, conferenceListenOptions);
