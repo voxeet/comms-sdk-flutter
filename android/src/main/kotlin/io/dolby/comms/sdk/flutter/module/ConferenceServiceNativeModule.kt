@@ -11,6 +11,7 @@ import io.dolby.comms.sdk.flutter.extension.error
 import io.dolby.comms.sdk.flutter.extension.launch
 import io.dolby.comms.sdk.flutter.mapper.AudioProcessingMapper
 import io.dolby.comms.sdk.flutter.mapper.ConferenceJoinOptionsMapper
+import io.dolby.comms.sdk.flutter.mapper.ConferenceListenOptionsMapper
 import io.dolby.comms.sdk.flutter.mapper.ConferenceMapper
 import io.dolby.comms.sdk.flutter.mapper.ParticipantMapper
 import io.dolby.comms.sdk.flutter.mapper.ParticipantPermissionsMapper
@@ -35,6 +36,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
             ::current.name -> current(result)
             ::fetch.name -> fetch(call, result)
             ::join.name -> join(call, result)
+            ::listen.name -> listen(call, result)
             ::leave.name -> leave(result)
             ::getStatus.name -> getStatus(call, result)
             ::getAudioLevel.name -> getAudioLevel(call, result)
@@ -124,6 +126,20 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                 .fromMap(call.arguments as? Map<String, Any?>)
                 ?.let {
                     val conference = VoxeetSDK.conference().join(it).await()
+                    ConferenceMapper(conference).convertToMap()
+                }
+                ?.let { result.success(it) }
+                ?: throw IllegalArgumentException("Could not map arguments")
+        }
+    )
+
+    private fun listen(call: MethodCall, result: Result) = scope.launch(
+        onError = result::error,
+        onSuccess = {
+            ConferenceListenOptionsMapper
+                .fromMap(call.arguments as? Map<String, Any?>)
+                ?.let {
+                    val conference = VoxeetSDK.conference().listen(it).await()
                     ConferenceMapper(conference).convertToMap()
                 }
                 ?.let { result.success(it) }

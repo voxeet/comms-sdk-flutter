@@ -71,6 +71,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   bool switchConferenceStatus = false;
   bool switchSpatialAudio = false;
   bool switchDolbyVoice = false;
+  bool joinAsListener = false;
   StreamSubscription<
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
@@ -153,62 +154,75 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                       controller: conferenceAliasTextController,
                       focusColor: Colors.deepPurple),
                 ),
-                ExpansionTile(title: const Text('Options'),
+                ExpansionTile(
+                    title: const Text('Options'),
                     textColor: Colors.black,
                     iconColor: Colors.deepPurple,
                     children: [
-                  SwitchOption(
-                      title: 'Observe Conference Status',
-                      value: switchConferenceStatus,
-                      onChanged: (value) {
-                        setState(() {
-                          switchConferenceStatus = value;
-                          observeConferenceStatus(switchConferenceStatus);
-                        });
-                      }),
-                  SwitchOption(
-                      title: 'Dolby Voice',
-                      value: switchDolbyVoice,
-                      onChanged: (value) {
-                        if (value == false) {
-                          setState(() {
-                            switchDolbyVoice = value;
-                            switchSpatialAudio = value;
-                          });
-                        } else {
-                          setState(() => switchDolbyVoice = value);
-                        }
-                      }),
-                  SwitchOption(
-                      title: 'Spatial audio',
-                      value: switchSpatialAudio,
-                      onChanged: switchDolbyVoice
-                            ? (value) {
-                                setState(() => switchSpatialAudio = value);
-                              }
-                            : null)
-                  ]),
-              PrimaryButton(
-                widgetText: isJoining
-                    ? const WhiteCircularProgressIndicator()
-                    : const Text('Join'),
-                onPressed: () {
-                  if (defaultTargetPlatform == TargetPlatform.android) {
-                    checkPermissions();
-                    return;
-                  }
-                  onJoinButtonPressed();
-                },
-                color: Colors.deepPurple,
-              ),
-              const SizedBox(height: 16),
-              Form(
-                  key: formKeyId,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: InputTextFormField(
-                      labelText: 'Conference ID with record',
-                      controller: conferenceIdTextController,
-                      focusColor: Colors.deepPurple)),
+                      SwitchOption(
+                          title: 'Observe Conference Status',
+                          value: switchConferenceStatus,
+                          onChanged: (value) {
+                            setState(() {
+                              switchConferenceStatus = value;
+                              observeConferenceStatus(switchConferenceStatus);
+                            });
+                          }),
+                      SwitchOption(
+                          title: 'Dolby Voice',
+                          value: switchDolbyVoice,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                switchDolbyVoice = value;
+                                switchSpatialAudio = value;
+                              });
+                            } else {
+                              setState(() => switchDolbyVoice = value);
+                            }
+                          }),
+                      SwitchOption(
+                          title: 'Spatial audio',
+                          value: switchSpatialAudio,
+                          onChanged: switchDolbyVoice
+                              ? (value) {
+                                  setState(() => switchSpatialAudio = value);
+                                }
+                              : null),
+                      SwitchOption(
+                          title: 'Join as listener',
+                          value: joinAsListener,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                joinAsListener = value;
+                              });
+                            } else {
+                              setState(() => joinAsListener = value);
+                            }
+                          }),
+                    ]),
+                PrimaryButton(
+                  widgetText: isJoining
+                      ? const WhiteCircularProgressIndicator()
+                      : const Text('Join'),
+                  onPressed: () {
+                    if (defaultTargetPlatform == TargetPlatform.android) {
+                      checkPermissions();
+                      return;
+                    }
+                    onJoinButtonPressed();
+                  },
+                  color: Colors.deepPurple,
+                ),
+                const SizedBox(height: 16),
+                Form(
+                    key: formKeyId,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: InputTextFormField(
+                        labelText: 'Conference ID with record',
+                        controller: conferenceIdTextController,
+                        focusColor: Colors.deepPurple)),
                 const SizedBox(height: 16),
                 PrimaryButton(
                   widgetText: isReplaying
@@ -257,7 +271,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     final isValidForm = formKeyAlias.currentState!.validate();
     if (isValidForm) {
       setState(() => isJoining = true);
-      join();
+      if (joinAsListener) {
+        listen();
+      } else {
+        join();
+      }
     } else {
       developer.log('Cannot join to conference due to error.');
     }
@@ -277,6 +295,16 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     create().then((value) {
       _dolbyioCommsSdkFlutterPlugin.conference
           .join(value, conferenceJoinOptions())
+          .then((value) => checkJoinConferenceResult(value))
+          .onError((error, stackTrace) =>
+              onError('Error during joining conference.', error));
+    });
+  }
+
+  void listen() {
+    create().then((value) {
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .listen(value, conferenceListenOptions())
           .then((value) => checkJoinConferenceResult(value))
           .onError((error, stackTrace) =>
               onError('Error during joining conference.', error));
@@ -304,6 +332,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     joinOptions.maxVideoForwarding = 4;
     joinOptions.spatialAudio = switchSpatialAudio;
     return joinOptions;
+  }
+
+  ConferenceListenOptions conferenceListenOptions() {
+    var listenOptions = ConferenceListenOptions();
+    listenOptions.maxVideoForwarding = 4;
+    listenOptions.spatialAudio = switchSpatialAudio;
+    return listenOptions;
   }
 
   void checkJoinConferenceResult(Conference conference) {
@@ -386,8 +421,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => ParticipantScreen(
-              conference: conference,
-              isSpatialAudio: switchSpatialAudio)),
+              conference: conference, isSpatialAudio: switchSpatialAudio)),
     );
     setState(() => isJoining = false);
   }

@@ -122,8 +122,7 @@ void main() {
       ..constraints = ConferenceConstraints(true, true)
       ..maxVideoForwarding = 2
       ..mixing = ConferenceMixingOptions(true)
-      ..preferRecvMono = true
-      ..preferSendMono = true
+      ..videoForwardingStrategy = VideoForwardingStrategy.closestUser
       ..simulcast = true
       ..spatialAudio = true;
 
@@ -142,9 +141,34 @@ void main() {
         "conferenceAccessToken": joinOptions.conferenceAccessToken,
         "maxVideoForwarding": joinOptions.maxVideoForwarding,
         "mixing": joinOptions.mixing?.toJson(),
-        "preferRecvMono": joinOptions.preferRecvMono,
-        "preferSendMono": joinOptions.preferSendMono,
+        "videoForwardingStrategy": joinOptions.videoForwardingStrategy?.encode(),
         "simulcast": joinOptions.simulcast,
+        "spatialAudio": joinOptions.spatialAudio,
+      }
+    })).called(1);
+  });
+
+  test("test listen method", () async {
+    var joinOptions = ConferenceListenOptions()
+      ..conferenceAccessToken = "token"
+      ..maxVideoForwarding = 2
+      ..videoForwardingStrategy = VideoForwardingStrategy.closestUser
+      ..spatialAudio = true;
+
+    when(channel.invokeMethod("listen", {
+      "conference": conference.toJson(),
+      "options": joinOptions.toJson()
+    })).thenAnswer((_) => Future.value(conference.toJson()));
+
+    var result = await conferenceService.listen(conference, joinOptions);
+
+    expectConference(result, conference);
+    verify(channel.invokeMethod("listen", {
+      "conference": conferenceMap,
+      "options": {
+        "conferenceAccessToken": joinOptions.conferenceAccessToken,
+        "maxVideoForwarding": joinOptions.maxVideoForwarding,
+        "videoForwardingStrategy": joinOptions.videoForwardingStrategy?.encode(),
         "spatialAudio": joinOptions.spatialAudio,
       }
     })).called(1);
