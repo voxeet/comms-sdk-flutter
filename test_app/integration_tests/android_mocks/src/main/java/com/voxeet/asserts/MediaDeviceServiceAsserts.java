@@ -26,6 +26,9 @@ public class MediaDeviceServiceAsserts implements MethodDelegate {
                 case "assertSwitchCameraArgs":
                     assertSwitchCameraArgs(args);
                     break;
+                case "assertSwitchDeviceSpeakerArgs":
+                    assertSwitchDeviceSpeakerArgs(args);
+                    break;
                 default:
                     result.error(new NoSuchMethodError());
                     return;
@@ -50,26 +53,26 @@ public class MediaDeviceServiceAsserts implements MethodDelegate {
         } else {
             AssertUtils.compareWithExpectedValue(mockHasRun, args.get("hasRun"), "hasRun is incorrect");
         }
-        Object mockArgs = VoxeetSDK.mediaDevice().level.name();
+        int mockArgs = VoxeetSDK.mediaDevice().level.value();
         if (!args.containsKey("noiseLevel")) {
             throw new KeyNotFoundException("Key: hasRun not found");
         } else {
-            AssertUtils.compareWithExpectedValue(mockArgs, args.get("noiseLevel"), "noiseLevel is incorrect");
+            AssertUtils.compareWithExpectedValue(mockArgs, (int)args.get("noiseLevel"), "noiseLevel is incorrect");
         }
 
     }
 
     private void assertSetComfortNoiseLevelArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException {
-        Object mockArgs = VoxeetSDK.mediaDevice().level.name();
+        int mockArgs = VoxeetSDK.mediaDevice().level.value();
         if (!args.containsKey("noiseLevel")) {
             throw new KeyNotFoundException("Key: alias not found");
         } else {
-            AssertUtils.compareWithExpectedValue(mockArgs, args.get("noiseLevel"), "noiseLevel is incorrect");
+            AssertUtils.compareWithExpectedValue(mockArgs, (int) args.get("noiseLevel"), "noiseLevel is incorrect");
         }
     }
 
     private void assertSwitchCameraArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException {
-        Object mockArgs = VoxeetSDK.mediaDevice().switchCameraHasRun;
+        boolean mockArgs = VoxeetSDK.mediaDevice().switchCameraHasRun;
         if (!args.containsKey("hasRun")) {
             throw new KeyNotFoundException("Key: hasRun not found");
         } else {
@@ -77,4 +80,12 @@ public class MediaDeviceServiceAsserts implements MethodDelegate {
         }
     }
 
+    private void assertSwitchDeviceSpeakerArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException {
+        boolean mockArgs = VoxeetSDK.audio().local.soundManager.switchDeviceSpeakerHasRun;
+        if (!args.containsKey("hasRun")) {
+            throw new KeyNotFoundException("Key: hasRun not found");
+        } else {
+            AssertUtils.compareWithExpectedValue(mockArgs, args.get("hasRun"), "hasRun is incorrect");
+        }
+    }
 }
