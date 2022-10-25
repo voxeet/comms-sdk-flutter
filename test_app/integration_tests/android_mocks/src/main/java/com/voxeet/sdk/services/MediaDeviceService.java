@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.voxeet.android.media.camera.CameraContext;
 import com.voxeet.android.media.errors.MediaEngineException;
-import com.voxeet.android.media.MediaEngine.ComfortNoiseLevel;
+import com.voxeet.android.media.utils.ComfortNoiseLevel;
 import com.voxeet.promise.Promise;
 
 import org.jetbrains.annotations.NotNull;
