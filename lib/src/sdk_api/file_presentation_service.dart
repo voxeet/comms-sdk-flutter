@@ -82,7 +82,7 @@ class FilePresentationService {
   }
 
   /// Starts presenting a converted file.
-  /// The [uri] parameter refers to a required URL
+  /// The [fileConverted] parameter refers to the file to be presented.
   Future<void> start(FileConverted fileConverted) async {
     await _methodChannel.invokeMethod("start", fileConverted.toJson());
     return Future.value();

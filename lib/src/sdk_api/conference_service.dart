@@ -290,14 +290,15 @@ class ConferenceService {
   ///For more information, see the
   ///[Video Forwarding](https://docs.dolby.io/communications-apis/docs/guides-video-forwarding) article.
   ///
-  ///[param] strategy Defines how the SDK should select conference participants whose videos will be
+  /// This method uses the following parameters:
+  /// - [strategy]: Defines how the SDK should select conference participants whose videos will be
   ///transmitted to the local participant. There are two possible values; the selection can be either
   ///based on the participants' audio volume or the distance from the local participant
-  ///[max] The maximum number of video streams that may be transmitted to the local
+  /// - [max]: The maximum number of video streams that may be transmitted to the local
   ///participant. The valid values are between 0 and 4. The default value is 4.
   ///In the case of providing a value smaller than 0 or greater than 4, SDK triggers
-  ///the [IllegalStateException] error.
-  ///[prioritizedParticipants] The list of participants' objects. Allows prioritizing specific participant's
+  ///an error.
+  /// - [prioritizedParticipants]: The list of participants' objects. Allows prioritizing specific participant's
   ///video streams and display their videos even when these participants do not talk.
   ///For example, in the case of virtual classes, this option allows participants to pin the teacher's
   ///video and see the teacher, even when the teacher is not the active speaker.

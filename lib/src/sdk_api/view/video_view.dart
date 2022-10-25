@@ -14,7 +14,7 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 /// [VideoView] state.
 ///
 /// An instance of this class can be provided during the instantiation of the [VideoView] widget,
-/// if this widget is constructed using [VideoView.forList].
+/// if this widget is constructed using the default constructor.
 /// 
 /// {@category Widgets}
 class VideoViewController {
@@ -73,7 +73,7 @@ class VideoViewController {
 /// A widget that can display a [MediaStream] for a [Participant].
 ///
 /// You can use [VideoView] in two ways, either as an item of a [GridView] or a [ListView] used
-/// with the [VideoView.forList] constructor or as a stand-alone widget outside of collection
+/// with the [VideoView.withMediaStream] constructor or as a stand-alone widget outside of collection
 /// widgets, such as [GridView] or [ListView]. In this second option, you need to use the
 /// [VideoView] constructor and provide a [VideoViewController] to the constructor.
 /// 
