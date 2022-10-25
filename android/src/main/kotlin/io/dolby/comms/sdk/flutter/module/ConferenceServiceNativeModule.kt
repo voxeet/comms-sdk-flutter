@@ -430,9 +430,11 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         onSuccess = {
             call.arguments<List<Any?>>()
                 ?.mapNotNull { it?.let { ParticipantPermissionsMapper.fromMap(it as Map<String, Any?>) } }
-                ?.let { VoxeetSDK.conference().updatePermissions(it).await() }
+                ?.let { VoxeetSDK.conference().updatePermissions(it).await()
+                    result.success(null)
+                }
                 ?: throw IllegalArgumentException("Could not parse arguments")
-                    .also { result.success(null) }
+
         }
     )
 }
