@@ -16,6 +16,7 @@ import com.voxeet.sdk.models.ParticipantPermissions;
 import com.voxeet.sdk.services.ScreenShareService;
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions;
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions;
+import com.voxeet.sdk.services.builders.ConferenceListenOptions;
 import com.voxeet.sdk.services.conference.AudioProcessing;
 
 import java.util.List;
@@ -123,6 +124,12 @@ public class ConferenceServiceAsserts implements MethodDelegate {
                 case "assertUpdatePermissions":
                     assertUpdatePermissions(args);
                     break;
+                case "setListenConferenceReturn":
+                    setListenConferenceReturn(args);
+                    break;
+                case "assertListenConfrenceArgs":
+                    assertListenConfrenceArgs(args);
+                    break;
                 default:
                     result.error(new NoSuchMethodError("Method: " + methodName + " not found in " + getName() + " method channel"));
                     return;
@@ -132,6 +139,28 @@ public class ConferenceServiceAsserts implements MethodDelegate {
             result.failed(exception);
         } catch (Exception ex) {
             result.error(ex);
+        }
+    }
+
+    private void assertListenConfrenceArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException {
+        ConferenceListenOptions mockOptions = VoxeetSDK.conference().listenArgs;
+        if (args.containsKey("listenOptions")) {
+            Map<String, Object> listenArgs = (Map<String, Object>) args.get("listenOptions");
+            if (listenArgs.containsKey("conferenceAccessToken")) {
+                AssertUtils.compareWithExpectedValue(listenArgs.get("conferenceAccessToken"), mockOptions.conferenceAccessToken, "ConferenceAccessToken is incorrect");
+            }
+            if (listenArgs.containsKey("maxVideoForwarding")) {
+                AssertUtils.compareWithExpectedValue(listenArgs.get("maxVideoForwarding"), mockOptions.maxVideoForwarding, "MaxVideoForwarding is incorrect");
+            }
+            if (listenArgs.containsKey("spatialAudio")) {
+                AssertUtils.compareWithExpectedValue(listenArgs.get("spatialAudio"), mockOptions.spatialAudio, "SpatialAudio is incorrect");
+            }
+        }
+    }
+
+    private void setListenConferenceReturn(Map<String, Object> args) {
+        if (args.containsKey("type")) {
+            VoxeetSDK.conference().listenReturn = ConferenceServiceAssertUtils.createConference((Integer) args.get("type"));
         }
     }
 

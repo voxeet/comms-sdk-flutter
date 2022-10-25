@@ -2,6 +2,7 @@ package com.voxeet.sdk.services.builders;
 
 import com.voxeet.sdk.media.constraints.Constraints;
 import com.voxeet.sdk.models.Conference;
+import com.voxeet.sdk.models.VideoForwardingStrategy;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,6 +58,10 @@ public class ConferenceJoinOptions {
 
         public ConferenceJoinOptions build() {
             return options;
+        }
+
+        public void setVideoForwardingStrategy(@NotNull VideoForwardingStrategy valueOf) {
+
         }
     }
 }
