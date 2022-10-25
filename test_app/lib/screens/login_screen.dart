@@ -188,13 +188,13 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   }
 
   void initSharedPreferences() {
-    accessTokenTextController.text = sharedPreferences.accessToken;
-    usernameTextController.text = sharedPreferences.username;
+    accessTokenTextController.text = SharedPreferencesHelper().accessToken;
+    usernameTextController.text = SharedPreferencesHelper().username;
   }
 
   void saveToSharedPreferences() {
-    sharedPreferences.accessToken = _accessToken;
-    sharedPreferences.username = _username;
+    SharedPreferencesHelper().accessToken = _accessToken;
+    SharedPreferencesHelper().username = _username;
   }
 
   void onError(String message, Object? error) {

@@ -6,7 +6,7 @@ import 'shared_preferences_helper.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await sharedPreferences.init();
+  await SharedPreferencesHelper.load();
   runApp(const MaterialApp(home: MyApp()));
 }
 

@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesHelper {
   static SharedPreferences? _preferences;
 
-  Future<void> init() async {
+  static Future<void> load() async {
     _preferences ??= await SharedPreferences.getInstance();
   }
 
@@ -17,7 +17,6 @@ class SharedPreferencesHelper {
     _preferences?.setString(keyUsername, value);
   }
 }
-final sharedPreferences = SharedPreferencesHelper();
 
 const String keyAccessToken = "key_access_token";
 const String keyUsername = "key_username";
