@@ -50,7 +50,7 @@ public class MediaDeviceServiceAsserts implements MethodDelegate {
         } else {
             AssertUtils.compareWithExpectedValue(mockHasRun, args.get("hasRun"), "hasRun is incorrect");
         }
-        Object mockArgs = VoxeetSDK.mediaDevice().level.value();
+        Object mockArgs = VoxeetSDK.mediaDevice().level.name();
         if (!args.containsKey("noiseLevel")) {
             throw new KeyNotFoundException("Key: hasRun not found");
         } else {
@@ -60,7 +60,7 @@ public class MediaDeviceServiceAsserts implements MethodDelegate {
     }
 
     private void assertSetComfortNoiseLevelArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException {
-        Object mockArgs = VoxeetSDK.mediaDevice().level.value();
+        Object mockArgs = VoxeetSDK.mediaDevice().level.name();
         if (!args.containsKey("noiseLevel")) {
             throw new KeyNotFoundException("Key: alias not found");
         } else {

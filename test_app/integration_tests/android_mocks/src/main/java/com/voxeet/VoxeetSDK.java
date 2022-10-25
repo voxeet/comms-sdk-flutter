@@ -17,6 +17,7 @@ import com.voxeet.sdk.services.RecordingService;
 import com.voxeet.sdk.services.ScreenShareService;
 import com.voxeet.sdk.services.SessionService;
 import com.voxeet.sdk.services.VideoPresentationService;
+import com.voxeet.sdk.services.VideoService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.EventBusException;
@@ -36,6 +37,7 @@ public class VoxeetSDK {
     private final ScreenShareService screenShareService;
     private final LocalStatsService localStatsService;
     private final AudioService audioService;
+    private final VideoService videoService;
 
     private static final VoxeetSDK currentInstance = new VoxeetSDK();
 
@@ -55,6 +57,11 @@ public class VoxeetSDK {
     @NotNull
     public static AudioService audio() {
         return instance().audioService;
+    }
+
+    @NotNull
+    public static VideoService video() {
+        return instance().videoService;
     }
 
     @NotNull
@@ -118,6 +125,7 @@ public class VoxeetSDK {
         screenShareService = new ScreenShareService();
         localStatsService = new LocalStatsService();
         audioService = new AudioService();
+        videoService = new VideoService();
     }
 
     @NotNull
