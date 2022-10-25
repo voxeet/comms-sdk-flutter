@@ -78,11 +78,6 @@ public class NotificationServiceAsserts implements MethodDelegate {
             } else {
                 AssertUtils.compareWithExpectedValue(mockParticipantInvited.getParticipant().getExternalId(), participantInvited.get("externalId"), "externalId is incorrect");
             }
-            if (!participantInvited.containsKey("permission")) {
-                throw new KeyNotFoundException("Key: permission not found");
-            } else {
-                AssertUtils.compareWithExpectedValue(mockParticipantInvited.getPermissions().toArray()[0], participantInvited.get("permission"), "permission is incorrect");
-            }
         }
     }
 
