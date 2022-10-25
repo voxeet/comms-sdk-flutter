@@ -1091,10 +1091,12 @@ void main() {
     var returnedConference = await dolbyioCommsSdkFlutterPlugin.conference
         .listen(conference, conferenceListenOptions);
 
-    await expectNative(
-        methodChannel: conferenceServiceAssertsMethodChannel,
-        assertLabel: "assertFetchConferenceArgs",
-        expected: {"conferenceId": "conference_id"});
+    if (Platform.isIOS) {
+      await expectNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          assertLabel: "assertFetchConferenceArgs",
+          expected: {"conferenceId": "conference_id"});
+    }
 
     await expectNative(
         methodChannel: conferenceServiceAssertsMethodChannel,

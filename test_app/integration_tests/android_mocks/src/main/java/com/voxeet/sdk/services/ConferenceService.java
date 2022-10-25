@@ -21,6 +21,7 @@ import com.voxeet.sdk.models.ParticipantPermissions;
 import com.voxeet.sdk.models.v1.ConferenceParticipantStatus;
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions;
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions;
+import com.voxeet.sdk.services.builders.ConferenceListenOptions;
 import com.voxeet.sdk.services.builders.VideoForwardingOptions;
 import com.voxeet.sdk.services.conference.AudioProcessing;
 import com.voxeet.sdk.services.conference.information.ConferenceStatus;
@@ -64,6 +65,7 @@ public class ConferenceService {
     public Participant speakingArgs;
     public Pair<List<Participant>, Integer> videoForwardingArgs;
     public AudioProcessing audioProcessingArgs;
+    public Conference listenReturn;
 
     private String mConferenceId = null;
     private boolean localUserLeft = false;
@@ -72,6 +74,7 @@ public class ConferenceService {
     public Pair<Conference, Long> replayArgs;
     public SpatialEnvironment spatialEnvironmentArgs;
     public List<ParticipantPermissions> updatePermissionsArgs;
+    public ConferenceListenOptions listenArgs;
 
     @NotNull
     public Promise<Conference> create(@NotNull ConferenceCreateOptions conferenceCreateOption) {
@@ -167,6 +170,11 @@ public class ConferenceService {
     public boolean mute(@NonNull Participant participant, boolean mute) {
         muteArgs = new Pair<>(participant, mute);
         return true;
+    }
+
+    public Promise<Conference> listen(@NonNull ConferenceListenOptions options) {
+        listenArgs = options;
+        return Promise.resolve(listenReturn);
     }
 
     public boolean mute(boolean mute) {
