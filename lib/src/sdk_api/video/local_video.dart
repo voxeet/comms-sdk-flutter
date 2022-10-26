@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'package:dolbyio_comms_sdk_flutter/src/mapper/mapper.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/audio.dart';
 
-import '../../../dolbyio_comms_sdk_flutter.dart';
 import '../../dolbyio_comms_sdk_flutter_platform_interface.dart';
 
 /// The [LocalVideo] allows enabling and disabling the local participant's video.
