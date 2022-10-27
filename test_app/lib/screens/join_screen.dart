@@ -69,8 +69,15 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   bool isJoining = false;
   bool isReplaying = false;
   bool switchConferenceStatus = false;
-  bool switchSpatialAudio = false;
-  bool switchDolbyVoice = false;
+  bool spatialAudio = false;
+  bool switchDolbyVoice = true;
+  String? spatialAudioStyleDropDownText;
+  SpatialAudioStyle spatialAudioStyle = SpatialAudioStyle.disabled;
+  static const String spatialAudioWithIndividual =
+      "Spatial Audio with Individual";
+  static const String spatialAudioWithSharedScene =
+      "Spatial Audio with Shared Scene";
+  static const String spatialAudioDisabled = "Spatial Audio Disabled";
   StreamSubscription<
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
@@ -169,10 +176,10 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                   title: const Text("Dolby voice"),
                   value: switchDolbyVoice,
                   onChanged: (value) {
-                    if(value == false) {
+                    if (value == false) {
                       setState(() {
                         switchDolbyVoice = value;
-                        switchSpatialAudio = value;
+                        spatialAudio = value;
                       });
                     } else {
                       setState(() {
@@ -181,17 +188,61 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     }
                   },
                 ),
-                SwitchListTile(
-                    activeColor: Colors.deepPurple,
-                    title: const Text("Spatial audio"),
-                    value: switchSpatialAudio,
-                    onChanged: switchDolbyVoice
-                        ? (value) {
-                            setState(() {
-                              switchSpatialAudio = value;
-                            });
-                          }
-                        : null),
+                DropdownButton<String>(
+                  focusColor: Colors.white,
+                  value:
+                      switchDolbyVoice ? spatialAudioStyleDropDownText : null,
+                  style: const TextStyle(color: Colors.white),
+                  iconEnabledColor: Colors.black,
+                  items: <String>[
+                    spatialAudioWithIndividual,
+                    spatialAudioWithSharedScene,
+                    spatialAudioDisabled,
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: const TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }).toList(),
+                  hint: const Text(
+                    "Spatial Audio Style",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  onChanged: (String? value) {
+                    if (switchDolbyVoice == true &&
+                        value == spatialAudioWithIndividual) {
+                      setState(() {
+                        spatialAudioStyle = SpatialAudioStyle.individual;
+                        spatialAudio = true;
+                        spatialAudioStyleDropDownText = value;
+                      });
+                    } else if (switchDolbyVoice == true &&
+                        value == spatialAudioWithSharedScene) {
+                      setState(() {
+                        spatialAudioStyle = SpatialAudioStyle.shared;
+                        spatialAudio = true;
+                        spatialAudioStyleDropDownText = value;
+                      });
+                    } else if (switchDolbyVoice == true &&
+                        value == spatialAudioDisabled) {
+                      setState(() {
+                        spatialAudioStyle = SpatialAudioStyle.disabled;
+                        spatialAudio = false;
+                        spatialAudioStyleDropDownText = value;
+                      });
+                    } else {
+                      spatialAudioStyle = SpatialAudioStyle.disabled;
+                      spatialAudioStyleDropDownText = null;
+                      spatialAudio = false;
+                    }
+                  },
+                ),
                 PrimaryButton(
                   widgetText: isJoining
                       ? const WhiteCircularProgressIndicator()
@@ -298,7 +349,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var params = ConferenceCreateParameters();
     params.dolbyVoice = switchDolbyVoice;
     params.liveRecording = true;
-    var createOptions = ConferenceCreateOption(conferenceName, params, 0);
+    var createOptions =
+        ConferenceCreateOption(conferenceName, params, 0, spatialAudioStyle);
+    createOptions.spatialAudioStyle = spatialAudioStyle;
     return createOptions;
   }
 
@@ -306,7 +359,8 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var joinOptions = ConferenceJoinOptions();
     joinOptions.constraints = ConferenceConstraints(true, true);
     joinOptions.maxVideoForwarding = 4;
-    joinOptions.spatialAudio = switchSpatialAudio;
+    joinOptions.spatialAudio = spatialAudio;
+    joinOptions.mixing = ConferenceMixingOptions(switchDolbyVoice);
     return joinOptions;
   }
 
@@ -390,8 +444,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => ParticipantScreen(
-              conference: conference,
-              isSpatialAudio: switchSpatialAudio)),
+              conference: conference, isSpatialAudio: spatialAudio)),
     );
     setState(() => isJoining = false);
   }

@@ -27,7 +27,8 @@ export 'src/sdk_api/models/conference.dart'
         AudioProcessingOptions,
         AudioProcessingSenderOptions,
         RTCStatsType,
-        VideoForwardingStrategy;
+        VideoForwardingStrategy,
+        SpatialAudioStyle;
 export 'src/sdk_api/models/enums.dart'
     show
         ComfortNoiseLevel,
