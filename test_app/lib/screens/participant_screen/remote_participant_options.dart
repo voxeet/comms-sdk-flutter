@@ -1,9 +1,8 @@
+import '../../widgets/spatial_value_dialog_content.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
-
 import '/widgets/dialogs.dart';
 import 'permissions_list.dart';
-import 'spatial_position_dialog_content.dart';
 
 class RemoteParticipantOptions extends StatefulWidget {
   final Participant participant;
@@ -230,9 +229,10 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
         builder: (BuildContext spatialPositionContext) {
           return AlertDialog(
             title: const Text("Spatial position"),
-            content: SpatialPosiotionDialogContent(
+            content: SpatialValueDialogContent(
                 participant: participant,
-                spatialPositiontDialogContext: spatialPositionContext,
+                spatialValueDialogContext: spatialPositionContext,
+                spatialValueType: 'Spatial position',
                 resultDialogContext: context),
           );
         });
