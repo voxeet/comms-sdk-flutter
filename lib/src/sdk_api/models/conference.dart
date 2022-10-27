@@ -24,8 +24,12 @@ class Conference {
 
   SpatialAudioStyle? spatialAudioStyle;
 
+<<<<<<< HEAD
   Conference(this.alias, this.id, this.isNew, this.participants, this.status,
       this.spatialAudioStyle);
+=======
+  Conference(this.alias, this.id, this.isNew, this.participants, this.status, this.spatialAudioStyle);
+>>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
@@ -115,8 +119,12 @@ class ConferenceCreateOption {
   /// Defines how the spatial location should be communicated between the SDK and the Dolby.io server. Setting the spatial audio style is supported only on SDK 3.6 and later. The earlier SDK versions support only the individual mode.
   SpatialAudioStyle? spatialAudioStyle;
 
+<<<<<<< HEAD
   ConferenceCreateOption(
       this.alias, this.params, this.pinCode, this.spatialAudioStyle);
+=======
+  ConferenceCreateOption(this.alias, this.params, this.pinCode, this.spatialAudioStyle);
+>>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {

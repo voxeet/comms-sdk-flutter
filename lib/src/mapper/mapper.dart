@@ -18,6 +18,7 @@ class ConferenceMapper {
     var status =
         ConferenceStatus.decode(map["status"] as String? ?? "DEFAULT") ??
             ConferenceStatus.defaultStatus;
+<<<<<<< HEAD
     var spatialAudioStyle =
         map.containsKey("spatialAudioStyle") && map["spatialAudioStyle"] != null
             ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String)
@@ -25,6 +26,12 @@ class ConferenceMapper {
 
     return Conference(
         alias, id, isNew, participants, status, spatialAudioStyle);
+=======
+    var spatialAudioStyle = map.containsKey("spatialAudioStyle") 
+        ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String) : null;
+    
+    return Conference(alias, id, isNew, participants, status, spatialAudioStyle);
+>>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
   }
 
   static List<Participant> prepareParticipantsList(List<Object?> participants) {

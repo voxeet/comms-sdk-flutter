@@ -1058,7 +1058,8 @@ void main() {
               ParticipantStatus.connected,
               ParticipantType.listner)
         ],
-        ConferenceStatus.created);
+        ConferenceStatus.created,
+        SpatialAudioStyle.individual);
 
     var conferenceListenOptions = ConferenceListenOptions();
     conferenceListenOptions.conferenceAccessToken = "conference_access_token";
