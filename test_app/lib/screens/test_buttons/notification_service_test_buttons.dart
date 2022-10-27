@@ -39,7 +39,10 @@ class _NotificationServiceTestButtonsState
               focusColor: Colors.deepPurple,
             ),
             SecondaryButton(
-                text: 'Invite', onPressed: () => onInviteButtonPressed()),
+              text: 'Invite',
+              onPressed: () => onInviteButtonPressed(),
+              fillWidth: true,
+            ),
           ],
         ));
   }
