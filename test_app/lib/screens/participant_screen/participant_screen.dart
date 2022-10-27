@@ -72,6 +72,9 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           Event<ConferenceServiceEventNames, List<ConferencePermission>>>?
       _onPermissionsChangeSubsription;
 
+  StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
+    _onRecordingChangeSubscription;
+
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;
 
@@ -102,6 +105,13 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       StatusSnackbar.buildSnackbar(
           context, event.body.toString(), const Duration(seconds: 2));
     });
+
+    _onRecordingChangeSubscription = _dolbyioCommsSdkFlutterPlugin.recording
+        .onRecordingStatusUpdate()
+        .listen((event) {
+      StatusSnackbar.buildSnackbar(
+          context, "Recording status: ${event.body.recordingStatus} for conference: ${event.body.conferenceId}", const Duration(seconds: 2));
+    });
   }
 
   @override
@@ -111,6 +121,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     _dolbyioCommsSdkFlutterPlugin.conference.leave(options: options);
     _streamsChangeSubscription?.cancel();
     _onPermissionsChangeSubsription?.cancel();
+    _onRecordingChangeSubscription?.cancel();
     super.deactivate();
   }
 
