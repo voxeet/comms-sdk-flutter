@@ -70,7 +70,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   bool isReplaying = false;
   bool switchConferenceStatus = false;
   bool switchSpatialAudio = false;
-  bool switchDolbyVoice = false;
+  bool switchDolbyVoice = true;
   bool joinAsListener = false;
   StreamSubscription<
           Event<NotificationServiceEventNames,
