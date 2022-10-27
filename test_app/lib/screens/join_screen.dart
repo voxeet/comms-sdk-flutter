@@ -81,7 +81,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
 =======
   bool switchSpatialAudio = false;
-  bool switchDolbyVoice = false;
+  bool switchDolbyVoice = true;
   bool joinAsListener = false;
 >>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
   StreamSubscription<
