@@ -18,7 +18,10 @@ class ConferenceMapper {
     var status =
         ConferenceStatus.decode(map["status"] as String? ?? "DEFAULT") ??
             ConferenceStatus.defaultStatus;
-    return Conference(alias, id, isNew, participants, status);
+    var spatialAudioStyle = map.containsKey("spatialAudioStyle") 
+        ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String) : null;
+    
+    return Conference(alias, id, isNew, participants, status, spatialAudioStyle);
   }
 
   static List<Participant> prepareParticipantsList(List<Object?> participants) {
