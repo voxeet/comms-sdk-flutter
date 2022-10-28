@@ -56,19 +56,22 @@ class _InputTextFormFieldState extends State<InputTextFormField> {
           borderSide: BorderSide(color: widget.focusColor, width: 2),
         ),
         suffixIcon: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              widget.isStorageNeeded
-                  ? IconButton(
-                      onPressed: widget.onStorageIconTap,
-                      icon: const Icon(Icons.storage),
-                      color: Colors.grey)
-                  : const SizedBox.shrink(),
-              IconButton(
-                  onPressed: widget.controller!.clear,
-                  icon: const Icon(Icons.clear, color: Colors.grey))
-            ]),
+          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            widget.isStorageNeeded
+                ? IconButton(
+                    onPressed: widget.onStorageIconTap,
+                    icon: const Icon(Icons.storage),
+                    color: Colors.grey,
+                  )
+                : const SizedBox.shrink(),
+            IconButton(
+              onPressed: widget.controller!.clear,
+              icon: const Icon(Icons.clear, color: Colors.grey),
+            )
+          ],
+        ),
       ),
       validator: (value) => value!.isEmpty ? 'Please, fill this field.' : null,
       controller: widget.controller,

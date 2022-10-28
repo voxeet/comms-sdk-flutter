@@ -157,17 +157,21 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     blackText: "External ID  ", colorText: widget.externalId),
                 const SizedBox(height: 16),
                 Form(
-                    key: formKeyAlias,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    child: InputTextFormField(
-                        labelText: 'Conference alias',
-                        controller: conferenceAliasTextController,
-                        focusColor: Colors.deepPurple,
-                        isStorageNeeded: true,
-                        onStorageIconTap: () async {
-                          await showAliasSelectorDialog(context,
-                              SharedPreferencesHelper().conferenceAliases);
-                        })),
+                  key: formKeyAlias,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: InputTextFormField(
+                    labelText: 'Conference alias',
+                    controller: conferenceAliasTextController,
+                    focusColor: Colors.deepPurple,
+                    isStorageNeeded: true,
+                    onStorageIconTap: () async {
+                      await showAliasSelectorDialog(
+                        context,
+                        SharedPreferencesHelper().conferenceAliases,
+                      );
+                    },
+                  ),
+                ),
                 ExpansionTile(
                     title: const Text('Options'),
                     textColor: Colors.black,
@@ -495,7 +499,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   Future<void> showAliasSelectorDialog(
-      BuildContext context, List<String>? conferenceAliases) async {
+    BuildContext context,
+    List<String>? conferenceAliases,
+  ) async {
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -503,30 +509,38 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
               title: const Text('Choose from recently saved'),
               actionsOverflowButtonSpacing: 10,
               content: SingleChildScrollView(
-                  child: SizedBox(
-                width: double.maxFinite,
-                child: Column(mainAxisSize: MainAxisSize.min, children: [
-                  if (conferenceAliases != null)
-                    ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: conferenceAliases.length,
-                        itemBuilder: (context, index) {
-                          String alias = conferenceAliases[index];
-                          return ListTile(
+                child: SizedBox(
+                  width: double.maxFinite,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (conferenceAliases != null)
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: conferenceAliases.length,
+                          itemBuilder: (context, index) {
+                            String alias = conferenceAliases[index];
+                            return ListTile(
                               title: Text(alias),
-                              onTap: () => onAliasTap(alias));
-                        })
-                  else
-                    const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('No aliases in storage.'))
-                ]),
-              )),
+                              onTap: () => onAliasTap(alias),
+                            );
+                          },
+                        )
+                      else
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('No aliases in storage.'),
+                        )
+                    ],
+                  ),
+                ),
+              ),
               actions: [
                 TextButton(
-                    style: TextButton.styleFrom(primary: Colors.deepPurple),
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel')),
+                  style: TextButton.styleFrom(primary: Colors.deepPurple),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
               ]);
         });
   }
