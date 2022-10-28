@@ -6,12 +6,13 @@ class SecondaryButton extends StatelessWidget {
   final Color color;
   final bool fillWidth;
 
-  const SecondaryButton(
-      {super.key,
-      required this.text,
-      required this.onPressed,
-      this.color = Colors.deepPurple,
-      this.fillWidth = true});
+  const SecondaryButton({
+    super.key,
+    required this.text,
+    required this.onPressed,
+    this.color = Colors.deepPurple,
+    this.fillWidth = false,
+  });
 
   @override
   Widget build(BuildContext context) {
