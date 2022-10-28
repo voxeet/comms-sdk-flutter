@@ -5,13 +5,17 @@ class InputTextFormField extends StatefulWidget {
   final TextEditingController? controller;
   final Color focusColor;
   final String? initialValue;
+  final void Function()? onStorageIconTap;
+  final bool isStorageNeeded;
 
   const InputTextFormField(
       {Key? key,
       required this.labelText,
       required this.controller,
       this.focusColor = Colors.blue,
-      this.initialValue})
+      this.initialValue,
+      this.onStorageIconTap,
+      this.isStorageNeeded = false})
       : super(key: key);
 
   @override
@@ -51,9 +55,20 @@ class _InputTextFormFieldState extends State<InputTextFormField> {
           borderRadius: const BorderRadius.all(Radius.circular(12.0)),
           borderSide: BorderSide(color: widget.focusColor, width: 2),
         ),
-        suffixIcon: IconButton(
-            onPressed: widget.controller!.clear,
-            icon: const Icon(Icons.clear, color: Colors.grey)),
+        suffixIcon: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              widget.isStorageNeeded
+                  ? IconButton(
+                      onPressed: widget.onStorageIconTap,
+                      icon: const Icon(Icons.storage),
+                      color: Colors.grey)
+                  : const SizedBox.shrink(),
+              IconButton(
+                  onPressed: widget.controller!.clear,
+                  icon: const Icon(Icons.clear, color: Colors.grey))
+            ]),
       ),
       validator: (value) => value!.isEmpty ? 'Please, fill this field.' : null,
       controller: widget.controller,
