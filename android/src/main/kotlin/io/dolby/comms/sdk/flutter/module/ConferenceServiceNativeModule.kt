@@ -5,6 +5,7 @@ import com.voxeet.sdk.json.internal.ParamsHolder
 import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.VideoForwardingOptions
+import com.voxeet.sdk.services.conference.spatialisation.SpatialAudioStyle
 import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
 import io.dolby.comms.sdk.flutter.extension.await
 import io.dolby.comms.sdk.flutter.extension.error
@@ -79,14 +80,18 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     private fun create(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val paramsHolder = HashMap<String, Any?>()
-            call.argument<Map<String, Any>>("params")?.let {
-                paramsHolder.putAll(it)
+            val params = HashMap<String, Any?>()
+            call.argument<Map<String, Any>>("params")?.let { params.putAll(it) }
+
+            val paramsHolder = ParamsHolder(params)
+
+            call.argument<String>("spatialAudioStyle")?.let{
+                paramsHolder.setSpatialAudioStyle(SpatialAudioStyle.valueOf(it))
             }
 
             val conferenceCreateOption = ConferenceCreateOptions.Builder()
                 .setConferenceAlias(call.argument<String?>("alias"))
-                .setParamsHolder(ParamsHolder(paramsHolder))
+                .setParamsHolder(paramsHolder)
                 .build()
 
             VoxeetSDK.conference().create(conferenceCreateOption).await().let {
