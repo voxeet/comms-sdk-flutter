@@ -1,8 +1,9 @@
-import 'spatial_position_dialog_content.dart';
-import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'permissions_list.dart';
+import 'package:flutter/material.dart';
+
 import '/widgets/dialogs.dart';
+import 'permissions_list.dart';
+import 'spatial_position_dialog_content.dart';
 
 class RemoteParticipantOptions extends StatefulWidget {
   final Participant participant;
@@ -19,6 +20,8 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   List<ConferencePermission> permissionsList = [];
   bool isRemoteMuted = false;
+  bool isAudioStarted = false;
+  bool isVideoStarted = false;
 
   void updatePermissionsList(List<ConferencePermission> newPermissionsList) {
     setState(() {
@@ -73,7 +76,27 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
               child: ListTile(
                   title: Text('Set spatial position'),
                   leading: Icon(Icons.spatial_audio, color: Colors.deepPurple)),
-            )
+            ),
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 4,
+              child: ListTile(title: Text('Start audio')),
+            ),
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 5,
+              child: ListTile(title: Text('Stop audio')),
+            ),
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 6,
+              child: ListTile(title: Text('Start video')),
+            ),
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 7,
+              child: ListTile(title: Text('Stop video')),
+            ),
           ];
         },
         onSelected: (value) {
@@ -89,6 +112,18 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
               break;
             case 3:
               showSpatialPositionDialog(context);
+              break;
+            case 4:
+              startAudio();
+              break;
+            case 5:
+              stopAudio();
+              break;
+            case 6:
+              startVideo();
+              break;
+            case 7:
+              stopVideo();
               break;
           }
         });
@@ -108,6 +143,30 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
       _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, false);
       setState(() => isRemoteMuted = false);
     }
+  }
+
+  Future<void> startAudio() async {
+    _dolbyioCommsSdkFlutterPlugin.audioService.remoteAudio.start(
+      await _upToDateParticipant(),
+    );
+  }
+
+  Future<void> stopAudio() async {
+    _dolbyioCommsSdkFlutterPlugin.audioService.remoteAudio.stop(
+      await _upToDateParticipant(),
+    );
+  }
+
+  Future<void> startVideo() async {
+    _dolbyioCommsSdkFlutterPlugin.videoService.remoteVideo.start(
+      await _upToDateParticipant(),
+    );
+  }
+
+  Future<void> stopVideo() async {
+    _dolbyioCommsSdkFlutterPlugin.videoService.remoteVideo.stop(
+      await _upToDateParticipant(),
+    );
   }
 
   Future<void> updatePermissions() async {
