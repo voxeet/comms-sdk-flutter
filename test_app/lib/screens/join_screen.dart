@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import '../shared_preferences_helper.dart';
 import '/widgets/text_form_field.dart';
 import '/widgets/two_color_text.dart';
 import '/widgets/dolby_title.dart';
@@ -79,6 +80,8 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       "Spatial Audio with Shared Scene";
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
   bool joinAsListener = false;
+  String _conferenceAlias = '';
+
   StreamSubscription<
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
@@ -89,7 +92,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   @override
   void initState() {
     super.initState();
-
+    initSharedPreferences();
     onInvitationReceivedSubscription = _dolbyioCommsSdkFlutterPlugin
         .notification
         .onInvitationReceived()
@@ -157,9 +160,17 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                   key: formKeyAlias,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: InputTextFormField(
-                      labelText: 'Conference alias',
-                      controller: conferenceAliasTextController,
-                      focusColor: Colors.deepPurple),
+                    labelText: 'Conference alias',
+                    controller: conferenceAliasTextController,
+                    focusColor: Colors.deepPurple,
+                    isStorageNeeded: true,
+                    onStorageIconTap: () async {
+                      await showAliasSelectorDialog(
+                        context,
+                        SharedPreferencesHelper().conferenceAliases,
+                      );
+                    },
+                  ),
                 ),
                 ExpansionTile(
                     title: const Text('Options'),
@@ -375,12 +386,12 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   ConferenceCreateOption conferenceCreateOptions() {
-    var conferenceName = conferenceAliasTextController.text;
+    _conferenceAlias = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
     params.dolbyVoice = switchDolbyVoice;
     params.liveRecording = true;
-    var createOptions = ConferenceCreateOption(
-        conferenceName, params, 0, spatialAudioStyle);
+    var createOptions =
+        ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
     createOptions.spatialAudioStyle = spatialAudioStyle;
     return createOptions;
   }
@@ -407,6 +418,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     } else {
       developer.log('Cannot join to conference.');
     }
+    saveToSharedPreferences();
   }
 
   void joinInvitation(String conferenceId) {
@@ -484,6 +496,71 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
               conference: conference, isSpatialAudio: spatialAudio)),
     );
     setState(() => isJoining = false);
+  }
+
+  Future<void> showAliasSelectorDialog(
+    BuildContext context,
+    List<String>? conferenceAliases,
+  ) async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text('Choose from recently saved'),
+              actionsOverflowButtonSpacing: 10,
+              content: SingleChildScrollView(
+                child: SizedBox(
+                  width: double.maxFinite,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (conferenceAliases != null)
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: conferenceAliases.length,
+                          itemBuilder: (context, index) {
+                            String alias = conferenceAliases[index];
+                            return ListTile(
+                              title: Text(alias),
+                              onTap: () => onAliasTap(alias),
+                            );
+                          },
+                        )
+                      else
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('No aliases in storage.'),
+                        )
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  style: TextButton.styleFrom(primary: Colors.deepPurple),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+              ]);
+        });
+  }
+
+  void onAliasTap(String alias) {
+    conferenceAliasTextController.text = alias;
+    Navigator.of(context).pop();
+  }
+
+  void initSharedPreferences() {
+    try {
+      conferenceAliasTextController.text =
+          SharedPreferencesHelper().latestAlias;
+    } catch (error) {
+      onError('Cannot load data from shared preferences.', error);
+    }
+  }
+
+  void saveToSharedPreferences() {
+    SharedPreferencesHelper().latestAlias = _conferenceAlias;
   }
 
   void onError(String message, Object? error) {
