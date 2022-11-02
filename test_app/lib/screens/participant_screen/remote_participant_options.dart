@@ -232,7 +232,7 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
             content: SpatialValueDialogContent(
                 participant: participant,
                 spatialValueDialogContext: spatialPositionContext,
-                spatialValueType: 'Spatial position',
+                spatialValueType: SpatialValueType.spatialPosition,
                 resultDialogContext: context),
           );
         });

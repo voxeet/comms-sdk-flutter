@@ -10,9 +10,8 @@ class SpatialValueDialogContent extends StatelessWidget {
 
   final BuildContext spatialValueDialogContext;
   final BuildContext resultDialogContext;
-  final String spatialValueType;
+  final SpatialValueType spatialValueType;
   final Participant? participant;
-
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
   SpatialValueDialogContent(
@@ -36,9 +35,9 @@ class SpatialValueDialogContent extends StatelessWidget {
           TextButton(
             child: const Text('OK', style: TextStyle(color: Colors.deepPurple)),
             onPressed: () {
-              if(spatialValueType == 'Spatial direction') {
+              if(spatialValueType == SpatialValueType.spatialDirection) {
                 setSpatialDirection(resultDialogContext);
-              } else if(spatialValueType == 'Spatial position') {
+              } else if(spatialValueType == SpatialValueType.spatialPosition) {
                 setSpatialPosition(resultDialogContext);
               }
               Navigator.of(spatialValueDialogContext).pop();
@@ -90,4 +89,9 @@ class SpatialValueDialogContent extends StatelessWidget {
       body: text,
     );
   }
+}
+
+enum SpatialValueType {
+  spatialPosition,
+  spatialDirection,
 }

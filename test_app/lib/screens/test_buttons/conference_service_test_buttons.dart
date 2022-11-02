@@ -55,10 +55,10 @@ class ConferenceServiceTestButtons extends StatelessWidget {
             onPressed: () => stopScreenShare(context)),
         SecondaryButton(
             text: 'Set spatial position',
-            onPressed: () => setSpatialValuesDialog(context, 'Spatial position')),
+            onPressed: () => setSpatialValuesDialog(context, SpatialValueType.spatialPosition)),
         SecondaryButton(
             text: 'Set spatial direction',
-            onPressed: () => setSpatialValuesDialog(context, 'Spatial direction')),
+            onPressed: () => setSpatialValuesDialog(context, SpatialValueType.spatialDirection)),
         SecondaryButton(
             text: 'Set spatial environment',
             onPressed: () => setSpatialEnvironmentDialog(context)),
@@ -227,14 +227,14 @@ class ConferenceServiceTestButtons extends StatelessWidget {
             context, 'Error', error.toString() + stackTrace.toString()));
   }
 
-  Future<void> setSpatialValuesDialog(BuildContext context, String spatialValueType) async {
+  Future<void> setSpatialValuesDialog(BuildContext context, SpatialValueType spatialValueType) async {
     final participant = await getLocalParticipant();
     return await showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext spatialValueDialogContext) {
         return AlertDialog(
-          title: Text('Set ${spatialValueType.toLowerCase()}'),
+          title: Text('Set ${spatialValueType.name}'),
           content: SpatialValueDialogContent(
               spatialValueDialogContext: spatialValueDialogContext,
               participant: participant,
