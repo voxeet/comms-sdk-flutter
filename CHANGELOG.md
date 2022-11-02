@@ -1,3 +1,15 @@
+## 3.6.1
+
+### Features
+
+- Introduced SpatialAudioStyle that defines how the spatial location is communicated between SDK and the Dolby.io server.
+- Introduced obfuscation rules, to make Android applications easier to obfuscate.
+
+### Bug fixes
+
+- Fixed an issue where the conferenceAccessToken did not refresh correctly on Android.
+- Fixed an issue where the updatePermissions method did not work correctly on Android.
+
 ## 3.6.0
 
 ### Features
