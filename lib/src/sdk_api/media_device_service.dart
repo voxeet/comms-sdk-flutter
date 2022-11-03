@@ -32,7 +32,7 @@ class MediaDeviceService {
     return await _methodChannel.invokeMethod<void>("switchCamera");
   }
 
-  /// Switches the current speaker to a different speaker that is available. The method is available only on iOS. Using the method on Android triggers an error.
+  /// Switches the current speaker to a different speaker that is available.
   Future<void> switchSpeaker() async {
     return await _methodChannel.invokeMethod<void>("switchSpeaker");
   }
