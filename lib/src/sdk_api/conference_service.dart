@@ -277,13 +277,17 @@ class ConferenceService {
   /// This method uses the following parameters:
   /// - [max]: The maximum number of video streams that may be transmitted to the local participant. The valid parameter values are between 0 and 4. By default, the parameter is set to 4.
   /// - [prioritizedParticipants]: The list of the prioritized participants. This parameter allows using a pin option to prioritize specific participant's video streams and display their videos even when these participants do not talk.
-  Future<bool?> setMaxVideoForwarding(
+  @Deprecated(
+      'Use [ConferenceService.setVideoForwarding(VideoForwardingStrategy, MaxVideoForwarding, List<Participant>)]')
+  Future<bool> setMaxVideoForwarding(
       MaxVideoForwarding max, List<Participant> prioritizedParticipants) async {
-    return await _methodChannel.invokeMethod<bool>("setMaxVideoForwarding", {
+    final result =
+        await _methodChannel.invokeMethod<bool>("setMaxVideoForwarding", {
       "max": max,
       "prioritizedParticipants":
           prioritizedParticipants.map((e) => e.toJson()).toList()
     });
+    return Future.value(result);
   }
 
   ///Sets the maximum number of video streams that may be transmitted to the local participant.
@@ -302,12 +306,12 @@ class ConferenceService {
   ///video streams and display their videos even when these participants do not talk.
   ///For example, in the case of virtual classes, this option allows participants to pin the teacher's
   ///video and see the teacher, even when the teacher is not the active speaker.
-  Future<bool?> setVideoForwarding(
+  Future<bool> setVideoForwarding(
     VideoForwardingStrategy strategy,
     MaxVideoForwarding max,
     List<Participant> prioritizedParticipants,
   ) async {
-    return await _methodChannel.invokeMethod<bool>(
+    final result = await _methodChannel.invokeMethod<bool>(
       "setVideoForwarding",
       {
         "strategy": strategy.encode(),
@@ -316,6 +320,7 @@ class ConferenceService {
             prioritizedParticipants.map((e) => e.toJson()).toList()
       },
     );
+    return Future.value(result ?? false);
   }
 
   /// Gets the Participant object based on the [participantId].
