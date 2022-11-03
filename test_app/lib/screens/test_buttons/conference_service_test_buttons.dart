@@ -2,6 +2,7 @@ import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_environment/spatial_environment_dialog_content.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import '../../widgets/spatial_value_dialog_content.dart';
 import '/widgets/secondary_button.dart';
 import '/widgets/dialogs.dart';
 import 'dart:convert';
@@ -54,10 +55,10 @@ class ConferenceServiceTestButtons extends StatelessWidget {
             onPressed: () => stopScreenShare(context)),
         SecondaryButton(
             text: 'Set spatial position',
-            onPressed: () => setSpatialPosition(context)),
+            onPressed: () => setSpatialValuesDialog(context, SpatialValueType.spatialPosition)),
         SecondaryButton(
             text: 'Set spatial direction',
-            onPressed: () => setSpatialDirection(context)),
+            onPressed: () => setSpatialValuesDialog(context, SpatialValueType.spatialDirection)),
         SecondaryButton(
             text: 'Set spatial environment',
             onPressed: () => setSpatialEnvironmentDialog(context)),
@@ -226,17 +227,26 @@ class ConferenceServiceTestButtons extends StatelessWidget {
             context, 'Error', error.toString() + stackTrace.toString()));
   }
 
-  void setSpatialPosition(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalParticipant()
-        .then((participant) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+  Future<void> setSpatialValuesDialog(BuildContext context, SpatialValueType spatialValueType) async {
+    final participant = await getLocalParticipant();
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext spatialValueDialogContext) {
+        return AlertDialog(
+          title: Text('Set ${spatialValueType.name}'),
+          content: SpatialValueDialogContent(
+              spatialValueDialogContext: spatialValueDialogContext,
               participant: participant,
-              position: SpatialPosition(1.0, 1.0, 1.0),
-            ))
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
+              spatialValueType: spatialValueType,
+              resultDialogContext: context),
+        );
+      },
+    );
+  }
+
+  Future<Participant> getLocalParticipant() async {
+    return _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
   }
 
   Future<void> setSpatialEnvironmentDialog(BuildContext context) async {
@@ -252,14 +262,6 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         );
       },
     );
-  }
-
-  void setSpatialDirection(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialDirection(SpatialDirection(1.0, 1.0, 1.0))
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
   }
 
   void getLocalStats(BuildContext context) {
