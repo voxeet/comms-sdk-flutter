@@ -49,10 +49,9 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   TextEditingController accessTokenTextController = TextEditingController();
   TextEditingController usernameTextController = TextEditingController();
   TextEditingController externalIdTextController = TextEditingController();
-  late String? _sessionStatus;
   late String _accessToken;
   late String _username;
-  bool isSessionOpen = false, isLogging = false, isInitialized = false;
+  bool isSessionOpen = false, isLoginButtonPressed = false;
 
   @override
   void initState() {
@@ -64,12 +63,8 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   Future<void> initSessionStatus() async {
     await _dolbyioCommsSdkFlutterPlugin.session.isOpen().then((isOpen) {
       if (isOpen) {
-        setState(() {
-          _sessionStatus = 'open';
-          isSessionOpen = true;
-        });
+        isSessionOpen = true;
       } else {
-        setState(() => _sessionStatus = 'close');
         isSessionOpen = false;
       }
     });
@@ -112,7 +107,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
                 const SizedBox(height: 16),
                 PrimaryButton(
                   color: Colors.deepPurple,
-                  widgetText: isLogging
+                  widgetText: isLoginButtonPressed
                       ? const WhiteCircularProgressIndicator()
                       : const Text('Login'),
                   onPressed: () {
@@ -128,51 +123,40 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   }
 
   void onLoginButtonPressed() async {
-    final isValidForm = formKey.currentState!.validate();
-    if (isValidForm) {
-      setState(() => isLogging = true);
-      await initializeSdk();
-      if (isInitialized) {
-        openSession();
+    setState(() => isLoginButtonPressed = true);
+    try {
+      final isValidForm = formKey.currentState!.validate();
+      if (isValidForm) {
+        await initializeSdk();
+        await openSession();
+        await initSessionStatus();
+        saveToSharedPreferences();
+        if (isSessionOpen) {
+          navigateToJoinConference();
+        }
       }
-    } else {
-      developer.log('Cannot log in');
+    } catch (e) {
+      onError('Error: ', e);
+    } finally {
+      setState(() => isLoginButtonPressed = false);
     }
   }
 
   Future<void> initializeSdk() async {
     _accessToken = accessTokenTextController.text;
-    await _dolbyioCommsSdkFlutterPlugin
-        .initializeToken(_accessToken, () => getRefreshToken())
-        .then((value) => setState(() => isInitialized = true))
-        .onError((error, stackTrace) =>
-            onError('Error during initializing sdk', error));
+    await _dolbyioCommsSdkFlutterPlugin.initializeToken(
+        _accessToken, () => getRefreshToken());
   }
 
-  void openSession() {
+  Future<void> openSession() async {
     _username = usernameTextController.text;
-    var participantInfo = ParticipantInfo(
-        _username, null, externalIdTextController.text);
-    _dolbyioCommsSdkFlutterPlugin.session
-        .open(participantInfo)
-        .then((value) => checkSessionStatus())
-        .onError((error, stackTrace) {
-      setState(() => isLogging = false);
-      onError('Error during opening session', error);
-    });
+    var participantInfo =
+        ParticipantInfo(_username, null, externalIdTextController.text);
+    await _dolbyioCommsSdkFlutterPlugin.session.open(participantInfo);
   }
 
-  void checkSessionStatus() async {
-    await initSessionStatus();
-    developer.log('Session is: $_sessionStatus');
-    if (isSessionOpen) {
-      saveToSharedPreferences();
-      navigateToJoinConference();
-    }
-  }
-
-  void navigateToJoinConference() async {
-    await Navigator.of(context).push(
+  void navigateToJoinConference() {
+    Navigator.of(context).push(
       MaterialPageRoute(
         settings: const RouteSettings(name: "JoinConferenceScreen"),
         builder: (context) => JoinConference(
@@ -180,7 +164,6 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
             externalId: externalIdTextController.text),
       ),
     );
-    setState(() => isLogging = false);
   }
 
   Future<String?> getRefreshToken() async {
