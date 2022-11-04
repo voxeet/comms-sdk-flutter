@@ -6,6 +6,8 @@ import 'streams.dart';
 typedef FileConvertedType = FileConverted;
 
 /// The InvitationReceivedNotificationData class gathers information about a received invitation.
+///
+/// {@category Models}
 class InvitationReceivedNotificationData {
   /// The conference alias.
   String conferenceAlias;
@@ -36,6 +38,8 @@ class InvitationReceivedNotificationData {
 }
 
 /// The MessageReceivedData interface gathers information about a received message.
+///
+/// {@category Models}
 class MessageReceivedData {
   /// The received message.
   String message;
@@ -47,6 +51,8 @@ class MessageReceivedData {
 }
 
 /// ThePermissionsUpdatedData class gathers information about a conference permissions updates.
+///
+/// {@category Models}
 class PermissionsUpdatedData {
   /// The conference permissions.
   List<ConferencePermission> permissions;
@@ -55,6 +61,8 @@ class PermissionsUpdatedData {
 }
 
 /// The StreamsChangeData class gathers information about media stream updates.
+///
+/// {@category Models}
 class StreamsChangeData {
   Participant participant;
   MediaStream mediaStream;

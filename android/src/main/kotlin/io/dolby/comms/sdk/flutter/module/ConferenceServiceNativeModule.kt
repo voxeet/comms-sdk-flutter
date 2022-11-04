@@ -5,6 +5,7 @@ import com.voxeet.sdk.json.internal.ParamsHolder
 import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.VideoForwardingOptions
+import com.voxeet.sdk.services.conference.spatialisation.SpatialAudioStyle
 import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
 import io.dolby.comms.sdk.flutter.extension.await
 import io.dolby.comms.sdk.flutter.extension.error
@@ -77,14 +78,18 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     private fun create(call: MethodCall, result: Result) = scope.launch(
         onError = result::error,
         onSuccess = {
-            val paramsHolder = HashMap<String, Any?>()
-            call.argument<Map<String, Any>>("params")?.let {
-                paramsHolder.putAll(it)
+            val params = HashMap<String, Any?>()
+            call.argument<Map<String, Any>>("params")?.let { params.putAll(it) }
+
+            val paramsHolder = ParamsHolder(params)
+
+            call.argument<String>("spatialAudioStyle")?.let{
+                paramsHolder.setSpatialAudioStyle(SpatialAudioStyle.valueOf(it))
             }
 
             val conferenceCreateOption = ConferenceCreateOptions.Builder()
                 .setConferenceAlias(call.argument<String?>("alias"))
-                .setParamsHolder(ParamsHolder(paramsHolder))
+                .setParamsHolder(paramsHolder)
                 .build()
 
             VoxeetSDK.conference().create(conferenceCreateOption).await().let {
@@ -197,7 +202,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                         ?.let { VoxeetSDK.conference().mute(it, muteValue) }
                         ?: throw IllegalStateException("Could not find participant")
                 }
-            }.let { result.success(it) }
+            }.let {
+                if (it != null && it) {
+                    result.success(it)
+                } else {
+                    result.error(Exception("Call mute method failed"))
+                }
+            }
         }
     )
 
@@ -221,7 +232,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
             VoxeetSDK
                 .conference()
                 .muteOutput(call.argumentOrThrow("isMuted"))
-                .let { result.success(it) }
+                .let {
+                    if (it) {
+                        result.success(it)
+                    } else {
+                        result.error(Exception("Call muteOutput method failed"))
+                    }
+                }
         }
     )
 
@@ -356,7 +373,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                 .conference()
                 .videoForwarding(max, prioritizedParticipants)
                 .await()
-                .let { result.success(it) }
+                .let {
+                    if (it) {
+                        result.success(it)
+                    } else {
+                        result.error(Exception("Max video forwarding setting failed"))
+                    }
+                }
         }
     )
 
@@ -382,7 +405,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                 .conference()
                 .videoForwarding(videoForwardingOptions)
                 .await()
-                .let { result.success(it) }
+                .let {
+                    if (it) {
+                        result.success(it)
+                    } else {
+                        result.error(Exception("Video forwarding setting failed"))
+                    }
+                }
         }
     )
 
@@ -430,9 +459,11 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
         onSuccess = {
             call.arguments<List<Any?>>()
                 ?.mapNotNull { it?.let { ParticipantPermissionsMapper.fromMap(it as Map<String, Any?>) } }
-                ?.let { VoxeetSDK.conference().updatePermissions(it).await() }
+                ?.let { VoxeetSDK.conference().updatePermissions(it).await()
+                    result.success(null)
+                }
                 ?: throw IllegalArgumentException("Could not parse arguments")
-                    .also { result.success(null) }
+
         }
     )
 }

@@ -27,6 +27,7 @@ import 'models/file_presentation.dart';
 ///
 /// 9. The presenter and the viewers receive the [FilePresentationServiceEventNames.filePresentationStopped] event that informs about the end of the file presentation.
 ///
+/// {@category Services}
 class FilePresentationService {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
@@ -81,7 +82,7 @@ class FilePresentationService {
   }
 
   /// Starts presenting a converted file.
-  /// The [uri] parameter refers to a required URL
+  /// The [fileConverted] parameter refers to the file to be presented.
   Future<void> start(FileConverted fileConverted) async {
     await _methodChannel.invokeMethod("start", fileConverted.toJson());
     return Future.value();

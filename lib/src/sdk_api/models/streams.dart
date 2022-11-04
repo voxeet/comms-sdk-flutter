@@ -2,6 +2,8 @@ typedef AudioTrack = Object;
 typedef VideoTrack = Object;
 
 /// The MediaStream type gathers information about media streams.
+///
+/// {@category Models}
 class MediaStream {
   /// The media stream identifier.
   String id;
@@ -31,6 +33,8 @@ class MediaStream {
 }
 
 /// The MediaStreamType enum gathers the possible types of media streams.
+///
+/// {@category Models}
 enum MediaStreamType {
   /// The camera media stream, either audio, video, or audio and video. This stream type is enabled by default.
   camera('CAMERA'),

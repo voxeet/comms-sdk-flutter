@@ -12,6 +12,7 @@ extension DTO {
         let params: ConferenceParameters?
         let status: ConferenceStatus
         let pinCode: String?
+        let spatialAudioStyle: ConferenceSpatialAudioStyle?
         
         init(conference: VTConference) {
             self.id = conference.id
@@ -21,6 +22,7 @@ extension DTO {
             self.params = ConferenceParameters(conferenceParameters: conference.params)
             self.status = ConferenceStatus(status: conference.status)
             self.pinCode = conference.pinCode
+            self.spatialAudioStyle = conference.spatialAudioStyle.map { ConferenceSpatialAudioStyle(spatialAudioStyle: $0) }
         }
     }
     
@@ -79,11 +81,13 @@ extension DTO {
         let alias: String?
         let params: ConferenceParameters?
         let pinCode: ConferencePinCode?
+        let spatialAudioStyle: ConferenceSpatialAudioStyle?
         
         init(conferenceOptions: VTConferenceOptions) {
             self.alias = conferenceOptions.alias
             self.params = ConferenceParameters(conferenceParameters: conferenceOptions.params)
             self.pinCode = conferenceOptions.pinCode.map { ConferencePinCode(pinCode: $0) }
+            self.spatialAudioStyle = conferenceOptions.spatialAudioStyle.map { ConferenceSpatialAudioStyle(spatialAudioStyle: $0) }
         }
         
         func toSdkType() -> VTConferenceOptions {
@@ -93,6 +97,7 @@ extension DTO {
                 params.toSdkType(conferenceParameters: conferenceOptions.params)
             }
             conferenceOptions.pinCode = pinCode.map { $0.pinCode }
+            conferenceOptions.spatialAudioStyle = spatialAudioStyle?.toSdkType()
             return conferenceOptions
         }
     }
@@ -248,6 +253,41 @@ extension DTO {
             try container.encode(pinCode.intValue)
         }
     }
+    
+    struct ConferenceSpatialAudioStyle: Codable {
+        private let audioStyle: SpatialAudioStyle
+        
+        init(spatialAudioStyle: SpatialAudioStyle) {
+            self.audioStyle = spatialAudioStyle
+        }
+        
+        init(from decoder: Decoder) throws {
+            
+            let container = try decoder.singleValueContainer()
+            
+            switch try container.decode(String.self) {
+            case "INDIVIDUAL": audioStyle = .individual
+            case "SHARED": audioStyle = .shared
+            case "DISABLED": audioStyle = .disabled
+            default: throw EncoderError.decoderFailed()
+            }
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch audioStyle {
+            case .individual: try container.encode("INDIVIDUAL")
+            case .shared: try container.encode("SHARED")
+            case .disabled: try container.encode("DISABLED")
+            @unknown default:
+                throw EncoderError.encoderFailed()
+            }
+        }
+        
+        func toSdkType() -> SpatialAudioStyle? {
+            return audioStyle
+        }
+    }
 
     struct SpatialDirection: Codable {
         let x, y, z: Double
@@ -344,6 +384,37 @@ extension DTO {
         
         func toFlutterValue() -> Any {
             return map
+        }
+    }
+        
+    struct VideoForwardingStrategyDTO: Codable {
+        
+        let videoForwardingStrategy: VideoForwardingStrategy
+        
+        init(videoForwardingStrategy: VideoForwardingStrategy) {
+            self.videoForwardingStrategy = videoForwardingStrategy
+        }
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            switch try container.decode(String.self) {
+            case "LAST_SPEAKER": videoForwardingStrategy = .lastSpeaker
+            case "CLOSEST_USER": videoForwardingStrategy = .closestUser
+            default: throw EncoderError.decoderFailed()
+            }
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch videoForwardingStrategy {
+            case .lastSpeaker: try container.encode("LAST_SPEAKER")
+            case .closestUser: try container.encode("CLOSEST_USER")
+            @unknown default: throw EncoderError.encoderFailed()
+            }
+        }
+        
+        func toSdkType() -> VideoForwardingStrategy {
+            return videoForwardingStrategy
         }
     }
 }

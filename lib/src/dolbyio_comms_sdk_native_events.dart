@@ -43,6 +43,8 @@ class DolbyioCommsSdkNativeEventsReceiver<T extends EnumWithStringValue> {
 ///
 /// The generic [T] is the type of the event and is usually an enum, while [B] is the body of
 /// the event which is typically a class for which some change has happened.
+///
+/// {@category Models}
 class Event<T, B> {
   /// The type of the event that is usually an element of an enum.
   T type;

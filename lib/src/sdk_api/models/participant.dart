@@ -4,6 +4,8 @@ import 'participant_info.dart';
 import 'streams.dart';
 
 /// The Participant class gathers information about a conference participant.
+///
+/// {@category Models}
 class Participant {
   /// The participant ID.
   String id;
@@ -33,6 +35,8 @@ class Participant {
 }
 
 /// The ParticipantPermissions class gathers information about the invited participants and their conference permissions.
+///
+/// {@category Models}
 class ParticipantPermissions {
   /// The invited participant.
   Participant participant;
@@ -50,6 +54,8 @@ class ParticipantPermissions {
 }
 
 /// The ParticipantStatus enum gathers the possible statuses of a conference participant.
+///
+/// {@category Models}
 enum ParticipantStatus {
   /// The participant has successfully connected to a conference.
   connected('CONNECTED'),
@@ -99,6 +105,8 @@ enum ParticipantStatus {
 }
 
 /// The ParticipantType enum gathers the possible types of a conference participant.
+///
+/// {@category Models}
 enum ParticipantType {
   /// A participant who cannot send any audio or video stream to a conference.
   listner("listener"),
@@ -126,6 +134,8 @@ enum ParticipantType {
 }
 
 /// The ParticipantInvited class gathers information about an invited participant.
+///
+/// {@category Models}
 class ParticipantInvited {
   /// Information about the invited participant.
   ParticipantInfo info;

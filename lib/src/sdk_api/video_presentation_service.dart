@@ -21,6 +21,7 @@ import 'models/video_presentation.dart';
 ///
 /// 6. The presenter calls the [stop] method to stop the video presentation.
 ///
+/// {@category Services}
 class VideoPresentationService {
   /// @internal */
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
@@ -38,7 +39,7 @@ class VideoPresentationService {
         result != null ? VideoPresentationMapper.fromMap(result) : null);
   }
 
-  /// Starts a video presentation. The [file] parameter refers to a video file that the local participant would like to share.
+  /// Starts a video presentation. The [url] parameter refers to a video file that the local participant would like to share.
   Future<void> start(String url) async {
     await _methodChannel.invokeMethod("start", {"url": url});
     return Future.value();

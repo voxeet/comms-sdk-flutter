@@ -1,3 +1,19 @@
+## 3.6.1
+
+### Features
+
+- Introduced SpatialAudioStyle that defines how the spatial location is communicated between SDK and the Dolby.io server.
+- Introduced obfuscation rules to simplify the obfuscation of Android applications.
+
+### Changes
+
+- Deprecated the [setMaxVideoForwarding](./lib/src/sdk_api/conference_service.dart) method. To set Video Forwarding in this and later releases, use the [setVideoForwarding](./lib/src/sdk_api/conference_service.dart) method. 
+
+### Bug fixes
+
+- Fixed an issue where the conferenceAccessToken did not refresh correctly on Android.
+- Fixed an issue where the updatePermissions method did not work correctly on Android.
+
 ## 3.6.0
 
 ### Features

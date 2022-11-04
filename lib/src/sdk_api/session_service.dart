@@ -5,6 +5,8 @@ import 'models/participant.dart';
 import 'models/participant_info.dart';
 
 /// The SessionService allows connecting the SDK with the Dolby.io backend via the [open] method. Opening a session is mandatory before interacting with any service.
+///
+/// {@category Services}
 class SessionService {
   /// @internal
   final _methodChannel =

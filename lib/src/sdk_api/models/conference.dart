@@ -4,6 +4,8 @@ import 'participant.dart';
 import 'enums.dart';
 
 /// The Conference class gathers information about a conference.
+///
+/// {@category Models}
 class Conference {
   /// The conference alias. The alias is case insensitive, which means that using "foobar" and "FOObar" aliases results in joining the same conference.
   String? alias;
@@ -20,7 +22,10 @@ class Conference {
   /// The current conference status.
   ConferenceStatus status;
 
-  Conference(this.alias, this.id, this.isNew, this.participants, this.status);
+  SpatialAudioStyle? spatialAudioStyle;
+
+  Conference(this.alias, this.id, this.isNew, this.participants, this.status,
+      this.spatialAudioStyle);
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
@@ -29,10 +34,13 @@ class Conference {
         "isNew": isNew,
         "participants": participants.map((e) => e.toJson()).toList(),
         "status": status.encode(),
+        "spatialAudioStyle": spatialAudioStyle?.encode(),
       };
 }
 
 /// The ConferenceStatus enum represents the possible conference statuses.
+///
+/// {@category Models}
 enum ConferenceStatus {
   /// The conference has been created.
   created('CREATED'),
@@ -92,6 +100,8 @@ enum ConferenceStatus {
 }
 
 /// The ConferenceCreateOption class allows defining conference details.
+///
+/// {@category Models}
 class ConferenceCreateOption {
   /// The conference alias. The alias must be a logical and unique string that consists of up to 250 characters, such as letters, digits, and symbols other than #. The alias is case insensitive, which means that using "foobar" and "FOObar" aliases refers to the same conference.
   String? alias;
@@ -102,17 +112,24 @@ class ConferenceCreateOption {
   /// The PIN code of a conference.
   num pinCode;
 
-  ConferenceCreateOption(this.alias, this.params, this.pinCode);
+  /// Defines how the spatial location should be communicated between the SDK and the Dolby.io server. Setting the spatial audio style is supported only on SDK 3.6 and later. The earlier SDK versions support only the individual mode.
+  SpatialAudioStyle? spatialAudioStyle;
+
+  ConferenceCreateOption(
+      this.alias, this.params, this.pinCode, this.spatialAudioStyle);
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
         "alias": alias,
         "params": params?.toJson(),
         "pinCode": pinCode,
+        "spatialAudioStyle": spatialAudioStyle?.encode(),
       };
 }
 
 /// The ConferenceCreateParameters class allows defining conference parameters.
+///
+/// {@category Models}
 class ConferenceCreateParameters {
   /// A boolean that indicates whether an application wishes to create a conference with Dolby Voice enabled. For more information about Dolby Voice, see the [Dolby Voice](https://docs.dolby.io/communications-apis/docs/guides-dolby-voice) article. By default, the parameter is set to true.
   bool dolbyVoice = false;
@@ -144,6 +161,8 @@ class ConferenceCreateParameters {
 }
 
 /// The RTCPMode enum gathers the possible bitrate adaptation modes for video transmission.
+///
+/// {@category Models}
 enum RTCPMode {
   /// Averages the available bandwidth of all receivers and adjusts the transmission bitrate to this value.
   average('average'),
@@ -164,6 +183,8 @@ enum RTCPMode {
 }
 
 /// The Codec enum gathers the available video codecs.
+///
+/// {@category Models}
 enum Codec {
   /// The default H264 video codec.
   h264('H264'),
@@ -182,8 +203,45 @@ enum Codec {
   }
 }
 
-/// The ConferenceJoinOptions class defines how an application expects to join a conference in terms of media preference.
+/// The SpatialAudioStyle enum defines how the spatial location is communicated between SDK and the Dolby.io server. The style can be defined during a conference creation, although its value for each participant depends on the participant's spatial audio setting. The shared spatial audio style is only available for participants who joined a conference with spatial audio enabled. Setting the spatial audio style is supported only on SDK 3.6 and later. The earlier SDK versions support only the individual mode and do not allow participants to join conferences created with the spatial audio style set to shared. The following table lists the possible spatial audio style settings for the local participant:
+///
+/// | Create: SpatialAudioStyle | Join: SpatialAudio | Result                            |
+/// |---------------------------|--------------------|-----------------------------------|
+/// | Individual                | True               | Success                           |
+/// | Individual                | False              | Success                           |
+/// | Shared                    | True               | Success only on SDK 3.6 and later |
+/// | Shared                    | False              | Rejected                          |
+/// | Disabled                  | True               | Rejected                          |
+/// | Disabled                  | False              | Success                           |
+enum SpatialAudioStyle {
+  /// Sets the spatial location that is based on the spatial scene, local participant's position, and remote participants'positions. This allows a client to control the position using the local, self-contained logic. However, the client has to communicate a large set of requests constantly to the server, which increases network traffic, log subsystem pressure, and complexity of the client-side application. This option is selected by default. We recommend this mode for A/V congruence scenarios in video conferencing and similar applications.
+  individual('INDIVIDUAL'),
 
+  /// Sets the spatial location that is based on the spatial scene and the local participant's position, while the relative positions among participants are calculated by the Dolby.io server. This way, the spatial scene is shared by all participants, so that each client can set a position and participate in the shared scene. This approach simplifies communication between the client and the server and decreases network traffic. We recommend this mode for virtual space scenarios, such as 2D or 3D games, trade shows, virtual museums, water cooler scenarios, etc.
+  shared('SHARED'),
+
+  /// Disables spatial audio in a conference.
+  disabled('DISABLED');
+
+  final String _value;
+
+  const SpatialAudioStyle(this._value);
+
+  /// @internal
+  static SpatialAudioStyle? decode(String value) {
+    return SpatialAudioStyle.values
+        .firstWhereOrNull((element) => element._value == value);
+  }
+
+  /// @internal
+  String encode() {
+    return _value;
+  }
+}
+
+/// The ConferenceJoinOptions class defines how an application expects to join a conference in terms of media preference.
+///
+/// {@category Models}
 class ConferenceJoinOptions {
   /// The conference access token that is required to join a protected conference if the conference is created using the [create](https://docs.dolby.io/communications-apis/reference/create-conference) REST API. If the conference is created using the create method, the token is managed by the SDK and is not visible to the application users. For more information, see the [Enhanced Conference Access Control](https://docs.dolby.io/communications-apis/docs/guides-enhanced-conference-access-control) document.
   String? conferenceAccessToken;
@@ -223,6 +281,8 @@ class ConferenceJoinOptions {
 }
 
 /// The ConferenceConstraints class gathers information about the preferred [WebRTC constraints](https://webrtc.org/getting-started/media-capture-and-constraints#constraints).
+///
+/// {@category Models}
 class ConferenceConstraints {
   /// A boolean that indicates whether audio should be enabled for the local participant.
   bool audio;
@@ -240,6 +300,8 @@ class ConferenceConstraints {
 }
 
 /// The ConferenceMixingOptions class is responsible for notifying the Dolby.io server that a participant who joins or replays a conference is a special participant called Mixer. Mixer can use the SDK to record or replay a conference. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
+///
+/// {@category Models}
 class ConferenceMixingOptions {
   /// A boolean that notifies the server whether a participant is a Mixer (true) or not (false).
   bool enabled;
@@ -253,6 +315,8 @@ class ConferenceMixingOptions {
 }
 
 /// The ConferenceLeaveOptions class gathers information about preferences for leaving a conference.
+///
+/// {@category Models}
 class ConferenceLeaveOptions {
   /// A boolean indicating whether the SDK should close a session after leaving a conference or leave the session open.
   bool leaveRoom;
@@ -336,6 +400,8 @@ enum RTCStatsType {
 }
 
 /// The ConferenceReplayOptions class contains options for replaying conferences.
+///
+/// {@category Models}
 class ConferenceReplayOptions {
   /// The conference access token.
   String? conferenceAccessToken;
@@ -347,6 +413,8 @@ class ConferenceReplayOptions {
 }
 
 /// The ConferencePermission enum gathers the possible permissions a participant may have in a conference.
+///
+/// {@category Models}
 enum ConferencePermission {
   /// Allows a participant to invite other participants to a conference.
   invite('INVITE'),
@@ -401,6 +469,8 @@ enum ConferencePermission {
 }
 
 /// The ConferenceServiceEventNames enum gathers events that inform about changes in the participants list and the connected streams.
+///
+/// {@category Models}
 enum ConferenceServiceEventNames implements EnumWithStringValue {
   /// Emitted when a new participant is invited to a conference. The SDK does not emit the participantAdded event for the local participant. Listeners only receive the participantAdded events about users; they do not receive events for other listeners. Users receive the participantAdded events about users and do not receive any events about listeners.
   participantAdded('EVENT_CONFERENCE_PARTICIPANT_ADDED'),
@@ -450,6 +520,8 @@ enum ConferenceServiceEventNames implements EnumWithStringValue {
 }
 
 /// The AudioProcessingOptions class is responsible for enabling and disabling audio processing.
+///
+/// {@category Models}
 class AudioProcessingOptions {
   /// Allows enabling and disabling audio processing for the local participant who transmits an audio stream.
   AudioProcessingSenderOptions? send;
@@ -461,6 +533,8 @@ class AudioProcessingOptions {
 }
 
 /// The AudioProcessingSenderOptions class allows enabling and disabling audio processing for the local participant who transmits an audio stream.
+///
+/// {@category Models}
 class AudioProcessingSenderOptions {
   /// A boolean that indicates whether audio processing should be enabled or disabled.
   bool? audioProcessing;
@@ -472,6 +546,8 @@ class AudioProcessingSenderOptions {
 }
 
 /// The VideoForwardingStrategy enum defines how the SDK should select conference participants whose videos will be transmitted to the local participant. There are two possible values; the selection can be either based on the participants' audio volume or the distance from the local participant.
+///
+/// {@category Models}
 enum VideoForwardingStrategy {
   /// Selects participants based on their audio volume. This allows the local participant to receive video streams only from active speakers.
   lastSpeaker('LAST_SPEAKER'),
