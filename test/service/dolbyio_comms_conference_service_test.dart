@@ -383,6 +383,7 @@ void main() {
     })).thenAnswer((_) => Future.value(true));
 
     var result = await conferenceService
+        // ignore: deprecated_member_use_from_same_package
         .setMaxVideoForwarding(maxVideoForwarding, [participant]);
 
     expect(result, true);

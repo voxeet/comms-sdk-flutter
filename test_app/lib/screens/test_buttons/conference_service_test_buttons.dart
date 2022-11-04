@@ -6,10 +6,18 @@ import '/widgets/secondary_button.dart';
 import '/widgets/dialogs.dart';
 import 'dart:convert';
 
-class ConferenceServiceTestButtons extends StatelessWidget {
-  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+class ConferenceServiceTestButtons extends StatefulWidget {
+  const ConferenceServiceTestButtons({Key? key}) : super(key: key);
 
-  ConferenceServiceTestButtons({Key? key}) : super(key: key);
+  @override
+  State<ConferenceServiceTestButtons> createState() {
+    return _ConferenceServiceTestButtonsState();
+  }
+}
+
+class _ConferenceServiceTestButtonsState
+    extends State<ConferenceServiceTestButtons> {
+  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +285,7 @@ class ConferenceServiceTestButtons extends StatelessWidget {
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
             .getParticipants(conference))
         .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference
+            // ignore: deprecated_member_use
             .setMaxVideoForwarding(4, participants))
         .then(
             (value) => showResultDialog(context, 'Success', jsonEncode(value)))
@@ -284,18 +293,16 @@ class ConferenceServiceTestButtons extends StatelessWidget {
             showResultDialog(context, 'Error', error.toString()));
   }
 
-  void setVideoForwarding(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
-            .getParticipants(conference))
-        .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference
-            .setVideoForwarding(
-                VideoForwardingStrategy.lastSpeaker, 4, participants))
-        .then(
-            (value) => showResultDialog(context, 'Success', jsonEncode(value)))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
+  Future<void> setVideoForwarding(BuildContext context) async {
+    try {
+      final value = await _dolbyioCommsSdkFlutterPlugin.conference
+          .setVideoForwarding(VideoForwardingStrategy.lastSpeaker, 4, []);
+      if (!mounted) return;
+      showResultDialog(context, 'Success', jsonEncode(value));
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
   }
 
   void setAudioProcessing(BuildContext context) {
