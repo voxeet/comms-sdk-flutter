@@ -51,7 +51,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   TextEditingController externalIdTextController = TextEditingController();
   late String _accessToken;
   late String _username;
-  bool isSessionOpen = false, isLoginButtonPressed = false;
+  bool isSessionOpen = false, loginInProgress = false;
 
   @override
   void initState() {
@@ -107,7 +107,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
                 const SizedBox(height: 16),
                 PrimaryButton(
                   color: Colors.deepPurple,
-                  widgetText: isLoginButtonPressed
+                  widgetText: loginInProgress
                       ? const WhiteCircularProgressIndicator()
                       : const Text('Login'),
                   onPressed: () {
@@ -123,7 +123,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   }
 
   void onLoginButtonPressed() async {
-    setState(() => isLoginButtonPressed = true);
+    setState(() => loginInProgress = true);
     try {
       final isValidForm = formKey.currentState!.validate();
       if (isValidForm) {
@@ -138,7 +138,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     } catch (e) {
       onError('Error: ', e);
     } finally {
-      setState(() => isLoginButtonPressed = false);
+      setState(() => loginInProgress = false);
     }
   }
 

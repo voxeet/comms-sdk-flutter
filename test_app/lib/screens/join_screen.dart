@@ -67,8 +67,8 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKeyAlias = GlobalKey<FormState>();
   final formKeyId = GlobalKey<FormState>();
-  bool isJoinButtonPressed = false;
-  bool isReplayButtonPressed = false;
+  bool joiningInProgress = false;
+  bool startingConferenceReplay = false;
   bool switchConferenceStatus = false;
   bool spatialAudio = false;
   bool switchDolbyVoice = true;
@@ -271,7 +271,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                       ),
                     ]),
                 PrimaryButton(
-                  widgetText: isJoinButtonPressed
+                  widgetText: joiningInProgress
                       ? const WhiteCircularProgressIndicator()
                       : const Text('Join'),
                   onPressed: () {
@@ -293,7 +293,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                         focusColor: Colors.deepPurple)),
                 const SizedBox(height: 16),
                 PrimaryButton(
-                  widgetText: isReplayButtonPressed
+                  widgetText: startingConferenceReplay
                       ? const WhiteCircularProgressIndicator()
                       : const Text('Replay'),
                   onPressed: () {
@@ -336,7 +336,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   void onJoinButtonPressed() async {
-    setState(() => isJoinButtonPressed = true);
+    setState(() => joiningInProgress = true);
     try {
       final isValidForm = formKeyAlias.currentState!.validate();
       if (isValidForm) {
@@ -345,17 +345,16 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
         if (conference.status == ConferenceStatus.joined) {
           navigateToParticipantScreen(conference);
         }
-        // navigateToParticipantScreen(conference);
       }
     } catch (e) {
       onError('Error: ', e);
     } finally {
-      setState(() => isJoinButtonPressed = false);
+      setState(() => joiningInProgress = false);
     }
   }
 
   void onReplayButtonPressed() async {
-    setState(() => isReplayButtonPressed = true);
+    setState(() => startingConferenceReplay = true);
     try {
       final isValidForm = formKeyAlias.currentState!.validate();
       if (isValidForm) {
@@ -367,7 +366,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     } catch (e) {
       onError('Error: ', e);
     } finally {
-      setState(() => isReplayButtonPressed = false);
+      setState(() => startingConferenceReplay = false);
     }
   }
 
