@@ -13,13 +13,13 @@ class AudioCaptureModeMapper(private val audioCaptureMode: AudioCaptureMode) : M
     )
 
     private fun Mode.convertToString(): String = when (this) {
-        Mode.STANDARD -> "STANDARD"
-        Mode.UNPROCESSED -> "UNPROCESSED"
+        Mode.STANDARD -> "standard"
+        Mode.UNPROCESSED -> "unprocessed"
     }
 
     private fun NoiseReduction.convertToString(): String = when (this) {
-        NoiseReduction.HIGH -> "HIGH"
-        else -> "LOW"
+        NoiseReduction.HIGH -> "high"
+        else -> "low"
     }
 
     companion object {
@@ -31,12 +31,12 @@ class AudioCaptureModeMapper(private val audioCaptureMode: AudioCaptureMode) : M
         }
 
         private fun toMode(mode: String?): Mode = when (mode) {
-            "UNPROCESSED" -> Mode.UNPROCESSED
+            "unprocessed" -> Mode.UNPROCESSED
             else -> Mode.STANDARD
         }
 
         private fun toNoiseReduction(noiseReduction: String?) = when (noiseReduction) {
-            "HIGH" -> StandardNoiseReduction.HIGH
+            "high" -> StandardNoiseReduction.HIGH
             else -> StandardNoiseReduction.LOW
         }
     }

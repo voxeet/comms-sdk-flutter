@@ -63,3 +63,5 @@ export 'src/sdk_api/models/video_presentation.dart' show VideoPresentation;
 export 'src/sdk_api/models/streams.dart' show MediaStream, MediaStreamType;
 export 'src/dolbyio_comms_sdk_native_events.dart' show Event;
 export 'src/sdk_api/view/video_view.dart' show VideoView, VideoViewController;
+export 'src/sdk_api/models/audio.dart'
+    show AudioCaptureOptions, AudioCaptureMode, NoiseReduction;

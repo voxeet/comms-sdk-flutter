@@ -13,6 +13,12 @@ class LocalAudio {
     "local_audio",
   );
 
+  /// Sets the local participant's audio capture mode in Dolby Voice conferences.
+  Future<void> setCaptureMode(AudioCaptureOptions options) async {
+    return await _methodChannel.invokeMethod<void>(
+        "setCaptureMode", options.toJson());
+  }
+
   /// Returns the local participant's audio capture mode in Dolby Voice conferences.
   Future<AudioCaptureOptions> getCaptureMode() async {
     var result = await _methodChannel
