@@ -37,12 +37,14 @@ export 'src/sdk_api/models/enums.dart'
         NotificationServiceEventNames,
         CommandServiceEventNames,
         VideoPresentationState,
-        VideoPresentationEventNames;
+        VideoPresentationEventNames,
+        RecordingServiceEventNames;
 export 'src/sdk_api/models/events.dart'
     show
         InvitationReceivedNotificationData,
         MessageReceivedData,
-        StreamsChangeData;
+        StreamsChangeData,
+        RecordingStatusUpdate;
 export 'src/sdk_api/models/file_presentation.dart'
     show File, FileConverted, FilePresentation;
 export 'src/sdk_api/models/participant_info.dart' show ParticipantInfo;

@@ -1,3 +1,5 @@
+import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/enums.dart';
+
 import 'conference.dart';
 import 'file_presentation.dart';
 import 'participant.dart';
@@ -67,4 +69,33 @@ class StreamsChangeData {
   Participant participant;
   MediaStream mediaStream;
   StreamsChangeData(this.participant, this.mediaStream);
+}
+
+class RecordingStatusUpdate {
+  RecordingStatus recordingStatus;
+  String conferenceId;
+  String participantId;
+  int timeStamp;
+
+  RecordingStatusUpdate(
+    this.recordingStatus,
+    this.conferenceId,
+    this.participantId,
+    this.timeStamp
+  );
+
+  static RecordingStatusUpdate fromMap(Map<Object?, Object?> data) {
+    RecordingStatus recordingStatus =
+        RecordingStatus.valueOf(data["recordingStatus"] as String);
+    String conferenceId = data["conferenceId"] as String;
+    String participantId = data["participantId"] as String;
+    int timeStamp = data["timeStamp"] as int;
+    return RecordingStatusUpdate(
+        recordingStatus,
+        conferenceId,
+        participantId,
+        timeStamp
+    );
+  }
+
 }
