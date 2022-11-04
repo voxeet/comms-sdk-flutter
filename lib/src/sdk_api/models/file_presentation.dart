@@ -1,7 +1,7 @@
 import 'participant.dart';
 
 /// The File class gathers information about a file that a presenter wants to share during a conference.
-/// 
+///
 /// {@category Models}
 class File {
   /// The local path of a file.
@@ -15,7 +15,7 @@ class File {
 }
 
 /// The FileConverted class gathers information about a converted file.
-/// 
+///
 /// {@category Models}
 class FileConverted {
   /// The file ID.
@@ -45,7 +45,7 @@ class FileConverted {
 }
 
 /// The FilePresentation class gathers information about a file presentation.
-/// 
+///
 /// {@category Models}
 class FilePresentation {
   /// The file ID.
