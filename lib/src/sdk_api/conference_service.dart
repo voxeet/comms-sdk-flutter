@@ -10,7 +10,7 @@ import 'models/spatial.dart';
 import 'session_service.dart';
 
 /// The ConferenceService allows an application to manage a conference life-cycle and interact with the conference. The service allows creating, joining, and leaving conferences and managing the audio, video, and screen-share streams.
-/// 
+///
 /// {@category Services}
 class ConferenceService {
   /// @internal
@@ -278,7 +278,7 @@ class ConferenceService {
   /// - [max]: The maximum number of video streams that may be transmitted to the local participant. The valid parameter values are between 0 and 4. By default, the parameter is set to 4.
   /// - [prioritizedParticipants]: The list of the prioritized participants. This parameter allows using a pin option to prioritize specific participant's video streams and display their videos even when these participants do not talk.
   @Deprecated(
-      'Use [ConferenceService.setVideoForwarding(VideoForwardingStrategy, MaxVideoForwarding, List<Participant>)]')
+      'This method is supported only in SDK 3.6.0. To set Video Forwarding in SDK 3.6.1 and later, use the [ConferenceService.setVideoForwarding()] method.')
   Future<bool> setMaxVideoForwarding(
       MaxVideoForwarding max, List<Participant> prioritizedParticipants) async {
     final result =
