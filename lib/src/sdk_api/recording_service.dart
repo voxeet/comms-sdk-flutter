@@ -3,7 +3,7 @@ import '../mapper/mapper.dart';
 import 'models/recording.dart';
 
 /// The RecordingService allows recording conferences.
-/// 
+///
 /// {@category Services}
 class RecordingService {
   /// @internal

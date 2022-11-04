@@ -1,5 +1,5 @@
 /// The ParticipantInfo class gathers information about a conference participant.
-/// 
+///
 /// {@category Models}
 class ParticipantInfo {
   /// The URL of the participant's avatar.

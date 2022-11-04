@@ -2,7 +2,7 @@ import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'models/enums.dart';
 
 /// The MediaDeviceService allows an application to manage media devices that are used during a conference.
-/// 
+///
 /// {@category Services}
 class MediaDeviceService {
   /// @internal

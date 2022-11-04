@@ -17,7 +17,7 @@ import 'sdk_api/session_service.dart';
 import 'sdk_api/video_presentation_service.dart';
 
 /// DolbyioCommsSdk is the main class that allows an application to interact with Dolby.io services.
-/// 
+///
 /// {@category Services}
 class DolbyioCommsSdk {
   static final DolbyioCommsSdk instance = DolbyioCommsSdk._internal();
