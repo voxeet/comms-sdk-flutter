@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/primary_button.dart';
 import '/screens/login_screen.dart';
+import 'shared_preferences_helper.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferencesHelper.load();
   runApp(const MaterialApp(home: MyApp()));
 }
 

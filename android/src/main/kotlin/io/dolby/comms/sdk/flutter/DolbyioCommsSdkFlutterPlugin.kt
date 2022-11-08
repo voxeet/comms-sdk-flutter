@@ -1,13 +1,7 @@
 package io.dolby.comms.sdk.flutter
 
 import androidx.annotation.NonNull
-import io.dolby.comms.sdk.flutter.events.CommandEventEmitter
-import io.dolby.comms.sdk.flutter.events.ConferenceEventEmitter
-import io.dolby.comms.sdk.flutter.events.EventChannelHandler
-import io.dolby.comms.sdk.flutter.events.FilePresentationEventEmitter
-import io.dolby.comms.sdk.flutter.events.NativeEventEmitter
-import io.dolby.comms.sdk.flutter.events.NotificationEventEmitter
-import io.dolby.comms.sdk.flutter.events.VideoPresentationEventEmitter
+import io.dolby.comms.sdk.flutter.events.*
 import io.dolby.comms.sdk.flutter.module.CommandServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.CommsSdkNativeModule
 import io.dolby.comms.sdk.flutter.module.ConferenceServiceNativeModule
@@ -18,6 +12,10 @@ import io.dolby.comms.sdk.flutter.module.NotificationServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.RecordingServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.SessionServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.VideoPresentationServiceModule
+import io.dolby.comms.sdk.flutter.module.audio.LocalAudioNativeModule
+import io.dolby.comms.sdk.flutter.module.audio.RemoteAudioNativeModule
+import io.dolby.comms.sdk.flutter.module.video.LocalVideoNativeModule
+import io.dolby.comms.sdk.flutter.module.video.RemoteVideoNativeModule
 import io.dolby.comms.sdk.flutter.screenshare.ScreenShareHandler
 import io.dolby.comms.sdk.flutter.state.FilePresentationHolder
 import io.dolby.comms.sdk.flutter.state.VideoPresentationHolder
@@ -46,11 +44,16 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
             CommandEventEmitter(EventChannelHandler(COMMAND)),
             ConferenceEventEmitter(EventChannelHandler(CONFERENCE)),
             NotificationEventEmitter(EventChannelHandler(NOTIFICATION)),
+            RecordingEventEmitter(EventChannelHandler(RECORDING)),
             VideoPresentationEventEmitter(EventChannelHandler(VIDEO_PRESENTATION), videoPresentationHolder),
             filePresentationEventEmitter
         )
 
         nativeModules = listOf(
+            LocalAudioNativeModule(scope),
+            RemoteAudioNativeModule(scope),
+            LocalVideoNativeModule(scope),
+            RemoteVideoNativeModule(scope),
             CommandServiceNativeModule(scope),
             NotificationServiceNativeModule(scope),
             CommsSdkNativeModule(scope),
@@ -85,6 +88,7 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
         const val COMMAND = "dolbyio_command_service_event_channel"
         const val CONFERENCE = "dolbyio_conference_service_event_channel"
         const val NOTIFICATION = "dolbyio_notification_service_event_channel"
+        const val RECORDING = "dolbyio_recording_service_event_channel"
         const val VIDEO_PRESENTATION = "dolbyio_video_presentation_service_event_channel"
         const val FILE_PRESENTATION = "dolbyio_file_presentation_service_event_channel"
     }

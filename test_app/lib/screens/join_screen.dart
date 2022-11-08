@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import '../shared_preferences_helper.dart';
 import '/widgets/text_form_field.dart';
 import '/widgets/two_color_text.dart';
 import '/widgets/dolby_title.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/dialogs.dart';
 import '/widgets/circular_progress_indicator.dart';
+import '/widgets/switch_option.dart';
 import '/permission_helper.dart';
 import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
-
 import 'replay_screen.dart';
 
 class JoinConference extends StatelessWidget {
@@ -78,6 +79,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   static const String spatialAudioWithSharedScene =
       "Spatial Audio with Shared Scene";
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
+  bool joinAsListener = false;
+  String _conferenceAlias = '';
+
   StreamSubscription<
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
@@ -88,7 +92,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   @override
   void initState() {
     super.initState();
-
+    initSharedPreferences();
     onInvitationReceivedSubscription = _dolbyioCommsSdkFlutterPlugin
         .notification
         .onInvitationReceived()
@@ -156,93 +160,116 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                   key: formKeyAlias,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: InputTextFormField(
-                      labelText: 'Conference alias',
-                      controller: conferenceAliasTextController,
-                      focusColor: Colors.deepPurple),
-                ),
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Observe Conference Status"),
-                  value: switchConferenceStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      switchConferenceStatus = value;
-                      observeConferenceStatus(switchConferenceStatus);
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Dolby voice"),
-                  value: switchDolbyVoice,
-                  onChanged: (value) {
-                    if (value == false) {
-                      setState(() {
-                        switchDolbyVoice = value;
-                        spatialAudio = value;
-                      });
-                    } else {
-                      setState(() {
-                        switchDolbyVoice = value;
-                      });
-                    }
-                  },
-                ),
-                DropdownButton<String>(
-                  focusColor: Colors.white,
-                  value:
-                      switchDolbyVoice ? spatialAudioStyleDropDownText : null,
-                  style: const TextStyle(color: Colors.white),
-                  iconEnabledColor: Colors.black,
-                  items: <String>[
-                    spatialAudioWithIndividual,
-                    spatialAudioWithSharedScene,
-                    spatialAudioDisabled,
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                  hint: const Text(
-                    "Spatial Audio Style",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
+                    labelText: 'Conference alias',
+                    controller: conferenceAliasTextController,
+                    focusColor: Colors.deepPurple,
+                    isStorageNeeded: true,
+                    onStorageIconTap: () async {
+                      await showAliasSelectorDialog(
+                        context,
+                        SharedPreferencesHelper().conferenceAliases,
+                      );
+                    },
                   ),
-                  onChanged: (String? value) {
-                    if (switchDolbyVoice == true &&
-                        value == spatialAudioWithIndividual) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.individual;
-                        spatialAudio = true;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else if (switchDolbyVoice == true &&
-                        value == spatialAudioWithSharedScene) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.shared;
-                        spatialAudio = true;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else if (switchDolbyVoice == true &&
-                        value == spatialAudioDisabled) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.disabled;
-                        spatialAudio = false;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else {
-                      spatialAudioStyle = SpatialAudioStyle.disabled;
-                      spatialAudioStyleDropDownText = null;
-                      spatialAudio = false;
-                    }
-                  },
                 ),
+                ExpansionTile(
+                    title: const Text('Options'),
+                    textColor: Colors.black,
+                    iconColor: Colors.deepPurple,
+                    children: [
+                      SwitchOption(
+                          title: 'Observe Conference Status',
+                          value: switchConferenceStatus,
+                          onChanged: (value) {
+                            setState(() {
+                              switchConferenceStatus = value;
+                              observeConferenceStatus(switchConferenceStatus);
+                            });
+                          }),
+                      SwitchOption(
+                          title: 'Dolby Voice',
+                          value: switchDolbyVoice,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                switchDolbyVoice = value;
+                                spatialAudio = value;
+                              });
+                            } else {
+                              setState(() => switchDolbyVoice = value);
+                            }
+                          }),
+                      SwitchOption(
+                          title: 'Join as listener',
+                          value: joinAsListener,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                joinAsListener = value;
+                              });
+                            } else {
+                              setState(() => joinAsListener = value);
+                            }
+                          }),
+                      DropdownButton<String>(
+                        focusColor: Colors.white,
+                        value: switchDolbyVoice
+                            ? spatialAudioStyleDropDownText
+                            : null,
+                        style: const TextStyle(color: Colors.white),
+                        iconEnabledColor: Colors.black,
+                        items: <String>[
+                          spatialAudioWithIndividual,
+                          spatialAudioWithSharedScene,
+                          spatialAudioDisabled,
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        hint: const Text(
+                          "Spatial Audio Style",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        onChanged: (String? value) {
+                          if (switchDolbyVoice == true &&
+                              value == spatialAudioWithIndividual) {
+                            setState(() {
+                              spatialAudioStyle =
+                                  SpatialAudioStyle.individual;
+                              spatialAudio = true;
+                              spatialAudioStyleDropDownText = value;
+                            });
+                          } else if (switchDolbyVoice == true &&
+                              value == spatialAudioWithSharedScene) {
+                            setState(() {
+                              spatialAudioStyle = SpatialAudioStyle.shared;
+                              spatialAudio = true;
+                              spatialAudioStyleDropDownText = value;
+                            });
+                          } else if (switchDolbyVoice == true &&
+                              value == spatialAudioDisabled) {
+                            setState(() {
+                              spatialAudioStyle =
+                                  SpatialAudioStyle.disabled;
+                              spatialAudio = false;
+                              spatialAudioStyleDropDownText = value;
+                            });
+                          } else {
+                            spatialAudioStyle = SpatialAudioStyle.disabled;
+                            spatialAudioStyleDropDownText = null;
+                            spatialAudio = false;
+                          }
+                        },
+                      ),
+                    ]),
                 PrimaryButton(
                   widgetText: isJoining
                       ? const WhiteCircularProgressIndicator()
@@ -258,13 +285,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 ),
                 const SizedBox(height: 16),
                 Form(
-                  key: formKeyId,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: InputTextFormField(
-                      labelText: 'Conference ID with record',
-                      controller: conferenceIdTextController,
-                      focusColor: Colors.deepPurple),
-                ),
+                    key: formKeyId,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    child: InputTextFormField(
+                        labelText: 'Conference ID with record',
+                        controller: conferenceIdTextController,
+                        focusColor: Colors.deepPurple)),
+                const SizedBox(height: 16),
                 PrimaryButton(
                   widgetText: isReplaying
                       ? const WhiteCircularProgressIndicator()
@@ -312,7 +339,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     final isValidForm = formKeyAlias.currentState!.validate();
     if (isValidForm) {
       setState(() => isJoining = true);
-      join();
+      if (joinAsListener) {
+        listen();
+      } else {
+        join();
+      }
     } else {
       developer.log('Cannot join to conference due to error.');
     }
@@ -338,6 +369,16 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     });
   }
 
+  void listen() {
+    create().then((value) {
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .listen(value, conferenceListenOptions())
+          .then((value) => checkJoinConferenceResult(value))
+          .onError((error, stackTrace) =>
+              onError('Error during joining conference.', error));
+    });
+  }
+
   Future<Conference> create() {
     var conference = _dolbyioCommsSdkFlutterPlugin.conference
         .create(conferenceCreateOptions());
@@ -345,12 +386,12 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   ConferenceCreateOption conferenceCreateOptions() {
-    var conferenceName = conferenceAliasTextController.text;
+    _conferenceAlias = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
     params.dolbyVoice = switchDolbyVoice;
     params.liveRecording = true;
     var createOptions =
-        ConferenceCreateOption(conferenceName, params, 0, spatialAudioStyle);
+        ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
     createOptions.spatialAudioStyle = spatialAudioStyle;
     return createOptions;
   }
@@ -364,12 +405,20 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     return joinOptions;
   }
 
+  ConferenceListenOptions conferenceListenOptions() {
+    var listenOptions = ConferenceListenOptions();
+    listenOptions.maxVideoForwarding = 4;
+    listenOptions.spatialAudio = spatialAudio;
+    return listenOptions;
+  }
+
   void checkJoinConferenceResult(Conference conference) {
     if (conference.status == ConferenceStatus.joined) {
       navigateToParticipantScreen(context, conference);
     } else {
       developer.log('Cannot join to conference.');
     }
+    saveToSharedPreferences();
   }
 
   void joinInvitation(String conferenceId) {
@@ -447,6 +496,71 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
               conference: conference, isSpatialAudio: spatialAudio)),
     );
     setState(() => isJoining = false);
+  }
+
+  Future<void> showAliasSelectorDialog(
+    BuildContext context,
+    List<String>? conferenceAliases,
+  ) async {
+    return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text('Choose from recently saved'),
+              actionsOverflowButtonSpacing: 10,
+              content: SingleChildScrollView(
+                child: SizedBox(
+                  width: double.maxFinite,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (conferenceAliases != null)
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: conferenceAliases.length,
+                          itemBuilder: (context, index) {
+                            String alias = conferenceAliases[index];
+                            return ListTile(
+                              title: Text(alias),
+                              onTap: () => onAliasTap(alias),
+                            );
+                          },
+                        )
+                      else
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('No aliases in storage.'),
+                        )
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  style: TextButton.styleFrom(primary: Colors.deepPurple),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Cancel'),
+                ),
+              ]);
+        });
+  }
+
+  void onAliasTap(String alias) {
+    conferenceAliasTextController.text = alias;
+    Navigator.of(context).pop();
+  }
+
+  void initSharedPreferences() {
+    try {
+      conferenceAliasTextController.text =
+          SharedPreferencesHelper().latestAlias;
+    } catch (error) {
+      onError('Cannot load data from shared preferences.', error);
+    }
+  }
+
+  void saveToSharedPreferences() {
+    SharedPreferencesHelper().latestAlias = _conferenceAlias;
   }
 
   void onError(String message, Object? error) {

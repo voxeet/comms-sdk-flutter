@@ -11,7 +11,10 @@ class CommandServiceTestButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SecondaryButton(
-        text: 'Send message', onPressed: () => send(context));
+      text: 'Send message',
+      onPressed: () => send(context),
+      fillWidth: true,
+    );
   }
 
   Future<void> showDialog(

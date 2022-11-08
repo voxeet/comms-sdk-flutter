@@ -207,8 +207,6 @@ void main() {
     conferenceJoinOptions.constraints = ConferenceConstraints(true, true);
     conferenceJoinOptions.maxVideoForwarding = 15;
     conferenceJoinOptions.mixing = ConferenceMixingOptions(true);
-    conferenceJoinOptions.preferRecvMono = true;
-    conferenceJoinOptions.preferSendMono = true;
     conferenceJoinOptions.simulcast = true;
     conferenceJoinOptions.spatialAudio = true;
     var returnedConference = await dolbyioCommsSdkFlutterPlugin.conference
@@ -1036,6 +1034,62 @@ void main() {
             }
           ]
         });
+  });
+
+  testWidgets('ConferenceService: Listen', (tester) async {
+    await runNative(
+        methodChannel: conferenceServiceAssertsMethodChannel,
+        label: "setListenConferenceReturn",
+        args: {"type": 1});
+
+    await runNative(
+        methodChannel: conferenceServiceAssertsMethodChannel,
+        label: "setFetchConferenceReturn",
+        args: {"type": 4});
+
+    var conference = Conference(
+        "conference_alias",
+        "conference_id",
+        true,
+        [
+          Participant(
+              "participant_id",
+              ParticipantInfo("participant_name", "avatar_url", "external_id"),
+              ParticipantStatus.connected,
+              ParticipantType.listner)
+        ],
+        ConferenceStatus.created,
+        SpatialAudioStyle.individual);
+
+    var conferenceListenOptions = ConferenceListenOptions();
+    conferenceListenOptions.conferenceAccessToken = "conference_access_token";
+    conferenceListenOptions.maxVideoForwarding = 15;
+    conferenceListenOptions.spatialAudio = true;
+    var returnedConference = await dolbyioCommsSdkFlutterPlugin.conference
+        .listen(conference, conferenceListenOptions);
+
+    await expectNative(
+        methodChannel: conferenceServiceAssertsMethodChannel,
+        assertLabel: "assertFetchConferenceArgs",
+        expected: {"conferenceId": "conference_id"});
+
+    await expectNative(
+        methodChannel: conferenceServiceAssertsMethodChannel,
+        assertLabel: "assertListenConfrenceArgs",
+        expected: {
+          "conference": {
+            "id": "setCreateConferenceReturn_id_4",
+            "alias": "setCreateConferenceReturn_alias_4"
+          },
+          "listenOptions": {
+            "conferenceAccessToken": "conference_access_token",
+            "maxVideoForwarding": 15,
+            "spatialAudio": true
+          }
+        });
+
+    expect(returnedConference.id, "setCreateConferenceReturn_id_1");
+    expect(returnedConference.alias, "setCreateConferenceReturn_alias_1");
   });
 
   // Commented out because is not working yet

@@ -1,3 +1,5 @@
+import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/audio.dart';
+
 import '../sdk_api/models/conference.dart';
 import '../sdk_api/models/events.dart';
 import '../sdk_api/models/file_presentation.dart';
@@ -174,6 +176,17 @@ class MediaStreamMapper {
     var videoTracks = toNoNullableList(stream["videoTracks"] as List<Object?>);
     return MediaStream(
         id, MediaStreamType.decode(type)!, audioTracks, videoTracks, label);
+  }
+}
+
+class AudioCaptureOptionsMapper {
+  static AudioCaptureOptions fromMap(Map<Object?, Object?> stream) {
+    var mode = stream["mode"] as String;
+    var noiseReduction = stream["noiseReduction"] as String?;
+    return AudioCaptureOptions(
+      AudioCaptureMode.decode(mode),
+      NoiseReduction.decode(noiseReduction),
+    );
   }
 }
 
