@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter/src/mapper/mapper.dart';
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/audio.dart';
-
 import '../../../dolbyio_comms_sdk_flutter.dart';
 import '../../dolbyio_comms_sdk_flutter_platform_interface.dart';
 
@@ -12,6 +10,12 @@ class LocalAudio {
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
     "local_audio",
   );
+
+  /// Sets the local participant's audio capture mode in Dolby Voice conferences.
+  Future<void> setCaptureMode(AudioCaptureOptions options) async {
+    return await _methodChannel.invokeMethod<void>(
+        "setCaptureMode", options.toJson());
+  }
 
   /// Returns the local participant's audio capture mode in Dolby Voice conferences.
   Future<AudioCaptureOptions> getCaptureMode() async {

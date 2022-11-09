@@ -21,7 +21,11 @@ class AudioServiceTestButtons extends StatelessWidget {
       SecondaryButton(
           text: 'Start local audio', onPressed: () => startLocalAudio(context)),
       SecondaryButton(
-          text: 'Stop local audio', onPressed: () => stopLocalAudio(context))
+          text: 'Stop local audio', onPressed: () => stopLocalAudio(context)),
+      SecondaryButton(
+          text: 'Get capture mode', onPressed: () => getCaptureMode(context)),
+      SecondaryButton(
+          text: 'Set capture mode', onPressed: () => setCaptureMode(context))
     ];
     return Wrap(
       spacing: 8.0,
@@ -72,5 +76,25 @@ class AudioServiceTestButtons extends StatelessWidget {
         .onError(
           (error, stackTrace) => showDialog(context, 'Error', error.toString()),
         );
+  }
+
+  void getCaptureMode(BuildContext context) {
+    _dolbyioCommsSdkFlutterPlugin.audioService.localAudio
+        .getCaptureMode()
+        .then((audioCaptureOptions) => showDialog(
+            context, 'Success', audioCaptureOptions.toJson().toString()))
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
+  }
+
+  void setCaptureMode(BuildContext context) {
+    var mode = AudioCaptureMode.standard;
+    var noiseReduction = NoiseReduction.high;
+    var options = AudioCaptureOptions(mode, noiseReduction);
+    _dolbyioCommsSdkFlutterPlugin.audioService.localAudio
+        .setCaptureMode(options)
+        .then((value) => showDialog(context, 'Success', 'OK'))
+        .onError((error, stackTrace) =>
+            showDialog(context, 'Error', error.toString()));
   }
 }
