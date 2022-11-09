@@ -3,10 +3,17 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import '/widgets/secondary_button.dart';
 import '/widgets/dialogs.dart';
 
-class RecordingServiceTestButtons extends StatelessWidget {
-  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+class RecordingServiceTestButtons extends StatefulWidget {
+  const RecordingServiceTestButtons({Key? key}) : super(key: key);
 
-  RecordingServiceTestButtons({Key? key}) : super(key: key);
+  @override
+  State<RecordingServiceTestButtons> createState() =>
+      _RecordingServiceTestButtonsState();
+}
+
+class _RecordingServiceTestButtonsState
+    extends State<RecordingServiceTestButtons> {
+  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +22,17 @@ class RecordingServiceTestButtons extends StatelessWidget {
       runSpacing: 4.0,
       children: <Widget>[
         SecondaryButton(
-            text: 'Start recording', onPressed: () => startRecording(context)),
+          text: 'Start recording',
+          onPressed: () => startRecording(),
+        ),
         SecondaryButton(
-            text: 'Stop recording', onPressed: () => stopRecording(context)),
+          text: 'Stop recording',
+          onPressed: () => stopRecording(),
+        ),
         SecondaryButton(
-            text: 'Current recording',
-            onPressed: () => currentRecording(context)),
+          text: 'Current recording',
+          onPressed: () => currentRecording(),
+        ),
       ],
     );
   }
@@ -34,32 +46,42 @@ class RecordingServiceTestButtons extends StatelessWidget {
     );
   }
 
-  void startRecording(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.recording
-        .start()
-        .then((value) => showDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, 'Error', error.toString()));
+  Future<void> startRecording() async {
+    try {
+      await _dolbyioCommsSdkFlutterPlugin.recording.start();
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
   }
 
-  void stopRecording(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.recording
-        .stop()
-        .then((value) => showDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, 'Error', error.toString()));
+  Future<void> stopRecording() async {
+    try {
+      await _dolbyioCommsSdkFlutterPlugin.recording.stop();
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
   }
 
-  void currentRecording(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.recording
-        .currentRecording()
-        .then((recordingInformation) => showDialog(
-            context,
-            'Success',
-            "Recording ${recordingInformation.recordingStatus}"
-                " by: ${recordingInformation.participantId}"
-                " start time stamp: ${recordingInformation.startTimestamp}"))
-        .onError((error, stackTrace) =>
-            showDialog(context, 'Error', error.toString()));
+  Future<void> currentRecording() async {
+    try {
+      var currentRecording =
+          await _dolbyioCommsSdkFlutterPlugin.recording.currentRecording();
+      if (!mounted) return;
+      showDialog(
+          context,
+          'Success',
+          'Recording status: ${currentRecording.recordingStatus} '
+              ', by: ${currentRecording.participantId} '
+              ', start time stamp: ${currentRecording.startTimestamp}');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
   }
 }
