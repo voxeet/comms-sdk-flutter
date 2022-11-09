@@ -14,6 +14,8 @@ public typealias RefreshTokenHandlerWithParam = ((_ closure: (@escaping (_ token
     public let videoPresentation = VideoPresentationService()
     public let notification = NotificationService()
     public let filePresentation = FilePresentationService()
+    public let audio = AudioService()
+    public let video = VideoService()
     
     public var initializeArgs: (consumerKey: String, consumerSecret: String)?
     public func initialize(consumerKey: String, consumerSecret: String) {

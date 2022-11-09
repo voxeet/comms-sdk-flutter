@@ -20,6 +20,10 @@ const notificationServiceAssertsMethodChannel =
     MethodChannel('IntegrationTesting.NotificationServiceAsserts');
 const filePresentationServiceAssertsMethodChannel =
     MethodChannel('IntegrationTesting.FilePresentationServiceAsserts');
+const videoServiceAssertsMethodChannel =
+    MethodChannel('IntegrationTesting.VideoServiceAsserts');
+const audioServiceAssertsMethodChannel =
+    MethodChannel('IntegrationTesting.AudioServiceAsserts');
 
 void _handleNativeResult(
     List<dynamic> invokeMethodResult, String messagePrefix, String label) {
