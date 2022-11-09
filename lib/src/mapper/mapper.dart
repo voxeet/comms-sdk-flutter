@@ -21,6 +21,9 @@ class ConferenceMapper {
         ConferenceStatus.decode(map["status"] as String? ?? "DEFAULT") ??
             ConferenceStatus.defaultStatus;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
     var spatialAudioStyle =
         map.containsKey("spatialAudioStyle") && map["spatialAudioStyle"] != null
             ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String)
@@ -28,12 +31,15 @@ class ConferenceMapper {
 
     return Conference(
         alias, id, isNew, participants, status, spatialAudioStyle);
+<<<<<<< HEAD
 =======
     var spatialAudioStyle = map.containsKey("spatialAudioStyle") 
         ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String) : null;
     
     return Conference(alias, id, isNew, participants, status, spatialAudioStyle);
 >>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
+=======
+>>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
   }
 
   static List<Participant> prepareParticipantsList(List<Object?> participants) {

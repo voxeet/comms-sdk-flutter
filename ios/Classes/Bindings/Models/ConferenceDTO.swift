@@ -386,6 +386,42 @@ extension DTO {
             return map
         }
     }
+<<<<<<< HEAD
+=======
+        
+    struct VideoForwardingStrategyDTO: Codable {
+        
+        let videoForwardingStrategy: VideoForwardingStrategy
+        
+        init(videoForwardingStrategy: VideoForwardingStrategy) {
+            self.videoForwardingStrategy = videoForwardingStrategy
+        }
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            switch try container.decode(String.self) {
+            case "LAST_SPEAKER": videoForwardingStrategy = .lastSpeaker
+            case "CLOSEST_USER": videoForwardingStrategy = .closestUser
+            default: throw EncoderError.decoderFailed()
+            }
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch videoForwardingStrategy {
+            case .lastSpeaker: try container.encode("LAST_SPEAKER")
+            case .closestUser: try container.encode("CLOSEST_USER")
+            @unknown default: throw EncoderError.encoderFailed()
+            }
+        }
+        
+        func toSdkType() -> VideoForwardingStrategy {
+            return videoForwardingStrategy
+        }
+    }
+    
+    struct ListenOptions: Codable {
+>>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
         
     struct VideoForwardingStrategyDTO: Codable {
         

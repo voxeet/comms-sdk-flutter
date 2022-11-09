@@ -25,11 +25,16 @@ class Conference {
   SpatialAudioStyle? spatialAudioStyle;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   Conference(this.alias, this.id, this.isNew, this.participants, this.status,
       this.spatialAudioStyle);
 =======
   Conference(this.alias, this.id, this.isNew, this.participants, this.status, this.spatialAudioStyle);
 >>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
+=======
+  Conference(this.alias, this.id, this.isNew, this.participants, this.status,
+      this.spatialAudioStyle);
+>>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
@@ -120,11 +125,16 @@ class ConferenceCreateOption {
   SpatialAudioStyle? spatialAudioStyle;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   ConferenceCreateOption(
       this.alias, this.params, this.pinCode, this.spatialAudioStyle);
 =======
   ConferenceCreateOption(this.alias, this.params, this.pinCode, this.spatialAudioStyle);
 >>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
+=======
+  ConferenceCreateOption(
+      this.alias, this.params, this.pinCode, this.spatialAudioStyle);
+>>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {

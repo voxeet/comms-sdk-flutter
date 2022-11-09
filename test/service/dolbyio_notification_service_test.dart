@@ -26,12 +26,17 @@ var participantsInvitation = [
 ];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 var conference = Conference("test_conf", "test_id", true, participants,
     ConferenceStatus.joined, SpatialAudioStyle.individual);
 =======
 var conference = Conference(
     "test_conf", "test_id", true, participants, ConferenceStatus.joined, SpatialAudioStyle.individual);
 >>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
+=======
+var conference = Conference("test_conf", "test_id", true, participants,
+    ConferenceStatus.joined, SpatialAudioStyle.individual);
+>>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
 
 void main() {
   var notificationService = DolbyioCommsSdk.instance.notification;
