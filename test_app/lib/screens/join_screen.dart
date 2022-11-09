@@ -67,8 +67,8 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKeyAlias = GlobalKey<FormState>();
   final formKeyId = GlobalKey<FormState>();
-  bool isJoining = false;
-  bool isReplaying = false;
+  bool joiningInProgress = false;
+  bool startingConferenceReplay = false;
   bool switchConferenceStatus = false;
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -376,7 +376,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     ]),
 >>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
                 PrimaryButton(
-                  widgetText: isJoining
+                  widgetText: joiningInProgress
                       ? const WhiteCircularProgressIndicator()
                       : const Text('Join'),
                   onPressed: () {
@@ -408,9 +408,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 const SizedBox(height: 16),
 >>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
                 PrimaryButton(
-                  widgetText: isReplaying
+                  widgetText: startingConferenceReplay
                       ? const WhiteCircularProgressIndicator()
-                      : const Text('Replay conference'),
+                      : const Text('Replay'),
                   onPressed: () {
                     onReplayButtonPressed();
                   },
@@ -450,51 +450,64 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     );
   }
 
-  void onJoinButtonPressed() {
-    final isValidForm = formKeyAlias.currentState!.validate();
-    if (isValidForm) {
-      setState(() => isJoining = true);
-      if (joinAsListener) {
-        listen();
-      } else {
-        join();
+  void onJoinButtonPressed() async {
+    setState(() => joiningInProgress = true);
+    try {
+      final isValidForm = formKeyAlias.currentState!.validate();
+      if (isValidForm) {
+        Conference conference = joinAsListener ? await listen() : await join();
+        saveToSharedPreferences();
+        if (conference.status == ConferenceStatus.joined) {
+          navigateToParticipantScreen(conference);
+        }
       }
-    } else {
-      developer.log('Cannot join to conference due to error.');
+    } catch (e) {
+      onError('Error: ', e);
+    } finally {
+      setState(() => joiningInProgress = false);
     }
   }
 
-  void onReplayButtonPressed() {
-    final isValidForm = formKeyId.currentState!.validate();
-    if (isValidForm) {
-      setState(() => isReplaying = true);
-      replay();
-    } else {
-      developer.log('Cannot replay the conference due to error.');
+  void onReplayButtonPressed() async {
+    setState(() => startingConferenceReplay = true);
+    try {
+      final isValidForm = formKeyAlias.currentState!.validate();
+      if (isValidForm) {
+        final conference = await replay();
+        if (conference.id != null) {
+          navigateToReplayScreen(conference);
+        }
+      }
+    } catch (e) {
+      onError('Error: ', e);
+    } finally {
+      setState(() => startingConferenceReplay = false);
     }
   }
 
-  void join() {
-    create().then((value) {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .join(value, conferenceJoinOptions())
-          .then((value) => checkJoinConferenceResult(value))
-          .onError((error, stackTrace) =>
-              onError('Error during joining conference.', error));
-    });
+  Future<Conference> join() async {
+    Conference conference = await createConference().then((value) =>
+        _dolbyioCommsSdkFlutterPlugin.conference
+            .join(value, conferenceJoinOptions()));
+    return conference;
   }
 
-  void listen() {
-    create().then((value) {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .listen(value, conferenceListenOptions())
-          .then((value) => checkJoinConferenceResult(value))
-          .onError((error, stackTrace) =>
-              onError('Error during joining conference.', error));
-    });
+  Future<Conference> listen() async {
+    Conference conference = await createConference().then((value) =>
+        _dolbyioCommsSdkFlutterPlugin.conference
+            .listen(value, conferenceListenOptions()));
+    return conference;
   }
 
-  Future<Conference> create() {
+  Future<Conference> replay() async {
+    Conference conference = await _dolbyioCommsSdkFlutterPlugin.conference
+        .fetch(conferenceIdTextController.text)
+        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
+            .replay(conference: conference));
+    return conference;
+  }
+
+  Future<Conference> createConference() {
     var conference = _dolbyioCommsSdkFlutterPlugin.conference
         .create(conferenceCreateOptions());
     return conference;
@@ -537,22 +550,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     return listenOptions;
   }
 
-  void checkJoinConferenceResult(Conference conference) {
-    if (conference.status == ConferenceStatus.joined) {
-      navigateToParticipantScreen(context, conference);
-    } else {
-      developer.log('Cannot join to conference.');
-    }
-    saveToSharedPreferences();
-  }
-
   void joinInvitation(String conferenceId) {
     _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceId)
         .then((value) => {
               _dolbyioCommsSdkFlutterPlugin.conference
                   .join(value, conferenceJoinOptions())
-                  .then((value) => checkJoinConferenceResult(value))
+                  .then((value) => navigateToParticipantScreen(value))
                   .onError((error, stackTrace) =>
                       onError('Error during joining conference.', error))
             });
@@ -581,41 +585,15 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     }
   }
 
-  void replay() {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .fetch(conferenceIdTextController.text)
-        .then(
-          (conference) => _dolbyioCommsSdkFlutterPlugin.conference
-              .replay(conference: conference)
-              .then((conference) => checkReplayConferenceResult(conference)),
-        )
-        .onError(
-          (error, stackTrace) => developer.log(error.toString()),
-        );
-  }
-
-  void checkReplayConferenceResult(Conference conference) {
-    if (conference.id != null) {
-      navigateToReplayScreen(context, conference);
-    } else {
-      developer.log('Cannot replay the conference.');
-    }
-  }
-
-  Future navigateToReplayScreen(
-    BuildContext context,
-    Conference conference,
-  ) async {
-    await Navigator.of(context).push(
+  void navigateToReplayScreen(Conference conference) {
+    Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => ReplayScreen(conference: conference)),
     );
-    setState(() => isReplaying = false);
   }
 
-  Future navigateToParticipantScreen(
-      BuildContext context, Conference conference) async {
-    await Navigator.of(context).push(
+  void navigateToParticipantScreen(Conference conference) {
+    Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => ParticipantScreen(
 <<<<<<< HEAD
@@ -628,7 +606,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
               conference: conference, isSpatialAudio: spatialAudio)),
 >>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
     );
-    setState(() => isJoining = false);
   }
 
   Future<void> showAliasSelectorDialog(
