@@ -3,12 +3,17 @@ class AudioCaptureOptions {
   NoiseReduction? noiseReduction;
 
   AudioCaptureOptions(this.mode, this.noiseReduction);
+
+  Map<String, Object?> toJson() => {
+    "mode": mode.encode(),
+    "noiseReduction": noiseReduction?.encode()
+  };
 }
 
 enum AudioCaptureMode {
-  standard('STANDARD'),
+  standard('standard'),
 
-  unprocessed('UNPROCESSED');
+  unprocessed('unprocessed');
 
   final String _value;
 
