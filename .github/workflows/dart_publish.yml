@@ -2,7 +2,7 @@ name: Publish comms-sdk-flutter package to pub.dev
 on:
   push:
     branches:
-      - main
+    - main
 
 jobs:
   build:
@@ -10,7 +10,10 @@ jobs:
     container:
       image:  google/dart:latest
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
     - name: Setup credentials
       run: |
         mkdir -p ~/.pub-cache
