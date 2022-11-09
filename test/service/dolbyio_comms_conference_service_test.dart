@@ -29,8 +29,8 @@ var participantMap = {
 };
 
 var participants = [participant];
-var conference = Conference(
-    "test_conf", "test_id", true, participants, ConferenceStatus.joined, SpatialAudioStyle.individual);
+var conference = Conference("test_conf", "test_id", true, participants,
+    ConferenceStatus.joined, SpatialAudioStyle.individual);
 var conferenceMap = {
   "alias": "test_conf",
   "id": "test_id",
@@ -66,7 +66,8 @@ void main() {
       ..rtcpMode = RTCPMode.best
       ..ttl = 1000
       ..videoCodec = Codec.h264;
-    var createOptions = ConferenceCreateOption("conference", createParams, 1, SpatialAudioStyle.individual);
+    var createOptions = ConferenceCreateOption(
+        "conference", createParams, 1, SpatialAudioStyle.individual);
     when(channel.invokeMethod("create", createOptions.toJson()))
         .thenAnswer((_) => Future.value(conference.toJson()));
 
@@ -407,6 +408,7 @@ void main() {
     })).thenAnswer((_) => Future.value(true));
 
     var result = await conferenceService
+        // ignore: deprecated_member_use_from_same_package
         .setMaxVideoForwarding(maxVideoForwarding, [participant]);
 
     expect(result, true);

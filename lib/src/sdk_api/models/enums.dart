@@ -3,7 +3,7 @@ abstract class EnumWithStringValue implements Enum {
 }
 
 /// The ComfortNoiseLevel enum gathers the available comfort noise levels.
-/// 
+///
 /// {@category Models}
 enum ComfortNoiseLevel {
   /// The default comfort noise level that is based on the device database. The database contains the proper comfort noise levels, individual for all devices.
@@ -36,7 +36,7 @@ enum ComfortNoiseLevel {
 }
 
 /// The FilePresentationServiceEventNames enum gathers events informing about the file presentation status.
-/// 
+///
 /// {@category Models}
 enum FilePresentationServiceEventNames implements EnumWithStringValue {
   /// Emitted when a file is converted.
@@ -69,7 +69,7 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
 }
 
 /// The NotificationServiceEventNames enum gathers the NotificationService events.
-/// 
+///
 /// {@category Models}
 enum NotificationServiceEventNames implements EnumWithStringValue {
   /// Emitted when an application user receives an invitation.
@@ -93,7 +93,7 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
 }
 
 /// The CommandServiceEventNames enum gathers the CommandService events.
-/// 
+///
 /// {@category Models}
 enum CommandServiceEventNames implements EnumWithStringValue {
   /// Emitted when a participant receives a message.
@@ -117,7 +117,7 @@ enum CommandServiceEventNames implements EnumWithStringValue {
 }
 
 /// The VideoPresentationState enum gathers the possible statuses of a video presentation.
-/// 
+///
 /// {@category Models}
 enum VideoPresentationState {
   /// The video presentation is paused.
@@ -143,7 +143,7 @@ enum VideoPresentationState {
 }
 
 /// The VideoPresentationEventNames enum gathers the possible statuses of a video presentation.
-/// 
+///
 /// {@category Models}
 enum VideoPresentationEventNames implements EnumWithStringValue {
   /// Emitted when a video presentation is paused.

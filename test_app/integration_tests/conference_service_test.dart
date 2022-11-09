@@ -906,6 +906,7 @@ void main() {
         label: "setCurrentConference",
         args: {"type": 5});
 
+    // ignore: deprecated_member_use
     await dolbyioCommsSdkFlutterPlugin.conference.setMaxVideoForwarding(1, [
       Participant(
           "participant_id_5_1",

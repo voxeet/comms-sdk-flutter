@@ -1,7 +1,7 @@
 import 'participant.dart';
 
 /// The VideoPresentation class gathers information about a video presentation.
-/// 
+///
 /// {@category Models}
 class VideoPresentation {
   /// The participant who started the presentation.

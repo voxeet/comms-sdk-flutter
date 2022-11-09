@@ -5,7 +5,7 @@ import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
 import '../mapper/mapper.dart';
 
 /// The RecordingService allows recording conferences.
-/// 
+///
 /// {@category Services}
 class RecordingService {
   /// @internal

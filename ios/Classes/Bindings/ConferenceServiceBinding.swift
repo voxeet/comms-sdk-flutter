@@ -496,13 +496,44 @@ class ConferenceServiceBinding: Binding {
                 max: max,
                 participants: participants.compactMap { current?.findParticipant(with: $0.id) }
             ) { error in
-                completionHandler.handleError(error)?.orSuccess()
+                completionHandler.handleError(error)?.orSuccess({ true })
             }
         } catch {
             completionHandler.failure(error)
         }
     }
     
+    /// Sets the maximum number of video streams that may be transmitted to the local participant.
+    /// - Parameters:
+    /// - flutterArguments: Method arguments passed from Flutter.
+    /// - completionHandler: Call methods on this instance when execution has finished.
+    func setVideoForwarding(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let strategy = try flutterArguments.asDictionary(argKey: "strategy")
+                .decode(type: DTO.VideoForwardingStrategyDTO.self)
+            let max: Int = try flutterArguments.asDictionary(argKey: "max").decode()
+            let participants = try flutterArguments.asDictionary(argKey: "prioritizedParticipants")
+                .decode(type: [DTO.Participant].self)
+            
+            VoxeetSDK.shared.conference.videoForwarding(
+                options: VideoForwardingOptions(
+                    strategy: strategy.toSdkType(),
+                    max: max,
+                    participants: participants.compactMap {
+                        current?.findParticipant(with: $0.id)
+                    }
+                )
+            ) { error in
+                completionHandler.handleError(error)?.orSuccess({ true })
+            }
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
+
     /// Mutes or unmutes output (only compatible with Dolby Voice conferences).
     /// - Parameters:
     ///   - isMuted: <code>true</code> if user mutes output. Otherwise, <code>false</code>.
@@ -805,6 +836,8 @@ extension ConferenceServiceBinding: FlutterBinding {
             getLocalStats(completionHandler: completionHandler)
         case "setMaxVideoForwarding":
             setMaxVideoForwarding(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "setVideoForwarding":
+            setVideoForwarding(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "setAudioProcessing":
             setAudioProcessing(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "muteOutput":

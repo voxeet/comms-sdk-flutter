@@ -2,7 +2,7 @@
 import 'package:collection/collection.dart';
 
 /// The RecordingInformation class gathers information about a conference recording.
-/// 
+///
 /// {@category Models}
 class RecordingInformation {
   /// The ID of the participant who started the recording.
@@ -22,7 +22,7 @@ class RecordingInformation {
 }
 
 /// The RecordingStatus enum gathers the possible statuses of recording.
-/// 
+///
 /// {@category Models}
 enum RecordingStatus {
   /// The conference is recorded.

@@ -218,7 +218,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                         ?.let { VoxeetSDK.conference().mute(it, muteValue) }
                         ?: throw IllegalStateException("Could not find participant")
                 }
-            }.let { result.success(it) }
+            }.let {
+                if (it != null && it) {
+                    result.success(it)
+                } else {
+                    result.error(Exception("Call mute method failed"))
+                }
+            }
         }
     )
 
@@ -242,7 +248,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
             VoxeetSDK
                 .conference()
                 .muteOutput(call.argumentOrThrow("isMuted"))
-                .let { result.success(it) }
+                .let {
+                    if (it) {
+                        result.success(it)
+                    } else {
+                        result.error(Exception("Call muteOutput method failed"))
+                    }
+                }
         }
     )
 
@@ -377,7 +389,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                 .conference()
                 .videoForwarding(max, prioritizedParticipants)
                 .await()
-                .let { result.success(it) }
+                .let {
+                    if (it) {
+                        result.success(it)
+                    } else {
+                        result.error(Exception("Max video forwarding setting failed"))
+                    }
+                }
         }
     )
 
@@ -403,7 +421,13 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
                 .conference()
                 .videoForwarding(videoForwardingOptions)
                 .await()
-                .let { result.success(it) }
+                .let {
+                    if (it) {
+                        result.success(it)
+                    } else {
+                        result.error(Exception("Video forwarding setting failed"))
+                    }
+                }
         }
     )
 

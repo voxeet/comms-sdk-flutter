@@ -2,7 +2,7 @@ import '../dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'models/enums.dart';
 
 /// The MediaDeviceService allows an application to manage media devices that are used during a conference.
-/// 
+///
 /// {@category Services}
 class MediaDeviceService {
   /// @internal
@@ -32,7 +32,7 @@ class MediaDeviceService {
     return await _methodChannel.invokeMethod<void>("switchCamera");
   }
 
-  /// Switches the current speaker to a different speaker that is available. The method is available only on iOS. Using the method on Android triggers an error.
+  /// Switches the current speaker to a different speaker that is available.
   Future<void> switchSpeaker() async {
     return await _methodChannel.invokeMethod<void>("switchSpeaker");
   }

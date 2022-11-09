@@ -6,7 +6,7 @@ import 'models/enums.dart';
 import 'models/events.dart';
 
 /// The CommandService allows the application to send and receive text messages and notifications during a conference.
-/// 
+///
 /// {@category Services}
 class CommandService {
   /// @internal
