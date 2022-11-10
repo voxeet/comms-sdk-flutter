@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:integration_test/integration_test.dart';
@@ -14,16 +16,33 @@ void main() {
   });
 
   testWidgets('FilePresentationService: convert', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.filePresentation
-        .convert(File("file:///path/to/file"));
+    String fileName;
+    if (Platform.isIOS) {
+      fileName = "file:///path/to/file";
+    } else if (Platform.isAndroid) {
+      fileName = "file:///path/to/file.file";
+      var participant = ParticipantInfo("user", null, null);
+      await dolbyioCommsSdkFlutterPlugin.session.open(participant);
+    } else {
+      throw UnsupportedError("Platform is not supported");
+    }
+    await dolbyioCommsSdkFlutterPlugin.filePresentation
+        .convert(File(fileName));
     await expectNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
         assertLabel: "assertConvertArgs",
-        expected: {"hasRun": true, "uri": "file:///path/to/file"});
+        expected: {"hasRun": true, "uri": fileName});
   });
 
   testWidgets('FilePresentationService: setPage', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.filePresentation.setPage(5);
+    if (Platform.isAndroid) {
+      var participant = ParticipantInfo("user", null, null);
+      await dolbyioCommsSdkFlutterPlugin.session.open(participant);
+      var fileName = "file:///path/to/file.file";
+      await dolbyioCommsSdkFlutterPlugin.filePresentation
+          .convert(File(fileName));
+    }
+    await dolbyioCommsSdkFlutterPlugin.filePresentation.setPage(5);
     await expectNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
         assertLabel: "assertSetPageArgs",
@@ -31,7 +50,7 @@ void main() {
   });
 
   testWidgets('FilePresentationService: start', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.filePresentation
+    await dolbyioCommsSdkFlutterPlugin.filePresentation
         .start(FileConverted("fileId", 10, "fileName", "fileOwnerId", 5));
     await expectNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
@@ -47,7 +66,14 @@ void main() {
   });
 
   testWidgets('FilePresentationService: stop', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.filePresentation.stop();
+    if (Platform.isAndroid) {
+      var fileName = "file:///path/to/file.file";
+      var participant = ParticipantInfo("user", null, null);
+      await dolbyioCommsSdkFlutterPlugin.session.open(participant);
+      await dolbyioCommsSdkFlutterPlugin.filePresentation
+        .convert(File(fileName));
+    }
+    await dolbyioCommsSdkFlutterPlugin.filePresentation.stop();
     await expectNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
         assertLabel: "assertStopArgs",
@@ -55,11 +81,18 @@ void main() {
   });
 
   testWidgets('FilePresentationService: getImage', (tester) async {
-    runNative(
+    await runNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
         label: "setGetImageReturn",
         args: {"hasRun": true, "url": 'https://dolby.io/image_url'});
 
+    if (Platform.isAndroid) {
+      var fileName = "file:///path/to/file.file";
+      var participant = ParticipantInfo("user", null, null);
+      await dolbyioCommsSdkFlutterPlugin.session.open(participant);
+      await dolbyioCommsSdkFlutterPlugin.filePresentation
+          .convert(File(fileName));
+    }
     var url = await dolbyioCommsSdkFlutterPlugin.filePresentation.getImage(5);
 
     await expectNative(
@@ -71,11 +104,18 @@ void main() {
   });
 
   testWidgets('FilePresentationService: getThumbnail', (tester) async {
-    runNative(
+    await runNative(
         methodChannel: filePresentationServiceAssertsMethodChannel,
         label: "setGetThumbnailReturn",
         args: {"hasRun": true, "url": 'https://dolby.io/thumbnail_url'});
 
+    if (Platform.isAndroid) {
+      var fileName = "file:///path/to/file.file";
+      var participant = ParticipantInfo("user", null, null);
+      await dolbyioCommsSdkFlutterPlugin.session.open(participant);
+      await dolbyioCommsSdkFlutterPlugin.filePresentation
+          .convert(File(fileName));
+    }
     var url =
         await dolbyioCommsSdkFlutterPlugin.filePresentation.getThumbnail(3);
 

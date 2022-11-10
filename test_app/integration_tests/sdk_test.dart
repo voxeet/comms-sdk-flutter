@@ -13,7 +13,7 @@ void main() {
   });
 
   testWidgets('VoxeetSDK: initilise', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.initialize(
+    await dolbyioCommsSdkFlutterPlugin.initialize(
         "test_consumer_key", "test_consumer_secret");
     await expectNative(
         methodChannel: voxeetSDKAsertsMethodChannel,
@@ -25,7 +25,7 @@ void main() {
 
     await resetSDK();
 
-    dolbyioCommsSdkFlutterPlugin.initialize(
+    await dolbyioCommsSdkFlutterPlugin.initialize(
         "test_consumer_key1", "test_consumer_secret2");
     await expectNative(
         methodChannel: voxeetSDKAsertsMethodChannel,
@@ -37,7 +37,7 @@ void main() {
   });
 
   testWidgets('VoxeetSDK: initializeToken', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.initializeToken("token", () => throw '');
+    await dolbyioCommsSdkFlutterPlugin.initializeToken("token", () => throw '');
     await expectNative(
         methodChannel: voxeetSDKAsertsMethodChannel,
         assertLabel: "assertInitializeToken",

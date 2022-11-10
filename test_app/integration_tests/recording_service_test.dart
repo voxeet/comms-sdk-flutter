@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:integration_test/integration_test.dart';
@@ -13,23 +14,25 @@ void main() {
     await resetSDK();
   });
 
-  testWidgets('RecordingService: currentRecording', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.recording.start();
+  if(Platform.isIOS) {
+    testWidgets('RecordingService: currentRecording', (tester) async {
+      dolbyioCommsSdkFlutterPlugin.recording.start();
 
-    await runNative(
-        methodChannel: recordingServiceAssertsMethodChannel,
-        label: "setCurrentRecording",
-        args: {"status": 1, "participantId": "123", "startTimestamp": 1});
+      await runNative(
+          methodChannel: recordingServiceAssertsMethodChannel,
+          label: "setCurrentRecording",
+          args: {"status": 1, "participantId": "123", "startTimestamp": 1});
 
-    var current =
-        await dolbyioCommsSdkFlutterPlugin.recording.currentRecording();
-    expect(current.participantId, "123");
-    expect(current.startTimestamp, 1);
-    expect(current.recordingStatus, RecordingStatus.recording);
-  });
+      var current =
+      await dolbyioCommsSdkFlutterPlugin.recording.currentRecording();
+      expect(current.participantId, "123");
+      expect(current.startTimestamp, 1);
+      expect(current.recordingStatus, RecordingStatus.recording);
+    });
+  }
 
   testWidgets('RecordingService: start', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.recording.start();
+    await dolbyioCommsSdkFlutterPlugin.recording.start();
     await expectNative(
         methodChannel: recordingServiceAssertsMethodChannel,
         assertLabel: "assertStartRecordingArgs",
@@ -37,7 +40,7 @@ void main() {
   });
 
   testWidgets('RecordingService: stop', (tester) async {
-    dolbyioCommsSdkFlutterPlugin.recording.stop();
+    await dolbyioCommsSdkFlutterPlugin.recording.stop();
     await expectNative(
         methodChannel: recordingServiceAssertsMethodChannel,
         assertLabel: "assertStopRecordingArgs",

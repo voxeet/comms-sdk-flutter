@@ -21,7 +21,7 @@ void main() {
 
     var conference = await dolbyioCommsSdkFlutterPlugin.conference
         .fetch("fetch_conferenceId_1");
-    dolbyioCommsSdkFlutterPlugin.notification.invite(conference, [
+    await dolbyioCommsSdkFlutterPlugin.notification.invite(conference, [
       ParticipantInvited(ParticipantInfo("name", "avatarUrl", "externalId"),
           [ConferencePermission.invite].toList())
     ]);
@@ -30,7 +30,7 @@ void main() {
         assertLabel: "assertInviteArgs",
         expected: {
           "hasRun": true,
-          "conference": {"id": "setCreateConferenceReturn_id_1"},
+          "conference": {"id": "setCreateConferenceReturn_id_1", "alias": "setCreateConferenceReturn_alias_1"},
           "participantInvited": {
             "name": "name",
             "avatarUrl": "avatarUrl",
@@ -48,13 +48,13 @@ void main() {
     var conference = await dolbyioCommsSdkFlutterPlugin.conference
         .fetch("fetch_conferenceId_1");
 
-    dolbyioCommsSdkFlutterPlugin.notification.decline(conference);
+    await dolbyioCommsSdkFlutterPlugin.notification.decline(conference);
     await expectNative(
         methodChannel: notificationServiceAssertsMethodChannel,
         assertLabel: "assertDeclineArgs",
         expected: {
           "hasRun": true,
-          "conference": {"id": "setCreateConferenceReturn_id_1"}
+          "conference": {"id": "setCreateConferenceReturn_id_1", "alias": "setCreateConferenceReturn_alias_1"}
         });
   });
 }
