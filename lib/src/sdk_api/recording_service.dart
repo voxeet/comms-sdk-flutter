@@ -14,8 +14,8 @@ class RecordingService {
 
   /// @internal
   final _eventStream =
-  DolbyioCommsSdkNativeEvents.createEventChannel("recording_service")
-      .receiveBroadcastStream();
+      DolbyioCommsSdkNativeEvents.createEventChannel("recording_service")
+          .receiveBroadcastStream();
 
   /// Returns information about the current recording. Use this accessor if you
   /// wish to receive information that is available in the Recording object,
@@ -40,8 +40,8 @@ class RecordingService {
     return Future.value();
   }
 
-  Stream<Event<RecordingServiceEventNames,
-          RecordingStatusUpdate>> onRecordingStatusUpdate() {
+  Stream<Event<RecordingServiceEventNames, RecordingStatusUpdate>>
+      onRecordingStatusUpdate() {
     return _eventStream.addListener(
         [RecordingServiceEventNames.recordingStatusUpdate.value]).map((map) {
       final event = map as Map<Object?, Object?>;
