@@ -1,4 +1,6 @@
-import '../../widgets/spatial_value_dialog_content.dart';
+import 'package:provider/provider.dart';
+import '../../widgets/spatial_extensions/spatial_position_dialog_content.dart';
+import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
 import '/widgets/dialogs.dart';
@@ -222,18 +224,30 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
         });
   }
 
-  Future<void> showSpatialPositionDialog(BuildContext context) async {
+  Future<void> showSpatialPositionDialog(BuildContext remoteParticipantContext) async {
     final participant = await _upToDateParticipant();
-    return showDialog(
-        context: context,
+    return await showDialog(
+        context: remoteParticipantContext,
         builder: (BuildContext spatialPositionContext) {
           return AlertDialog(
             title: const Text("Spatial position"),
-            content: SpatialValueDialogContent(
-                participant: participant,
-                spatialValueDialogContext: spatialPositionContext,
-                spatialValueType: SpatialValueType.spatialPosition,
-                resultDialogContext: context),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Consumer<SpatialValuesModel>(
+                    builder: (context, spatialValuesModel, child) {
+                  return SpatialPositionDialogContent(
+                      spatialValueDialogContext: spatialPositionContext,
+                      participant: participant,
+                      resultDialogContext: remoteParticipantContext,
+                      spatialPosition: spatialValuesModel
+                          .listOfParticipantSpatialValues
+                          .where((element) => element.id == participant.id)
+                          .first
+                          .spatialPosition!);
+                })
+              ],
+            ),
           );
         });
   }

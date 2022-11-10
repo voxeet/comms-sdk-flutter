@@ -1,9 +1,11 @@
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_extensions/participant_spatial_values.dart';
+import 'package:provider/provider.dart';
 import '../../conference_ext.dart';
+import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '../../widgets/status_snackbar.dart';
 import '../test_buttons/test_buttons.dart';
 import 'conference_controls.dart';
 import 'conference_title.dart';
-import '/screens/test_buttons/test_buttons.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
@@ -77,6 +79,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;
+  List<ParticipantSpatialValues> participants = [];
 
   @override
   void initState() {
@@ -128,6 +131,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   @override
   Widget build(BuildContext context) {
     Widget videoView = const FlutterLogo();
+    Provider.of<SpatialValuesModel>(context).copyList(participants);
     if (_localParticipant != null) {
       videoView =
           VideoView(videoViewController: _localParticipantVideoViewController);
@@ -178,6 +182,10 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       for (var participant in availableParticipants!) {
         _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
             participant: participant, position: SpatialPosition(0.0, 0.0, 0.0));
+        ParticipantSpatialValues participantSpatial = ParticipantSpatialValues(
+            participant.id,
+            SpatialPosition(0.0, 0.0, 0.0), null);
+        participants.add(participantSpatial);
       }
     }
   }
@@ -188,6 +196,10 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           || participant.status == ParticipantStatus.connected) {
         _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
             participant: participant, position: SpatialPosition(0.0, 0.0, 0.0));
+        ParticipantSpatialValues participantSpatial = ParticipantSpatialValues(
+            participant.id,
+            SpatialPosition(0.0, 0.0, 0.0), null);
+        participants.add(participantSpatial);
       }
     }
   }

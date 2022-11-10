@@ -1,8 +1,11 @@
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_environment/spatial_environment_dialog_content.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import '../../widgets/spatial_value_dialog_content.dart';
+import 'package:provider/provider.dart';
+import '../../widgets/spatial_extensions/spatial_direction_dialog_content.dart';
+import '../../widgets/spatial_extensions/spatial_environment_dialog_content.dart';
+import '../../widgets/spatial_extensions/spatial_position_dialog_content.dart';
+import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '/widgets/secondary_button.dart';
 import '/widgets/dialogs.dart';
 import 'dart:convert';
@@ -63,10 +66,10 @@ class _ConferenceServiceTestButtonsState
             onPressed: () => stopScreenShare(context)),
         SecondaryButton(
             text: 'Set spatial position',
-            onPressed: () => setSpatialValuesDialog(context, SpatialValueType.spatialPosition)),
+            onPressed: () => setSpatialPositionDialog(context)),
         SecondaryButton(
             text: 'Set spatial direction',
-            onPressed: () => setSpatialValuesDialog(context, SpatialValueType.spatialDirection)),
+            onPressed: () => setSpatialDirectionDialog(context)),
         SecondaryButton(
             text: 'Set spatial environment',
             onPressed: () => setSpatialEnvironmentDialog(context)),
@@ -235,19 +238,57 @@ class _ConferenceServiceTestButtonsState
             context, 'Error', error.toString() + stackTrace.toString()));
   }
 
-  Future<void> setSpatialValuesDialog(BuildContext context, SpatialValueType spatialValueType) async {
+  Future<void> setSpatialPositionDialog(BuildContext testButtonsContext) async {
     final participant = await getLocalParticipant();
     return await showDialog(
-      context: context,
+      context: testButtonsContext,
       barrierDismissible: false,
-      builder: (BuildContext spatialValueDialogContext) {
+      builder: (BuildContext spatialPositionDialogContext) {
         return AlertDialog(
-          title: Text('Set ${spatialValueType.name}'),
-          content: SpatialValueDialogContent(
-              spatialValueDialogContext: spatialValueDialogContext,
-              participant: participant,
-              spatialValueType: spatialValueType,
-              resultDialogContext: context),
+          title: const Text('Set Spatial Position'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Consumer<SpatialValuesModel>(
+                  builder: (context, spatialValuesModel, child) {
+                return SpatialPositionDialogContent(
+                    spatialValueDialogContext: spatialPositionDialogContext,
+                    participant: participant,
+                    resultDialogContext: testButtonsContext,
+                    spatialPosition: spatialValuesModel
+                        .listOfParticipantSpatialValues
+                        .where((element) => element.id == participant.id)
+                        .first
+                        .spatialPosition!);
+              })
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> setSpatialDirectionDialog(BuildContext testButtonsContext) async {
+    final participant = await getLocalParticipant();
+    return await showDialog(
+      context: testButtonsContext,
+      barrierDismissible: false,
+      builder: (BuildContext spatialDirectionDialogContext) {
+        return AlertDialog(
+          title: const Text('Set Spatial Direction'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Consumer<SpatialValuesModel>(
+                  builder: (context, spatialValuesModel, child) {
+                return SpatialDirectionDialogContent(
+                    spatialValueDialogContext: spatialDirectionDialogContext,
+                    participant: participant,
+                    resultDialogContext: testButtonsContext,
+                    spatialDirection: spatialValuesModel.localSpatialDirection);
+              })
+            ],
+          ),
         );
       },
     );
@@ -257,16 +298,27 @@ class _ConferenceServiceTestButtonsState
     return _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
   }
 
-  Future<void> setSpatialEnvironmentDialog(BuildContext context) async {
+  Future<void> setSpatialEnvironmentDialog(BuildContext testButtonsContext) async {
     return await showDialog(
-      context: context,
+      context: testButtonsContext,
       barrierDismissible: false,
       builder: (BuildContext environmentContext) {
         return AlertDialog(
           title: const Text('Set spatial environment'),
-          content: SpatialEnvironmentDialogContent(
-              environmentDialogContext: environmentContext,
-              resultDialogContext: context),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            Consumer<SpatialValuesModel>(
+                builder: (context, spatialValuesModel, child) {
+              return SpatialEnvironmentDialogContent(
+                environmentDialogContext: environmentContext,
+                resultDialogContext: testButtonsContext,
+                spatialScaleForEnvironment: spatialValuesModel.spatialScaleForEnvironment,
+                forwardPositionForEnvironment: spatialValuesModel.forwardPositionForEnvironment,
+                upPositionForEnvironment: spatialValuesModel.upPositionForEnvironment,
+                rightPositionForEnvironment: spatialValuesModel.rightPositionForEnvironment,
+
+              );
+            })
+          ]),
         );
       },
     );
