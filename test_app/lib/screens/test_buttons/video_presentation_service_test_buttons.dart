@@ -64,34 +64,13 @@ class _VideoPresentationServiceTestButtonsState
       spacing: 8.0,
       runSpacing: 4.0,
       children: <Widget>[
-        SecondaryButton(
-          text: 'Start presenting',
-          onPressed: () => start(),
-        ),
-        SecondaryButton(
-          text: 'Check state',
-          onPressed: () => state(),
-        ),
-        SecondaryButton(
-          text: 'Current video',
-          onPressed: () => currentVideo(),
-        ),
-        SecondaryButton(
-          text: 'Play video',
-          onPressed: () => play(),
-        ),
-        SecondaryButton(
-          text: 'Pause video',
-          onPressed: () => pause(),
-        ),
-        SecondaryButton(
-          text: 'Seek video',
-          onPressed: () => seek(),
-        ),
-        SecondaryButton(
-          text: 'Stop presenting',
-          onPressed: () => stop(),
-        ),
+        SecondaryButton(text: 'Start presenting', onPressed: () => start()),
+        SecondaryButton(text: 'Check state', onPressed: () => state()),
+        SecondaryButton(text: 'Current video', onPressed: () => currentVideo()),
+        SecondaryButton(text: 'Play video', onPressed: () => play()),
+        SecondaryButton(text: 'Pause video', onPressed: () => pause()),
+        SecondaryButton(text: 'Seek video', onPressed: () => seek()),
+        SecondaryButton(text: 'Stop presenting', onPressed: () => stop()),
       ],
     );
   }

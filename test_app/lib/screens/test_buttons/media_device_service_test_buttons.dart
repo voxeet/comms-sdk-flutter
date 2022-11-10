@@ -22,25 +22,16 @@ class _MediaDeviceServiceTestButtonsState
       runSpacing: 4.0,
       children: <Widget>[
         SecondaryButton(
-          text: 'Get comfort noise level',
-          onPressed: () => getComfortNoiseLevel(),
-        ),
+            text: 'Get comfort noise level',
+            onPressed: () => getComfortNoiseLevel()),
         SecondaryButton(
-          text: 'Set comfort noise level',
-          onPressed: () => setComfortNoiseLevel(),
-        ),
+            text: 'Set comfort noise level',
+            onPressed: () => setComfortNoiseLevel()),
         SecondaryButton(
-          text: 'Is front camera',
-          onPressed: () => isFrontCamera(),
-        ),
+            text: 'Is front camera', onPressed: () => isFrontCamera()),
+        SecondaryButton(text: 'Switch camera', onPressed: () => switchCamera()),
         SecondaryButton(
-          text: 'Switch camera',
-          onPressed: () => switchCamera(),
-        ),
-        SecondaryButton(
-          text: 'Switch speaker',
-          onPressed: () => switchSpeaker(),
-        )
+            text: 'Switch speaker', onPressed: () => switchSpeaker())
       ],
     );
   }
