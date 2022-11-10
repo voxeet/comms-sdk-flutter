@@ -22,17 +22,11 @@ class _RecordingServiceTestButtonsState
       runSpacing: 4.0,
       children: <Widget>[
         SecondaryButton(
-          text: 'Start recording',
-          onPressed: () => startRecording(),
-        ),
+            text: 'Start recording', onPressed: () => startRecording()),
         SecondaryButton(
-          text: 'Stop recording',
-          onPressed: () => stopRecording(),
-        ),
+            text: 'Stop recording', onPressed: () => stopRecording()),
         SecondaryButton(
-          text: 'Current recording',
-          onPressed: () => currentRecording(),
-        ),
+            text: 'Current recording', onPressed: () => currentRecording()),
       ],
     );
   }

@@ -21,13 +21,9 @@ class _VideoServiceTestButtonsState extends State<VideoServiceTestButtons> {
       runSpacing: 4.0,
       children: <Widget>[
         SecondaryButton(
-          text: 'Start local video',
-          onPressed: () => startLocalVideo(),
-        ),
+            text: 'Start local video', onPressed: () => startLocalVideo()),
         SecondaryButton(
-          text: 'Stop local video',
-          onPressed: () => stopLocalVideo(),
-        )
+            text: 'Stop local video', onPressed: () => stopLocalVideo())
       ],
     );
   }

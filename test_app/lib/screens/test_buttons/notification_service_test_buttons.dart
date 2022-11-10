@@ -60,8 +60,8 @@ class _NotificationServiceTestButtonsState
     try {
       final isValidForm = formKey.currentState!.validate();
       if (isValidForm) await invite();
-    } catch (e) {
-      developer.log('Cannot invite due to error: $e');
+    } catch (error) {
+      developer.log('Cannot invite due to error: $error');
     }
   }
 

@@ -130,12 +130,13 @@ class _FilePresentationServiceTestButtonsState
       if (path != null) {
         var fileConverted = await _dolbyioCommsSdkFlutterPlugin.filePresentation
             .convert(File(path));
+
         _fileConverted = fileConverted;
         if (!mounted) return;
-        showDialog(context, 'Success', 'OK');
+        showDialog(context, 'Success', fileConverted.toJson().toString());
       } else {
         if (!mounted) return;
-        showDialog(context, 'File not selected', '');
+        showDialog(context, 'File not selected', 'Cannot convert.');
       }
     } catch (error) {
       if (!mounted) return;
@@ -151,7 +152,9 @@ class _FilePresentationServiceTestButtonsState
         if (!mounted) return;
         showDialog(context, 'Success', 'OK');
       } else {
-        showDialog(context, 'You must convert file first!', '');
+        if (!mounted) return;
+        showDialog(context, 'You must convert file first!',
+            'Cannot start presentation');
       }
     } catch (error) {
       if (!mounted) return;
