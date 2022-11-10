@@ -1,8 +1,19 @@
 #! /usr/bin/env bash
 
-device_name="Pixel_5_API_32"
+device_name="testAVD"
+
+#for local test uncomment for macos
+#export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
+sudo apt update && sudo apt -y install android-sdk-build-tools
+
+
+avdmanager create avd --force --name $device_name --package 'system-images;android-32;google_apis;arm64-v8a' -d pixel
+echo "disk.dataPartition.size=1024MB" >> ~/.android/avd/$device_name.avd/config.ini
+
+
 device_port="5554"
-emulator -avd $device_name -port $device_port -netdelay none -netspeed full &
+emulator -avd $device_name -port $device_port -netdelay none -netspeed full -no-window &
 
 echo "Device name: $device_name"
 
@@ -32,5 +43,8 @@ cd $currentFolder
 echo "Shutting down simulator $device_id ..."
 adb -s $serial_no emu kill
 echo "Simulator $device_name shut down"
+wait
+echo "Remove avd: "
+avdmanager delete avd -n testAVD
 
 exit $test_exit_code
