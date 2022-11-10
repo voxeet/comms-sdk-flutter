@@ -77,12 +77,8 @@ class RecordingStatusUpdate {
   String participantId;
   int timeStamp;
 
-  RecordingStatusUpdate(
-    this.recordingStatus,
-    this.conferenceId,
-    this.participantId,
-    this.timeStamp
-  );
+  RecordingStatusUpdate(this.recordingStatus, this.conferenceId,
+      this.participantId, this.timeStamp);
 
   static RecordingStatusUpdate fromMap(Map<Object?, Object?> data) {
     RecordingStatus recordingStatus =
@@ -91,11 +87,6 @@ class RecordingStatusUpdate {
     String participantId = data["participantId"] as String;
     int timeStamp = data["timeStamp"] as int;
     return RecordingStatusUpdate(
-        recordingStatus,
-        conferenceId,
-        participantId,
-        timeStamp
-    );
+        recordingStatus, conferenceId, participantId, timeStamp);
   }
-
 }

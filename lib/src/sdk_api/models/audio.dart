@@ -4,10 +4,8 @@ class AudioCaptureOptions {
 
   AudioCaptureOptions(this.mode, this.noiseReduction);
 
-  Map<String, Object?> toJson() => {
-    "mode": mode.encode(),
-    "noiseReduction": noiseReduction?.encode()
-  };
+  Map<String, Object?> toJson() =>
+      {"mode": mode.encode(), "noiseReduction": noiseReduction?.encode()};
 }
 
 enum AudioCaptureMode {
@@ -22,7 +20,7 @@ enum AudioCaptureMode {
   static AudioCaptureMode decode(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return AudioCaptureMode.values.firstWhere(
-          (element) => element._value == lowerCaseValue,
+      (element) => element._value == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -44,7 +42,7 @@ enum NoiseReduction {
   static NoiseReduction decode(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return NoiseReduction.values.firstWhere(
-          (element) => element._value == lowerCaseValue,
+      (element) => element._value == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -53,4 +51,3 @@ enum NoiseReduction {
     return _value;
   }
 }
-

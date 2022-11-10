@@ -364,7 +364,8 @@ class ConferenceService {
   /// Joins a conference as a listener.
   /// The [conference] parameter refers to the conference that tha local participant wants to join as a listener.
   /// The [options] parameter allows setting additional options for the joining participant.
-  Future<Conference> listen(Conference conference, ConferenceListenOptions options) async {
+  Future<Conference> listen(
+      Conference conference, ConferenceListenOptions options) async {
     var arguments = {
       "conference": conference.toJson(),
       "options": options.toJson()

@@ -188,7 +188,7 @@ enum RecordingStatus {
   static RecordingStatus valueOf(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return RecordingStatus.values.firstWhere(
-          (element) {
+      (element) {
         return element.value == value ||
             element.name.toLowerCase() == lowerCaseValue;
       },
@@ -212,7 +212,7 @@ enum RecordingServiceEventNames implements EnumWithStringValue {
   static RecordingServiceEventNames valueOf(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return RecordingServiceEventNames.values.firstWhere(
-          (element) {
+      (element) {
         return element.value == value ||
             element.name.toLowerCase() == lowerCaseValue;
       },
