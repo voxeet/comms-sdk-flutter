@@ -518,7 +518,7 @@ class ConferenceServiceBinding: Binding {
             let participants = try flutterArguments.asDictionary(argKey: "prioritizedParticipants")
                 .decode(type: [DTO.Participant].self)
             
-            VoxeetSDK.shared.conference.videoForwarding(
+            VoxeetSDK.shared.conference.setVideoForwarding(
                 options: VideoForwardingOptions(
                     strategy: strategy.toSdkType(),
                     max: max,
