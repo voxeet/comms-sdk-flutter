@@ -192,18 +192,11 @@ import WebRTC
         completion?(spatialEnvironmentReturn)
     }
 
-    var videoForwardingArgs: (max: Int, participants: [VTParticipant]?)?
+    var videoForwardingArgs: VideoForwardingOptions?
     var videoForwardingReturn: NSError?
-    public func videoForwarding(max: Int, participants: [VTParticipant]? = nil, completion: ((_ error: NSError?) -> Void)? = nil) {
-        videoForwardingArgs = (max, participants)
+    public func videoForwarding(options: VideoForwardingOptions, completion: ((_ error: NSError?) -> Void)? = nil) {
+        videoForwardingArgs = options
         completion?(videoForwardingReturn)
-    }
-    
-    var setVideoForwardingArgs: VideoForwardingOptions?
-    var setVideoForwardingReturn: NSError?
-    public func setVideoForwarding(options: VideoForwardingOptions, completion: ((_ error: NSError?) -> Void)? = nil) {
-        setVideoForwardingArgs = options
-        completion?(setVideoForwardingReturn)
     }
     
     var audioProcessingArgs: Bool?
