@@ -1,27 +1,66 @@
 #! /usr/bin/env bash
 
 device_name="testAVD"
+system_image="system-images;android-29;default;x86"
+device_port="5554"
+serial_no="emulator-$device_port"
+#gpu_mode="guest"
+gpu_mode="swiftshader_indirect"
 
-#for local test uncomment for macos
 #export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
-sudo apt update && sudo apt -y install android-sdk-build-tools
+#export ANDROID_SDK_ROOT=~/android-sdk
+#export ANDROID_HOME=~/.android/
 
+export PATH="$PATH:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin"
 
-avdmanager create avd --force --name $device_name --package 'system-images;android-32;google_apis;arm64-v8a' -d pixel
+echo $PATH
+
+echo "Check available avd"
+
+avdmanager list avd
+
+echo "Create system image: $system_image"
+
+echo "no" | avdmanager --verbose create avd --force --name $device_name --abi "default/x86" --package "$system_image"
 echo "disk.dataPartition.size=1024MB" >> ~/.android/avd/$device_name.avd/config.ini
+touch ~/.android/emu-update-last-check.ini
 
+ls -la ~/.android/
 
-device_port="5554"
-emulator -avd $device_name -port $device_port -netdelay none -netspeed full -no-window &
+adb start-server
+
+sleep 5
+
+echo "accel check: "
+emulator -accel-check
+
+echo "check emulator list:"
+emulator -list-avds
+
+echo "start: $device_name"
+$ANDROID_SDK_ROOT/emulator/emulator -avd $device_name -port $device_port -noaudio -no-window  -gpu $gpu_mode -no-snapshot -no-boot-anim &
 
 echo "Device name: $device_name"
 
-serial_no="emulator-$device_port"
+sleep 8
 
-while [ "`adb -s $serial_no shell getprop sys.boot_completed | tr -d '\r' `" != "1" ] ; do sleep 1; done
+
+
+i=1
+while [ "`adb -s $serial_no shell getprop sys.boot_completed | tr -d '\r' `" != "1" ] ; do
+  sleep 2;
+  i=$((i+1))
+  if [[ "$i" -gt 60 ]]; then
+    echo "Waiting for device - tiemout"
+    exit 1
+  fi
+
+done
 
 echo "Device: $device_name is booted"
+
+adb devices
 
 #run script that set useMockSDK flag
 ./scripts/change-to-mock.sh
