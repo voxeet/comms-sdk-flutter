@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_environment/spatial_values_row.dart';
+import 'package:provider/provider.dart';
 import '../dialogs.dart';
+import 'spatial_values_model.dart';
+import 'spatial_values_row.dart';
 
 class SpatialEnvironmentDialogContent extends StatelessWidget {
   final TextEditingController _scaleXTextController = TextEditingController();
@@ -19,13 +21,21 @@ class SpatialEnvironmentDialogContent extends StatelessWidget {
 
   final BuildContext environmentDialogContext;
   final BuildContext resultDialogContext;
+  final SpatialScale spatialScaleForEnvironment;
+  final SpatialPosition forwardPositionForEnvironment;
+  final SpatialPosition upPositionForEnvironment;
+  final SpatialPosition rightPositionForEnvironment;
 
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
   SpatialEnvironmentDialogContent(
       {Key? key,
       required this.environmentDialogContext,
-      required this.resultDialogContext})
+      required this.resultDialogContext,
+      required this.spatialScaleForEnvironment,
+      required this.forwardPositionForEnvironment,
+      required this.upPositionForEnvironment,
+      required this.rightPositionForEnvironment})
       : super(key: key);
 
   @override
@@ -33,27 +43,39 @@ class SpatialEnvironmentDialogContent extends StatelessWidget {
     return Column(mainAxisSize: MainAxisSize.min, children: [
       const Text("Spatial scale: "),
       SpatialValuesRow(
-          xTextController: _scaleXTextController..text = '1.0',
-          yTextController: _scaleYTextController..text = '1.0',
-          zTextController: _scaleZTextController..text = '1.0'),
+          xTextController: _scaleXTextController
+            ..text = spatialScaleForEnvironment.x.toString(),
+          yTextController: _scaleYTextController
+            ..text = spatialScaleForEnvironment.y.toString(),
+          zTextController: _scaleZTextController
+            ..text = spatialScaleForEnvironment.z.toString()),
       const SizedBox(height: 4),
       const Text("Spatial position (forward) :"),
       SpatialValuesRow(
-          xTextController: _forwardXTextController..text = '0.0',
-          yTextController: _forwardYTextController..text = '0.0',
-          zTextController: _forwardZTextController..text = '1.0'),
+          xTextController: _forwardXTextController
+            ..text = forwardPositionForEnvironment.x.toString(),
+          yTextController: _forwardYTextController
+            ..text = forwardPositionForEnvironment.y.toString(),
+          zTextController: _forwardZTextController
+            ..text = forwardPositionForEnvironment.z.toString()),
       const SizedBox(height: 4),
       const Text("Spatial position (up) :"),
       SpatialValuesRow(
-          xTextController: _upXTextController..text = '0.0',
-          yTextController: _upYTextController..text = '1.0',
-          zTextController: _upZTextController..text = '0.0'),
+          xTextController: _upXTextController
+            ..text = upPositionForEnvironment.x.toString(),
+          yTextController: _upYTextController
+            ..text = upPositionForEnvironment.y.toString(),
+          zTextController: _upZTextController
+            ..text = upPositionForEnvironment.z.toString()),
       const SizedBox(height: 4),
       const Text("Spatial position (right) :"),
       SpatialValuesRow(
-          xTextController: _rightXTextController..text = '1.0',
-          yTextController: _rightYTextController..text = '0.0',
-          zTextController: _rightZTextController..text = '0.0'),
+          xTextController: _rightXTextController
+            ..text = rightPositionForEnvironment.x.toString(),
+          yTextController: _rightYTextController
+            ..text = rightPositionForEnvironment.y.toString(),
+          zTextController: _rightZTextController
+            ..text = rightPositionForEnvironment.z.toString()),
       Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -77,7 +99,7 @@ class SpatialEnvironmentDialogContent extends StatelessWidget {
   }
 
   void setSpatialEnvironment(BuildContext context) async {
-    _dolbyioCommsSdkFlutterPlugin.conference
+    await _dolbyioCommsSdkFlutterPlugin.conference
         .setSpatialEnvironment(
             SpatialScale(
                 double.parse(_scaleXTextController.text.toString()),
@@ -95,13 +117,34 @@ class SpatialEnvironmentDialogContent extends StatelessWidget {
                 double.parse(_rightXTextController.text.toString()),
                 double.parse(_rightYTextController.text.toString()),
                 double.parse(_rightZTextController.text.toString())))
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
+        .then((value) => showResultDialog(context, 'Success', 'OK', true))
         .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
+            showResultDialog(context, 'Error', error.toString(), false));
   }
 
   Future<void> showResultDialog(
-      BuildContext context, String title, String text) async {
+      BuildContext context, String title, String text, bool flag) async {
+    if (flag) {
+      Provider.of<SpatialValuesModel>(context, listen: false)
+          .updateLocalSpatialEnvironment(
+        SpatialScale(
+            double.parse(_scaleXTextController.text.toString()),
+            double.parse(_scaleYTextController.text.toString()),
+            double.parse(_scaleZTextController.text.toString())),
+        SpatialPosition(
+            double.parse(_forwardXTextController.text.toString()),
+            double.parse(_forwardYTextController.text.toString()),
+            double.parse(_forwardZTextController.text.toString())),
+        SpatialPosition(
+            double.parse(_upXTextController.text.toString()),
+            double.parse(_upYTextController.text.toString()),
+            double.parse(_upZTextController.text.toString())),
+        SpatialPosition(
+            double.parse(_rightXTextController.text.toString()),
+            double.parse(_rightYTextController.text.toString()),
+            double.parse(_rightZTextController.text.toString())),
+      );
+    }
     await ViewDialogs.dialog(
       context: context,
       title: title,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_environment/spatial_value_text_field.dart';
+import 'spatial_value_text_field.dart';
 
 class SpatialValuesRow extends StatelessWidget {
   final TextEditingController xTextController;

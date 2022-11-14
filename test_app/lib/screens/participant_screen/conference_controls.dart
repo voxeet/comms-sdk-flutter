@@ -2,6 +2,8 @@ import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/bottom_tool_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:provider/provider.dart';
+import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '/widgets/conference_action_icon_button.dart';
 import 'dart:developer' as developer;
 
@@ -74,6 +76,7 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               child: const Text('YES'),
               onPressed: () {
                 widget.updateCloseSessionFlag(true);
+                Provider.of<SpatialValuesModel>(context, listen: false).clearSpatialValues();
                 Navigator.of(context).popUntil(
                   ModalRoute.withName("LoginScreen"),
                 );
@@ -83,6 +86,7 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               child: const Text('NO'),
               onPressed: () {
                 widget.updateCloseSessionFlag(false);
+                Provider.of<SpatialValuesModel>(context, listen: false).clearSpatialValues();
                 Navigator.of(context).popUntil(
                   ModalRoute.withName("JoinConferenceScreen"),
                 );
