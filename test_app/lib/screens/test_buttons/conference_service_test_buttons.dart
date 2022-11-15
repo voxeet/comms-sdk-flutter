@@ -60,7 +60,7 @@ class _ConferenceServiceTestButtonsState
             text: 'Stop video', onPressed: () => stopVideo(context)),
         SecondaryButton(
             text: 'Start screen share',
-            onPressed: () => startScreenShare(context)),
+            onPressed: () => startScreenShare()),
         SecondaryButton(
             text: 'Stop screen share',
             onPressed: () => stopScreenShare(context)),
@@ -218,14 +218,21 @@ class _ConferenceServiceTestButtonsState
                 context, 'Error', error.toString() + stackTrace.toString())));
   }
 
-  void startScreenShare(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.startScreenShare())
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showResultDialog(
-            context, 'Error', error.toString() + stackTrace.toString()));
+  Future<void> startScreenShare() async {
+    try {
+      var isScreenSharing = await isSomeoneScreenSharing();
+      if (isScreenSharing) {
+        if (!mounted) return;
+        showResultDialog(context, 'Error', 'Someone is already sharing the screen');
+      } else {
+        await _dolbyioCommsSdkFlutterPlugin.conference.startScreenShare();
+        if (!mounted) return;
+        showResultDialog(context, 'Success', 'OK');
+      }
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
   }
 
   void stopScreenShare(BuildContext context) {
@@ -387,5 +394,28 @@ class _ConferenceServiceTestButtonsState
             showResultDialog(context, 'Success', maxVideoForwarding.toString()))
         .onError((error, stackTrace) =>
             showResultDialog(context, 'Error', error.toString()));
+  }
+
+  Future<bool> isSomeoneScreenSharing() async {
+    final conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+    final participants = await _dolbyioCommsSdkFlutterPlugin.conference
+        .getParticipants(conference);
+    final availableParticipants = participants
+        .where((element) => element.status != ParticipantStatus.left);
+
+    if (availableParticipants.isNotEmpty) {
+      for (var participant in availableParticipants) {
+        var participantStreams = participant.streams;
+        if (participantStreams != null) {
+          for (var stream in participantStreams) {
+            if (stream.type == MediaStreamType.screenShare) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
   }
 }

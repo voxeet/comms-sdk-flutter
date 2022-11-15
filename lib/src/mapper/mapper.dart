@@ -20,26 +20,13 @@ class ConferenceMapper {
     var status =
         ConferenceStatus.decode(map["status"] as String? ?? "DEFAULT") ??
             ConferenceStatus.defaultStatus;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
     var spatialAudioStyle =
-        map.containsKey("spatialAudioStyle") && map["spatialAudioStyle"] != null
-            ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String)
-            : null;
+    map.containsKey("spatialAudioStyle") && map["spatialAudioStyle"] != null
+        ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String)
+        : null;
 
     return Conference(
         alias, id, isNew, participants, status, spatialAudioStyle);
-<<<<<<< HEAD
-=======
-    var spatialAudioStyle = map.containsKey("spatialAudioStyle") 
-        ? SpatialAudioStyle.decode(map["spatialAudioStyle"] as String) : null;
-    
-    return Conference(alias, id, isNew, participants, status, spatialAudioStyle);
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
-=======
->>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
   }
 
   static List<Participant> prepareParticipantsList(List<Object?> participants) {
@@ -54,17 +41,17 @@ class ParticipantMapper {
     var id = participant.containsKey("id") ? participant["id"] as String : "";
     var info = participant.containsKey("info") && participant["info"] != null
         ? ParticipantInfoMapper.fromMap(
-            participant["info"] as Map<Object?, Object?>)
+        participant["info"] as Map<Object?, Object?>)
         : null;
     var status = participant.containsKey("status")
         ? participant["status"] as String?
         : null;
     var type =
-        participant.containsKey("type") ? participant["type"] as String : null;
+    participant.containsKey("type") ? participant["type"] as String : null;
     var streams = participant.containsKey("streams")
         ? (participant["streams"] as List<Object?>?)
-            ?.map((e) => MediaStreamMapper.fromMap(e as Map<Object?, Object?>))
-            .toList()
+        ?.map((e) => MediaStreamMapper.fromMap(e as Map<Object?, Object?>))
+        .toList()
         : null;
     var result = Participant(id, info, ParticipantStatus.decode(status),
         ParticipantType.decode(type));
@@ -77,9 +64,9 @@ class ParticipantInfoMapper {
   static ParticipantInfo fromMap(Map<Object?, Object?> info) {
     var name = info.containsKey("name") ? info["name"] as String : "";
     var avatarUrl =
-        info.containsKey("avatarUrl") ? info["avatarUrl"] as String? : null;
+    info.containsKey("avatarUrl") ? info["avatarUrl"] as String? : null;
     var externalId =
-        info.containsKey("externalId") ? info["externalId"] as String? : null;
+    info.containsKey("externalId") ? info["externalId"] as String? : null;
     return ParticipantInfo(name, avatarUrl, externalId);
   }
 }
@@ -112,7 +99,7 @@ class InvitationReceivedNotificationMapper {
 class MessageReceivedMapper {
   static MessageReceivedData fromMap(Map<Object?, Object?> data) {
     var participant =
-        ParticipantMapper.fromMap(data["participant"] as Map<Object?, Object?>);
+    ParticipantMapper.fromMap(data["participant"] as Map<Object?, Object?>);
     var message = data["message"] as String;
     return MessageReceivedData(message, participant);
   }
@@ -129,7 +116,7 @@ class PermissionsUpdatedMapper {
 class VideoPresentationMapper {
   static VideoPresentation fromMap(Map<Object?, Object?> map) {
     var owner =
-        ParticipantMapper.fromMap(map["owner"] as Map<Object?, Object?>);
+    ParticipantMapper.fromMap(map["owner"] as Map<Object?, Object?>);
     var timestamp = map.containsKey("timestamp") ? map["timestamp"] as num : 0;
     var url = map.containsKey("url") ? map["url"] as String : "";
     return VideoPresentation(owner, timestamp, url);
@@ -140,10 +127,10 @@ class FilePresentationMapper {
   static FilePresentation fromMap(Map<Object?, Object?> map) {
     var id = map.containsKey("id") ? map["id"] as String : "";
     var imageCount =
-        map.containsKey("imageCount") ? map["imageCount"] as int : 0;
+    map.containsKey("imageCount") ? map["imageCount"] as int : 0;
     var position = map.containsKey("position") ? map["position"] as int : 0;
     var owner =
-        ParticipantMapper.fromMap(map["owner"] as Map<Object?, Object?>);
+    ParticipantMapper.fromMap(map["owner"] as Map<Object?, Object?>);
     return FilePresentation(id, imageCount, owner, position);
   }
 }
@@ -152,7 +139,7 @@ class FileConvertedMapper {
   static FileConverted fromMap(Map<Object?, Object?> map) {
     var id = map.containsKey("id") ? map["id"] as String : "";
     var imageCount =
-        map.containsKey("imageCount") ? map["imageCount"] as int : 0;
+    map.containsKey("imageCount") ? map["imageCount"] as int : 0;
     var name = map.containsKey("name") ? map["name"] as String? : null;
     var ownerId = map.containsKey("ownerId") ? map["ownerId"] as String? : null;
     var size = map.containsKey("size") ? map["size"] as num : null;

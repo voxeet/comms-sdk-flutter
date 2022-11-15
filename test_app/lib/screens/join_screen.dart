@@ -12,10 +12,10 @@ import '/widgets/dolby_title.dart';
 import '/widgets/primary_button.dart';
 import '/widgets/dialogs.dart';
 import '/widgets/circular_progress_indicator.dart';
+import '/widgets/switch_option.dart';
 import '/permission_helper.dart';
 import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
-
 import 'replay_screen.dart';
 
 class JoinConference extends StatelessWidget {
@@ -61,31 +61,16 @@ class JoinConferenceContent extends StatefulWidget {
 
 class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final TextEditingController conferenceAliasTextController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController conferenceIdTextController =
-      TextEditingController();
+  TextEditingController();
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKeyAlias = GlobalKey<FormState>();
   final formKeyId = GlobalKey<FormState>();
   bool joiningInProgress = false;
   bool startingConferenceReplay = false;
   bool switchConferenceStatus = false;
-<<<<<<< HEAD
-<<<<<<< HEAD
   bool spatialAudio = false;
-  bool switchDolbyVoice = true;
-  String? spatialAudioStyleDropDownText;
-  SpatialAudioStyle spatialAudioStyle = SpatialAudioStyle.disabled;
-  static const String spatialAudioWithIndividual =
-      "Spatial Audio with Individual";
-  static const String spatialAudioWithSharedScene =
-      "Spatial Audio with Shared Scene";
-  static const String spatialAudioDisabled = "Spatial Audio Disabled";
-=======
-  bool switchSpatialAudio = false;
-=======
-  bool spatialAudio = false;
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
   bool switchDolbyVoice = true;
   String? spatialAudioStyleDropDownText;
   SpatialAudioStyle spatialAudioStyle = SpatialAudioStyle.disabled;
@@ -95,18 +80,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       "Spatial Audio with Shared Scene";
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
   bool joinAsListener = false;
-<<<<<<< HEAD
->>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
-=======
   String _conferenceAlias = '';
 
->>>>>>> 88361a9 (Save up to 5 conference aliases in shared preferences (#192))
   StreamSubscription<
-          Event<NotificationServiceEventNames,
-              InvitationReceivedNotificationData>>?
-      onInvitationReceivedSubscription;
+      Event<NotificationServiceEventNames,
+          InvitationReceivedNotificationData>>?
+  onInvitationReceivedSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>?
-      onStatusChangeSubscription;
+  onStatusChangeSubscription;
 
   @override
   void initState() {
@@ -191,91 +172,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     },
                   ),
                 ),
-<<<<<<< HEAD
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Observe Conference Status"),
-                  value: switchConferenceStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      switchConferenceStatus = value;
-                      observeConferenceStatus(switchConferenceStatus);
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Dolby voice"),
-                  value: switchDolbyVoice,
-                  onChanged: (value) {
-                    if (value == false) {
-                      setState(() {
-                        switchDolbyVoice = value;
-                        spatialAudio = value;
-                      });
-                    } else {
-                      setState(() {
-                        switchDolbyVoice = value;
-                      });
-                    }
-                  },
-                ),
-                DropdownButton<String>(
-                  focusColor: Colors.white,
-                  value:
-                      switchDolbyVoice ? spatialAudioStyleDropDownText : null,
-                  style: const TextStyle(color: Colors.white),
-                  iconEnabledColor: Colors.black,
-                  items: <String>[
-                    spatialAudioWithIndividual,
-                    spatialAudioWithSharedScene,
-                    spatialAudioDisabled,
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                  hint: const Text(
-                    "Spatial Audio Style",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  onChanged: (String? value) {
-                    if (switchDolbyVoice == true &&
-                        value == spatialAudioWithIndividual) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.individual;
-                        spatialAudio = true;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else if (switchDolbyVoice == true &&
-                        value == spatialAudioWithSharedScene) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.shared;
-                        spatialAudio = true;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else if (switchDolbyVoice == true &&
-                        value == spatialAudioDisabled) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.disabled;
-                        spatialAudio = false;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else {
-                      spatialAudioStyle = SpatialAudioStyle.disabled;
-                      spatialAudioStyleDropDownText = null;
-                      spatialAudio = false;
-                    }
-                  },
-                ),
-=======
                 ExpansionTile(
                     title: const Text('Options'),
                     textColor: Colors.black,
@@ -374,7 +270,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                         },
                       ),
                     ]),
->>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
                 PrimaryButton(
                   widgetText: joiningInProgress
                       ? const WhiteCircularProgressIndicator()
@@ -390,15 +285,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 ),
                 const SizedBox(height: 16),
                 Form(
-<<<<<<< HEAD
-                  key: formKeyId,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  child: InputTextFormField(
-                      labelText: 'Conference ID with record',
-                      controller: conferenceIdTextController,
-                      focusColor: Colors.deepPurple),
-                ),
-=======
                     key: formKeyId,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: InputTextFormField(
@@ -406,7 +292,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                         controller: conferenceIdTextController,
                         focusColor: Colors.deepPurple)),
                 const SizedBox(height: 16),
->>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
                 PrimaryButton(
                   widgetText: startingConferenceReplay
                       ? const WhiteCircularProgressIndicator()
@@ -437,7 +322,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           context: context,
           title: 'Permissions missing',
           body:
-              'Required permissions $permissions were denied. Please enable them manually.',
+          'Required permissions $permissions were denied. Please enable them manually.',
           okText: 'Open settings',
           cancelText: 'Cancel',
           result: (value) => value ? openAppSettings() : null,
@@ -503,7 +388,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     Conference conference = await _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceIdTextController.text)
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
-            .replay(conference: conference));
+        .replay(conference: conference));
     return conference;
   }
 
@@ -518,18 +403,8 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var params = ConferenceCreateParameters();
     params.dolbyVoice = switchDolbyVoice;
     params.liveRecording = true;
-<<<<<<< HEAD
-<<<<<<< HEAD
     var createOptions =
-        ConferenceCreateOption(conferenceName, params, 0, spatialAudioStyle);
-=======
-    var createOptions = ConferenceCreateOption(
-        conferenceName, params, 0, spatialAudioStyle);
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
-=======
-    var createOptions =
-        ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
->>>>>>> 88361a9 (Save up to 5 conference aliases in shared preferences (#192))
+    ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
     createOptions.spatialAudioStyle = spatialAudioStyle;
     return createOptions;
   }
@@ -554,19 +429,19 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceId)
         .then((value) => {
-              _dolbyioCommsSdkFlutterPlugin.conference
-                  .join(value, conferenceJoinOptions())
-                  .then((value) => navigateToParticipantScreen(value))
-                  .onError((error, stackTrace) =>
-                      onError('Error during joining conference.', error))
-            });
+      _dolbyioCommsSdkFlutterPlugin.conference
+          .join(value, conferenceJoinOptions())
+          .then((value) => navigateToParticipantScreen(value))
+          .onError((error, stackTrace) =>
+          onError('Error during joining conference.', error))
+    });
   }
 
   void declineInvitation(String conferenceId) {
     _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceId)
         .then((conference) =>
-            _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
+        _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
         .onError(
             (error, stackTrace) => onError('Error during declining.', error));
   }
@@ -596,22 +471,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => ParticipantScreen(
-<<<<<<< HEAD
-<<<<<<< HEAD
               conference: conference, isSpatialAudio: spatialAudio)),
-=======
-              conference: conference, isSpatialAudio: switchSpatialAudio)),
->>>>>>> d0cd0c0 (Add conference service listen method to Android (#178))
-=======
-              conference: conference, isSpatialAudio: spatialAudio)),
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
     );
   }
 
   Future<void> showAliasSelectorDialog(
-    BuildContext context,
-    List<String>? conferenceAliases,
-  ) async {
+      BuildContext context,
+      List<String>? conferenceAliases,
+      ) async {
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {

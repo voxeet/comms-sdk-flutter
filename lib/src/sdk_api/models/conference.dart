@@ -24,27 +24,18 @@ class Conference {
 
   SpatialAudioStyle? spatialAudioStyle;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   Conference(this.alias, this.id, this.isNew, this.participants, this.status,
       this.spatialAudioStyle);
-=======
-  Conference(this.alias, this.id, this.isNew, this.participants, this.status, this.spatialAudioStyle);
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
-=======
-  Conference(this.alias, this.id, this.isNew, this.participants, this.status,
-      this.spatialAudioStyle);
->>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "alias": alias,
-        "id": id,
-        "isNew": isNew,
-        "participants": participants.map((e) => e.toJson()).toList(),
-        "status": status.encode(),
-        "spatialAudioStyle": spatialAudioStyle?.encode(),
-      };
+    "alias": alias,
+    "id": id,
+    "isNew": isNew,
+    "participants": participants.map((e) => e.toJson()).toList(),
+    "status": status.encode(),
+    "spatialAudioStyle": spatialAudioStyle?.encode(),
+  };
 }
 
 /// The ConferenceStatus enum represents the possible conference statuses.
@@ -124,25 +115,16 @@ class ConferenceCreateOption {
   /// Defines how the spatial location should be communicated between the SDK and the Dolby.io server. Setting the spatial audio style is supported only on SDK 3.6 and later. The earlier SDK versions support only the individual mode.
   SpatialAudioStyle? spatialAudioStyle;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   ConferenceCreateOption(
       this.alias, this.params, this.pinCode, this.spatialAudioStyle);
-=======
-  ConferenceCreateOption(this.alias, this.params, this.pinCode, this.spatialAudioStyle);
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
-=======
-  ConferenceCreateOption(
-      this.alias, this.params, this.pinCode, this.spatialAudioStyle);
->>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "alias": alias,
-        "params": params?.toJson(),
-        "pinCode": pinCode,
-        "spatialAudioStyle": spatialAudioStyle?.encode(),
-      };
+    "alias": alias,
+    "params": params?.toJson(),
+    "pinCode": pinCode,
+    "spatialAudioStyle": spatialAudioStyle?.encode(),
+  };
 }
 
 /// The ConferenceCreateParameters class allows defining conference parameters.
@@ -170,12 +152,12 @@ class ConferenceCreateParameters {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, dynamic> toJson() => {
-        "dolbyVoice": dolbyVoice,
-        "liveRecording": liveRecording,
-        "rtcpMode": rtcpMode?.encode(),
-        "ttl": ttl,
-        "videoCodec": videoCodec?.encode(),
-      };
+    "dolbyVoice": dolbyVoice,
+    "liveRecording": liveRecording,
+    "rtcpMode": rtcpMode?.encode(),
+    "ttl": ttl,
+    "videoCodec": videoCodec?.encode(),
+  };
 }
 
 /// The RTCPMode enum gathers the possible bitrate adaptation modes for video transmission.
@@ -284,14 +266,14 @@ class ConferenceJoinOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "constraints": constraints?.toJson(),
-        "conferenceAccessToken": conferenceAccessToken,
-        "maxVideoForwarding": maxVideoForwarding,
-        "mixing": mixing?.toJson(),
-        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
-        "simulcast": simulcast,
-        "spatialAudio": spatialAudio,
-      };
+    "constraints": constraints?.toJson(),
+    "conferenceAccessToken": conferenceAccessToken,
+    "maxVideoForwarding": maxVideoForwarding,
+    "mixing": mixing?.toJson(),
+    "videoForwardingStrategy": videoForwardingStrategy?.encode(),
+    "simulcast": simulcast,
+    "spatialAudio": spatialAudio,
+  };
 }
 
 /// The ConferenceConstraints class gathers information about the preferred [WebRTC constraints](https://webrtc.org/getting-started/media-capture-and-constraints#constraints).
@@ -308,9 +290,9 @@ class ConferenceConstraints {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "audio": audio,
-        "video": video,
-      };
+    "audio": audio,
+    "video": video,
+  };
 }
 
 /// The ConferenceMixingOptions class is responsible for notifying the Dolby.io server that a participant who joins or replays a conference is a special participant called Mixer. Mixer can use the SDK to record or replay a conference. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
@@ -324,8 +306,8 @@ class ConferenceMixingOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "enabled": enabled,
-      };
+    "enabled": enabled,
+  };
 }
 
 /// The ConferenceLeaveOptions class gathers information about preferences for leaving a conference.
@@ -472,7 +454,7 @@ enum ConferencePermission {
 
   static ConferencePermission decode(String? value) {
     return ConferencePermission.values.firstWhere(
-      (element) => element._value == value,
+          (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -542,8 +524,8 @@ class AudioProcessingOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "send": send?.toJson(),
-      };
+    "send": send?.toJson(),
+  };
 }
 
 /// The AudioProcessingSenderOptions class allows enabling and disabling audio processing for the local participant who transmits an audio stream.
@@ -555,8 +537,8 @@ class AudioProcessingSenderOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "audioProcessing": audioProcessing,
-      };
+    "audioProcessing": audioProcessing,
+  };
 }
 
 /// The VideoForwardingStrategy enum defines how the SDK should select conference participants whose videos will be transmitted to the local participant. There are two possible values; the selection can be either based on the participants' audio volume or the distance from the local participant.
@@ -575,7 +557,7 @@ enum VideoForwardingStrategy {
 
   static VideoForwardingStrategy decode(String value) {
     return VideoForwardingStrategy.values.firstWhere(
-      (element) => element._value == value,
+          (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -601,9 +583,9 @@ class ConferenceListenOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-        "conferenceAccessToken": conferenceAccessToken,
-        "maxVideoForwarding": maxVideoForwarding,
-        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
-        "spatialAudio": spatialAudio,
-      };
+    "conferenceAccessToken": conferenceAccessToken,
+    "maxVideoForwarding": maxVideoForwarding,
+    "videoForwardingStrategy": videoForwardingStrategy?.encode(),
+    "spatialAudio": spatialAudio,
+  };
 }
