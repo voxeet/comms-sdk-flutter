@@ -15,7 +15,7 @@ class MediaDeviceServiceBinding: Binding {
 			if let error = error {
 				completionHandler.failure(error)
 			} else {
-				completionHandler.success(encodable: DTO.ComfortNoiseLevel(noiseLevel: comfortNoise))
+				completionHandler.success(encodable: DTO.MediaEngineComfortNoiseLevel(noiseLevel: comfortNoise))
 			}
 		}
 	}
@@ -29,7 +29,7 @@ class MediaDeviceServiceBinding: Binding {
 		completionHandler: FlutterMethodCallCompletionHandler
 	) {
 		do {
-			let noiseLevel = try flutterArguments.asDictionary(argKey: "noiseLevel").decode(type: DTO.ComfortNoiseLevel.self)
+			let noiseLevel = try flutterArguments.asDictionary(argKey: "noiseLevel").decode(type: DTO.MediaEngineComfortNoiseLevel.self)
 			VoxeetSDK.shared.mediaDevice.setComfortNoiseLevel(comfortNoise: noiseLevel.toSdkType()) { error in
 				completionHandler.handleError(error)?.orSuccess()
 			}
