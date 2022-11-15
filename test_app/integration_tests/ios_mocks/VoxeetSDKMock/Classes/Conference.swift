@@ -240,3 +240,24 @@ internal extension SpatialAudioStyle {
 		self.z = z
 	}
 }
+
+@objc public enum VideoForwardingStrategy: Int {
+    /// Selects participants based on their audio volume, which means that the local participant receives video streams
+    /// only from active speakers.
+    case lastSpeaker
+    /// Selects participants based on the distance from the local participant.
+    /// This means that the local participant receives video streams only from the nearest participants.
+    /// This strategy is available only in conferences enabled with spatial audio.
+    case closestUser
+}
+
+internal extension VideoForwardingStrategy {
+    var requestValue: String {
+        switch self {
+        case .lastSpeaker:
+            return "lastSpeakerStrategy"
+        case .closestUser:
+            return "closestUserStrategy"
+        }
+    }
+}
