@@ -272,30 +272,28 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     final availableParticipants = participants
         .where((element) => element.status != ParticipantStatus.left);
 
-    MediaStream? stream;
+    MediaStream? mediaStream;
     Participant? streamingParticipant;
     bool isScreenSharing = false;
 
     if (availableParticipants.isNotEmpty) {
       for (var participant in availableParticipants) {
-        var streams = participant.streams;
-        if (streams != null) {
-          for (var s in streams) {
-            if (s.type == MediaStreamType.screenShare) {
+        var participantStreams = participant.streams;
+        if (participantStreams != null) {
+          for (var stream in participantStreams) {
+            if (stream.type == MediaStreamType.screenShare) {
               streamingParticipant = participant;
-              stream = s;
-              setState(() {
-                isScreenSharing = true;
-              });
+              mediaStream = stream;
+              setState(() => isScreenSharing = true);
               break;
             }
           }
         }
       }
 
-      if (stream != null && streamingParticipant != null) {
+      if (mediaStream != null && streamingParticipant != null) {
         if (!mounted) return;
-        _shareScreenVideoViewController.attach(streamingParticipant, stream);
+        _shareScreenVideoViewController.attach(streamingParticipant, mediaStream);
       } else {
         if (!mounted) return;
         _shareScreenVideoViewController.detach();
