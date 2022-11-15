@@ -929,14 +929,14 @@ void main() {
     expect(isSpeaking, false);
   });
 
-  testWidgets('ConferenceService: setMaxVideoForwarding', (tester) async {
+  testWidgets('ConferenceService: setVideoForwarding', (tester) async {
     await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setCurrentConference",
         args: {"type": 5});
 
     // ignore: deprecated_member_use
-    await dolbyioCommsSdkFlutterPlugin.conference.setMaxVideoForwarding(1, [
+    await dolbyioCommsSdkFlutterPlugin.conference.setVideoForwarding(VideoForwardingStrategy.lastSpeaker, 1, [
       Participant(
           "participant_id_5_1",
           ParticipantInfo("participant_name", "avatar_url", "external_id"),

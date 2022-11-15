@@ -192,10 +192,10 @@ import WebRTC
         completion?(spatialEnvironmentReturn)
     }
 
-    var videoForwardingArgs: (max: Int, participants: [VTParticipant]?)?
+    var videoForwardingArgs: VideoForwardingOptions?
     var videoForwardingReturn: NSError?
-    public func videoForwarding(max: Int, participants: [VTParticipant]? = nil, completion: ((_ error: NSError?) -> Void)? = nil) {
-        videoForwardingArgs = (max, participants)
+    public func videoForwarding(options: VideoForwardingOptions, completion: ((_ error: NSError?) -> Void)? = nil) {
+        videoForwardingArgs = options
         completion?(videoForwardingReturn)
     }
     
@@ -251,6 +251,24 @@ import WebRTC
     public var conferenceAccessToken: String?
     public var spatialAudio: Bool = false
 }
+
+@objcMembers public class VideoForwardingOptions: NSObject {
+    /// The strategy that defines how the SDK should select conference participants whose videos will be transmitted to the local participant.
+    /// The selection can be either based on the participants' audio volume or the distance from the local participant.
+    public var strategy: VideoForwardingStrategy?
+    /// The maximum number of video streams that may be transmitted to the local participant.
+    /// The valid values are between 0 and 4. The default value is 4. In the case of providing a value smaller than 0 or greater than 4, SDK triggers an error.
+    public var max: Int?
+    /// The list of participants' objects.
+    public var participants: [VTParticipant]?
+    
+    public init(strategy: VideoForwardingStrategy?, max: Int?, participants: [VTParticipant]?) {
+        self.strategy = strategy
+        self.max = max
+        self.participants = participants
+    }
+}
+
 
 @objcMembers public class VTReplayOptions: NSObject {
     public var offset: Int = 0
