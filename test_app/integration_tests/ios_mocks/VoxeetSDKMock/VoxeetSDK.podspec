@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'VoxeetSDK'
-  s.version          = '3.6'
+  s.version          = '3.7'
   s.summary          = 'Mock for VoxeetSDK'
   s.description      = <<-DESC
 For testing purposes we need to mock the VoxeetSDK. This Pod contains the mock. 

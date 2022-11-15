@@ -32,7 +32,7 @@ PODS:
     - SwiftyGif
   - dolbyio_comms_sdk_flutter (0.0.1):
     - Flutter
-    - VoxeetSDK (~> 3.6.0)
+    - VoxeetSDK (~> 3.7.0)
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
@@ -44,14 +44,16 @@ PODS:
     - Flutter
   - permission_handler_apple (9.0.4):
     - Flutter
-  - SDWebImage (5.13.2):
-    - SDWebImage/Core (= 5.13.2)
-  - SDWebImage/Core (5.13.2)
+  - SDWebImage (5.14.0):
+    - SDWebImage/Core (= 5.14.0)
+  - SDWebImage/Core (5.14.0)
   - shared_preferences_ios (0.0.1):
     - Flutter
   - SwiftyGif (5.4.3)
   - Toast (4.0.0)
-  - VoxeetSDK (3.6.0)
+  - VoxeetSDK (3.7):
+    - WebRTC (~> 1.0.0)
+  - WebRTC (1.0.0)
 
 DEPENDENCIES:
   - dolbyio_comms_sdk_flutter (from `.symlinks/plugins/dolbyio_comms_sdk_flutter/ios`)
@@ -61,6 +63,8 @@ DEPENDENCIES:
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - VoxeetSDK (from `../../test_app/integration_tests/ios_mocks/VoxeetSDKMock`)
+  - WebRTC (from `../../test_app/integration_tests/ios_mocks/WebRTCMock`)
 
 SPEC REPOS:
   trunk:
@@ -69,7 +73,6 @@ SPEC REPOS:
     - SDWebImage
     - SwiftyGif
     - Toast
-    - VoxeetSDK
 
 EXTERNAL SOURCES:
   dolbyio_comms_sdk_flutter:
@@ -86,22 +89,27 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  VoxeetSDK:
+    :path: "../../test_app/integration_tests/ios_mocks/VoxeetSDKMock"
+  WebRTC:
+    :path: "../../test_app/integration_tests/ios_mocks/WebRTCMock"
 
 SPEC CHECKSUMS:
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  dolbyio_comms_sdk_flutter: 83d7715ed5d7100fdc0548741946013e637bd679
+  dolbyio_comms_sdk_flutter: 3bccdf32d97d6c3a65cd2a6545bb0a911e2e1e33
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  SDWebImage: 72f86271a6f3139cc7e4a89220946489d4b9a866
+  SDWebImage: 9e391cf38577742f501055dca17e4987f6713fe1
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  VoxeetSDK: 1d4e4ad0b2c67b1b49607834d212283e126f7c32
+  VoxeetSDK: 07e017151e319ba077ef0307c0a3a94bb45040f7
+  WebRTC: 0a9a0f1e38ad6408e1e7da90fa994aa014f4c661
 
-PODFILE CHECKSUM: 52938583781cf5c902318a871d993515c9b3cab3
+PODFILE CHECKSUM: ad35eb4c4f8efa60cf39d5ae575517a0e24a77af
 
 COCOAPODS: 1.11.3
