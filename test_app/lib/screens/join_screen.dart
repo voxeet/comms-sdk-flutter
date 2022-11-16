@@ -79,12 +79,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   static const String spatialAudioWithSharedScene =
       "Spatial Audio with Shared Scene";
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
-<<<<<<< HEAD
   bool joinAsListener = false;
   String _conferenceAlias = '';
 
-=======
->>>>>>> main
   StreamSubscription<
       Event<NotificationServiceEventNames,
           InvitationReceivedNotificationData>>?
@@ -175,7 +172,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                     },
                   ),
                 ),
-<<<<<<< HEAD
                 ExpansionTile(
                     title: const Text('Options'),
                     textColor: Colors.black,
@@ -274,91 +270,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                         },
                       ),
                     ]),
-=======
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Observe Conference Status"),
-                  value: switchConferenceStatus,
-                  onChanged: (value) {
-                    setState(() {
-                      switchConferenceStatus = value;
-                      observeConferenceStatus(switchConferenceStatus);
-                    });
-                  },
-                ),
-                SwitchListTile(
-                  activeColor: Colors.deepPurple,
-                  title: const Text("Dolby voice"),
-                  value: switchDolbyVoice,
-                  onChanged: (value) {
-                    if (value == false) {
-                      setState(() {
-                        switchDolbyVoice = value;
-                        spatialAudio = value;
-                      });
-                    } else {
-                      setState(() {
-                        switchDolbyVoice = value;
-                      });
-                    }
-                  },
-                ),
-                DropdownButton<String>(
-                  focusColor: Colors.white,
-                  value:
-                      switchDolbyVoice ? spatialAudioStyleDropDownText : null,
-                  style: const TextStyle(color: Colors.white),
-                  iconEnabledColor: Colors.black,
-                  items: <String>[
-                    spatialAudioWithIndividual,
-                    spatialAudioWithSharedScene,
-                    spatialAudioDisabled,
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(color: Colors.black),
-                      ),
-                    );
-                  }).toList(),
-                  hint: const Text(
-                    "Spatial Audio Style",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  onChanged: (String? value) {
-                    if (switchDolbyVoice == true &&
-                        value == spatialAudioWithIndividual) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.individual;
-                        spatialAudio = true;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else if (switchDolbyVoice == true &&
-                        value == spatialAudioWithSharedScene) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.shared;
-                        spatialAudio = true;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else if (switchDolbyVoice == true &&
-                        value == spatialAudioDisabled) {
-                      setState(() {
-                        spatialAudioStyle = SpatialAudioStyle.disabled;
-                        spatialAudio = false;
-                        spatialAudioStyleDropDownText = value;
-                      });
-                    } else {
-                      spatialAudioStyle = SpatialAudioStyle.disabled;
-                      spatialAudioStyleDropDownText = null;
-                      spatialAudio = false;
-                    }
-                  },
-                ),
->>>>>>> main
                 PrimaryButton(
                   widgetText: joiningInProgress
                       ? const WhiteCircularProgressIndicator()
