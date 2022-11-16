@@ -29,18 +29,8 @@ var participantMap = {
 };
 
 var participants = [participant];
-<<<<<<< HEAD
-<<<<<<< HEAD
 var conference = Conference("test_conf", "test_id", true, participants,
     ConferenceStatus.joined, SpatialAudioStyle.individual);
-=======
-var conference = Conference(
-    "test_conf", "test_id", true, participants, ConferenceStatus.joined, SpatialAudioStyle.individual);
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
-=======
-var conference = Conference("test_conf", "test_id", true, participants,
-    ConferenceStatus.joined, SpatialAudioStyle.individual);
->>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
 var conferenceMap = {
   "alias": "test_conf",
   "id": "test_id",
@@ -76,17 +66,10 @@ void main() {
       ..rtcpMode = RTCPMode.best
       ..ttl = 1000
       ..videoCodec = Codec.h264;
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     var createOptions = ConferenceCreateOption(
         "conference", createParams, 1, SpatialAudioStyle.individual);
-=======
-    var createOptions = ConferenceCreateOption("conference", createParams, 1, SpatialAudioStyle.individual);
->>>>>>> 7c170e6 (Add SpatialAudioStyle in iOS (#187))
-=======
-    var createOptions = ConferenceCreateOption(
-        "conference", createParams, 1, SpatialAudioStyle.individual);
->>>>>>> f36ccda (Merge release/3.6.1 to develop (#209))
+
     when(channel.invokeMethod("create", createOptions.toJson()))
         .thenAnswer((_) => Future.value(conference.toJson()));
 

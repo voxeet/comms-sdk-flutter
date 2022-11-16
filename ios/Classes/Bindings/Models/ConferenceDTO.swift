@@ -386,15 +386,15 @@ extension DTO {
             return map
         }
     }
-
+        
     struct VideoForwardingStrategyDTO: Codable {
-
+        
         let videoForwardingStrategy: VideoForwardingStrategy
-
+        
         init(videoForwardingStrategy: VideoForwardingStrategy) {
             self.videoForwardingStrategy = videoForwardingStrategy
         }
-
+        
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
             switch try container.decode(String.self) {
@@ -404,6 +404,7 @@ extension DTO {
             }
         }
 
+        
         func encode(to encoder: Encoder) throws {
             var container = encoder.singleValueContainer()
             switch videoForwardingStrategy {
@@ -417,13 +418,13 @@ extension DTO {
             return videoForwardingStrategy
         }
     }
-
+    
     struct ListenOptions: Codable {
-
+        
         let maxVideoForwarding: Int?
         let conferenceAccessToken: String?
         let spatialAudio: Bool?
-
+        
         init(conferenceListenOptions: VTListenOptions) {
 
             self.maxVideoForwarding = conferenceListenOptions.maxVideoForwarding?.intValue

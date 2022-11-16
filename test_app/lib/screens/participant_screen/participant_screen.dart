@@ -67,9 +67,9 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
   final VideoViewController _localParticipantVideoViewController =
-  VideoViewController();
+      VideoViewController();
   final VideoViewController _shareScreenVideoViewController =
-  VideoViewController();
+      VideoViewController();
 
   StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
   _participantsChangeSubscription;
@@ -81,6 +81,9 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
   _onRecordingChangeSubscription;
+
+  StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
+      _onRecordingChangeSubscription;
 
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;

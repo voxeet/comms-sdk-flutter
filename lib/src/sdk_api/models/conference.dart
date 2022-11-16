@@ -29,13 +29,13 @@ class Conference {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "alias": alias,
-    "id": id,
-    "isNew": isNew,
-    "participants": participants.map((e) => e.toJson()).toList(),
-    "status": status.encode(),
-    "spatialAudioStyle": spatialAudioStyle?.encode(),
-  };
+        "alias": alias,
+        "id": id,
+        "isNew": isNew,
+        "participants": participants.map((e) => e.toJson()).toList(),
+        "status": status.encode(),
+        "spatialAudioStyle": spatialAudioStyle?.encode(),
+      };
 }
 
 /// The ConferenceStatus enum represents the possible conference statuses.
@@ -120,11 +120,11 @@ class ConferenceCreateOption {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "alias": alias,
-    "params": params?.toJson(),
-    "pinCode": pinCode,
-    "spatialAudioStyle": spatialAudioStyle?.encode(),
-  };
+        "alias": alias,
+        "params": params?.toJson(),
+        "pinCode": pinCode,
+        "spatialAudioStyle": spatialAudioStyle?.encode(),
+      };
 }
 
 /// The ConferenceCreateParameters class allows defining conference parameters.
@@ -266,14 +266,14 @@ class ConferenceJoinOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "constraints": constraints?.toJson(),
-    "conferenceAccessToken": conferenceAccessToken,
-    "maxVideoForwarding": maxVideoForwarding,
-    "mixing": mixing?.toJson(),
-    "videoForwardingStrategy": videoForwardingStrategy?.encode(),
-    "simulcast": simulcast,
-    "spatialAudio": spatialAudio,
-  };
+        "constraints": constraints?.toJson(),
+        "conferenceAccessToken": conferenceAccessToken,
+        "maxVideoForwarding": maxVideoForwarding,
+        "mixing": mixing?.toJson(),
+        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
+        "simulcast": simulcast,
+        "spatialAudio": spatialAudio,
+      };
 }
 
 /// The ConferenceConstraints class gathers information about the preferred [WebRTC constraints](https://webrtc.org/getting-started/media-capture-and-constraints#constraints).
@@ -583,9 +583,9 @@ class ConferenceListenOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "conferenceAccessToken": conferenceAccessToken,
-    "maxVideoForwarding": maxVideoForwarding,
-    "videoForwardingStrategy": videoForwardingStrategy?.encode(),
-    "spatialAudio": spatialAudio,
-  };
+        "conferenceAccessToken": conferenceAccessToken,
+        "maxVideoForwarding": maxVideoForwarding,
+        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
+        "spatialAudio": spatialAudio,
+      };
 }

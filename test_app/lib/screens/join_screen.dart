@@ -388,7 +388,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     Conference conference = await _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceIdTextController.text)
         .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
-        .replay(conference: conference));
+            .replay(conference: conference));
     return conference;
   }
 
@@ -404,7 +404,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     params.dolbyVoice = switchDolbyVoice;
     params.liveRecording = true;
     var createOptions =
-    ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
+        ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
     createOptions.spatialAudioStyle = spatialAudioStyle;
     return createOptions;
   }
@@ -429,12 +429,12 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceId)
         .then((value) => {
-      _dolbyioCommsSdkFlutterPlugin.conference
-          .join(value, conferenceJoinOptions())
-          .then((value) => navigateToParticipantScreen(value))
-          .onError((error, stackTrace) =>
-          onError('Error during joining conference.', error))
-    });
+              _dolbyioCommsSdkFlutterPlugin.conference
+                  .join(value, conferenceJoinOptions())
+                  .then((value) => navigateToParticipantScreen(value))
+                  .onError((error, stackTrace) =>
+                      onError('Error during joining conference.', error))
+            });
   }
 
   void declineInvitation(String conferenceId) {
@@ -476,9 +476,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   Future<void> showAliasSelectorDialog(
-      BuildContext context,
-      List<String>? conferenceAliases,
-      ) async {
+    BuildContext context,
+    List<String>? conferenceAliases,
+  ) async {
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
