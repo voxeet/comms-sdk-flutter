@@ -336,7 +336,7 @@ class _ConferenceServiceTestButtonsState
         .onError((error, stackTrace) =>
             showResultDialog(context, 'Error', error.toString()));
   }
-
+  
   Future<void> setVideoForwarding(BuildContext context) async {
     try {
       final value = await _dolbyioCommsSdkFlutterPlugin.conference
