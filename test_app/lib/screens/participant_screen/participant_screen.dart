@@ -80,9 +80,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   _onPermissionsChangeSubsription;
 
   StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
-  _onRecordingChangeSubscription;
-
-  StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
       _onRecordingChangeSubscription;
 
   Participant? _localParticipant;

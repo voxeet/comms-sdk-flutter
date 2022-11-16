@@ -66,10 +66,8 @@ void main() {
       ..rtcpMode = RTCPMode.best
       ..ttl = 1000
       ..videoCodec = Codec.h264;
-
     var createOptions = ConferenceCreateOption(
         "conference", createParams, 1, SpatialAudioStyle.individual);
-
     when(channel.invokeMethod("create", createOptions.toJson()))
         .thenAnswer((_) => Future.value(conference.toJson()));
 

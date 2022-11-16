@@ -152,12 +152,12 @@ class ConferenceCreateParameters {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, dynamic> toJson() => {
-    "dolbyVoice": dolbyVoice,
-    "liveRecording": liveRecording,
-    "rtcpMode": rtcpMode?.encode(),
-    "ttl": ttl,
-    "videoCodec": videoCodec?.encode(),
-  };
+        "dolbyVoice": dolbyVoice,
+        "liveRecording": liveRecording,
+        "rtcpMode": rtcpMode?.encode(),
+        "ttl": ttl,
+        "videoCodec": videoCodec?.encode(),
+      };
 }
 
 /// The RTCPMode enum gathers the possible bitrate adaptation modes for video transmission.
@@ -290,9 +290,9 @@ class ConferenceConstraints {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "audio": audio,
-    "video": video,
-  };
+        "audio": audio,
+        "video": video,
+      };
 }
 
 /// The ConferenceMixingOptions class is responsible for notifying the Dolby.io server that a participant who joins or replays a conference is a special participant called Mixer. Mixer can use the SDK to record or replay a conference. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
@@ -306,8 +306,8 @@ class ConferenceMixingOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "enabled": enabled,
-  };
+        "enabled": enabled,
+      };
 }
 
 /// The ConferenceLeaveOptions class gathers information about preferences for leaving a conference.
@@ -454,7 +454,7 @@ enum ConferencePermission {
 
   static ConferencePermission decode(String? value) {
     return ConferencePermission.values.firstWhere(
-          (element) => element._value == value,
+      (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
@@ -524,8 +524,8 @@ class AudioProcessingOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "send": send?.toJson(),
-  };
+        "send": send?.toJson(),
+      };
 }
 
 /// The AudioProcessingSenderOptions class allows enabling and disabling audio processing for the local participant who transmits an audio stream.
@@ -537,8 +537,8 @@ class AudioProcessingSenderOptions {
 
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
-    "audioProcessing": audioProcessing,
-  };
+        "audioProcessing": audioProcessing,
+      };
 }
 
 /// The VideoForwardingStrategy enum defines how the SDK should select conference participants whose videos will be transmitted to the local participant. There are two possible values; the selection can be either based on the participants' audio volume or the distance from the local participant.
@@ -557,7 +557,7 @@ enum VideoForwardingStrategy {
 
   static VideoForwardingStrategy decode(String value) {
     return VideoForwardingStrategy.values.firstWhere(
-          (element) => element._value == value,
+      (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }
