@@ -72,12 +72,12 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       VideoViewController();
 
   StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
-      _participantsChangeSubscription;
+  _participantsChangeSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>?
-      _streamsChangeSubscription;
+  _streamsChangeSubscription;
   StreamSubscription<
-          Event<ConferenceServiceEventNames, List<ConferencePermission>>>?
-      _onPermissionsChangeSubsription;
+      Event<ConferenceServiceEventNames, List<ConferencePermission>>>?
+  _onPermissionsChangeSubsription;
 
   StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
       _onRecordingChangeSubscription;
@@ -239,7 +239,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         .conference
         .getParticipants(widget.conference);
     final localParticipant =
-        await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+    await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
     final availableParticipants = conferenceParticipants
         .where((element) => element.status != ParticipantStatus.left);
     if (availableParticipants.isNotEmpty) {
