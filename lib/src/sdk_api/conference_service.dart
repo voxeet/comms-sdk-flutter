@@ -145,12 +145,16 @@ class ConferenceService {
   /// Starts audio transmission between the local client and a conference. The startAudio method impacts only the audio streams that the local participant sends and receives; the method does not impact the audio transmission between remote participants and a conference and does not allow the local participant to force sending remote participants’ streams to the conference or to the local participant. Depending on the specified participant in the [participant] parameter, the startAudio method starts the proper audio transmission:
   /// - When the specified participant is the local participant, startAudio ensures sending local participant’s audio from the local client to the conference.
   /// - When the specified participant is a remote participant, startAudio ensures sending remote participant’s audio from the conference to the local client. This allows the local participant to un-mute remote participants who were locally muted via the [ConferenceService.stopAudio] method.
+  @Deprecated(
+      'This method is not supported in SDK 3.7 and replaced with the start methods that are available in the [LocalAudio](./../LocalAudio-class.html) and [RemoteAudio](./../RemoteAudio-class.html) models.')
   Future<void> startAudio(Participant participant) async {
     await _methodChannel.invokeMethod<void>("startAudio", participant.toJson());
     return Future.value();
   }
 
   /// Notifies the server to either start sending the local participant's video stream to the conference or start sending a remote participant's video stream to the local participant. The behavior depends on the specified participant in [participant] parameter. The startVideo method does not control the remote participant's video stream; if a remote participant does not transmit any video stream, the local participant cannot change it using the startVideo method.
+  @Deprecated(
+      'This method is not supported in SDK 3.7 and replaced with the start methods that are available in the [LocalVideo](./../LocalVideo-class.html) and [RemoteVideo](./../RemoteVideo-class.html) models.')
   Future<void> startVideo(Participant participant) async {
     await _methodChannel.invokeMethod<void>("startVideo", participant.toJson());
     return Future.value();
@@ -159,6 +163,8 @@ class ConferenceService {
   /// Stops audio transmission between the local client and a conference. The stopAudio method impacts only the audio streams that the local participant sends and receives; the method does not impact the audio transmission between remote participants and a conference and does not allow the local participant to stop sending remote participants’ streams to the conference. Depending on the specified participant in the [participant] parameter, the stopAudio method stops the proper audio transmission:
   /// - When the specified participant is the local participant, stopAudio stops sending local participant’s audio from the local client to the conference.
   /// - When the specified participant is a remote participant, stopAudio stops sending remote participant’s audio from the conference to the local client. This allows the local participant to locally mute remote participants.
+  @Deprecated(
+      'This method is not supported in SDK 3.7 and replaced with the stop methods that are available in the [LocalAudio](./../LocalAudio-class.html) and [RemoteAudio](./../RemoteAudio-class.html) models.')
   Future<void> stopAudio(Participant participant) async {
     await _methodChannel.invokeMethod<void>("stopAudio", participant.toJson());
     return Future.value();
@@ -299,8 +305,8 @@ class ConferenceService {
   ///transmitted to the local participant. There are two possible values; the selection can be either
   ///based on the participants' audio volume or the distance from the local participant
   /// - [max]: The maximum number of video streams that may be transmitted to the local
-  ///participant. The valid values are between 0 and 4. The default value is 4.
-  ///In the case of providing a value smaller than 0 or greater than 4, SDK triggers
+  ///participant. The valid values are between 0 and 25. The default value is 4.
+  ///In the case of providing a value smaller than 0 or greater than 25, SDK triggers
   ///an error.
   /// - [prioritizedParticipants]: The list of participants' objects. Allows prioritizing specific participant's
   ///video streams and display their videos even when these participants do not talk.
@@ -347,6 +353,8 @@ class ConferenceService {
   }
 
   /// Enables and disables audio processing for the local participant. The [options] parameter refers to additional audio processing options.
+  @Deprecated(
+      'This method is deprecated in SDK 3.7 and replaced with the [setCaptureMode](./../LocalAudio/setCaptureMode.html) method.')
   Future<void> setAudioProcessing(AudioProcessingOptions options) async {
     await _methodChannel.invokeMethod<void>(
         "setAudioProcessing", options.toJson());
