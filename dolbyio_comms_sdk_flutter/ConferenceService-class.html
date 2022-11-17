@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the ConferenceService class from the dolbyio_comms_sdk_flutter library, for the Dart programming language.">
+  <title>ConferenceService class - dolbyio_comms_sdk_flutter library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">dolbyio_comms_sdk_flutter</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter-library.html">dolbyio_comms_sdk_flutter</a></li>
+    <li class="self-crumb">ConferenceService class</li>
+  </ol>
+  <div class="self-name">ConferenceService</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-class">ConferenceService</span> class 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+ 
+    <span class="category services cp-0 linked" title="This is part of the Services Topic."><a href="../topics/Services-topic.html">Services</a></span>
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>The ConferenceService allows an application to manage a conference life-cycle and interact with the conference. The service allows creating, joining, and leaving conferences and managing the audio, video, and screen-share streams.</p>
+</section>
+
+
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+
+    <dl class="constructor-summary-list">
+        <dt id="ConferenceService" class="callable">
+          <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/ConferenceService.html">ConferenceService</a></span><span class="signature">(<span class="parameter" id="-param-_sessionService"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/SessionService-class.html">SessionService</a></span> <span class="parameter-name">_sessionService</span></span>)</span>
+        </dt>
+        <dd>
+          
+        </dd>
+    </dl>
+  </section>
+
+    <section class="summary offset-anchor inherited" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features">read-only, inherited</div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span> 
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features">read-only, inherited</div>
+
+</dd>
+
+      </dl>
+    </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="create" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/create.html">create</a></span><span class="signature">(<wbr><span class="parameter" id="create-param-options"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/ConferenceCreateOption-class.html">ConferenceCreateOption</a></span> <span class="parameter-name">options</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Creates a conference and returns the Conference object. The <code>options</code> parameter allows setting the conference preferences.
+  
+
+</dd>
+
+        <dt id="current" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/current.html">current</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the Conference object for the current conference.
+  
+
+</dd>
+
+        <dt id="fetch" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/fetch.html">fetch</a></span><span class="signature">(<wbr><span class="parameter" id="fetch-param-conferenceId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">conferenceId</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the Conference object that you can use to join the conference. If the <code>conferenceId</code> parameter is not provided, the method returns the current Conference object.
+  
+
+</dd>
+
+        <dt id="getAudioLevel" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getAudioLevel.html">getAudioLevel</a></span><span class="signature">(<wbr><span class="parameter" id="getAudioLevel-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">AudioLevel</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the participant's audio level. Audio level values are in the range 0 to 1.
+The <code>participant</code> parameter refers to the participant whose audio level should be returned.
+  
+
+</dd>
+
+        <dt id="getLocalStats" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getLocalStats.html">getLocalStats</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Gets the <a href="https://www.w3.org/TR/webrtc-stats/#dom-rtcstatstype">standard WebRTC statistics</a>.
+  
+
+</dd>
+
+        <dt id="getMaxVideoForwarding" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getMaxVideoForwarding.html">getMaxVideoForwarding</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">MaxVideoForwarding</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the maximum number of video streams that can be transmitted to the local participant.
+  
+
+</dd>
+
+        <dt id="getParticipant" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getParticipant.html">getParticipant</a></span><span class="signature">(<wbr><span class="parameter" id="getParticipant-param-participantId"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">participantId</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Gets the Participant object based on the <code>participantId</code>.
+  
+
+</dd>
+
+        <dt id="getParticipants" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getParticipants.html">getParticipants</a></span><span class="signature">(<wbr><span class="parameter" id="getParticipants-param-conference"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span> <span class="parameter-name">conference</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Gets a list of participants who are present at a specific conference defined in the <code>conference</code> parameter.
+<strong>Note</strong>: If a session is closed and reopened, the list obtained from the getParticipants method can sometimes get corrupted. This can result in no preview video being displayed for the local participant or the local participant appearing twice on the list.
+  
+
+</dd>
+
+        <dt id="getStatus" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getStatus.html">getStatus</a></span><span class="signature">(<wbr><span class="parameter" id="getStatus-param-conference"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span> <span class="parameter-name">conference</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ConferenceStatus.html">ConferenceStatus</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Gets the status of a specific <code>conference</code>.
+  
+
+</dd>
+
+        <dt id="isMuted" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/isMuted.html">isMuted</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the current mute state of the local participant.
+  
+
+</dd>
+
+        <dt id="isSpeaking" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/isSpeaking.html">isSpeaking</a></span><span class="signature">(<wbr><span class="parameter" id="isSpeaking-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the participant's current speaking status for the active talker indicator. The <code>participant</code> parameter refers to the participant whose speaking status the local participant would like to receive.
+  
+
+</dd>
+
+        <dt id="join" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/join.html">join</a></span><span class="signature">(<wbr><span class="parameter" id="join-param-conference"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span> <span class="parameter-name">conference</span>, </span><span class="parameter" id="join-param-options"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/ConferenceJoinOptions-class.html">ConferenceJoinOptions</a></span> <span class="parameter-name">options</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Joins a conference as a user who can send media to the conference.
+The <code>conference</code> parameter refers to the conference that tha local participant wants to join.
+The <code>options</code> parameter allows setting additional options for the joining participant.
+  
+
+</dd>
+
+        <dt id="kick" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/kick.html">kick</a></span><span class="signature">(<wbr><span class="parameter" id="kick-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Kicks a participant out of the current conference. This method is available only for conference owners or participants who have the adequate permissions to kick a participant. The <code>participant</code> parameter refers to the participant who should be kicked out of the conference.
+  
+
+</dd>
+
+        <dt id="leave" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/leave.html">leave</a></span><span class="signature">(<wbr><span class="parameter" id="leave-param-options">{<span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/ConferenceLeaveOptions-class.html">ConferenceLeaveOptions</a>?</span> <span class="parameter-name">options</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Leaves the current conference. The <code>options</code> parameter allows setting additional options for the leaving participant.
+The <code>options</code> parameter allows choosing additional options for the leaving participant.
+  
+
+</dd>
+
+        <dt id="listen" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/listen.html">listen</a></span><span class="signature">(<wbr><span class="parameter" id="listen-param-conference"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span> <span class="parameter-name">conference</span>, </span><span class="parameter" id="listen-param-options"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/ConferenceListenOptions-class.html">ConferenceListenOptions</a></span> <span class="parameter-name">options</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Joins a conference as a listener.
+The <code>conference</code> parameter refers to the conference that tha local participant wants to join as a listener.
+The <code>options</code> parameter allows setting additional options for the joining participant.
+  
+
+</dd>
+
+        <dt id="mute" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/mute.html">mute</a></span><span class="signature">(<wbr><span class="parameter" id="mute-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span>, </span><span class="parameter" id="mute-param-isMuted"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isMuted</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Stops playing a specific remote participant's audio to the local participant or stops playing the local participant's audio to the conference. The <code>participant</code> parameter refers to the participant who should be muted. The <code>isMuted</code> parameter enables and disables audio; true indicates that the SDK should mute the participant, false indicates that the participant should not be muted.
+  
+
+</dd>
+
+        <dt id="muteOutput" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/muteOutput.html">muteOutput</a></span><span class="signature">(<wbr><span class="parameter" id="muteOutput-param-isMuted"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">isMuted</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Controls playing remote participants' audio to the local participant.
+Note: This API is only supported when the client connects to a Dolby Voice conference.
+The <code>isMuted</code> parameter enables and disables audio.
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a non-existent method or property is accessed.
+  <div class="features">inherited</div>
+
+</dd>
+
+        <dt id="onParticipantsChange" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onParticipantsChange.html">onParticipantsChange</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Event-class.html">Event</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames</a></span>, <span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a> of the <a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames.participantAdded</a> and <a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames.participantUpdated</a> events. By subscribing to the returned stream you will be notified about changed statuses of conference participants and new participants in a conference.
+  
+
+</dd>
+
+        <dt id="onPermissionsChange" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onPermissionsChange.html">onPermissionsChange</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Event-class.html">Event</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames</a></span>, <span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ConferencePermission.html">ConferencePermission</a></span>&gt;</span></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a> of the <a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames.permissionsUpdated</a> events. By subscribing to the returned stream you will be notified about conference permissions changes.
+  
+
+</dd>
+
+        <dt id="onStatusChange" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onStatusChange.html">onStatusChange</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Event-class.html">Event</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames</a></span>, <span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ConferenceStatus.html">ConferenceStatus</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a> of the <a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames.statusUpdated</a> events. By subscribing to the returned stream you will be notified about conference status changes.
+  
+
+</dd>
+
+        <dt id="onStreamsChange" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onStreamsChange.html">onStreamsChange</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Event-class.html">Event</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames</a></span>, <span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/StreamsChangeData-class.html">StreamsChangeData</a></span>&gt;</span></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns a <a href="https://api.flutter.dev/flutter/dart-async/Stream-class.html">Stream</a> of the <a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames.streamAdded</a>, <a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames.streamUpdated</a>, and <a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames.streamRemoved</a> events. By subscribing to the returned stream you will be notified about new, changed, and removed streams of conference participants.
+  
+
+</dd>
+
+        <dt id="replay" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/replay.html">replay</a></span><span class="signature">(<wbr><span class="parameter" id="replay-param-conference">{<span>required</span> <span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span> <span class="parameter-name">conference</span>, </span><span class="parameter" id="replay-param-replayOptions"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/ConferenceReplayOptions-class.html">ConferenceReplayOptions</a>?</span> <span class="parameter-name">replayOptions</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Replays a recorded <code>conference</code>. The <code>replayOptions</code> parameter refers to additional replay options that you can define. For more information, see the <a href="https://docs.dolby.io/communications-apis/docs/guides-recording-conferences">Recording Conferences</a> article.
+  
+
+</dd>
+
+        <dt id="setAudioProcessing" class="callable">
+  <span class="name deprecated"><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/setAudioProcessing.html">setAudioProcessing</a></span><span class="signature">(<wbr><span class="parameter" id="setAudioProcessing-param-options"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/AudioProcessingOptions-class.html">AudioProcessingOptions</a></span> <span class="parameter-name">options</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Enables and disables audio processing for the local participant. The <code>options</code> parameter refers to additional audio processing options.
+  <div class="features">@<a href="https://api.flutter.dev/flutter/dart-core/Deprecated-class.html">Deprecated</a>(&#39;This method is deprecated in SDK 3.7 and replaced with the [setCaptureMode](.&#47;..&#47;LocalAudio&#47;setCaptureMode.html) method.&#39;)</div>
+
+</dd>
+
+        <dt id="setMaxVideoForwarding" class="callable">
+  <span class="name deprecated"><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/setMaxVideoForwarding.html">setMaxVideoForwarding</a></span><span class="signature">(<wbr><span class="parameter" id="setMaxVideoForwarding-param-max"><span class="type-annotation">MaxVideoForwarding</span> <span class="parameter-name">max</span>, </span><span class="parameter" id="setMaxVideoForwarding-param-prioritizedParticipants"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span>&gt;</span></span> <span class="parameter-name">prioritizedParticipants</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets the maximum number of video streams that may be transmitted to the local participant.
+  <div class="features">@<a href="https://api.flutter.dev/flutter/dart-core/Deprecated-class.html">Deprecated</a>(&#39;This method is supported only in SDK 3.6.0. To set Video Forwarding in SDK 3.6.1 and later, use the [ConferenceService.setVideoForwarding()] method.&#39;)</div>
+
+</dd>
+
+        <dt id="setSpatialDirection" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setSpatialDirection.html">setSpatialDirection</a></span><span class="signature">(<wbr><span class="parameter" id="setSpatialDirection-param-direction"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/SpatialDirection-class.html">SpatialDirection</a></span> <span class="parameter-name">direction</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets the <code>direction</code> the local participant is facing in space. This method is available only for participants who joined the conference using the <a href="../dolbyio_comms_sdk_flutter/ConferenceService/join.html">ConferenceService.join</a> method with the <a href="../dolbyio_comms_sdk_flutter/ConferenceJoinOptions/spatialAudio.html">ConferenceJoinOptions.spatialAudio</a> parameter enabled. Otherwise, SDK triggers an error. To set a spatial direction for listeners, use the <a href="https://docs.dolby.io/communications-apis/reference/set-spatial-listeners-audio">Set Spatial Listeners Audio</a> REST API.
+  
+
+</dd>
+
+        <dt id="setSpatialEnvironment" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setSpatialEnvironment.html">setSpatialEnvironment</a></span><span class="signature">(<wbr><span class="parameter" id="setSpatialEnvironment-param-scale"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/SpatialScale-class.html">SpatialScale</a></span> <span class="parameter-name">scale</span>, </span><span class="parameter" id="setSpatialEnvironment-param-forward"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/SpatialPosition-class.html">SpatialPosition</a></span> <span class="parameter-name">forward</span>, </span><span class="parameter" id="setSpatialEnvironment-param-up"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/SpatialPosition-class.html">SpatialPosition</a></span> <span class="parameter-name">up</span>, </span><span class="parameter" id="setSpatialEnvironment-param-right"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/SpatialPosition-class.html">SpatialPosition</a></span> <span class="parameter-name">right</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Configures a spatial environment of an application, so the audio renderer understands which directions the application considers forward, up, and right and which units it uses for distance. This method is available only for participants who joined a conference using the <a href="../dolbyio_comms_sdk_flutter/ConferenceService/join.html">ConferenceService.join</a> method with the <a href="../dolbyio_comms_sdk_flutter/ConferenceJoinOptions/spatialAudio.html">ConferenceJoinOptions.spatialAudio</a> parameter enabled. Otherwise, SDK triggers an error. To set a spatial environment for listeners, use the <a href="https://docs.dolby.io/communications-apis/reference/set-spatial-listeners-audio">Set Spatial Listeners Audio</a> REST API.
+  
+
+</dd>
+
+        <dt id="setSpatialPosition" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setSpatialPosition.html">setSpatialPosition</a></span><span class="signature">(<wbr><span class="parameter" id="setSpatialPosition-param-participant">{<span>required</span> <span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span>, </span><span class="parameter" id="setSpatialPosition-param-position"><span>required</span> <span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/SpatialPosition-class.html">SpatialPosition</a></span> <span class="parameter-name">position</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets a participant's <code>position</code> in space to enable the spatial audio experience during a Dolby Voice conference. This method is available only for participants who joined the conference using the <a href="../dolbyio_comms_sdk_flutter/ConferenceService/join.html">ConferenceService.join</a> method with the <a href="../dolbyio_comms_sdk_flutter/ConferenceJoinOptions/spatialAudio.html">ConferenceJoinOptions.spatialAudio</a> parameter enabled. Otherwise, SDK triggers an error. To set a spatial position for listeners, use the <a href="https://docs.dolby.io/communications-apis/reference/set-spatial-listeners-audio">Set Spatial Listeners Audio</a> REST API.
+  
+
+</dd>
+
+        <dt id="setVideoForwarding" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setVideoForwarding.html">setVideoForwarding</a></span><span class="signature">(<wbr><span class="parameter" id="setVideoForwarding-param-strategy"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/VideoForwardingStrategy.html">VideoForwardingStrategy</a></span> <span class="parameter-name">strategy</span>, </span><span class="parameter" id="setVideoForwarding-param-max"><span class="type-annotation">MaxVideoForwarding</span> <span class="parameter-name">max</span>, </span><span class="parameter" id="setVideoForwarding-param-prioritizedParticipants"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span>&gt;</span></span> <span class="parameter-name">prioritizedParticipants</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Sets the maximum number of video streams that may be transmitted to the local participant.
+For more information, see the
+<a href="https://docs.dolby.io/communications-apis/docs/guides-video-forwarding">Video Forwarding</a> article.
+  
+
+</dd>
+
+        <dt id="startAudio" class="callable">
+  <span class="name deprecated"><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/startAudio.html">startAudio</a></span><span class="signature">(<wbr><span class="parameter" id="startAudio-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Starts audio transmission between the local client and a conference. The startAudio method impacts only the audio streams that the local participant sends and receives; the method does not impact the audio transmission between remote participants and a conference and does not allow the local participant to force sending remote participants’ streams to the conference or to the local participant. Depending on the specified participant in the <code>participant</code> parameter, the startAudio method starts the proper audio transmission:
+  <div class="features">@<a href="https://api.flutter.dev/flutter/dart-core/Deprecated-class.html">Deprecated</a>(&#39;This method is not supported in SDK 3.7 and replaced with the start methods that are available in the [LocalAudio](.&#47;..&#47;LocalAudio-class.html) and [RemoteAudio](.&#47;..&#47;RemoteAudio-class.html) models.&#39;)</div>
+
+</dd>
+
+        <dt id="startScreenShare" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/startScreenShare.html">startScreenShare</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Starts a screen sharing session.
+For iOS, see the <a href="https://docs.dolby.io/communications-apis/docs/screenshare-with-ios">ScreenShare with iOS document</a> that describes how to set up screen share outside the application.
+  
+
+</dd>
+
+        <dt id="startVideo" class="callable">
+  <span class="name deprecated"><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/startVideo.html">startVideo</a></span><span class="signature">(<wbr><span class="parameter" id="startVideo-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Notifies the server to either start sending the local participant's video stream to the conference or start sending a remote participant's video stream to the local participant. The behavior depends on the specified participant in <code>participant</code> parameter. The startVideo method does not control the remote participant's video stream; if a remote participant does not transmit any video stream, the local participant cannot change it using the startVideo method.
+  <div class="features">@<a href="https://api.flutter.dev/flutter/dart-core/Deprecated-class.html">Deprecated</a>(&#39;This method is not supported in SDK 3.7 and replaced with the start methods that are available in the [LocalVideo](.&#47;..&#47;LocalVideo-class.html) and [RemoteVideo](.&#47;..&#47;RemoteVideo-class.html) models.&#39;)</div>
+
+</dd>
+
+        <dt id="stopAudio" class="callable">
+  <span class="name deprecated"><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/stopAudio.html">stopAudio</a></span><span class="signature">(<wbr><span class="parameter" id="stopAudio-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Stops audio transmission between the local client and a conference. The stopAudio method impacts only the audio streams that the local participant sends and receives; the method does not impact the audio transmission between remote participants and a conference and does not allow the local participant to stop sending remote participants’ streams to the conference. Depending on the specified participant in the <code>participant</code> parameter, the stopAudio method stops the proper audio transmission:
+  <div class="features">@<a href="https://api.flutter.dev/flutter/dart-core/Deprecated-class.html">Deprecated</a>(&#39;This method is not supported in SDK 3.7 and replaced with the stop methods that are available in the [LocalAudio](.&#47;..&#47;LocalAudio-class.html) and [RemoteAudio](.&#47;..&#47;RemoteAudio-class.html) models.&#39;)</div>
+
+</dd>
+
+        <dt id="stopScreenShare" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/stopScreenShare.html">stopScreenShare</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Stops a screen sharing session.
+  
+
+</dd>
+
+        <dt id="stopVideo" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/stopVideo.html">stopVideo</a></span><span class="signature">(<wbr><span class="parameter" id="stopVideo-param-participant"><span class="type-annotation"><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></span> <span class="parameter-name">participant</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Notifies the server to either stop sending the local participant's video stream to the conference or stop sending a remote participant's video stream to the local participant. The behavior depends on the specified participant in <code>participant</code> parameter.
+  
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features">inherited</div>
+
+</dd>
+
+        <dt id="updatePermissions" class="callable">
+  <span class="name"><a href="../dolbyio_comms_sdk_flutter/ConferenceService/updatePermissions.html">updatePermissions</a></span><span class="signature">(<wbr><span class="parameter" id="updatePermissions-param-participantPermissions"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../dolbyio_comms_sdk_flutter/ParticipantPermissions-class.html">ParticipantPermissions</a></span>&gt;</span></span> <span class="parameter-name">participantPermissions</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Updates the participant's conference permissions. The <code>participantPermissions</code> parameter allows assigning the required permissions to specific participants.
+  
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features">inherited</div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">dolbyio_comms_sdk_flutter</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter-library.html">dolbyio_comms_sdk_flutter</a></li>
+  <li class="self-crumb">ConferenceService class</li>
+</ol>
+
+
+    <h5>dolbyio_comms_sdk_flutter library</h5>
+    <ol>
+  <li class="section-title"><a href="../dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter-library.html#classes">Classes</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/AudioCaptureOptions-class.html">AudioCaptureOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/AudioProcessingOptions-class.html">AudioProcessingOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/AudioProcessingSenderOptions-class.html">AudioProcessingSenderOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/AudioService-class.html">AudioService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/CommandService-class.html">CommandService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/Conference-class.html">Conference</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceConstraints-class.html">ConferenceConstraints</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceCreateOption-class.html">ConferenceCreateOption</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceCreateParameters-class.html">ConferenceCreateParameters</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceJoinOptions-class.html">ConferenceJoinOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceLeaveOptions-class.html">ConferenceLeaveOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceListenOptions-class.html">ConferenceListenOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceMixingOptions-class.html">ConferenceMixingOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceReplayOptions-class.html">ConferenceReplayOptions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService-class.html">ConferenceService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/DolbyioCommsSdk-class.html">DolbyioCommsSdk</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/Event-class.html">Event</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/File-class.html">File</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/FileConverted-class.html">FileConverted</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/FilePresentation-class.html">FilePresentation</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/FilePresentationService-class.html">FilePresentationService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/InvitationReceivedNotificationData-class.html">InvitationReceivedNotificationData</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/LocalAudio-class.html">LocalAudio</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/LocalVideo-class.html">LocalVideo</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/MediaDeviceService-class.html">MediaDeviceService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/MediaStream-class.html">MediaStream</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/MessageReceivedData-class.html">MessageReceivedData</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/NotificationService-class.html">NotificationService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/Participant-class.html">Participant</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ParticipantInfo-class.html">ParticipantInfo</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ParticipantInvited-class.html">ParticipantInvited</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ParticipantPermissions-class.html">ParticipantPermissions</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RecordingInformation-class.html">RecordingInformation</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RecordingService-class.html">RecordingService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RecordingStatusUpdate-class.html">RecordingStatusUpdate</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RemoteAudio-class.html">RemoteAudio</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RemoteVideo-class.html">RemoteVideo</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/SessionService-class.html">SessionService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/SpatialDirection-class.html">SpatialDirection</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/SpatialPosition-class.html">SpatialPosition</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/SpatialScale-class.html">SpatialScale</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/StreamsChangeData-class.html">StreamsChangeData</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoPresentation-class.html">VideoPresentation</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoPresentationService-class.html">VideoPresentationService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoService-class.html">VideoService</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoView-class.html">VideoView</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoViewController-class.html">VideoViewController</a></li>
+
+
+
+
+
+
+  <li class="section-title"><a href="../dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter-library.html#enums">Enums</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/AudioCaptureMode.html">AudioCaptureMode</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/Codec.html">Codec</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ComfortNoiseLevel.html">ComfortNoiseLevel</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/CommandServiceEventNames.html">CommandServiceEventNames</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferencePermission.html">ConferencePermission</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceServiceEventNames.html">ConferenceServiceEventNames</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ConferenceStatus.html">ConferenceStatus</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/FilePresentationServiceEventNames.html">FilePresentationServiceEventNames</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/MediaStreamType.html">MediaStreamType</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/NoiseReduction.html">NoiseReduction</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/NotificationServiceEventNames.html">NotificationServiceEventNames</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ParticipantStatus.html">ParticipantStatus</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/ParticipantType.html">ParticipantType</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RecordingServiceEventNames.html">RecordingServiceEventNames</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RecordingStatus.html">RecordingStatus</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/RTCPMode.html">RTCPMode</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/SpatialAudioStyle.html">SpatialAudioStyle</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoForwardingStrategy.html">VideoForwardingStrategy</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoPresentationEventNames.html">VideoPresentationEventNames</a></li>
+  <li><a href="../dolbyio_comms_sdk_flutter/VideoPresentationState.html">VideoPresentationState</a></li>
+
+
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <ol>
+
+        <li class="section-title"><a href="../dolbyio_comms_sdk_flutter/ConferenceService-class.html#constructors">Constructors</a></li>
+          <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/ConferenceService.html">ConferenceService</a></li>
+
+
+    <li class="section-title inherited">
+      <a href="../dolbyio_comms_sdk_flutter/ConferenceService-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title"><a href="../dolbyio_comms_sdk_flutter/ConferenceService-class.html#instance-methods">Methods</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/create.html">create</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/current.html">current</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/fetch.html">fetch</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getAudioLevel.html">getAudioLevel</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getLocalStats.html">getLocalStats</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getMaxVideoForwarding.html">getMaxVideoForwarding</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getParticipant.html">getParticipant</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getParticipants.html">getParticipants</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/getStatus.html">getStatus</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/isMuted.html">isMuted</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/isSpeaking.html">isSpeaking</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/join.html">join</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/kick.html">kick</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/leave.html">leave</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/listen.html">listen</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/mute.html">mute</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/muteOutput.html">muteOutput</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onParticipantsChange.html">onParticipantsChange</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onPermissionsChange.html">onPermissionsChange</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onStatusChange.html">onStatusChange</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/onStreamsChange.html">onStreamsChange</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/replay.html">replay</a></li>
+    <li><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/setAudioProcessing.html">setAudioProcessing</a></li>
+    <li><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/setMaxVideoForwarding.html">setMaxVideoForwarding</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setSpatialDirection.html">setSpatialDirection</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setSpatialEnvironment.html">setSpatialEnvironment</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setSpatialPosition.html">setSpatialPosition</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/setVideoForwarding.html">setVideoForwarding</a></li>
+    <li><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/startAudio.html">startAudio</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/startScreenShare.html">startScreenShare</a></li>
+    <li><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/startVideo.html">startVideo</a></li>
+    <li><a class="deprecated" href="../dolbyio_comms_sdk_flutter/ConferenceService/stopAudio.html">stopAudio</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/stopScreenShare.html">stopScreenShare</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/stopVideo.html">stopVideo</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+    <li><a href="../dolbyio_comms_sdk_flutter/ConferenceService/updatePermissions.html">updatePermissions</a></li>
+
+    <li class="section-title inherited"><a href="../dolbyio_comms_sdk_flutter/ConferenceService-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    dolbyio_comms_sdk_flutter
+      3.7.0-beta.1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
