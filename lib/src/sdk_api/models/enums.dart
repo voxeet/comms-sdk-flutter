@@ -177,8 +177,14 @@ enum VideoPresentationEventNames implements EnumWithStringValue {
   }
 }
 
+/// The recording status.
+///
+/// This service is available in SDK 3.7 and later.
+/// {@category Models}
 enum RecordingStatus {
+  /// The recording is started.
   recordingStarted('RECORDING'),
+  /// The recording is stopped.
   recordingStop('NOT_RECORDING');
 
   final String value;

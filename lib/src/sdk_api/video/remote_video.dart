@@ -3,7 +3,7 @@ import 'dart:async';
 import '../../../dolbyio_comms_sdk_flutter.dart';
 import '../../dolbyio_comms_sdk_flutter_platform_interface.dart';
 
-/// The [RemoteVideo] allows the local participant to locally start and
+/// The RemoteVideo class allows the local participant to locally start and
 /// stop remote participants` video streams transmission.
 class RemoteVideo {
   /// @internal

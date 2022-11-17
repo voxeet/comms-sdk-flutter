@@ -3,8 +3,11 @@ import 'package:dolbyio_comms_sdk_flutter/src/mapper/mapper.dart';
 import '../../../dolbyio_comms_sdk_flutter.dart';
 import '../../dolbyio_comms_sdk_flutter_platform_interface.dart';
 
-/// The [LocalAudio] allows enabling and disabling the local participant's
+/// The LocalAudio class allows enabling and disabling the local participant's
 /// audio as well as setting and checking the capture mode and comfort noise level.
+///
+///This service is available in SDK 3.7 and later.
+/// {@category Models}
 class LocalAudio {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
@@ -32,7 +35,7 @@ class LocalAudio {
     );
   }
 
-  /// Sets the [comfort noise level] for output devices in Dolby Voice conferences.
+  /// Sets the comfort noise level for output devices in Dolby Voice conferences.
   Future<void> setComfortNoiseLevel(ComfortNoiseLevel noiseLevel) async {
     return await _methodChannel.invokeMethod<void>(
       "setComfortNoiseLevel",
