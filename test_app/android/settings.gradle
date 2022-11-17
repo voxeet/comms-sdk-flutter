@@ -1,4 +1,8 @@
 include ':app'
+include ':dolbyMock'
+include ':app_utils'
+
+project(':dolbyMock').projectDir = new File('../integration_tests/android_mocks')
 
 def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
 def properties = new Properties()

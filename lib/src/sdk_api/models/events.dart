@@ -1,3 +1,5 @@
+import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/enums.dart';
+
 import 'conference.dart';
 import 'file_presentation.dart';
 import 'participant.dart';
@@ -50,7 +52,7 @@ class MessageReceivedData {
   MessageReceivedData(this.message, this.participant);
 }
 
-/// ThePermissionsUpdatedData class gathers information about a conference permissions updates.
+/// The PermissionsUpdatedData class gathers information about a conference permissions updates.
 ///
 /// {@category Models}
 class PermissionsUpdatedData {
@@ -67,4 +69,35 @@ class StreamsChangeData {
   Participant participant;
   MediaStream mediaStream;
   StreamsChangeData(this.participant, this.mediaStream);
+}
+
+/// The RecordingStatusUpdate model contains information about recording statuses.
+///
+/// This service is available in SDK 3.7 and later.
+/// {@category Models}
+class RecordingStatusUpdate {
+  /// The recording status.
+  RecordingStatus recordingStatus;
+
+  /// The unique identifier of the conference.
+  String conferenceId;
+
+  /// The unique identifier the participant who changed the recording status.
+  String participantId;
+
+  ///The timestamp of when the recording status changed.
+  int timeStamp;
+
+  RecordingStatusUpdate(this.recordingStatus, this.conferenceId,
+      this.participantId, this.timeStamp);
+
+  static RecordingStatusUpdate fromMap(Map<Object?, Object?> data) {
+    RecordingStatus recordingStatus =
+        RecordingStatus.valueOf(data["recordingStatus"] as String);
+    String conferenceId = data["conferenceId"] as String;
+    String participantId = data["participantId"] as String;
+    int timeStamp = data["timeStamp"] as int;
+    return RecordingStatusUpdate(
+        recordingStatus, conferenceId, participantId, timeStamp);
+  }
 }

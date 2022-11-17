@@ -6,6 +6,10 @@
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
 import 'dart:developer' as developer;
+
+import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/audio_service.dart';
+import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/video_service.dart';
+
 import 'dolbyio_comms_sdk_flutter_platform_interface.dart';
 import 'sdk_api/command_service.dart';
 import 'sdk_api/conference_service.dart';
@@ -24,6 +28,9 @@ class DolbyioCommsSdk {
 
   final _methodChannel =
       DolbyioCommsSdkFlutterPlatform.createMethodChannel("sdk");
+
+  /// The AudioService allows changing audio settings for the local and remote participants.
+  final AudioService audioService;
 
   /// Retrieves the CommandService instance that allows sending messages to conferences.
   final CommandService command;
@@ -49,27 +56,36 @@ class DolbyioCommsSdk {
   /// Retrieves the VideoPresentationService instance that allows presenting video files during conferences.
   final VideoPresentationService videoPresentation;
 
+  /// The VideoService allows changing video settings for the local and remote participants.
+  final VideoService videoService;
+
   DolbyioCommsSdk._allFields(
-      this.command,
-      this.conference,
-      this.filePresentation,
-      this.mediaDevice,
-      this.notification,
-      this.recording,
-      this.session,
-      this.videoPresentation);
+    this.audioService,
+    this.command,
+    this.conference,
+    this.filePresentation,
+    this.mediaDevice,
+    this.notification,
+    this.recording,
+    this.session,
+    this.videoPresentation,
+    this.videoService,
+  );
 
   factory DolbyioCommsSdk._internal() {
     final sessionService = SessionService();
     return DolbyioCommsSdk._allFields(
-        CommandService(),
-        ConferenceService(sessionService),
-        FilePresentationService(),
-        MediaDeviceService(),
-        NotificationService(),
-        RecordingService(),
-        sessionService,
-        VideoPresentationService());
+      AudioService(),
+      CommandService(),
+      ConferenceService(sessionService),
+      FilePresentationService(),
+      MediaDeviceService(),
+      NotificationService(),
+      RecordingService(),
+      sessionService,
+      VideoPresentationService(),
+      VideoService(),
+    );
   }
 
   /// Initializes the SDK using the [customerKey] and [customerSecret]. For security reasons, we recommend using the [initializeToken] method in production. Use initialize method only for prototyping new applications.

@@ -38,6 +38,9 @@ jobs:
       - name: Run tests
         run: |
          flutter test -r expanded
+      - name: Run pana analyzer
+        run: |
+          ./scripts/score_analyzer.sh
       - name: Build app
         run: |
           ./scripts/build-android.sh
@@ -63,6 +66,9 @@ jobs:
       - name: Run tests
         run: |
          flutter test -r expanded
+      - name: Run pana analyzer
+        run: |
+          ./scripts/score_analyzer.sh
       - name: Run unmocked integration tests
         run: |
           ./scripts/run-unmocked-integration-tests-ios.sh

@@ -1,7 +1,11 @@
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_environment/spatial_environment_dialog_content.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:provider/provider.dart';
+import '../../widgets/spatial_extensions/spatial_direction_dialog_content.dart';
+import '../../widgets/spatial_extensions/spatial_environment_dialog_content.dart';
+import '../../widgets/spatial_extensions/spatial_position_dialog_content.dart';
+import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '/widgets/secondary_button.dart';
 import '/widgets/dialogs.dart';
 import 'dart:convert';
@@ -56,24 +60,21 @@ class _ConferenceServiceTestButtonsState
             text: 'Stop video', onPressed: () => stopVideo(context)),
         SecondaryButton(
             text: 'Start screen share',
-            onPressed: () => startScreenShare(context)),
+            onPressed: () => startScreenShare()),
         SecondaryButton(
             text: 'Stop screen share',
             onPressed: () => stopScreenShare(context)),
         SecondaryButton(
             text: 'Set spatial position',
-            onPressed: () => setSpatialPosition(context)),
+            onPressed: () => setSpatialPositionDialog(context)),
         SecondaryButton(
             text: 'Set spatial direction',
-            onPressed: () => setSpatialDirection(context)),
+            onPressed: () => setSpatialDirectionDialog(context)),
         SecondaryButton(
             text: 'Set spatial environment',
             onPressed: () => setSpatialEnvironmentDialog(context)),
         SecondaryButton(
             text: 'Get local stats', onPressed: () => getLocalStats(context)),
-        SecondaryButton(
-            text: 'Set max video forwarding',
-            onPressed: () => setMaxVideoForwarding(context)),
         SecondaryButton(
             text: 'Set video forwarding',
             onPressed: () => setVideoForwarding(context)),
@@ -214,14 +215,21 @@ class _ConferenceServiceTestButtonsState
                 context, 'Error', error.toString() + stackTrace.toString())));
   }
 
-  void startScreenShare(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.startScreenShare())
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showResultDialog(
-            context, 'Error', error.toString() + stackTrace.toString()));
+  Future<void> startScreenShare() async {
+    try {
+      var isScreenSharing = await isSomeoneScreenSharing();
+      if (isScreenSharing) {
+        if (!mounted) return;
+        showResultDialog(context, 'Error', 'Someone is already sharing the screen');
+      } else {
+        await _dolbyioCommsSdkFlutterPlugin.conference.startScreenShare();
+        if (!mounted) return;
+        showResultDialog(context, 'Success', 'OK');
+      }
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
   }
 
   void stopScreenShare(BuildContext context) {
@@ -234,40 +242,90 @@ class _ConferenceServiceTestButtonsState
             context, 'Error', error.toString() + stackTrace.toString()));
   }
 
-  void setSpatialPosition(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalParticipant()
-        .then((participant) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
-              participant: participant,
-              position: SpatialPosition(1.0, 1.0, 1.0),
-            ))
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  Future<void> setSpatialEnvironmentDialog(BuildContext context) async {
+  Future<void> setSpatialPositionDialog(BuildContext testButtonsContext) async {
+    final participant = await getLocalParticipant();
     return await showDialog(
-      context: context,
+      context: testButtonsContext,
       barrierDismissible: false,
-      builder: (BuildContext environmentContext) {
+      builder: (BuildContext spatialPositionDialogContext) {
         return AlertDialog(
-          title: const Text('Set spatial environment'),
-          content: SpatialEnvironmentDialogContent(
-              environmentDialogContext: environmentContext,
-              resultDialogContext: context),
+          title: const Text('Set Spatial Position'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Consumer<SpatialValuesModel>(
+                  builder: (context, spatialValuesModel, child) {
+                return SpatialPositionDialogContent(
+                    spatialValueDialogContext: spatialPositionDialogContext,
+                    participant: participant,
+                    resultDialogContext: testButtonsContext,
+                    spatialPosition: spatialValuesModel
+                        .listOfParticipantSpatialValues
+                        .where((element) => element.id == participant.id)
+                        .first
+                        .spatialPosition!);
+              })
+            ],
+          ),
         );
       },
     );
   }
 
-  void setSpatialDirection(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setSpatialDirection(SpatialDirection(1.0, 1.0, 1.0))
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
+  Future<void> setSpatialDirectionDialog(BuildContext testButtonsContext) async {
+    final participant = await getLocalParticipant();
+    return await showDialog(
+      context: testButtonsContext,
+      barrierDismissible: false,
+      builder: (BuildContext spatialDirectionDialogContext) {
+        return AlertDialog(
+          title: const Text('Set Spatial Direction'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Consumer<SpatialValuesModel>(
+                  builder: (context, spatialValuesModel, child) {
+                return SpatialDirectionDialogContent(
+                    spatialValueDialogContext: spatialDirectionDialogContext,
+                    participant: participant,
+                    resultDialogContext: testButtonsContext,
+                    spatialDirection: spatialValuesModel.localSpatialDirection);
+              })
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<Participant> getLocalParticipant() async {
+    return _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+  }
+
+  Future<void> setSpatialEnvironmentDialog(BuildContext testButtonsContext) async {
+    return await showDialog(
+      context: testButtonsContext,
+      barrierDismissible: false,
+      builder: (BuildContext environmentContext) {
+        return AlertDialog(
+          title: const Text('Set spatial environment'),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            Consumer<SpatialValuesModel>(
+                builder: (context, spatialValuesModel, child) {
+              return SpatialEnvironmentDialogContent(
+                environmentDialogContext: environmentContext,
+                resultDialogContext: testButtonsContext,
+                spatialScaleForEnvironment: spatialValuesModel.spatialScaleForEnvironment,
+                forwardPositionForEnvironment: spatialValuesModel.forwardPositionForEnvironment,
+                upPositionForEnvironment: spatialValuesModel.upPositionForEnvironment,
+                rightPositionForEnvironment: spatialValuesModel.rightPositionForEnvironment,
+
+              );
+            })
+          ]),
+        );
+      },
+    );
   }
 
   void getLocalStats(BuildContext context) {
@@ -278,21 +336,7 @@ class _ConferenceServiceTestButtonsState
         .onError((error, stackTrace) =>
             showResultDialog(context, 'Error', error.toString()));
   }
-
-  void setMaxVideoForwarding(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
-            .getParticipants(conference))
-        .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference
-            // ignore: deprecated_member_use
-            .setMaxVideoForwarding(4, participants))
-        .then(
-            (value) => showResultDialog(context, 'Success', jsonEncode(value)))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
+  
   Future<void> setVideoForwarding(BuildContext context) async {
     try {
       final value = await _dolbyioCommsSdkFlutterPlugin.conference
@@ -333,5 +377,28 @@ class _ConferenceServiceTestButtonsState
             showResultDialog(context, 'Success', maxVideoForwarding.toString()))
         .onError((error, stackTrace) =>
             showResultDialog(context, 'Error', error.toString()));
+  }
+
+  Future<bool> isSomeoneScreenSharing() async {
+    final conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+    final participants = await _dolbyioCommsSdkFlutterPlugin.conference
+        .getParticipants(conference);
+    final availableParticipants = participants
+        .where((element) => element.status != ParticipantStatus.left);
+
+    if (availableParticipants.isNotEmpty) {
+      for (var participant in availableParticipants) {
+        var participantStreams = participant.streams;
+        if (participantStreams != null) {
+          for (var stream in participantStreams) {
+            if (stream.type == MediaStreamType.screenShare) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
   }
 }

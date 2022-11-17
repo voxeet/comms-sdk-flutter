@@ -1,11 +1,14 @@
+import 'package:dolbyio_comms_sdk_flutter_example/screens/test_buttons/audio_service_test_buttons.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/screens/test_buttons/video_service_test_buttons.dart';
 import 'package:flutter/material.dart';
-import 'conference_service_test_buttons.dart';
-import 'recording_service_test_buttons.dart';
-import 'media_device_service_test_buttons.dart';
+
 import 'command_service_test_buttons.dart';
+import 'conference_service_test_buttons.dart';
 import 'file_presentation_service_test_buttons.dart';
-import 'video_presentation_service_test_buttons.dart';
+import 'media_device_service_test_buttons.dart';
 import 'notification_service_test_buttons.dart';
+import 'recording_service_test_buttons.dart';
+import 'video_presentation_service_test_buttons.dart';
 
 class TestButtons extends StatelessWidget {
   const TestButtons({Key? key}) : super(key: key);
@@ -21,6 +24,10 @@ class TestButtons extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              const SizedBox(height: 10),
+              const Text("Audio service"),
+              const SizedBox(height: 10),
+              AudioServiceTestButtons(),
               const SizedBox(height: 10),
               const Text("Conference service"),
               const SizedBox(height: 10),
@@ -48,7 +55,11 @@ class TestButtons extends StatelessWidget {
               const SizedBox(height: 10),
               const Text("Notification service"),
               const SizedBox(height: 10),
-              const NotificationServiceTestButtons()
+              const NotificationServiceTestButtons(),
+              const SizedBox(height: 10),
+              const Text("Video service"),
+              const SizedBox(height: 10),
+              VideoServiceTestButtons(),
             ],
           ),
         ),

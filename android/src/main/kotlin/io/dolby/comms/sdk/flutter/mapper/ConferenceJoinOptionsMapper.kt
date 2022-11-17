@@ -2,6 +2,7 @@ package io.dolby.comms.sdk.flutter.mapper
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.media.constraints.Constraints
+import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions
 import com.voxeet.sdk.services.conference.information.ConferenceParticipantType
 
@@ -25,6 +26,9 @@ class ConferenceJoinOptionsMapper {
                 }
                 (options?.get("maxVideoForwarding") as? Int)?.let { maxForwarding ->
                     builder.setMaxVideoForwarding(maxForwarding)
+                }
+                (options?.get("videoForwardingStrategy") as? String)?.let {
+                    builder.setVideoForwardingStrategy(VideoForwardingStrategy.valueOf(it))
                 }
                 builder
                     .setConstraints(constraints)

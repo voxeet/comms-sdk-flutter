@@ -249,17 +249,14 @@ class ConferenceJoinOptions {
   /// Sets the conference [WebRTC constraints](https://webrtc.org/getting-started/media-capture-and-constraints#constraints). By default, only audio is enabled: `{audio: true, video: false}`.
   ConferenceConstraints? constraints;
 
-  /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 4 for mobile browsers. By default, the parameter is set to 4.
+  /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 25 for mobile browsers. By default, the parameter is set to 4.
   num? maxVideoForwarding;
 
   /// Allows joining a conference as a special participant called Mixer. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
   ConferenceMixingOptions? mixing;
 
-  /// Indicates whether a participant wants to receive mono sound. By default, participants receive stereo audio. This configuration is only applicable when using the Opus codec.
-  bool? preferRecvMono;
-
-  /// Indicates whether a participant wants to send mono sound to a conference. By default, when using the Opus codec, participants' audio is sent as stereo. This configuration is only applicable when using the Opus codec.
-  bool? preferSendMono;
+  /// Defines how the SDK should select conference participants whose videos will be transmitted to the local participant.
+  VideoForwardingStrategy? videoForwardingStrategy;
 
   /// Enables sending the Simulcast video streams to other conference participants.
   bool? simulcast;
@@ -273,8 +270,7 @@ class ConferenceJoinOptions {
         "conferenceAccessToken": conferenceAccessToken,
         "maxVideoForwarding": maxVideoForwarding,
         "mixing": mixing?.toJson(),
-        "preferRecvMono": preferRecvMono,
-        "preferSendMono": preferSendMono,
+        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
         "simulcast": simulcast,
         "spatialAudio": spatialAudio,
       };
@@ -569,4 +565,27 @@ enum VideoForwardingStrategy {
   String encode() {
     return _value;
   }
+}
+
+/// The ConferenceListenOptions class defines how the application expects to join a conference using the listen method.
+class ConferenceListenOptions {
+  /// The conference access token that is required to join a protected conference if the conference is created using the [create](https://docs.dolby.io/communications-apis/reference/create-conference) REST API. If the conference is created using the create method, the token is managed by the SDK and is not visible to the application users. For more information, see the [Enhanced Conference Access Control](https://docs.dolby.io/communications-apis/docs/guides-enhanced-conference-access-control) document.
+  String? conferenceAccessToken;
+
+  /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 25 for mobile browsers. By default, the parameter is set to 4.
+  num? maxVideoForwarding;
+
+  /// Defines how the SDK should select conference participants whose videos will be transmitted to the local participant.
+  VideoForwardingStrategy? videoForwardingStrategy;
+
+  /// Enables spatial audio for the local participant who joins a Dolby Voice conference. By default, this parameter is set to false. When set to true in a conference that uses the individual [SpatialAudioStyle], the application must place remote participants in a 3D space using the [ConferenceService.setSpatialPosition] method.
+  bool? spatialAudio;
+
+  /// Returns a representation of this object as a JSON object.
+  Map<String, Object?> toJson() => {
+        "conferenceAccessToken": conferenceAccessToken,
+        "maxVideoForwarding": maxVideoForwarding,
+        "videoForwardingStrategy": videoForwardingStrategy?.encode(),
+        "spatialAudio": spatialAudio,
+      };
 }

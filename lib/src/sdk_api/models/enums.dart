@@ -176,3 +176,54 @@ enum VideoPresentationEventNames implements EnumWithStringValue {
     );
   }
 }
+
+/// The recording status.
+///
+/// This service is available in SDK 3.7 and later.
+/// {@category Models}
+enum RecordingStatus {
+  /// The recording is started.
+  recordingStarted('RECORDING'),
+
+  /// The recording is stopped.
+  recordingStop('NOT_RECORDING');
+
+  final String value;
+
+  const RecordingStatus(this.value);
+
+  static RecordingStatus valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
+    return RecordingStatus.values.firstWhere(
+      (element) {
+        return element.value == value ||
+            element.name.toLowerCase() == lowerCaseValue;
+      },
+      orElse: () => throw Exception("Invalid enum name"),
+    );
+  }
+}
+
+/// The RecordingServiceEventNames enum gathers the recording events.
+///
+/// {@category Models}
+enum RecordingServiceEventNames implements EnumWithStringValue {
+  /// Emitted when an application user receives an invitation.
+  recordingStatusUpdate('EVENT_RECORDING_STATUS_UPDATED');
+
+  @override
+  final String value;
+
+  const RecordingServiceEventNames(this.value);
+
+  static RecordingServiceEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
+    return RecordingServiceEventNames.values.firstWhere(
+      (element) {
+        return element.value == value ||
+            element.name.toLowerCase() == lowerCaseValue;
+      },
+      orElse: () => throw Exception("Invalid enum name"),
+    );
+  }
+}

@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:provider/provider.dart';
 import '/widgets/primary_button.dart';
 import '/screens/login_screen.dart';
+import 'shared_preferences_helper.dart';
+import 'widgets/spatial_extensions/spatial_values_model.dart';
 
-void main() {
-  runApp(const MaterialApp(home: MyApp()));
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferencesHelper.load();
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => SpatialValuesModel(),
+        child: const MaterialApp(home: MyApp()),
+      ),
+  );
 }
 
 class MyApp extends StatefulWidget {
