@@ -78,10 +78,13 @@ class StreamsChangeData {
 class RecordingStatusUpdate {
   /// The recording status.
   RecordingStatus recordingStatus;
+
   /// The unique identifier of the conference.
   String conferenceId;
+
   /// The unique identifier the participant who changed the recording status.
   String participantId;
+
   ///The timestamp of when the recording status changed.
   int timeStamp;
 

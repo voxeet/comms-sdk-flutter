@@ -49,14 +49,10 @@ export 'src/sdk_api/models/events.dart'
         RecordingStatusUpdate;
 export 'src/sdk_api/models/file_presentation.dart'
     show File, FileConverted, FilePresentation;
-export 'src/sdk_api/audio/local_audio.dart'
-    show LocalAudio;
-export 'src/sdk_api/video/local_video.dart'
-    show LocalVideo;
-export 'src/sdk_api/audio/remote_audio.dart'
-    show RemoteAudio;
-export 'src/sdk_api/video/remote_video.dart'
-    show RemoteVideo;
+export 'src/sdk_api/audio/local_audio.dart' show LocalAudio;
+export 'src/sdk_api/video/local_video.dart' show LocalVideo;
+export 'src/sdk_api/audio/remote_audio.dart' show RemoteAudio;
+export 'src/sdk_api/video/remote_video.dart' show RemoteVideo;
 export 'src/sdk_api/models/participant_info.dart' show ParticipantInfo;
 export 'src/sdk_api/models/participant.dart'
     show

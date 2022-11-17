@@ -184,6 +184,7 @@ enum VideoPresentationEventNames implements EnumWithStringValue {
 enum RecordingStatus {
   /// The recording is started.
   recordingStarted('RECORDING'),
+
   /// The recording is stopped.
   recordingStop('NOT_RECORDING');
 

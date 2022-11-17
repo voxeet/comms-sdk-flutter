@@ -1,11 +1,12 @@
 /// The AudioCaptureModeOptions model allows selecting the preferred audio capture mode and the preferred noise reduction level.
-/// 
+///
 /// This model is available in SDK 3.7 and later.
 ///
 /// {@category Models}
 class AudioCaptureOptions {
   /// The preferred audio mode that allows enabling and disabling audio processing.
   AudioCaptureMode mode;
+
   /// The preferred level of noise reduction.
   NoiseReduction? noiseReduction;
 
@@ -45,7 +46,7 @@ enum AudioCaptureMode {
 }
 
 /// The NoiseReductionLevel model allows selecting the preferred level of noise reduction.
-/// 
+///
 /// This model is available in SDK 3.7 and later.
 ///
 /// {@category Models}
