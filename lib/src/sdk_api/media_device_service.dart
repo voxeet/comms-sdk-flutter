@@ -10,6 +10,8 @@ class MediaDeviceService {
       "media_device_service");
 
   /// Retrieves the comfort noise level setting for output devices in Dolby Voice conferences.
+  @Deprecated(
+      'This method is deprecated in SDK 3.7 and replaced with the [getComfortNoiseLevel](./../LocalAudio/getComfortNoiseLevel.html) method available in the [LocalAudio](./../LocalAudio-class.html) model.')
   Future<ComfortNoiseLevel> getComfortNoiseLevel() async {
     return Future.value(ComfortNoiseLevel.decode(
         await _methodChannel.invokeMethod<String?>("getComfortNoiseLevel")));
@@ -21,7 +23,9 @@ class MediaDeviceService {
         await _methodChannel.invokeMethod<bool>("isFrontCamera"));
   }
 
-  /// Sets the comfort noise level ([noiseLevel]) for output devices in Dolby Voice conferences.
+  /// Sets the comfort noise level for output devices in Dolby Voice conferences.
+  @Deprecated(
+      'This method is deprecated in SDK 3.7 and replaced with the [setComfortNoiseLevel](./../LocalAudio/setComfortNoiseLevel.html) method available in the [LocalAudio](./../LocalAudio-class.html) model.')
   Future<void> setComfortNoiseLevel(ComfortNoiseLevel noiseLevel) async {
     return await _methodChannel.invokeMethod<void>(
         "setComfortNoiseLevel", {"noiseLevel": noiseLevel.encode()});

@@ -1,4 +1,5 @@
 export 'src/dolbyio_comms_sdk.dart' show DolbyioCommsSdk;
+export 'src/sdk_api/audio_service.dart' show AudioService;
 export 'src/sdk_api/command_service.dart' show CommandService;
 export 'src/sdk_api/conference_service.dart' show ConferenceService;
 export 'src/sdk_api/file_presentation_service.dart'
@@ -7,6 +8,7 @@ export 'src/sdk_api/media_device_service.dart' show MediaDeviceService;
 export 'src/sdk_api/notification_service.dart' show NotificationService;
 export 'src/sdk_api/recording_service.dart' show RecordingService;
 export 'src/sdk_api/session_service.dart' show SessionService;
+export 'src/sdk_api/video_service.dart' show VideoService;
 export 'src/sdk_api/video_presentation_service.dart'
     show VideoPresentationService;
 export 'src/sdk_api/models/conference.dart'
@@ -47,6 +49,10 @@ export 'src/sdk_api/models/events.dart'
         RecordingStatusUpdate;
 export 'src/sdk_api/models/file_presentation.dart'
     show File, FileConverted, FilePresentation;
+export 'src/sdk_api/audio/local_audio.dart' show LocalAudio;
+export 'src/sdk_api/video/local_video.dart' show LocalVideo;
+export 'src/sdk_api/audio/remote_audio.dart' show RemoteAudio;
+export 'src/sdk_api/video/remote_video.dart' show RemoteVideo;
 export 'src/sdk_api/models/participant_info.dart' show ParticipantInfo;
 export 'src/sdk_api/models/participant.dart'
     show

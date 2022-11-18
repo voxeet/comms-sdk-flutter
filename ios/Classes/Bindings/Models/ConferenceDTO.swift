@@ -403,7 +403,7 @@ extension DTO {
             default: throw EncoderError.decoderFailed()
             }
         }
-        
+
         func encode(to encoder: Encoder) throws {
             var container = encoder.singleValueContainer()
             switch videoForwardingStrategy {
@@ -412,7 +412,7 @@ extension DTO {
             @unknown default: throw EncoderError.encoderFailed()
             }
         }
-        
+
         func toSdkType() -> VideoForwardingStrategy {
             return videoForwardingStrategy
         }
@@ -430,7 +430,7 @@ extension DTO {
             self.conferenceAccessToken = conferenceListenOptions.conferenceAccessToken
             self.spatialAudio = conferenceListenOptions.spatialAudio
         }
-        
+
         func toSdkType() -> VTListenOptions {
             let listenOptions = VTListenOptions()
             listenOptions.maxVideoForwarding = maxVideoForwarding.map { NSNumber(value: $0) }

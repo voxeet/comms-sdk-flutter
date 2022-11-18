@@ -61,9 +61,9 @@ class JoinConferenceContent extends StatefulWidget {
 
 class _JoinConferenceContentState extends State<JoinConferenceContent> {
   final TextEditingController conferenceAliasTextController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController conferenceIdTextController =
-      TextEditingController();
+  TextEditingController();
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
   final formKeyAlias = GlobalKey<FormState>();
   final formKeyId = GlobalKey<FormState>();
@@ -83,11 +83,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   String _conferenceAlias = '';
 
   StreamSubscription<
-          Event<NotificationServiceEventNames,
-              InvitationReceivedNotificationData>>?
-      onInvitationReceivedSubscription;
+      Event<NotificationServiceEventNames,
+          InvitationReceivedNotificationData>>?
+  onInvitationReceivedSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>?
-      onStatusChangeSubscription;
+  onStatusChangeSubscription;
 
   @override
   void initState() {
@@ -322,7 +322,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           context: context,
           title: 'Permissions missing',
           body:
-              'Required permissions $permissions were denied. Please enable them manually.',
+          'Required permissions $permissions were denied. Please enable them manually.',
           okText: 'Open settings',
           cancelText: 'Cancel',
           result: (value) => value ? openAppSettings() : null,
@@ -441,7 +441,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     _dolbyioCommsSdkFlutterPlugin.conference
         .fetch(conferenceId)
         .then((conference) =>
-            _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
+        _dolbyioCommsSdkFlutterPlugin.notification.decline(conference))
         .onError(
             (error, stackTrace) => onError('Error during declining.', error));
   }
