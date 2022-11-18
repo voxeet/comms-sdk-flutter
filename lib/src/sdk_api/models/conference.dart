@@ -249,7 +249,7 @@ class ConferenceJoinOptions {
   /// Sets the conference [WebRTC constraints](https://webrtc.org/getting-started/media-capture-and-constraints#constraints). By default, only audio is enabled: `{audio: true, video: false}`.
   ConferenceConstraints? constraints;
 
-  /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 4 for mobile browsers. By default, the parameter is set to 4.
+  /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 25 for mobile browsers. By default, the parameter is set to 4.
   num? maxVideoForwarding;
 
   /// Allows joining a conference as a special participant called Mixer. For more information, see the [Recording Conferences](https://docs.dolby.io/communications-apis/docs/guides-recording-conferences) article.
@@ -572,7 +572,7 @@ class ConferenceListenOptions {
   /// The conference access token that is required to join a protected conference if the conference is created using the [create](https://docs.dolby.io/communications-apis/reference/create-conference) REST API. If the conference is created using the create method, the token is managed by the SDK and is not visible to the application users. For more information, see the [Enhanced Conference Access Control](https://docs.dolby.io/communications-apis/docs/guides-enhanced-conference-access-control) document.
   String? conferenceAccessToken;
 
-  /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 4 for mobile browsers. By default, the parameter is set to 4.
+  /// Sets the maximum number of video streams that may be transmitted to the joining participant. The valid parameter values are between 0 and 25 for mobile browsers. By default, the parameter is set to 4.
   num? maxVideoForwarding;
 
   /// Defines how the SDK should select conference participants whose videos will be transmitted to the local participant.

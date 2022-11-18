@@ -76,9 +76,6 @@ class _ConferenceServiceTestButtonsState
         SecondaryButton(
             text: 'Get local stats', onPressed: () => getLocalStats(context)),
         SecondaryButton(
-            text: 'Set max video forwarding',
-            onPressed: () => setMaxVideoForwarding(context)),
-        SecondaryButton(
             text: 'Set video forwarding',
             onPressed: () => setVideoForwarding(context)),
         SecondaryButton(
@@ -339,21 +336,7 @@ class _ConferenceServiceTestButtonsState
         .onError((error, stackTrace) =>
             showResultDialog(context, 'Error', error.toString()));
   }
-
-  void setMaxVideoForwarding(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
-            .getParticipants(conference))
-        .then((participants) => _dolbyioCommsSdkFlutterPlugin.conference
-            // ignore: deprecated_member_use
-            .setMaxVideoForwarding(4, participants))
-        .then(
-            (value) => showResultDialog(context, 'Success', jsonEncode(value)))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
+  
   Future<void> setVideoForwarding(BuildContext context) async {
     try {
       final value = await _dolbyioCommsSdkFlutterPlugin.conference

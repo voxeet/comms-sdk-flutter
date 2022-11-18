@@ -2,7 +2,10 @@ import 'dart:async';
 
 import '../../dolbyio_comms_sdk_flutter_platform_interface.dart';
 
-/// The [LocalVideo] allows enabling and disabling the local participant's video.
+/// The LocalVideo class allows enabling and disabling the local participant's video.
+///
+/// This service is available in SDK 3.7 and later.
+/// {@category Models}
 class LocalVideo {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(

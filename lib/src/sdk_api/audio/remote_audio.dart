@@ -3,7 +3,10 @@ import 'dart:async';
 import '../../../dolbyio_comms_sdk_flutter.dart';
 import '../../dolbyio_comms_sdk_flutter_platform_interface.dart';
 
-/// The [RemoteAudio] allows the local participant to locally mute and unmute remote participants.
+/// The RemoteAudio class allows the local participant to locally mute and unmute remote participants.
+///
+/// This service is available in SDK 3.7 and later.
+/// {@category Models}
 class RemoteAudio {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
