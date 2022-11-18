@@ -3,6 +3,7 @@ import 'package:dolbyio_comms_sdk_flutter_example/widgets/bottom_tool_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:provider/provider.dart';
+import '../../widgets/dialogs.dart';
 import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '/widgets/conference_action_icon_button.dart';
 import 'dart:developer' as developer;
@@ -13,6 +14,7 @@ typedef ParticipantConferenceStatus = void Function(
 class ConferenceControls extends StatefulWidget {
   final Conference conference;
   final ParticipantConferenceStatus updateCloseSessionFlag;
+
   const ConferenceControls(
       {Key? key,
       required this.conference,
@@ -25,7 +27,7 @@ class ConferenceControls extends StatefulWidget {
 
 class _ConferenceControlsState extends State<ConferenceControls> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  bool isMicOff = false, isVideoOff = false;
+  bool isMicOff = false, isVideoOff = false, isScreenShareOff = true;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +56,19 @@ class _ConferenceControlsState extends State<ConferenceControls> {
             : const Icon(Icons.videocam),
       ),
       ConferenceActionIconButton(
+        iconWidget: isScreenShareOff
+            ? const Icon(Icons.screen_share)
+            : const Icon(Icons.stop_screen_share_sharp),
+        backgroundIconColor: Colors.deepPurple,
+        onPressedIcon: () {
+          if (isScreenShareOff) {
+            startScreenShare();
+          } else {
+            stopScreenShare();
+          }
+        },
+      ),
+      ConferenceActionIconButton(
         onPressedIcon: () {
           leaveConferenceDialog(context);
         },
@@ -76,7 +91,8 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               child: const Text('YES'),
               onPressed: () {
                 widget.updateCloseSessionFlag(true);
-                Provider.of<SpatialValuesModel>(context, listen: false).clearSpatialValues();
+                Provider.of<SpatialValuesModel>(context, listen: false)
+                    .clearSpatialValues();
                 Navigator.of(context).popUntil(
                   ModalRoute.withName("LoginScreen"),
                 );
@@ -86,7 +102,8 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               child: const Text('NO'),
               onPressed: () {
                 widget.updateCloseSessionFlag(false);
-                Provider.of<SpatialValuesModel>(context, listen: false).clearSpatialValues();
+                Provider.of<SpatialValuesModel>(context, listen: false)
+                    .clearSpatialValues();
                 Navigator.of(context).popUntil(
                   ModalRoute.withName("JoinConferenceScreen"),
                 );
@@ -101,6 +118,15 @@ class _ConferenceControlsState extends State<ConferenceControls> {
           ],
         );
       },
+    );
+  }
+
+  Future<void> showResultDialog(
+      BuildContext context, String title, String text) async {
+    await ViewDialogs.dialog(
+      context: context,
+      title: title,
+      body: text,
     );
   }
 
@@ -144,6 +170,57 @@ class _ConferenceControlsState extends State<ConferenceControls> {
                 developer.log('Local participant video has been started.'))
             .onError((error, stackTrace) =>
                 onError('Error during starting video.', error)));
+  }
+
+  void startScreenShare() async {
+    try {
+      var isScreenSharing = await isSomeoneScreenSharing();
+      if (isScreenSharing) {
+        if (!mounted) return;
+        showResultDialog(
+            context, 'Error', 'Someone is already sharing the screen');
+      } else {
+        await _dolbyioCommsSdkFlutterPlugin.conference.startScreenShare();
+        var isScreenSharing = await isSomeoneScreenSharing();
+        if (isScreenSharing) setState(() => isScreenShareOff = false);
+      }
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  void stopScreenShare() async {
+    try {
+      await _dolbyioCommsSdkFlutterPlugin.conference.stopScreenShare();
+      setState(() => isScreenShareOff = true);
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<bool> isSomeoneScreenSharing() async {
+    final conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+    final participants = await _dolbyioCommsSdkFlutterPlugin.conference
+        .getParticipants(conference);
+    final availableParticipants = participants
+        .where((element) => element.status != ParticipantStatus.left);
+
+    if (availableParticipants.isNotEmpty) {
+      for (var participant in availableParticipants) {
+        var participantStreams = participant.streams;
+        if (participantStreams != null) {
+          for (var stream in participantStreams) {
+            if (stream.type == MediaStreamType.screenShare) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+
+    return false;
   }
 
   void onError(String message, Object? error) {
