@@ -27,6 +27,8 @@ jobs:
         persist-credentials: false
     - name: Checkout submodules
       run: git submodule update --init --recursive
+    - name: Create empty token file
+      run: echo 'const token = "";' > test_app/integration_tests/end_to_end/token.dart
     - name: Set up Java 🔧
       uses: actions/setup-java@v3
       with:
@@ -66,6 +68,8 @@ jobs:
         persist-credentials: false
     - name: Checkout submodules
       run: git submodule update --init --recursive
+    - name: Create empty token file
+      run: echo 'const token = "";' > test_app/integration_tests/end_to_end/token.dart
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
@@ -94,12 +98,14 @@ jobs:
       run: |
         ./scripts/run-mocked-integration-tests-android.sh
     - name: Run unmocked integration tests
+      env: 
+        APP_KEY: ${{ secrets.DOLBYIO_APP_KEY }}
+        URL: ${{ secrets.DOLBYIO_APP_SDK_USER_ACCESS_TOKEN_URL }}
       run: |
-        ./scripts/run-unmocked-integration-tests-ios.rb
+        ./scripts/run-end-to-end-tests-ios.rb "${URL}" "${APP_KEY}"
     - name: Run mocked integration tests
       run: |
         ./scripts/run-mocked-integration-tests-ios.rb
-
     - name: Analyze
       run: |
         flutter analyze
