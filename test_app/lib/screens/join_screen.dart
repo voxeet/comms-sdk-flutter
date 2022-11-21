@@ -73,6 +73,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       "Spatial Audio with Shared Scene";
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
   bool joinAsListener = false;
+  bool joinAsMixer = false;
   String _conferenceAlias = '';
 
   StreamSubscription<
@@ -203,6 +204,18 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                               setState(() => joinAsListener = value);
                             } else {
                               setState(() => joinAsListener = value);
+                            }
+                          }),
+                      SwitchOption(
+                          title: 'Join as mixer',
+                          value: joinAsMixer,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                joinAsMixer = value;
+                              });
+                            } else {
+                              setState(() => joinAsMixer = value);
                             }
                           }),
                       DropdownButton<String>(
@@ -412,7 +425,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     joinOptions.constraints = ConferenceConstraints(true, true);
     joinOptions.maxVideoForwarding = 4;
     joinOptions.spatialAudio = spatialAudio;
-    joinOptions.mixing = ConferenceMixingOptions(switchDolbyVoice);
+    joinOptions.mixing = ConferenceMixingOptions(joinAsMixer);
     return joinOptions;
   }
 
