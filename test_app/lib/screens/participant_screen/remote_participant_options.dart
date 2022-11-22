@@ -241,10 +241,12 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
                       participant: participant,
                       resultDialogContext: remoteParticipantContext,
                       spatialPosition: spatialValuesModel
-                          .listOfParticipantSpatialValues
-                          .where((element) => element.id == participant.id)
-                          .first
-                          .spatialPosition!);
+                              .isSpatialConferenceState
+                          ? spatialValuesModel.listOfParticipantSpatialValues
+                              .where((element) => element.id == participant.id)
+                              .first
+                              .spatialPosition!
+                          : spatialValuesModel.spatialPositionInNonSpatial);
                 })
               ],
             ),

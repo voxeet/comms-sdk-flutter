@@ -226,11 +226,12 @@ class _ConferenceServiceTestButtonsState
                     spatialValueDialogContext: spatialPositionDialogContext,
                     participant: participant,
                     resultDialogContext: testButtonsContext,
-                    spatialPosition: spatialValuesModel
-                        .listOfParticipantSpatialValues
-                        .where((element) => element.id == participant.id)
-                        .first
-                        .spatialPosition!);
+                    spatialPosition: spatialValuesModel.isSpatialConferenceState
+                        ? spatialValuesModel.listOfParticipantSpatialValues
+                            .where((element) => element.id == participant.id)
+                            .first
+                            .spatialPosition!
+                        : spatialValuesModel.spatialPositionInNonSpatial);
               })
             ],
           ),
