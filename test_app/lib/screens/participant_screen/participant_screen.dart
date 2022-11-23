@@ -140,6 +140,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<SpatialValuesModel>(context).setSpatialConferenceState(widget.isSpatialAudio);
     Provider.of<SpatialValuesModel>(context).copyList(participants);
 
     Widget videoView = const FlutterLogo();
