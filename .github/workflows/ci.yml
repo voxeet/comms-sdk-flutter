@@ -69,9 +69,12 @@ jobs:
       - name: Run pana analyzer
         run: |
           ./scripts/score_analyzer.sh
-      - name: Run unmocked integration tests
-        run: |
-          ./scripts/run-unmocked-integration-tests-ios.sh
+#      - name: Run unmocked integration tests
+#        run: |
+#          ./scripts/run-unmocked-integration-tests-ios.sh
       - name: Analyze
         run: |
+          cd test_app
+          flutter pub get
+          cd ..
           flutter analyze
