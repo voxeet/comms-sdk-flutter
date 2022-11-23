@@ -1,14 +1,15 @@
+import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:provider/provider.dart';
 import '/widgets/bottom_tool_bar.dart';
 import '/widgets/conference_action_icon_button.dart';
 import '/widgets/dolby_title.dart';
 import 'participant_screen/participant_grid.dart';
 
 class ReplayScreen extends StatefulWidget {
-  final Conference conference;
-  const ReplayScreen({Key? key, required this.conference}) : super(key: key);
+  const ReplayScreen({Key? key}) : super(key: key);
 
   @override
   State<ReplayScreen> createState() => _ReplayScreenState();
@@ -26,9 +27,9 @@ class _ReplayScreenState extends State<ReplayScreen> {
           decoration: const BoxDecoration(color: Colors.deepPurple),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-              ReplayScreenContent(conference: widget.conference)
+            children: const [
+              DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
+              ReplayScreenContent()
             ],
           ),
         ),
@@ -38,9 +39,7 @@ class _ReplayScreenState extends State<ReplayScreen> {
 }
 
 class ReplayScreenContent extends StatefulWidget {
-  final Conference conference;
-  const ReplayScreenContent({Key? key, required this.conference})
-      : super(key: key);
+  const ReplayScreenContent({Key? key}) : super(key: key);
 
   @override
   State<ReplayScreenContent> createState() => _ReplayScreenContentState();
@@ -60,6 +59,8 @@ class _ReplayScreenContentState extends State<ReplayScreenContent> {
         .onStatusChange()
         .listen((event) {
       if (event.body.encode() == ConferenceStatus.ended.encode()) {
+        Provider.of<ConferenceModel>(context, listen: false)
+            .isReplayConference = false;
         Navigator.of(context)
             .popUntil(ModalRoute.withName("JoinConferenceScreen"));
       }
@@ -76,6 +77,8 @@ class _ReplayScreenContentState extends State<ReplayScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    var conference =
+        Provider.of<ConferenceModel>(context, listen: false).replayedConference;
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
@@ -86,11 +89,11 @@ class _ReplayScreenContentState extends State<ReplayScreenContent> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
-                child: Text(widget.conference.id!,
+                child: Text(conference.id ?? "Invalid alias",
                     style: const TextStyle(fontSize: 16)),
               ),
             ),
-            Expanded(child: ParticipantGrid(remoteOptionsFlag: false, conference: widget.conference)),
+            const Expanded(child: ParticipantGrid()),
             const ReplayControllsWidget(),
           ],
         ),

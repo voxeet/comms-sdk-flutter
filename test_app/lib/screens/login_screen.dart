@@ -1,4 +1,6 @@
 import 'dart:developer' as developer;
+import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
+import 'package:provider/provider.dart';
 import 'join_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
@@ -10,9 +12,7 @@ import '/widgets/text_form_field.dart';
 import '../shared_preferences_helper.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({
-    Key? key,
-  }) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +51,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   TextEditingController externalIdTextController = TextEditingController();
   late String _accessToken;
   late String _username;
+  late String? _externalId;
   bool isSessionOpen = false, loginInProgress = false;
 
   @override
@@ -150,8 +151,13 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
 
   Future<void> openSession() async {
     _username = usernameTextController.text;
-    var participantInfo =
-        ParticipantInfo(_username, null, externalIdTextController.text);
+    _externalId = externalIdTextController.text;
+
+    Provider.of<ConferenceModel>(context, listen: false).username = _username;
+    Provider.of<ConferenceModel>(context, listen: false).externalId =
+        _externalId;
+
+    var participantInfo = ParticipantInfo(_username, null, _externalId);
     await _dolbyioCommsSdkFlutterPlugin.session.open(participantInfo);
   }
 
@@ -159,9 +165,7 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     Navigator.of(context).push(
       MaterialPageRoute(
         settings: const RouteSettings(name: "JoinConferenceScreen"),
-        builder: (context) => JoinConference(
-            username: usernameTextController.text,
-            externalId: externalIdTextController.text),
+        builder: (context) => const JoinConference(),
       ),
     );
   }
