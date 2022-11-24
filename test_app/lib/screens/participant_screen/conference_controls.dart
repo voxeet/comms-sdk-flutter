@@ -150,23 +150,21 @@ class _ConferenceControlsState extends State<ConferenceControls> {
   }
 
   void onStopVideo() {
-    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-            .stopVideo(participant)
-            .then((value) =>
-                developer.log('Local participant video has been stopped.'))
-            .onError((error, stackTrace) =>
-                onError('Error during stopping video.', error)));
+    _dolbyioCommsSdkFlutterPlugin.videoService.localVideo
+        .stop()
+        .then((value) =>
+            developer.log('Local participant video has been stopped.'))
+        .onError((error, stackTrace) =>
+            onError('Error during stopping video.', error));
   }
 
   void onStartVideo() {
-    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-            .startVideo(participant)
-            .then((value) =>
-                developer.log('Local participant video has been started.'))
-            .onError((error, stackTrace) =>
-                onError('Error during starting video.', error)));
+    _dolbyioCommsSdkFlutterPlugin.videoService.localVideo
+        .start()
+        .then((value) =>
+            developer.log('Local participant video has been started.'))
+        .onError((error, stackTrace) =>
+            onError('Error during starting video.', error));
   }
 
   void startScreenShare() async {
