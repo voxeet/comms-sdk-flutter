@@ -15,18 +15,20 @@ jobs:
     steps:
       - name: Checkout repo 
         uses: actions/checkout@v2
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
           java-version: 15
           distribution: 'adopt'
       - name: Set up Flutter version
-        uses: subosito/flutter-action@v2.4.0
+        uses: ./.github/actions/flutter-action
         with:
           flutter-version: $FLUTTER_VERSION
 
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.3
+      - uses: ./.github/actions/setup-dart
 
       - name: Install dependencies
         run: |
