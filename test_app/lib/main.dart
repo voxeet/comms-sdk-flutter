@@ -1,3 +1,4 @@
+import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:provider/provider.dart';
@@ -10,10 +11,13 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPreferencesHelper.load();
   runApp(
-      ChangeNotifierProvider(
-        create: (context) => SpatialValuesModel(),
-        child: const MaterialApp(home: MyApp()),
-      ),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ConferenceModel()),
+        ChangeNotifierProvider(create: (context) => SpatialValuesModel()),
+      ],
+      child: const MaterialApp(home: MyApp()),
+    ),
   );
 }
 

@@ -2,17 +2,14 @@ import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:provider/provider.dart';
+import '../../state_management/models/conference_model.dart';
 import '/widgets/dialogs.dart';
 import 'participant_widget.dart';
 import 'dart:developer' as developer;
 
 class ParticipantGrid extends StatefulWidget {
-  final bool remoteOptionsFlag;
-  final Conference conference;
-
-  const ParticipantGrid(
-      {Key? key, required this.remoteOptionsFlag, required this.conference})
-      : super(key: key);
+  const ParticipantGrid({Key? key}) : super(key: key);
 
   @override
   State<ParticipantGrid> createState() => _ParticipantGridState();
@@ -77,6 +74,9 @@ class _ParticipantGridState extends State<ParticipantGrid> {
 
   @override
   Widget build(BuildContext context) {
+    var isReplayConference =
+        Provider.of<ConferenceModel>(context, listen: false).isReplayConference;
+
     return GridView.builder(
         itemCount: participants.length,
         scrollDirection: Axis.vertical,
@@ -87,9 +87,10 @@ class _ParticipantGridState extends State<ParticipantGrid> {
           var participant = participants[index];
           return ParticipantWidget(
             participant: participant,
-            remoteOptionsFlag: localParticipant?.id == participant.id
-                ? false
-                : widget.remoteOptionsFlag,
+            remoteOptionsFlag:
+                localParticipant?.id == participant.id || isReplayConference
+                    ? false
+                    : true,
           );
         });
   }
@@ -101,9 +102,21 @@ class _ParticipantGridState extends State<ParticipantGrid> {
   }
 
   Future<void> initParticipantsList() async {
+    var isReplayConference =
+        Provider.of<ConferenceModel>(context, listen: false).isReplayConference;
+    late Conference conference;
+    if (isReplayConference) {
+      conference = Provider.of<ConferenceModel>(context, listen: false)
+          .replayedConference;
+    } else {
+      Provider.of<ConferenceModel>(context, listen: false).updateConference();
+      conference =
+          Provider.of<ConferenceModel>(context, listen: false).conference;
+    }
+
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin
         .conference
-        .getParticipants(widget.conference);
+        .getParticipants(conference);
     conferenceParticipants.sort((item1, item2) {
       if (item1.status == ParticipantStatus.onAir ||
           item1.status == ParticipantStatus.connected) {

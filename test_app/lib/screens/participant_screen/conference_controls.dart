@@ -12,13 +12,10 @@ typedef ParticipantConferenceStatus = void Function(
     bool closeSessionOnDeactivate);
 
 class ConferenceControls extends StatefulWidget {
-  final Conference conference;
   final ParticipantConferenceStatus updateCloseSessionFlag;
 
-  const ConferenceControls(
-      {Key? key,
-      required this.conference,
-      required this.updateCloseSessionFlag})
+
+  const ConferenceControls({Key? key, required this.updateCloseSessionFlag})
       : super(key: key);
 
   @override
