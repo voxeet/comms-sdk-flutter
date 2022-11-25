@@ -76,6 +76,9 @@ jobs:
       - name: Run unmocked integration tests
         run: |
           ./scripts/run-unmocked-integration-tests-ios.rb
+      - name: Run mocked integration tests
+        run: |
+          ./scripts/run-mocked-integration-tests-ios.rb
       - name: Analyze
         run: |
           cd test_app
