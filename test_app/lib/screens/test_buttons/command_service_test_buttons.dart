@@ -3,16 +3,22 @@ import '/widgets/secondary_button.dart';
 import 'package:flutter/material.dart';
 import '/widgets/dialogs.dart';
 
-class CommandServiceTestButtons extends StatelessWidget {
-  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+class CommandServiceTestButtons extends StatefulWidget {
+  const CommandServiceTestButtons({Key? key}) : super(key: key);
 
-  CommandServiceTestButtons({Key? key}) : super(key: key);
+  @override
+  State<CommandServiceTestButtons> createState() =>
+      _CommandServiceTestButtonsState();
+}
+
+class _CommandServiceTestButtonsState extends State<CommandServiceTestButtons> {
+  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
   @override
   Widget build(BuildContext context) {
     return SecondaryButton(
       text: 'Send message',
-      onPressed: () => send(context),
+      onPressed: () => send(),
       fillWidth: true,
     );
   }
@@ -26,11 +32,14 @@ class CommandServiceTestButtons extends StatelessWidget {
     );
   }
 
-  void send(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.command
-        .send("Test message")
-        .then((value) => showDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) =>
-            showDialog(context, 'Error', error.toString()));
+  Future<void> send() async {
+    try {
+      await _dolbyioCommsSdkFlutterPlugin.command.send('Test message');
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
   }
 }
