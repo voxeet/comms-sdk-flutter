@@ -30,6 +30,7 @@ public enum MediaEngineComfortNoiseLevel: NSInteger {
 	var switchCameraHasRun: Bool = false
 	public func switchCamera(completion: (() -> Void)? = nil) {
 		switchCameraHasRun = true
+        completion?()
 	}
 
 	var switchDeviceSpeakerHasRun: Bool = false
