@@ -13,12 +13,6 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     var buttons = <Widget>[
       SecondaryButton(
-          text: 'Get comfort noise level',
-          onPressed: () => getComfortNoiseLevel(context)),
-      SecondaryButton(
-          text: 'Set comfort noise level',
-          onPressed: () => setComfortNoiseLevel(context)),
-      SecondaryButton(
           text: 'Is front camera', onPressed: () => isFrontCamera(context)),
       SecondaryButton(
           text: 'Switch camera', onPressed: () => switchCamera(context)),
@@ -39,23 +33,6 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
       title: title,
       body: text,
     );
-  }
-
-  void getComfortNoiseLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .getComfortNoiseLevel()
-        .then((comfortNoiseLevel) =>
-            showDialog(context, "Success", comfortNoiseLevel.toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
-  }
-
-  void setComfortNoiseLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .setComfortNoiseLevel(ComfortNoiseLevel.medium)
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
   }
 
   void isFrontCamera(BuildContext context) {
