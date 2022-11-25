@@ -52,7 +52,7 @@ jobs:
 
   build-macos:
     name: flutter build macos
-    runs-on: macos-11
+    runs-on: macos-12
     env:
       FLUTTER_VERSION: "3.0.3"
     steps:
@@ -73,9 +73,9 @@ jobs:
       - name: Run pana analyzer
         run: |
           ./scripts/score_analyzer.sh
-#      - name: Run unmocked integration tests
-#        run: |
-#          ./scripts/run-unmocked-integration-tests-ios.sh
+      - name: Run unmocked integration tests
+        run: |
+          ./scripts/run-unmocked-integration-tests-ios.rb
       - name: Analyze
         run: |
           cd test_app

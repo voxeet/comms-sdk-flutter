@@ -51,9 +51,7 @@ PODS:
     - Flutter
   - SwiftyGif (5.4.3)
   - Toast (4.0.0)
-  - VoxeetSDK (3.7):
-    - WebRTC (~> 1.0.0)
-  - WebRTC (1.0.0)
+  - VoxeetSDK (3.7.2)
 
 DEPENDENCIES:
   - dolbyio_comms_sdk_flutter (from `.symlinks/plugins/dolbyio_comms_sdk_flutter/ios`)
@@ -63,8 +61,6 @@ DEPENDENCIES:
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
-  - VoxeetSDK (from `../../test_app/integration_tests/ios_mocks/VoxeetSDKMock`)
-  - WebRTC (from `../../test_app/integration_tests/ios_mocks/WebRTCMock`)
 
 SPEC REPOS:
   trunk:
@@ -73,6 +69,7 @@ SPEC REPOS:
     - SDWebImage
     - SwiftyGif
     - Toast
+    - VoxeetSDK
 
 EXTERNAL SOURCES:
   dolbyio_comms_sdk_flutter:
@@ -89,10 +86,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
-  VoxeetSDK:
-    :path: "../../test_app/integration_tests/ios_mocks/VoxeetSDKMock"
-  WebRTC:
-    :path: "../../test_app/integration_tests/ios_mocks/WebRTCMock"
 
 SPEC CHECKSUMS:
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
@@ -107,8 +100,7 @@ SPEC CHECKSUMS:
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  VoxeetSDK: 07e017151e319ba077ef0307c0a3a94bb45040f7
-  WebRTC: 0a9a0f1e38ad6408e1e7da90fa994aa014f4c661
+  VoxeetSDK: e93f5eae58e3eef54dd4d443398d7497e52ba23a
 
 PODFILE CHECKSUM: ad35eb4c4f8efa60cf39d5ae575517a0e24a77af
 
