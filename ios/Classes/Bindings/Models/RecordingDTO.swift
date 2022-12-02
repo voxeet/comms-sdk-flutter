@@ -7,7 +7,7 @@ extension DTO {
     struct RecordingInformation: Codable {
         let participantId: String?
         let startTimestamp: Int?
-        let recordingStatus: RecordingStatus?
+        let recordingStatus: RecordingStatus
     }
 
     struct RecordingStatus: Codable {
@@ -43,4 +43,17 @@ extension DTO {
         }
     }
 
+    struct RecordingStatusUpdateNotification: Codable {
+        let recordingStatus: RecordingStatus
+        let conferenceId: String?
+        let participantId: String?
+        let timeStamp: Int?
+        
+        init(recordingInformation: RecordingInformation, conferenceId: String?) {
+            self.recordingStatus = recordingInformation.recordingStatus
+            self.conferenceId = conferenceId
+            self.participantId = recordingInformation.participantId
+            self.timeStamp = recordingInformation.startTimestamp
+        }
+    }
 }
