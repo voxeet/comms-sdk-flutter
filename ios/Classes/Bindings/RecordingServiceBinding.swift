@@ -1,6 +1,11 @@
 import Foundation
 import VoxeetSDK
 
+private enum EventKeys: String, CaseIterable {
+    /// Emitted when the recording state of the conference is updated from the remote location.
+    case recordingStatusUpdate = "EVENT_RECORDING_STATUS_UPDATED"
+}
+
 class RecordingServiceBinding: Binding {
 
     private var currentRecording: DTO.RecordingInformation = .init(
@@ -74,5 +79,17 @@ extension RecordingServiceBinding: VTRecordingDelegate {
             startTimestamp: startTimestamp?.intValue,
             recordingStatus: .init(recordingStatus: status)
         )
+
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.recordingStatusUpdate,
+                body: DTO.RecordingStatusUpdateNotification(
+                    recordingInformation: currentRecording,
+                    conferenceId: VoxeetSDK.shared.conference.current?.id
+                )
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
     }
 }

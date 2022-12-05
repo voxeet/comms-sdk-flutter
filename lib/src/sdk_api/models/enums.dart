@@ -208,7 +208,7 @@ enum RecordingStatus {
 ///
 /// {@category Models}
 enum RecordingServiceEventNames implements EnumWithStringValue {
-  /// Emitted when an application user receives an invitation.
+  /// Emitted when the recording state of the conference is updated from the remote location.
   recordingStatusUpdate('EVENT_RECORDING_STATUS_UPDATED');
 
   @override
