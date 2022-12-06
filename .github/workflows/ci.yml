@@ -59,8 +59,8 @@ jobs:
     runs-on: macos-12
     env:
       FLUTTER_VERSION: "3.0.3"
-      ANDROID_SDK_ROOT: "~/android-sdk"
-      ANDROID_HOME: "~/.android/"
+      ANDROID_SDK_ROOT: "/Users/runner/android-sdk"
+      ANDROID_HOME: "~/.android"
     steps:
     - name: Checkout 🛎️
       uses: actions/checkout@v3
@@ -87,40 +87,29 @@ jobs:
     - name: Run mocked integration tests
       run: |
         ./scripts/run-mocked-integration-tests-ios.rb
+
+    - name: Set up Java
+      uses: actions/setup-java@v2
+      with:
+        java-version: 15
+        distribution: 'zulu'
+    - name: Set up android enviroment
+      run: |
+        ./scripts/macos_setup_android_env.sh
+    - name: Configure sdkmanager
+      run: |
+        ./scripts/macos_configure-sdkmanager.sh
+    - name: Set up Flutter version
+      uses: ./.github/actions/flutter-action
+      with:
+        flutter-version: $FLUTTER_VERSION
+    - name: Fetch dependencies
+      run: |
+        flutter pub get
+    - name: Run android integration tests
+      run: |
+        ./scripts/run-mocked-integration-tests-android.sh
+
     - name: Analyze
       run: |
         flutter analyze
-
-  run-android-test:
-    name: Run android integration test
-    runs-on: macos-12
-    env:
-      FLUTTER_VERSION: "3.0.3"
-      ANDROID_SDK_ROOT: "/Users/runner/android-sdk"
-      ANDROID_HOME: "~/.android"
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-      - name: Checkout submodules
-        run: git submodule update --init --recursive
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: 15
-          distribution: 'zulu'
-      - name: Set up android enviroment
-        run: |
-          ./scripts/macos_setup_android_env.sh
-      - name: Configure sdkmanager
-        run: |
-          ./scripts/macos_configure-sdkmanager.sh
-      - name: Set up Flutter version
-        uses: ./.github/actions/flutter-action
-        with:
-          flutter-version: $FLUTTER_VERSION
-      - name: Fetch dependencies
-        run: |
-          flutter pub get
-      - name: Run integration tests
-        run: |
-          ./scripts/run-mocked-integration-tests-android.sh
