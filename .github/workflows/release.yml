@@ -41,7 +41,8 @@ jobs:
       with:
         flutter-version: $FLUTTER_VERSION
 
-    - uses: ./.github/actions/setup-dart
+    - name: Setup Dart
+      uses: ./.github/actions/setup-dart
 
     - name: Install dependencies
       run: |
