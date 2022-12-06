@@ -1,28 +1,32 @@
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
-
 import '/widgets/dialogs.dart';
 import '/widgets/secondary_button.dart';
 
-class MediaDeviceServiceTestButtons extends StatelessWidget {
-  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+class MediaDeviceServiceTestButtons extends StatefulWidget {
+  const MediaDeviceServiceTestButtons({Key? key}) : super(key: key);
 
-  MediaDeviceServiceTestButtons({Key? key}) : super(key: key);
+  @override
+  State<MediaDeviceServiceTestButtons> createState() =>
+      _MediaDeviceServiceTestButtonsState();
+}
+
+class _MediaDeviceServiceTestButtonsState
+    extends State<MediaDeviceServiceTestButtons> {
+  final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
   @override
   Widget build(BuildContext context) {
-    var buttons = <Widget>[
-      SecondaryButton(
-          text: 'Is front camera', onPressed: () => isFrontCamera(context)),
-      SecondaryButton(
-          text: 'Switch camera', onPressed: () => switchCamera(context)),
-      SecondaryButton(
-          text: 'Switch speaker', onPressed: () => switchSpeaker(context))
-    ];
     return Wrap(
       spacing: 8.0,
       runSpacing: 4.0,
-      children: buttons,
+      children: <Widget>[
+        SecondaryButton(
+            text: 'Is front camera', onPressed: () => isFrontCamera()),
+        SecondaryButton(text: 'Switch camera', onPressed: () => switchCamera()),
+        SecondaryButton(
+            text: 'Switch speaker', onPressed: () => switchSpeaker())
+      ],
     );
   }
 
@@ -35,28 +39,37 @@ class MediaDeviceServiceTestButtons extends StatelessWidget {
     );
   }
 
-  void isFrontCamera(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .isFrontCamera()
-        .then((isFrontCamera) =>
-            showDialog(context, "Success", isFrontCamera.toString()))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
+  Future<void> isFrontCamera() async {
+    try {
+      var isFrontCamera =
+          await _dolbyioCommsSdkFlutterPlugin.mediaDevice.isFrontCamera();
+      if (!mounted) return;
+      showDialog(context, 'Success', isFrontCamera.toString());
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
   }
 
-  void switchCamera(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .switchCamera()
-        .then((value) => showDialog(context, "Success", "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, "Error", error.toString()));
+  Future<void> switchCamera() async {
+    try {
+      await _dolbyioCommsSdkFlutterPlugin.mediaDevice.switchCamera();
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
   }
 
-  void switchSpeaker(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.mediaDevice
-        .switchSpeaker()
-        .then((value) => showDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showDialog(
-            context, 'Error', error.toString() + stackTrace.toString()));
+  Future<void> switchSpeaker() async {
+    try {
+      await _dolbyioCommsSdkFlutterPlugin.mediaDevice.switchSpeaker();
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
   }
 }

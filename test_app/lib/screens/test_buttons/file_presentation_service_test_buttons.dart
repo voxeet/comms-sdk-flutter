@@ -3,7 +3,6 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/secondary_button.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '/widgets/dialogs.dart';
 
 class FilePresentationServiceTestButtons extends StatefulWidget {
@@ -17,7 +16,7 @@ class FilePresentationServiceTestButtons extends StatefulWidget {
 class _FilePresentationServiceTestButtonsState
     extends State<FilePresentationServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  FileConverted? fileConverted;
+  FileConverted? _fileConverted;
   int selectedPage = 0;
 
   final _eventListeners = <StreamSubscription<dynamic>>{};
@@ -31,8 +30,8 @@ class _FilePresentationServiceTestButtonsState
         .listen((event) {
       switch (event.type) {
         case FilePresentationServiceEventNames.fileConverted:
-          showDialog(context, "File presentation evet: fileConverted",
-              "On Event Change");
+          showDialog(context, 'File presentation evet: fileConverted',
+              'On Event Change');
           break;
         case FilePresentationServiceEventNames.filePresentationStarted:
         case FilePresentationServiceEventNames.filePresentationStopped:
@@ -48,16 +47,22 @@ class _FilePresentationServiceTestButtonsState
         case FilePresentationServiceEventNames.fileConverted:
           break;
         case FilePresentationServiceEventNames.filePresentationStarted:
-          showDialog(context, "File presentation evet: filePresentationStarted",
-              "On Event Change");
+          showDialog(
+              context,
+              'File presentation event: filePresentationStarted',
+              'On Event Change');
           break;
         case FilePresentationServiceEventNames.filePresentationStopped:
-          showDialog(context, "File presentation evet: filePresentationStopped",
-              "On Event Change");
+          showDialog(
+              context,
+              'File presentation event: filePresentationStopped',
+              'On Event Change');
           break;
         case FilePresentationServiceEventNames.filePresentationUpdated:
-          showDialog(context, "File presentation evet: filePresentationUpdated",
-              "On Event Change");
+          showDialog(
+              context,
+              'File presentation event: filePresentationUpdated',
+              'On Event Change');
           break;
       }
     }));
@@ -113,92 +118,128 @@ class _FilePresentationServiceTestButtonsState
     );
   }
 
-  void convert() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['doc', 'docx', 'ppt', 'pptx', 'pdf'],
-    );
-    String? path = result?.files.single.path;
+  Future<void> convert() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['doc', 'docx', 'ppt', 'pptx', 'pdf'],
+      );
+      String? path = result?.files.single.path;
 
-    if (path != null) {
-      _dolbyioCommsSdkFlutterPlugin.filePresentation
-          .convert(File(path))
-          .then((value) {
-        fileConverted = value;
-        return showDialog(context, 'Success', value.toJson().toString());
-      }).onError((error, stackTrace) =>
-              showDialog(context, 'Error', error.toString()));
-    } else {
-      Fluttertoast.showToast(msg: "File not selected");
+      if (path == null) {
+        if (!mounted) return;
+        showDialog(context, 'File not selected', '');
+        return;
+      }
+
+      var fileConverted = await _dolbyioCommsSdkFlutterPlugin.filePresentation
+          .convert(File(path));
+      _fileConverted = fileConverted;
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error: ', error.toString());
     }
   }
 
-  void startFilePresentation() {
-    if (fileConverted != null) {
-      _dolbyioCommsSdkFlutterPlugin.filePresentation
-          .start(fileConverted!)
-          .then((value) => showDialog(context, 'Success', "OK"))
-          .onError((error, stackTrace) =>
-              showDialog(context, 'Error', error.toString()));
-    } else {
-      Fluttertoast.showToast(msg: "You must convert file first!");
+  Future<void> startFilePresentation() async {
+    try {
+      if (_fileConverted == null) {
+        if (!mounted) return;
+        showDialog(context, 'You must convert file first!', '');
+        return;
+      }
+
+      await _dolbyioCommsSdkFlutterPlugin.filePresentation
+          .start(_fileConverted!);
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error: ', error.toString());
     }
   }
 
-  void stopFilePresentation() {
-    _dolbyioCommsSdkFlutterPlugin.filePresentation
-        .stop()
-        .then((value) => showDialog(context, 'Success', "OK"))
-        .onError((error, stackTrace) =>
-            showDialog(context, 'Error', error.toString()));
-  }
-
-  void getCurrent() {
-    if (fileConverted != null) {
-      _dolbyioCommsSdkFlutterPlugin.filePresentation
-          .getCurrent()
-          .then((value) =>
-              showDialog(context, 'Success', value.toJson().toString()))
-          .onError((error, stackTrace) =>
-              showDialog(context, 'Error', error.toString()));
-    } else {
-      Fluttertoast.showToast(msg: "You must start presentation first!");
+  Future<void> stopFilePresentation() async {
+    try {
+      await _dolbyioCommsSdkFlutterPlugin.filePresentation.stop();
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error: ', error.toString());
     }
   }
 
-  void setPage() {
-    if (fileConverted != null) {
-      _dolbyioCommsSdkFlutterPlugin.filePresentation
-          .setPage(0)
-          .then((value) => showDialog(context, 'Success', "OK"))
-          .onError((error, stackTrace) =>
-              showDialog(context, 'Error', error.toString()));
-    } else {
-      Fluttertoast.showToast(msg: "You must start presentation first!");
+  Future<void> getCurrent() async {
+    try {
+      if (_fileConverted == null) {
+        if (!mounted) return;
+        showDialog(context, 'You must start presentation first!', '');
+        return;
+      }
+
+      var filePresentation =
+          await _dolbyioCommsSdkFlutterPlugin.filePresentation.getCurrent();
+      if (!mounted) return;
+      showDialog(context, 'Success', filePresentation.toJson().toString());
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error: ', error.toString());
     }
   }
 
-  void getImage() {
-    if (fileConverted != null) {
-      _dolbyioCommsSdkFlutterPlugin.filePresentation
-          .getImage(0)
-          .then((value) => showDialog(context, 'Success', value))
-          .onError((error, stackTrace) =>
-              showDialog(context, 'Error', error.toString()));
-    } else {
-      Fluttertoast.showToast(msg: "You must start presentation first!");
+  Future<void> setPage() async {
+    try {
+      if (_fileConverted == null) {
+        if (!mounted) return;
+        showDialog(context, 'You must start presentation first!', '');
+        return;
+      }
+
+      await _dolbyioCommsSdkFlutterPlugin.filePresentation.setPage(0);
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error: ', error.toString());
     }
   }
 
-  void getThumbnail() {
-    if (fileConverted != null) {
-      _dolbyioCommsSdkFlutterPlugin.filePresentation
-          .getThumbnail(0)
-          .then((value) => showDialog(context, 'Success', value))
-          .onError((error, stackTrace) =>
-              showDialog(context, 'Error', error.toString()));
-    } else {
-      Fluttertoast.showToast(msg: "You must start presentation first!");
+  Future<void> getImage() async {
+    try {
+      if (_fileConverted == null) {
+        if (!mounted) return;
+        showDialog(context, 'You must start presentation first!', '');
+        return;
+      }
+
+      var value =
+          await _dolbyioCommsSdkFlutterPlugin.filePresentation.getImage(0);
+      if (!mounted) return;
+      showDialog(context, 'Success', value);
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error: ', error.toString());
+    }
+  }
+
+  Future<void> getThumbnail() async {
+    try {
+      if (_fileConverted == null) {
+        if (!mounted) return;
+        showDialog(context, 'You must start presentation first!', '');
+        return;
+      }
+
+      var value =
+          await _dolbyioCommsSdkFlutterPlugin.filePresentation.getThumbnail(0);
+      if (!mounted) return;
+      showDialog(context, 'Success', value);
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error: ', error.toString());
     }
   }
 }
