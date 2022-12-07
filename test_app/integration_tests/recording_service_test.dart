@@ -16,8 +16,6 @@ void main() {
 
   if(Platform.isIOS) {
     testWidgets('RecordingService: currentRecording', (tester) async {
-      dolbyioCommsSdkFlutterPlugin.recording.start();
-
       await runNative(
           methodChannel: recordingServiceAssertsMethodChannel,
           label: "setCurrentRecording",
