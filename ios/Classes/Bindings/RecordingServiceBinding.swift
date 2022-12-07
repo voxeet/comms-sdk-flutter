@@ -8,6 +8,11 @@ private enum EventKeys: String, CaseIterable {
 
 class RecordingServiceBinding: Binding {
 
+    override func onInit() {
+        super.onInit()
+        VoxeetSDK.shared.recording.delegate = self
+    }
+
     private var currentRecording: DTO.RecordingInformation = .init(
         participantId: nil,
         startTimestamp: nil,
@@ -31,7 +36,6 @@ class RecordingServiceBinding: Binding {
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
-        VoxeetSDK.shared.recording.delegate = self
         VoxeetSDK.shared.recording.start() { error in
             completionHandler.handleError(error)?.orSuccess()
         }
