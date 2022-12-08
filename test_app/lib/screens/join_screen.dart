@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:provider/provider.dart';
@@ -320,9 +319,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           result: (value) => value ? openAppSettings() : null,
         );
       },
-      onDenied: (permissions) {
-        Fluttertoast.showToast(
-            msg: "Permissions $permissions missing, can't continue");
+      onDenied: (permissions) async {
+        await ViewDialogs.dialog(
+            context: context,
+            title: 'Permissions missing',
+            body: 'Permissions $permissions missing, cannot continue.',
+            okText: 'Ok'
+        );
       },
     );
   }
