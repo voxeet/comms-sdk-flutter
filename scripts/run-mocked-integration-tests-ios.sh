@@ -24,7 +24,7 @@ else
 fi
 
 cd test_app
-USE_SDK_MOCK=true flutter test integration_tests --flavor "$xcode_build_scheme" -d "$device_id"
+USE_SDK_MOCK=true flutter test integration_tests/mocked --flavor "$xcode_build_scheme" -d "$device_id"
 test_exit_code=$?
 
 echo "Shutting down simulator $device_id ..."
