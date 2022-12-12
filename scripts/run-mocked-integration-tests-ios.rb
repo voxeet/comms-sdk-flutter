@@ -58,7 +58,7 @@ begin
     end
 
     puts("Runing tests ...")
-    cmd = "USE_SDK_MOCK=true flutter test integration_tests --flavor '#{xcode_build_scheme}' -d '#{simulator.udid}' -r expanded"
+    cmd = "USE_SDK_MOCK=true flutter test integration_tests/mocked --flavor '#{xcode_build_scheme}' -d '#{simulator.udid}' -r expanded"
     Open3.popen2(cmd, chdir: "test_app") do |stdin, stdout, wait_thr|
         while line = stdout.gets
             puts line
