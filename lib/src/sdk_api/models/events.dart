@@ -80,13 +80,13 @@ class RecordingStatusUpdate {
   RecordingStatus recordingStatus;
 
   /// The unique identifier of the conference.
-  String conferenceId;
+  String? conferenceId;
 
   /// The unique identifier the participant who changed the recording status.
-  String participantId;
+  String? participantId;
 
   ///The timestamp of when the recording status changed.
-  int timeStamp;
+  int? timeStamp;
 
   RecordingStatusUpdate(this.recordingStatus, this.conferenceId,
       this.participantId, this.timeStamp);
@@ -94,9 +94,9 @@ class RecordingStatusUpdate {
   static RecordingStatusUpdate fromMap(Map<Object?, Object?> data) {
     RecordingStatus recordingStatus =
         RecordingStatus.valueOf(data["recordingStatus"] as String);
-    String conferenceId = data["conferenceId"] as String;
-    String participantId = data["participantId"] as String;
-    int timeStamp = data["timeStamp"] as int;
+    String? conferenceId = data["conferenceId"] as String?;
+    String? participantId = data["participantId"] as String?;
+    int? timeStamp = data["timeStamp"] as int?;
     return RecordingStatusUpdate(
         recordingStatus, conferenceId, participantId, timeStamp);
   }

@@ -1,7 +1,17 @@
 import Foundation
 import VoxeetSDK
 
+private enum EventKeys: String, CaseIterable {
+    /// Emitted when the recording state of the conference is updated from the remote location.
+    case recordingStatusUpdate = "EVENT_RECORDING_STATUS_UPDATED"
+}
+
 class RecordingServiceBinding: Binding {
+
+    override func onInit() {
+        super.onInit()
+        VoxeetSDK.shared.recording.delegate = self
+    }
 
     private var currentRecording: DTO.RecordingInformation = .init(
         participantId: nil,
@@ -26,7 +36,6 @@ class RecordingServiceBinding: Binding {
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
-        VoxeetSDK.shared.recording.delegate = self
         VoxeetSDK.shared.recording.start() { error in
             completionHandler.handleError(error)?.orSuccess()
         }
@@ -74,5 +83,17 @@ extension RecordingServiceBinding: VTRecordingDelegate {
             startTimestamp: startTimestamp?.intValue,
             recordingStatus: .init(recordingStatus: status)
         )
+
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.recordingStatusUpdate,
+                body: DTO.RecordingStatusUpdateNotification(
+                    recordingInformation: currentRecording,
+                    conferenceId: VoxeetSDK.shared.conference.current?.id
+                )
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
     }
 }

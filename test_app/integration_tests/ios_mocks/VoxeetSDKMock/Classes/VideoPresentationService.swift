@@ -3,6 +3,8 @@ import WebRTC
 
 @objcMembers public class VideoPresentationService: NSObject {
     
+    public weak var delegate: VTVideoPresentationDelegate?
+    
     public internal(set) var current: VTVideoPresentation?
     public internal(set) var state: VTVideoPresentationState = .stopped
     

@@ -3,41 +3,62 @@ name: release
 on:
   push:
     branches:
-      - main
+    - main
   workflow_dispatch:
 
 jobs:
   generate-doc-linux:
     name: flutter build linux
+
+    # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
+    permissions:
+      contents: read
+      pages: write      # to deploy to Pages
+      id-token: write   # to verify the deployment originates from an appropriate source
+
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     runs-on: ubuntu-latest
     env:
       FLUTTER_VERSION: "3.0.3"
     steps:
-      - name: Checkout repo 
-        uses: actions/checkout@v2
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: 15
-          distribution: 'adopt'
-      - name: Set up Flutter version
-        uses: subosito/flutter-action@v2.4.0
-        with:
-          flutter-version: $FLUTTER_VERSION
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+    - name: Set up Java 🔧
+      uses: actions/setup-java@v3
+      with:
+        java-version: 15
+        distribution: 'adopt'
+    - name: Set up Flutter version 🔧
+      uses: ./.github/actions/flutter-action
+      with:
+        flutter-version: $FLUTTER_VERSION
 
-      - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1.3
+    - name: Setup Dart
+      uses: ./.github/actions/setup-dart
 
-      - name: Install dependencies
-        run: |
-         dart pub get
-      - name: Generate dart doc
-        run: |
-         dart doc .  
-      - name: Deploy github pages🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          force : true
-          single-commit: true
-          folder: doc/api # The folder the action should deploy.
+    - name: Install dependencies
+      run: |
+        dart pub get
+    - name: Generate dart doc
+      run: |
+        dart doc .
 
+    - name: Setup GitHub Pages 🛠
+      uses: actions/configure-pages@v2
+
+    - name: Upload artifact ⬆️
+      uses: actions/upload-pages-artifact@v1
+      with:
+        path: doc/api
+
+    - name: Deploy to GitHub Pages 🚀
+      id: deployment
+      uses: actions/deploy-pages@v1

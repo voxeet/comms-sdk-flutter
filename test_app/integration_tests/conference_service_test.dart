@@ -1065,7 +1065,7 @@ void main() {
         });
   });
 
-  testWidgets('ConferenceService: Listen', (tester) async {
+  testWidgets('ConferenceService: listen', (tester) async {
     await runNative(
         methodChannel: conferenceServiceAssertsMethodChannel,
         label: "setListenConferenceReturn",

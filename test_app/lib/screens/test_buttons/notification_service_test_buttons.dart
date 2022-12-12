@@ -28,13 +28,13 @@ class _NotificationServiceTestButtonsState
         child: Column(
           children: [
             InputTextFormField(
-              labelText: "name",
+              labelText: 'name',
               controller: nameTextController,
               focusColor: Colors.deepPurple,
             ),
             const SizedBox(height: 8),
             InputTextFormField(
-              labelText: "externalID",
+              labelText: 'externalID',
               controller: externalIdTextController,
               focusColor: Colors.deepPurple,
             ),
@@ -56,28 +56,36 @@ class _NotificationServiceTestButtonsState
     );
   }
 
-  void onInviteButtonPressed() {
-    final isValidForm = formKey.currentState!.validate();
-    if (isValidForm) {
-      invite();
-    } else {
-      developer.log('Cannot invite');
+  void onInviteButtonPressed() async {
+    try {
+      final isValidForm = formKey.currentState!.validate();
+      if (isValidForm) await invite();
+    } catch (e) {
+      developer.log('Cannot invite due to error: $e');
     }
   }
 
-  void invite() {
+  Future<void> invite() async {
+    try {
+      var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      var participants = await getInvitedParticipants();
+      await _dolbyioCommsSdkFlutterPlugin.notification
+          .invite(conference, participants);
+      if (!mounted) return;
+      showDialog(context, 'Success', 'OK');
+    } catch (error) {
+      if (!mounted) return;
+      showDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<List<ParticipantInvited>> getInvitedParticipants() async {
     List<ParticipantInvited> participants = [];
     var participantInvited = ParticipantInvited(
         ParticipantInfo(
             nameTextController.text, null, externalIdTextController.text),
         null);
     participants.add(participantInvited);
-
-    _dolbyioCommsSdkFlutterPlugin.conference.current().then((conference) =>
-        _dolbyioCommsSdkFlutterPlugin.notification
-            .invite(conference, participants)
-            .then((value) => showDialog(context, "Success", "OK"))
-            .onError((error, stackTrace) =>
-                showDialog(context, "Error", error.toString())));
+    return participants;
   }
 }

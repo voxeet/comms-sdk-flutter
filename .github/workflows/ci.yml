@@ -3,14 +3,14 @@ name: CI
 on:
   push:
     branches:
-      - main
-      - develop
-      - release/*
+    - main
+    - develop
+    - release/*
   pull_request:
     branches: 
-      - main
-      - develop
-      - release/*
+    - main
+    - develop
+    - release/*
 
   workflow_dispatch:
 
@@ -21,57 +21,68 @@ jobs:
     env:
       FLUTTER_VERSION: "3.0.3"
     steps:
-      - name: Checkout repo 
-        uses: actions/checkout@v2
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: 15
-          distribution: 'adopt'
-      - name: Set up Flutter version
-        uses: subosito/flutter-action@v2.4.0
-        with:
-          flutter-version: $FLUTTER_VERSION
-      - name: Fetch dependencies
-        run: |
-         flutter pub get
-      - name: Run tests
-        run: |
-         flutter test -r expanded
-      - name: Run pana analyzer
-        run: |
-          ./scripts/score_analyzer.sh
-      - name: Build app
-        run: |
-          ./scripts/build-android.sh
-      - name: Analyze
-        run: |
-          flutter analyze
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+    - name: Set up Java 🔧
+      uses: actions/setup-java@v3
+      with:
+        java-version: 15
+        distribution: 'adopt'
+    - name: Set up Flutter version 🔧
+      uses: ./.github/actions/flutter-action
+      with:
+        flutter-version: $FLUTTER_VERSION
+    - name: Fetch dependencies
+      run: |
+        flutter pub get
+    - name: Run tests
+      run: |
+        flutter test -r expanded
+    - name: Run pana analyzer
+      run: |
+        ./scripts/score_analyzer.sh
+    - name: Build app
+      run: |
+        ./scripts/build-android.sh
+    - name: Analyze
+      run: |
+        flutter analyze
 
   build-macos:
     name: flutter build macos
-    runs-on: macos-11
+    runs-on: macos-12
     env:
       FLUTTER_VERSION: "3.0.3"
     steps:
-      - name: Checkout repo 
-        uses: actions/checkout@v2
-      - name: Set up Flutter version
-        uses: subosito/flutter-action@v2.4.0
-        with:
-          flutter-version: $FLUTTER_VERSION
-      - name: Fetch dependencies
-        run: |
-         flutter pub get
-      - name: Run tests
-        run: |
-         flutter test -r expanded
-      - name: Run pana analyzer
-        run: |
-          ./scripts/score_analyzer.sh
-      - name: Run unmocked integration tests
-        run: |
-          ./scripts/run-unmocked-integration-tests-ios.sh
-      - name: Analyze
-        run: |
-          flutter analyze
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+    - name: Set up Flutter version 🔧
+      uses: ./.github/actions/flutter-action
+      with:
+        flutter-version: $FLUTTER_VERSION
+    - name: Fetch dependencies
+      run: |
+        flutter pub get
+    - name: Run tests
+      run: |
+        flutter test -r expanded
+    - name: Run pana analyzer
+      run: |
+        ./scripts/score_analyzer.sh
+    - name: Run unmocked integration tests
+      run: |
+        ./scripts/run-unmocked-integration-tests-ios.rb
+    - name: Run mocked integration tests
+      run: |
+        ./scripts/run-mocked-integration-tests-ios.rb
+    - name: Analyze
+      run: |
+        flutter analyze

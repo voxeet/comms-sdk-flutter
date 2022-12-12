@@ -1,3 +1,4 @@
+import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_extensions/participant_spatial_values.dart';
 import 'package:provider/provider.dart';
 import '../../conference_ext.dart';
@@ -14,11 +15,9 @@ import '/widgets/dolby_title.dart';
 import '/widgets/modal_bottom_sheet.dart';
 
 class ParticipantScreen extends StatefulWidget {
-  final Conference conference;
   final bool isSpatialAudio;
 
-  const ParticipantScreen(
-      {Key? key, required this.isSpatialAudio, required this.conference})
+  const ParticipantScreen({Key? key, required this.isSpatialAudio})
       : super(key: key);
 
   @override
@@ -39,9 +38,7 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-              ParticipantScreenContent(
-                  isSpatialAudio: widget.isSpatialAudio,
-                  conference: widget.conference),
+              ParticipantScreenContent(isSpatialAudio: widget.isSpatialAudio),
             ],
           ),
         ),
@@ -51,11 +48,9 @@ class _ParticipantScreenState extends State<ParticipantScreen> {
 }
 
 class ParticipantScreenContent extends StatefulWidget {
-  final Conference conference;
   final bool isSpatialAudio;
 
-  const ParticipantScreenContent(
-      {Key? key, required this.isSpatialAudio, required this.conference})
+  const ParticipantScreenContent({Key? key, required this.isSpatialAudio})
       : super(key: key);
 
   @override
@@ -72,12 +67,12 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       VideoViewController();
 
   StreamSubscription<Event<ConferenceServiceEventNames, Participant>>?
-  _participantsChangeSubscription;
+      _participantsChangeSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, StreamsChangeData>>?
-  _streamsChangeSubscription;
+      _streamsChangeSubscription;
   StreamSubscription<
-      Event<ConferenceServiceEventNames, List<ConferencePermission>>>?
-  _onPermissionsChangeSubsription;
+          Event<ConferenceServiceEventNames, List<ConferencePermission>>>?
+      _onPermissionsChangeSubsription;
 
   StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
       _onRecordingChangeSubscription;
@@ -140,6 +135,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<SpatialValuesModel>(context).setSpatialConferenceState(widget.isSpatialAudio);
     Provider.of<SpatialValuesModel>(context).copyList(participants);
 
     Widget videoView = const FlutterLogo();
@@ -162,12 +158,11 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         ),
         child: Column(
           children: [
-            ConferenceTitle(conference: widget.conference),
+            const ConferenceTitle(),
             Expanded(
               child: Stack(
                 children: [
-                  ParticipantGrid(
-                      remoteOptionsFlag: true, conference: widget.conference),
+                  const ParticipantGrid(),
                   Positioned(
                       left: 10,
                       bottom: 10,
@@ -179,7 +174,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
               ),
             ),
             ConferenceControls(
-              conference: widget.conference,
               updateCloseSessionFlag: (shouldCloseSession) {
                 shouldCloseSessionOnLeave = shouldCloseSession;
               },
@@ -199,8 +193,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
             participant: participant, position: SpatialPosition(0.0, 0.0, 0.0));
         ParticipantSpatialValues participantSpatial = ParticipantSpatialValues(
-            participant.id,
-            SpatialPosition(0.0, 0.0, 0.0), null);
+            participant.id, SpatialPosition(0.0, 0.0, 0.0), null);
         participants.add(participantSpatial);
       }
     }
@@ -213,8 +206,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         _dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
             participant: participant, position: SpatialPosition(0.0, 0.0, 0.0));
         ParticipantSpatialValues participantSpatial = ParticipantSpatialValues(
-            participant.id,
-            SpatialPosition(0.0, 0.0, 0.0), null);
+            participant.id, SpatialPosition(0.0, 0.0, 0.0), null);
         participants.add(participantSpatial);
       }
     }
@@ -235,11 +227,16 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       navigator.popUntil(ModalRoute.withName("JoinConferenceScreen"));
       return Future.value();
     }
+
+    if (!mounted) return;
+    Provider.of<ConferenceModel>(context, listen: false).conference =
+        currentConference;
+
     final conferenceParticipants = await _dolbyioCommsSdkFlutterPlugin
         .conference
-        .getParticipants(widget.conference);
+        .getParticipants(currentConference);
     final localParticipant =
-    await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+        await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
     final availableParticipants = conferenceParticipants
         .where((element) => element.status != ParticipantStatus.left);
     if (availableParticipants.isNotEmpty) {
@@ -267,8 +264,11 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   }
 
   Future<void> _updateShareScreenView() async {
+    Provider.of<ConferenceModel>(context, listen: false).updateConference();
+    var conference =
+        Provider.of<ConferenceModel>(context, listen: false).conference;
     final participants = await _dolbyioCommsSdkFlutterPlugin.conference
-        .getParticipants(widget.conference);
+        .getParticipants(conference);
     final availableParticipants = participants
         .where((element) => element.status != ParticipantStatus.left);
 
@@ -293,7 +293,8 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
       if (mediaStream != null && streamingParticipant != null) {
         if (!mounted) return;
-        _shareScreenVideoViewController.attach(streamingParticipant, mediaStream);
+        _shareScreenVideoViewController.attach(
+            streamingParticipant, mediaStream);
       } else {
         if (!mounted) return;
         _shareScreenVideoViewController.detach();

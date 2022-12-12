@@ -30,40 +30,26 @@ class _ConferenceServiceTestButtonsState
       runSpacing: 4.0,
       children: <Widget>[
         SecondaryButton(
-            text: 'Get participant', onPressed: () => getParticipant(context)),
+            text: 'Get participant', onPressed: () => getParticipant()),
         SecondaryButton(
             text: 'Get participants',
-            onPressed: () => getParticipants(context)),
+            onPressed: () => getParticipants()),
         SecondaryButton(
             text: 'Fetch conference',
-            onPressed: () => fetchConference(context)),
+            onPressed: () => fetchConference()),
         SecondaryButton(
-            text: 'Current conference', onPressed: () => current(context)),
+            text: 'Current conference', onPressed: () => current()),
         SecondaryButton(
-            text: 'GetAudioLevel', onPressed: () => getAudioLevel(context)),
-        SecondaryButton(text: 'IsMuted', onPressed: () => isMuted(context)),
-        SecondaryButton(text: 'Mute', onPressed: () => setMute(context, true)),
+            text: 'GetAudioLevel', onPressed: () => getAudioLevel()),
+        SecondaryButton(text: 'IsMuted', onPressed: () => isMuted()),
+        SecondaryButton(text: 'Mute', onPressed: () => setMute(true)),
         SecondaryButton(
-            text: 'Unmute', onPressed: () => setMute(context, false)),
+            text: 'Unmute', onPressed: () => setMute(false)),
         SecondaryButton(
-            text: 'Mute output', onPressed: () => setMuteOutput(context, true)),
+            text: 'Mute output', onPressed: () => setMuteOutput(true)),
         SecondaryButton(
             text: 'Unmute output',
-            onPressed: () => setMuteOutput(context, false)),
-        SecondaryButton(
-            text: 'Start audio', onPressed: () => startAudio(context)),
-        SecondaryButton(
-            text: 'Stop audio', onPressed: () => stopAudio(context)),
-        SecondaryButton(
-            text: 'Start video', onPressed: () => startVideo(context)),
-        SecondaryButton(
-            text: 'Stop video', onPressed: () => stopVideo(context)),
-        SecondaryButton(
-            text: 'Start screen share',
-            onPressed: () => startScreenShare()),
-        SecondaryButton(
-            text: 'Stop screen share',
-            onPressed: () => stopScreenShare(context)),
+            onPressed: () => setMuteOutput(false)),
         SecondaryButton(
             text: 'Set spatial position',
             onPressed: () => setSpatialPositionDialog(context)),
@@ -74,18 +60,15 @@ class _ConferenceServiceTestButtonsState
             text: 'Set spatial environment',
             onPressed: () => setSpatialEnvironmentDialog(context)),
         SecondaryButton(
-            text: 'Get local stats', onPressed: () => getLocalStats(context)),
+            text: 'Get local stats', onPressed: () => getLocalStats()),
         SecondaryButton(
             text: 'Set video forwarding',
             onPressed: () => setVideoForwarding(context)),
         SecondaryButton(
-            text: 'Set audio processing',
-            onPressed: () => setAudioProcessing(context)),
-        SecondaryButton(
-            text: 'Is speaking', onPressed: () => isSpeaking(context)),
+            text: 'Is speaking', onPressed: () => isSpeaking()),
         SecondaryButton(
             text: 'Get max video forwarding',
-            onPressed: () => getMaxVideoForwarding(context)),
+            onPressed: () => getMaxVideoForwarding()),
       ],
     );
   }
@@ -99,147 +82,106 @@ class _ConferenceServiceTestButtonsState
     );
   }
 
-  void getParticipant(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalParticipant()
-        .then((participant) => showResultDialog(
-            context, 'Success', participant.toJson().toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void getParticipants(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => _dolbyioCommsSdkFlutterPlugin.conference
-            .getParticipants(conference))
-        .then((participants) =>
-            showResultDialog(context, 'Success', jsonEncode(participants)))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void fetchConference(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.fetch(conference.id))
-        .then((conference) => showResultDialog(
-            context, 'Success', conference.toJson().toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void current(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) => showResultDialog(
-            context, 'Success', conference.toJson().toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void getAudioLevel(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalParticipant()
-        .then((participant) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.getAudioLevel(participant))
-        .then((audioLevel) =>
-            showResultDialog(context, 'Success', audioLevel.toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void isMuted(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .isMuted()
-        .then((isMuted) =>
-            showResultDialog(context, 'Success', isMuted.toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void setMute(BuildContext context, bool mute) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalParticipant()
-        .then((participant) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.mute(participant, mute))
-        .then((isMuted) =>
-            showResultDialog(context, 'Success', isMuted.toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void setMuteOutput(BuildContext context, bool mute) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .muteOutput(mute)
-        .then((isMuted) =>
-            showResultDialog(context, 'Success', isMuted.toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void startAudio(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-            .startAudio(participant)
-            .then((value) => showResultDialog(context, 'Success', 'OK'))
-            .onError((error, stackTrace) =>
-                showResultDialog(context, 'Error', error.toString())));
-  }
-
-  void stopAudio(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-            .stopAudio(participant)
-            .then((value) => showResultDialog(context, 'Success', 'OK'))
-            .onError((error, stackTrace) =>
-                showResultDialog(context, 'Error', error.toString())));
-  }
-
-  void startVideo(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-            .startVideo(participant)
-            .then((value) => showResultDialog(context, 'Success', 'OK'))
-            .onError((error, stackTrace) => showResultDialog(
-                context, 'Error', error.toString() + stackTrace.toString())));
-  }
-
-  void stopVideo(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant().then(
-        (participant) => _dolbyioCommsSdkFlutterPlugin.conference
-            .stopVideo(participant)
-            .then((value) => showResultDialog(context, 'Success', 'OK'))
-            .onError((error, stackTrace) => showResultDialog(
-                context, 'Error', error.toString() + stackTrace.toString())));
-  }
-
-  Future<void> startScreenShare() async {
+  Future<void> getParticipant() async {
     try {
-      var isScreenSharing = await isSomeoneScreenSharing();
-      if (isScreenSharing) {
-        if (!mounted) return;
-        showResultDialog(context, 'Error', 'Someone is already sharing the screen');
-      } else {
-        await _dolbyioCommsSdkFlutterPlugin.conference.startScreenShare();
-        if (!mounted) return;
-        showResultDialog(context, 'Success', 'OK');
-      }
+      var localParticipant =
+      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+      if (!mounted) return;
+      showResultDialog(
+          context, 'Success', localParticipant.toJson().toString());
     } catch (error) {
       if (!mounted) return;
       showResultDialog(context, 'Error', error.toString());
     }
   }
 
-  void stopScreenShare(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .current()
-        .then((conference) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.stopScreenShare())
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) => showResultDialog(
-            context, 'Error', error.toString() + stackTrace.toString()));
+  Future<void> getParticipants() async {
+    try {
+      var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      var participants = await _dolbyioCommsSdkFlutterPlugin.conference
+          .getParticipants(conference);
+      if (!mounted) return;
+      showResultDialog(context, 'Success', jsonEncode(participants));
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<void> fetchConference() async {
+    try {
+      var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      var fetchedConference =
+      await _dolbyioCommsSdkFlutterPlugin.conference.fetch(conference.id);
+      if (!mounted) return;
+      showResultDialog(
+          context, 'Success', fetchedConference.toJson().toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<void> current() async {
+    try {
+      var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      if (!mounted) return;
+      showResultDialog(context, 'Success', conference.toJson().toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<void> getAudioLevel() async {
+    try {
+      var localParticipant =
+      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+      var audioLevel = await _dolbyioCommsSdkFlutterPlugin.conference
+          .getAudioLevel(localParticipant);
+      if (!mounted) return;
+      showResultDialog(context, 'Success', audioLevel.toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<void> isMuted() async {
+    try {
+      var isMuted = await _dolbyioCommsSdkFlutterPlugin.conference.isMuted();
+      if (!mounted) return;
+      showResultDialog(context, 'Success', isMuted.toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<void> setMute(bool mute) async {
+    try {
+      var localParticipant =
+      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+      var isMuted = await _dolbyioCommsSdkFlutterPlugin.conference
+          .mute(localParticipant, mute);
+      if (!mounted) return;
+      showResultDialog(context, 'Success', isMuted.toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<void> setMuteOutput(bool mute) async {
+    try {
+      var isMuted =
+      await _dolbyioCommsSdkFlutterPlugin.conference.muteOutput(mute);
+      if (!mounted) return;
+      showResultDialog(context, 'Success', isMuted.toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
   }
 
   Future<void> setSpatialPositionDialog(BuildContext testButtonsContext) async {
@@ -259,11 +201,12 @@ class _ConferenceServiceTestButtonsState
                     spatialValueDialogContext: spatialPositionDialogContext,
                     participant: participant,
                     resultDialogContext: testButtonsContext,
-                    spatialPosition: spatialValuesModel
-                        .listOfParticipantSpatialValues
-                        .where((element) => element.id == participant.id)
-                        .first
-                        .spatialPosition!);
+                    spatialPosition: spatialValuesModel.isSpatialConferenceState
+                        ? spatialValuesModel.listOfParticipantSpatialValues
+                            .where((element) => element.id == participant.id)
+                            .first
+                            .spatialPosition!
+                        : spatialValuesModel.spatialPositionInNonSpatial);
               })
             ],
           ),
@@ -328,13 +271,16 @@ class _ConferenceServiceTestButtonsState
     );
   }
 
-  void getLocalStats(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalStats()
-        .then((rtcStatsTypes) =>
-            showResultDialog(context, 'Success', jsonEncode(rtcStatsTypes)))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
+  Future<void> getLocalStats() async {
+    try {
+      var rtcStatsTypes =
+      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalStats();
+      if (!mounted) return;
+      showResultDialog(context, 'Success', jsonEncode(rtcStatsTypes));
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
   }
   
   Future<void> setVideoForwarding(BuildContext context) async {
@@ -349,56 +295,29 @@ class _ConferenceServiceTestButtonsState
     }
   }
 
-  void setAudioProcessing(BuildContext context) {
-    var senderOptions = AudioProcessingSenderOptions()..audioProcessing = true;
-    var audioProcessingOptions = AudioProcessingOptions()..send = senderOptions;
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .setAudioProcessing(audioProcessingOptions)
-        .then((value) => showResultDialog(context, 'Success', 'OK'))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void isSpeaking(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getLocalParticipant()
-        .then((participant) =>
-            _dolbyioCommsSdkFlutterPlugin.conference.isSpeaking(participant))
-        .then((isSpeaking) =>
-            showResultDialog(context, 'Success', isSpeaking.toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  void getMaxVideoForwarding(BuildContext context) {
-    _dolbyioCommsSdkFlutterPlugin.conference
-        .getMaxVideoForwarding()
-        .then((maxVideoForwarding) =>
-            showResultDialog(context, 'Success', maxVideoForwarding.toString()))
-        .onError((error, stackTrace) =>
-            showResultDialog(context, 'Error', error.toString()));
-  }
-
-  Future<bool> isSomeoneScreenSharing() async {
-    final conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
-    final participants = await _dolbyioCommsSdkFlutterPlugin.conference
-        .getParticipants(conference);
-    final availableParticipants = participants
-        .where((element) => element.status != ParticipantStatus.left);
-
-    if (availableParticipants.isNotEmpty) {
-      for (var participant in availableParticipants) {
-        var participantStreams = participant.streams;
-        if (participantStreams != null) {
-          for (var stream in participantStreams) {
-            if (stream.type == MediaStreamType.screenShare) {
-              return true;
-            }
-          }
-        }
-      }
+  Future<void> isSpeaking() async {
+    try {
+      var localParticipant =
+      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+      var isSpeaking = await _dolbyioCommsSdkFlutterPlugin.conference
+          .isSpeaking(localParticipant);
+      if (!mounted) return;
+      showResultDialog(context, 'Success', isSpeaking.toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
     }
+  }
 
-    return false;
+  Future<void> getMaxVideoForwarding() async {
+    try {
+      var maxVideoForwarding = await _dolbyioCommsSdkFlutterPlugin.conference
+          .getMaxVideoForwarding();
+      if (!mounted) return;
+      showResultDialog(context, 'Success', maxVideoForwarding.toString());
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
   }
 }

@@ -5,8 +5,10 @@ import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_extensions/par
 import 'package:flutter/cupertino.dart';
 
 class SpatialValuesModel extends ChangeNotifier {
+  bool _isSpatialConference = false;
   List<ParticipantSpatialValues> _listOfParticipantSpatialValues =
       <ParticipantSpatialValues>[];
+  final SpatialPosition _spatialPositionInNonSpatial = SpatialPosition(0.0, 0.0, 0.0);
   SpatialDirection _localSpatialDirection = SpatialDirection(0.0, 0.0, 0.0);
   SpatialScale _spatialScaleForEnvironment = SpatialScale(1.0, 1.0, 1.0);
   SpatialPosition _forwardPositionForEnvironment =
@@ -23,6 +25,8 @@ class SpatialValuesModel extends ChangeNotifier {
   SpatialPosition get upPositionForEnvironment => _upPositionForEnvironment;
   SpatialPosition get rightPositionForEnvironment =>
       _rightPositionForEnvironment;
+  bool get isSpatialConferenceState => _isSpatialConference;
+  SpatialPosition get spatialPositionInNonSpatial => _spatialPositionInNonSpatial;
 
   void updateLocalSpatialDirection(SpatialDirection spatialDirection) {
     _localSpatialDirection = spatialDirection;
@@ -39,6 +43,10 @@ class SpatialValuesModel extends ChangeNotifier {
     _upPositionForEnvironment = upPosition;
     _rightPositionForEnvironment = rightPosition;
     notifyListeners();
+  }
+
+  void setSpatialConferenceState(bool isSpatial) {
+    _isSpatialConference = isSpatial;
   }
 
   void addParticipantSpatialValues(Participant participant) {
