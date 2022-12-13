@@ -1,3 +1,9 @@
+## 3.7.0-beta.2
+
+### Bug fixes
+
+Fixed an issue where the [RecordingStatusUpdate](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/RecordingStatusUpdate-class.html) events were not emitted on iOS.
+
 ## 3.7.0-beta.1
 
 ### Features
