@@ -20,8 +20,8 @@ currentFolder=`pwd`
 cd test_app
 
 #test for one test file only
-#USE_SDK_MOCK=true flutter test integration_tests/conference_service_test.dart -d $serial_no
-USE_SDK_MOCK=true flutter test integration_tests -d $serial_no
+#USE_SDK_MOCK=true flutter test integration_tests/mocked/conference_service_test.dart -d $serial_no
+USE_SDK_MOCK=true flutter test integration_tests/mocked -d $serial_no
 test_exit_code=$?
 
 cd $currentFolder
