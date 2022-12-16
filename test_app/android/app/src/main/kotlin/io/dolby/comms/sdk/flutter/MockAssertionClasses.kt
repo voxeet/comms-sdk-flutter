@@ -65,6 +65,18 @@ object MockAssertionClasses {
                 )?.let {
                 assertsClasses.add(it)
             }
+            DelegateMethodHandler.createChannelFor(
+                "com.voxeet.asserts.AudioServiceAsserts",
+                messenger
+            )?.let {
+                assertsClasses.add(it)
+            }
+            DelegateMethodHandler.createChannelFor(
+                "com.voxeet.asserts.VideoServiceAsserts",
+                messenger
+            )?.let {
+                assertsClasses.add(it)
+            }
         } catch (e: ClassNotFoundException) {
             android.util.Log.d("[KB]", "missing assertion classed, for mock it will be a problem")
         }

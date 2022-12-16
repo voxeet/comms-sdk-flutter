@@ -11,11 +11,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class MediaDeviceService {
     public ComfortNoiseLevel level = ComfortNoiseLevel.DEFAULT;
+
     public void setComfortNoiseLevel(ComfortNoiseLevel level) throws MediaEngineException {
         this.level = level;
     }
 
-    public Boolean getComfortNoiseLevelHasRun = false;
+    public boolean getComfortNoiseLevelHasRun = false;
     public ComfortNoiseLevel getComfortNoiseLevel() throws MediaEngineException {
         getComfortNoiseLevelHasRun = true;
         return level;
