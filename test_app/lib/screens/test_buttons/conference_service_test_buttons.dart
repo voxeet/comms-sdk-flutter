@@ -23,6 +23,8 @@ class ConferenceServiceTestButtons extends StatefulWidget {
 class _ConferenceServiceTestButtonsState
     extends State<ConferenceServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+  final TextEditingController _videoForwardingXTextController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -287,16 +289,45 @@ class _ConferenceServiceTestButtonsState
     return await showDialog(
       context: setVideoContext,
       barrierDismissible: false,
-      builder: (BuildContext environmentContext) {
+      builder: (BuildContext setVideoForwardingContext) {
         return AlertDialog(
           title: const Text('Set Video Forwarding'),
           content: Column(mainAxisSize: MainAxisSize.min, children: [
             Consumer<SpatialValuesModel>(
                 builder: (context, spatialValuesModel, child) {
-              return TextField(
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
+              return Column(
+                children: [
+                  TextField(
+                    controller: _videoForwardingXTextController
+                      ..text = spatialValuesModel.maxVideoForwarding.toString(),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        child: const Text('OK',
+                            style: TextStyle(color: Colors.deepPurple)),
+                        onPressed: () {
+                          spatialValuesModel.setMaxVideoForwarding(
+                              int.parse(_videoForwardingXTextController.text));
+                          setForwarding(
+                              int.parse(_videoForwardingXTextController.text));
+                          Navigator.of(setVideoForwardingContext).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('CANCEL',
+                            style: TextStyle(color: Colors.deepPurple)),
+                        onPressed: () {
+                          Navigator.of(setVideoForwardingContext).pop();
+                        },
+                      )
+                    ],
+                  ),
                 ],
               );
             })
@@ -304,16 +335,18 @@ class _ConferenceServiceTestButtonsState
         );
       },
     );
+  }
 
-    // try {
-    //   final value = await _dolbyioCommsSdkFlutterPlugin.conference
-    //       .setVideoForwarding(VideoForwardingStrategy.lastSpeaker, 4, []);
-    //   if (!mounted) return;
-    //   showResultDialog(context, 'Success', jsonEncode(value));
-    // } catch (error) {
-    //   if (!mounted) return;
-    //   showResultDialog(context, 'Error', error.toString());
-    // }
+  void setForwarding(int max) async {
+    try {
+      final value = await _dolbyioCommsSdkFlutterPlugin.conference
+          .setVideoForwarding(VideoForwardingStrategy.lastSpeaker, max, []);
+      if (!mounted) return;
+      showResultDialog(context, 'Success', jsonEncode(value));
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    }
   }
 
   Future<void> isSpeaking() async {
