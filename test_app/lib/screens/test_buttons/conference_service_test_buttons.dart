@@ -1,6 +1,7 @@
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/spatial_extensions/spatial_direction_dialog_content.dart';
 import '../../widgets/spatial_extensions/spatial_environment_dialog_content.dart';
@@ -22,6 +23,8 @@ class ConferenceServiceTestButtons extends StatefulWidget {
 class _ConferenceServiceTestButtonsState
     extends State<ConferenceServiceTestButtons> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+  final TextEditingController _videoForwardingXTextController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -32,24 +35,19 @@ class _ConferenceServiceTestButtonsState
         SecondaryButton(
             text: 'Get participant', onPressed: () => getParticipant()),
         SecondaryButton(
-            text: 'Get participants',
-            onPressed: () => getParticipants()),
+            text: 'Get participants', onPressed: () => getParticipants()),
         SecondaryButton(
-            text: 'Fetch conference',
-            onPressed: () => fetchConference()),
-        SecondaryButton(
-            text: 'Current conference', onPressed: () => current()),
+            text: 'Fetch conference', onPressed: () => fetchConference()),
+        SecondaryButton(text: 'Current conference', onPressed: () => current()),
         SecondaryButton(
             text: 'GetAudioLevel', onPressed: () => getAudioLevel()),
         SecondaryButton(text: 'IsMuted', onPressed: () => isMuted()),
         SecondaryButton(text: 'Mute', onPressed: () => setMute(true)),
-        SecondaryButton(
-            text: 'Unmute', onPressed: () => setMute(false)),
+        SecondaryButton(text: 'Unmute', onPressed: () => setMute(false)),
         SecondaryButton(
             text: 'Mute output', onPressed: () => setMuteOutput(true)),
         SecondaryButton(
-            text: 'Unmute output',
-            onPressed: () => setMuteOutput(false)),
+            text: 'Unmute output', onPressed: () => setMuteOutput(false)),
         SecondaryButton(
             text: 'Set spatial position',
             onPressed: () => setSpatialPositionDialog(context)),
@@ -64,8 +62,7 @@ class _ConferenceServiceTestButtonsState
         SecondaryButton(
             text: 'Set video forwarding',
             onPressed: () => setVideoForwarding(context)),
-        SecondaryButton(
-            text: 'Is speaking', onPressed: () => isSpeaking()),
+        SecondaryButton(text: 'Is speaking', onPressed: () => isSpeaking()),
         SecondaryButton(
             text: 'Get max video forwarding',
             onPressed: () => getMaxVideoForwarding()),
@@ -85,7 +82,7 @@ class _ConferenceServiceTestButtonsState
   Future<void> getParticipant() async {
     try {
       var localParticipant =
-      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+          await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
       if (!mounted) return;
       showResultDialog(
           context, 'Success', localParticipant.toJson().toString());
@@ -112,7 +109,7 @@ class _ConferenceServiceTestButtonsState
     try {
       var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
       var fetchedConference =
-      await _dolbyioCommsSdkFlutterPlugin.conference.fetch(conference.id);
+          await _dolbyioCommsSdkFlutterPlugin.conference.fetch(conference.id);
       if (!mounted) return;
       showResultDialog(
           context, 'Success', fetchedConference.toJson().toString());
@@ -136,7 +133,7 @@ class _ConferenceServiceTestButtonsState
   Future<void> getAudioLevel() async {
     try {
       var localParticipant =
-      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+          await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
       var audioLevel = await _dolbyioCommsSdkFlutterPlugin.conference
           .getAudioLevel(localParticipant);
       if (!mounted) return;
@@ -161,7 +158,7 @@ class _ConferenceServiceTestButtonsState
   Future<void> setMute(bool mute) async {
     try {
       var localParticipant =
-      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+          await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
       var isMuted = await _dolbyioCommsSdkFlutterPlugin.conference
           .mute(localParticipant, mute);
       if (!mounted) return;
@@ -175,7 +172,7 @@ class _ConferenceServiceTestButtonsState
   Future<void> setMuteOutput(bool mute) async {
     try {
       var isMuted =
-      await _dolbyioCommsSdkFlutterPlugin.conference.muteOutput(mute);
+          await _dolbyioCommsSdkFlutterPlugin.conference.muteOutput(mute);
       if (!mounted) return;
       showResultDialog(context, 'Success', isMuted.toString());
     } catch (error) {
@@ -215,7 +212,8 @@ class _ConferenceServiceTestButtonsState
     );
   }
 
-  Future<void> setSpatialDirectionDialog(BuildContext testButtonsContext) async {
+  Future<void> setSpatialDirectionDialog(
+      BuildContext testButtonsContext) async {
     final participant = await getLocalParticipant();
     return await showDialog(
       context: testButtonsContext,
@@ -245,7 +243,8 @@ class _ConferenceServiceTestButtonsState
     return _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
   }
 
-  Future<void> setSpatialEnvironmentDialog(BuildContext testButtonsContext) async {
+  Future<void> setSpatialEnvironmentDialog(
+      BuildContext testButtonsContext) async {
     return await showDialog(
       context: testButtonsContext,
       barrierDismissible: false,
@@ -258,11 +257,14 @@ class _ConferenceServiceTestButtonsState
               return SpatialEnvironmentDialogContent(
                 environmentDialogContext: environmentContext,
                 resultDialogContext: testButtonsContext,
-                spatialScaleForEnvironment: spatialValuesModel.spatialScaleForEnvironment,
-                forwardPositionForEnvironment: spatialValuesModel.forwardPositionForEnvironment,
-                upPositionForEnvironment: spatialValuesModel.upPositionForEnvironment,
-                rightPositionForEnvironment: spatialValuesModel.rightPositionForEnvironment,
-
+                spatialScaleForEnvironment:
+                    spatialValuesModel.spatialScaleForEnvironment,
+                forwardPositionForEnvironment:
+                    spatialValuesModel.forwardPositionForEnvironment,
+                upPositionForEnvironment:
+                    spatialValuesModel.upPositionForEnvironment,
+                rightPositionForEnvironment:
+                    spatialValuesModel.rightPositionForEnvironment,
               );
             })
           ]),
@@ -274,7 +276,7 @@ class _ConferenceServiceTestButtonsState
   Future<void> getLocalStats() async {
     try {
       var rtcStatsTypes =
-      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalStats();
+          await _dolbyioCommsSdkFlutterPlugin.conference.getLocalStats();
       if (!mounted) return;
       showResultDialog(context, 'Success', jsonEncode(rtcStatsTypes));
     } catch (error) {
@@ -282,11 +284,63 @@ class _ConferenceServiceTestButtonsState
       showResultDialog(context, 'Error', error.toString());
     }
   }
-  
-  Future<void> setVideoForwarding(BuildContext context) async {
+
+  Future<void> setVideoForwarding(BuildContext setVideoContext) async {
+    return await showDialog(
+      context: setVideoContext,
+      barrierDismissible: false,
+      builder: (BuildContext setVideoForwardingContext) {
+        return AlertDialog(
+          title: const Text('Set Video Forwarding'),
+          content: Column(mainAxisSize: MainAxisSize.min, children: [
+            Consumer<SpatialValuesModel>(
+                builder: (context, spatialValuesModel, child) {
+              return Column(
+                children: [
+                  TextField(
+                    controller: _videoForwardingXTextController
+                      ..text = spatialValuesModel.maxVideoForwarding.toString(),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        child: const Text('OK',
+                            style: TextStyle(color: Colors.deepPurple)),
+                        onPressed: () {
+                          spatialValuesModel.setMaxVideoForwarding(
+                              int.parse(_videoForwardingXTextController.text));
+                          setForwarding(
+                              int.parse(_videoForwardingXTextController.text));
+                          Navigator.of(setVideoForwardingContext).pop();
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('CANCEL',
+                            style: TextStyle(color: Colors.deepPurple)),
+                        onPressed: () {
+                          Navigator.of(setVideoForwardingContext).pop();
+                        },
+                      )
+                    ],
+                  ),
+                ],
+              );
+            })
+          ]),
+        );
+      },
+    );
+  }
+
+  void setForwarding(int max) async {
     try {
       final value = await _dolbyioCommsSdkFlutterPlugin.conference
-          .setVideoForwarding(VideoForwardingStrategy.lastSpeaker, 4, []);
+          .setVideoForwarding(VideoForwardingStrategy.lastSpeaker, max, []);
       if (!mounted) return;
       showResultDialog(context, 'Success', jsonEncode(value));
     } catch (error) {
@@ -298,7 +352,7 @@ class _ConferenceServiceTestButtonsState
   Future<void> isSpeaking() async {
     try {
       var localParticipant =
-      await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+          await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
       var isSpeaking = await _dolbyioCommsSdkFlutterPlugin.conference
           .isSpeaking(localParticipant);
       if (!mounted) return;

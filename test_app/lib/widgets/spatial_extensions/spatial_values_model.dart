@@ -15,6 +15,7 @@ class SpatialValuesModel extends ChangeNotifier {
       SpatialPosition(0.0, 0.0, 1.0);
   SpatialPosition _upPositionForEnvironment = SpatialPosition(0.0, 1.0, 0.0);
   SpatialPosition _rightPositionForEnvironment = SpatialPosition(1.0, 0.0, 0.0);
+  int _maxVideoForwarding = 4;
 
   SpatialDirection get localSpatialDirection => _localSpatialDirection;
   List<ParticipantSpatialValues> get listOfParticipantSpatialValues =>
@@ -27,6 +28,7 @@ class SpatialValuesModel extends ChangeNotifier {
       _rightPositionForEnvironment;
   bool get isSpatialConferenceState => _isSpatialConference;
   SpatialPosition get spatialPositionInNonSpatial => _spatialPositionInNonSpatial;
+  int get maxVideoForwarding => _maxVideoForwarding;
 
   void updateLocalSpatialDirection(SpatialDirection spatialDirection) {
     _localSpatialDirection = spatialDirection;
@@ -78,5 +80,9 @@ class SpatialValuesModel extends ChangeNotifier {
     _forwardPositionForEnvironment = SpatialPosition(0.0, 0.0, 1.0);
     _upPositionForEnvironment = SpatialPosition(0.0, 1.0, 0.0);
     _rightPositionForEnvironment = SpatialPosition(1.0, 0.0, 0.0);
+  }
+
+  void setMaxVideoForwarding(int max) {
+    _maxVideoForwarding = max;
   }
 }
