@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:provider/provider.dart';
 import '../../widgets/spatial_extensions/spatial_position_dialog_content.dart';
 import '../../widgets/spatial_extensions/spatial_values_model.dart';
@@ -98,6 +99,11 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
               value: 7,
               child: ListTile(title: Text('Stop video')),
             ),
+            const PopupMenuItem<int>(
+              textStyle: TextStyle(fontSize: 14, color: Colors.black),
+              value: 8,
+              child: ListTile(title: Text('Get participant info')),
+            ),
           ];
         },
         onSelected: (value) {
@@ -126,8 +132,21 @@ class _RemoteParticipantOptionsState extends State<RemoteParticipantOptions> {
             case 7:
               stopVideo();
               break;
+            case 8:
+              getParticipantInfo(context);
+              break;
           }
         });
+  }
+
+  Future<void> getParticipantInfo(BuildContext remoteParticipantContext) async {
+    try {
+      final participant = await _upToDateParticipant();
+      await showDialogWindow(
+          'Participant', jsonEncode(participant).toString());
+    } catch (error) {
+      showDialogWindow('Error', error.toString());
+    }
   }
 
   Future<void> kickParticipant() async {
