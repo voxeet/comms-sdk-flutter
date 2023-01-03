@@ -14,10 +14,15 @@ class SessionService {
 
   /// Opens a new session to connect the SDK with the Dolby.io backend. The [participantInfo] parameter refers to an additional information about the local participant.
   Future<void> open(ParticipantInfo participantInfo) async {
+    String? externalId = participantInfo.externalId;
+    if (externalId?.isEmpty == true) {
+      externalId = null;
+    }
+
     var params = {
       "name": participantInfo.name,
       "avatarUrl": participantInfo.avatarUrl,
-      "externalId": participantInfo.externalId
+      "externalId": externalId
     };
     await _methodChannel.invokeMethod<void>('open', params);
     return Future.value();
