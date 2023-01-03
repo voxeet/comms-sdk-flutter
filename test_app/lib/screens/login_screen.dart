@@ -152,6 +152,9 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
   Future<void> openSession() async {
     _username = usernameTextController.text;
     _externalId = externalIdTextController.text;
+    if (_externalId?.isEmpty == true) {
+      _externalId = null;
+    }
 
     Provider.of<ConferenceModel>(context, listen: false).username = _username;
     Provider.of<ConferenceModel>(context, listen: false).externalId =
