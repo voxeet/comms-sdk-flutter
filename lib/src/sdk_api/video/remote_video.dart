@@ -5,6 +5,7 @@ import '../../dolbyio_comms_sdk_flutter_platform_interface.dart';
 
 /// The RemoteVideo class allows the local participant to locally start and
 /// stop remote participants` video streams transmission.
+/// {@category Models}
 class RemoteVideo {
   /// @internal
   final _methodChannel = DolbyioCommsSdkFlutterPlatform.createMethodChannel(
