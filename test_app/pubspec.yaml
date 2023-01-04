@@ -1,7 +1,7 @@
 name: dolbyio_comms_sdk_flutter_example
 description: Demonstrates how to use the dolbyio_comms_sdk_flutter plugin.
 
-version: 3.7.0+1
+version: 3.7.0+2
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -20,7 +20,6 @@ dependencies:
   flutter:
     sdk: flutter
   file_picker: ^5.0.1
-  fluttertoast: ^8.0.9
   permission_handler: ^10.0.0
   shared_preferences: ^2.0.15
   collection: ^1.16.0

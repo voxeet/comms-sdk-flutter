@@ -213,6 +213,7 @@ enum Codec {
 /// | Shared                    | False              | Rejected                          |
 /// | Disabled                  | True               | Rejected                          |
 /// | Disabled                  | False              | Success                           |
+/// {@category Models}
 enum SpatialAudioStyle {
   /// Sets the spatial location that is based on the spatial scene, local participant's position, and remote participants'positions. This allows a client to control the position using the local, self-contained logic. However, the client has to communicate a large set of requests constantly to the server, which increases network traffic, log subsystem pressure, and complexity of the client-side application. This option is selected by default. We recommend this mode for A/V congruence scenarios in video conferencing and similar applications.
   individual('INDIVIDUAL'),
@@ -322,6 +323,7 @@ class ConferenceLeaveOptions {
 
 /// @nodoc
 /// @internal
+/// {@category Models}
 enum RTCStatsType {
   /// Statistics for a codec that is currently being used by RTP streams being sent or received by this RTCPeerConnection object. It is accessed by the RTCCodecStats.
   codec('codec'),
@@ -568,6 +570,7 @@ enum VideoForwardingStrategy {
 }
 
 /// The ConferenceListenOptions class defines how the application expects to join a conference using the listen method.
+/// {@category Models}
 class ConferenceListenOptions {
   /// The conference access token that is required to join a protected conference if the conference is created using the [create](https://docs.dolby.io/communications-apis/reference/create-conference) REST API. If the conference is created using the create method, the token is managed by the SDK and is not visible to the application users. For more information, see the [Enhanced Conference Access Control](https://docs.dolby.io/communications-apis/docs/guides-enhanced-conference-access-control) document.
   String? conferenceAccessToken;

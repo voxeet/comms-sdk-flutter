@@ -171,6 +171,8 @@ class ConferenceService {
   }
 
   /// Notifies the server to either stop sending the local participant's video stream to the conference or stop sending a remote participant's video stream to the local participant. The behavior depends on the specified participant in [participant] parameter.
+  @Deprecated(
+      'This method is not supported in SDK 3.7 and replaced with the stop methods that are available in the [LocalVideo](./../LocalVideo-class.html) and [RemoteVideo](./../RemoteVideo-class.html) models.')
   Future<void> stopVideo(Participant participant) async {
     await _methodChannel.invokeMethod<void>("stopVideo", participant.toJson());
     return Future.value();

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:provider/provider.dart';
@@ -65,6 +64,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   bool switchConferenceStatus = false;
   bool spatialAudio = false;
   bool switchDolbyVoice = true;
+  bool switchLiveRecording = false;
   String? spatialAudioStyleDropDownText;
   SpatialAudioStyle spatialAudioStyle = SpatialAudioStyle.disabled;
   static const String spatialAudioWithIndividual =
@@ -192,7 +192,23 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                                 spatialAudio = value;
                               });
                             } else {
-                              setState(() => switchDolbyVoice = value);
+                              setState(() {
+                                switchDolbyVoice = value;
+                              });
+                            }
+                          }),
+                      SwitchOption(
+                          title: 'Live recording',
+                          value: switchLiveRecording,
+                          onChanged: (value) {
+                            if (value == false) {
+                              setState(() {
+                                switchLiveRecording = value;
+                              });
+                            } else {
+                              setState((){
+                                switchLiveRecording = value;
+                              });
                             }
                           }),
                       SwitchOption(
@@ -320,9 +336,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           result: (value) => value ? openAppSettings() : null,
         );
       },
-      onDenied: (permissions) {
-        Fluttertoast.showToast(
-            msg: "Permissions $permissions missing, can't continue");
+      onDenied: (permissions) async {
+        await ViewDialogs.dialog(
+            context: context,
+            title: 'Permissions missing',
+            body: 'Permissions $permissions missing, cannot continue.',
+            okText: 'Ok'
+        );
       },
     );
   }
@@ -400,7 +420,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     _conferenceAlias = conferenceAliasTextController.text;
     var params = ConferenceCreateParameters();
     params.dolbyVoice = switchDolbyVoice;
-    params.liveRecording = true;
+    params.liveRecording = switchLiveRecording;
     var createOptions =
         ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
     createOptions.spatialAudioStyle = spatialAudioStyle;
@@ -412,7 +432,6 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     joinOptions.constraints = ConferenceConstraints(true, true);
     joinOptions.maxVideoForwarding = 4;
     joinOptions.spatialAudio = spatialAudio;
-    joinOptions.mixing = ConferenceMixingOptions(switchDolbyVoice);
     return joinOptions;
   }
 
