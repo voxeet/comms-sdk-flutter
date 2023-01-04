@@ -1,10 +1,7 @@
 package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.ParticipantInvitedMapper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
@@ -31,7 +28,7 @@ class NotificationServiceNativeModule(private val scope: CoroutineScope) : Nativ
     }
 
     private fun invite(call: MethodCall, result: MethodChannel.Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val conferenceId = call.argumentOrThrow<Map<String, Any?>>("conference")["id"] as String
             val participants = call
@@ -50,7 +47,7 @@ class NotificationServiceNativeModule(private val scope: CoroutineScope) : Nativ
     )
 
     private fun decline(call: MethodCall, result: MethodChannel.Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val conferenceId = call.argumentOrThrow<Map<String, Any?>>("conference")["id"] as String
             val conference = VoxeetSDK.conference().getConference(conferenceId)

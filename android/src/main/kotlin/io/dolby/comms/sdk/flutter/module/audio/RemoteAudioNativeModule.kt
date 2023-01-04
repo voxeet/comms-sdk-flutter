@@ -4,6 +4,7 @@ import com.voxeet.VoxeetSDK
 import io.dolby.comms.sdk.flutter.extension.await
 import io.dolby.comms.sdk.flutter.extension.error
 import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.onError
 import io.dolby.comms.sdk.flutter.mapper.ParticipantMapper
 import io.dolby.comms.sdk.flutter.module.NativeModule
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -11,7 +12,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 
 class RemoteAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
 
@@ -31,11 +31,10 @@ class RemoteAudioNativeModule(private val scope: CoroutineScope) : NativeModule 
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun start(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
@@ -47,7 +46,7 @@ class RemoteAudioNativeModule(private val scope: CoroutineScope) : NativeModule 
     )
 
     private fun stop(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)

@@ -6,10 +6,7 @@ import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.VideoForwardingOptions
 import com.voxeet.sdk.services.conference.spatialisation.SpatialAudioStyle
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.AudioProcessingMapper
 import io.dolby.comms.sdk.flutter.mapper.ConferenceJoinOptionsMapper
 import io.dolby.comms.sdk.flutter.mapper.ConferenceListenOptionsMapper
@@ -25,7 +22,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 
 class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeModule {
 
@@ -74,11 +70,10 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun create(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val params = HashMap<String, Any?>()
             call.argument<Map<String, Any>>("params")?.let { params.putAll(it) }
@@ -101,7 +96,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun current(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .conference()
@@ -113,7 +108,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun fetch(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .conference()
@@ -125,7 +120,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun join(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ConferenceJoinOptionsMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
@@ -139,7 +134,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun listen(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ConferenceListenOptionsMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
@@ -153,7 +148,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun leave(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = { result.success(VoxeetSDK.conference().leave().await()) }
     )
 
@@ -168,7 +163,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     }
 
     private fun getParticipant(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .conference()
@@ -181,7 +176,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun getParticipants(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             call.argumentOrThrow<String>("id")
                 .let { VoxeetSDK.conference().getConference(it).participants }
@@ -191,7 +186,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun getStatus(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             call.argumentOrThrow<String>("id")
                 .let { VoxeetSDK.conference().getConference(it).state.name }
@@ -200,12 +195,12 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun isMuted(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = { result.success(VoxeetSDK.conference().isMuted) }
     )
 
     private fun mute(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val muteValue = call.argument<Boolean?>("isMuted") ?: false
             val participant = call.argument<Map<String, Any?>?>("participant")
@@ -229,7 +224,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun kick(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val participantId = call.argument<Map<Any, Any?>?>("id") as? String
             participantId?.let { id ->
@@ -243,7 +238,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun muteOutput(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .conference()
@@ -259,7 +254,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun startAudio(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
@@ -271,7 +266,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun stopAudio(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
@@ -283,7 +278,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun startVideo(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
@@ -295,7 +290,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun stopVideo(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             ParticipantMapper
                 .fromMap(call.arguments as? Map<String, Any?>)
@@ -307,7 +302,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun startScreenShare(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.screenShare().sendRequestStartScreenShare()
             ScreenShareHandler.permissionResult().await().let { result.success(it) }
@@ -315,12 +310,12 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun stopScreenShare(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = { VoxeetSDK.screenShare().stopScreenShare().await().let { result.success(it) } }
     )
 
     private fun setSpatialPosition(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val participant = ParticipantMapper.fromMap(call.argument("participant"))
             val spatialPosition = SpatialPositionMapper.fromMap(call.argument("position"))
@@ -333,7 +328,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun setSpatialEnvironment(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val scale = SpatialScaleMapper.fromMap(call.argument("scale"))
             val forward = SpatialPositionMapper.fromMap(call.argument("forward"))
@@ -351,7 +346,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun setSpatialDirection(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val spatialDirection = SpatialDirectionMapper.fromMap(call.arguments())
                 ?: throw IllegalArgumentException("Spatial direction was not provided")
@@ -362,7 +357,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun getLocalStats(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.conference().localStats()
                 .let { it ->
@@ -376,7 +371,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun setMaxVideoForwarding(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val max = call.argument<Int>("max")
             val prioritizedParticipants = call.argument<List<Any?>>("prioritizedParticipants")?.mapNotNull {
@@ -400,7 +395,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun setVideoForwarding(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val strategy = call.argument<String>("strategy")?.let { VideoForwardingStrategy.valueOf(it) }
             val max = call.argument<Int>("max")
@@ -432,7 +427,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun getMaxVideoForwarding(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = { result.success(VoxeetSDK.conference().maxVideoForwarding) }
     )
 
@@ -447,7 +442,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     }
 
     private fun setAudioProcessing(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val audioProcessing = AudioProcessingMapper.fromMap(
                 call.arguments()
@@ -458,7 +453,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun replay(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val offset = call.argument<Int>("offset")?.toLong() ?: 0L
             val conferenceId = call.argumentOrThrow<Map<String, Any>>("conference")["id"] as String
@@ -471,7 +466,7 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     )
 
     private fun updatePermissions(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             call.arguments<List<Any?>>()
                 ?.mapNotNull { it?.let { ParticipantPermissionsMapper.fromMap(it as Map<String, Any?>) } }

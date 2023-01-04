@@ -8,10 +8,7 @@ import android.util.Log
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.models.v1.FilePresentationConverted
 import io.dolby.comms.sdk.flutter.events.FilePresentationEventEmitter
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.FileConvertedMapper
 import io.dolby.comms.sdk.flutter.mapper.FilePresentationMapper
 import io.dolby.comms.sdk.flutter.state.FilePresentationHolder
@@ -52,11 +49,10 @@ class FilePresentationServiceModule(
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun convert(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             fileFromUri(call.argumentOrThrow("uri"))
                 .let { file ->
@@ -80,7 +76,7 @@ class FilePresentationServiceModule(
     )
 
     private fun getCurrent(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val conference = VoxeetSDK.conference().conference ?: throw IllegalStateException("Missing current conference")
             val noStartedPresentationError = lazyOf(Exception("No started file presentation for current conference"))
@@ -96,7 +92,7 @@ class FilePresentationServiceModule(
     )
 
     private fun getImage(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             getCurrentFileId()
                 .let { VoxeetSDK.filePresentation().image(it, call.argumentOrThrow("page")) }
@@ -105,7 +101,7 @@ class FilePresentationServiceModule(
     )
 
     private fun getThumbnail(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             getCurrentFileId()
                 .let { VoxeetSDK.filePresentation().thumbnail(it, call.argumentOrThrow("page")) }
@@ -114,7 +110,7 @@ class FilePresentationServiceModule(
     )
 
     private fun setPage(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             getCurrentFileId()
                 .let { VoxeetSDK.filePresentation().update(it, call.argumentOrThrow("page")) }
@@ -123,7 +119,7 @@ class FilePresentationServiceModule(
     )
 
     private fun start(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             FilePresentationConverted(
                 call.argumentOrThrow("name"),
@@ -137,7 +133,7 @@ class FilePresentationServiceModule(
     )
 
     private fun stop(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             getCurrentFileId()
                 .let { VoxeetSDK.filePresentation().stop(it).await() }

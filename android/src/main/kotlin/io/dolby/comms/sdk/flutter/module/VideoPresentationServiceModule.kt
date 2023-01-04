@@ -1,10 +1,7 @@
 package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.VideoPresentationMapper
 import io.dolby.comms.sdk.flutter.mapper.mapToFlutter
 import io.dolby.comms.sdk.flutter.state.VideoPresentationHolder
@@ -13,7 +10,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 
 class VideoPresentationServiceModule(
     private val scope: CoroutineScope,
@@ -41,11 +37,10 @@ class VideoPresentationServiceModule(
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun currentVideo(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val presentation = VoxeetSDK.videoPresentation().currentPresentation ?: throw Exception("Couldn't get the presentation")
             val conference = VoxeetSDK.conference().conference ?: throw Exception("Couldn't get the conference")
@@ -56,7 +51,7 @@ class VideoPresentationServiceModule(
     )
 
     private fun start(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .videoPresentation()
@@ -67,7 +62,7 @@ class VideoPresentationServiceModule(
     )
 
     private fun stop(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .videoPresentation()
@@ -78,7 +73,7 @@ class VideoPresentationServiceModule(
     )
 
     private fun play(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .videoPresentation()
@@ -89,7 +84,7 @@ class VideoPresentationServiceModule(
     )
 
     private fun pause(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .videoPresentation()
@@ -100,7 +95,7 @@ class VideoPresentationServiceModule(
     )
 
     private fun seek(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .videoPresentation()
@@ -111,7 +106,7 @@ class VideoPresentationServiceModule(
     )
 
     private fun state(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK
                 .videoPresentation()

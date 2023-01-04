@@ -25,6 +25,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 
 class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
 
@@ -82,6 +83,7 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
     override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
         nativeModules.forEach { it.onDetached() }
         nativeEventEmitters.forEach { it.onDetached() }
+        scope.coroutineContext.cancelChildren(null)
     }
 
     private companion object EventChannel {

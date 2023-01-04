@@ -2,17 +2,14 @@ package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.ParticipantInfo
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.ParticipantMapper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
+import java.lang.reflect.InvocationTargetException
 
 class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModule {
 
@@ -34,11 +31,10 @@ class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModu
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun open(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             val participantInfo = ParticipantInfo(
                 call.argumentOrThrow("name"),
@@ -50,7 +46,7 @@ class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModu
     )
 
     private fun close(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.session().close().await().let { result.success(it) }
         }
