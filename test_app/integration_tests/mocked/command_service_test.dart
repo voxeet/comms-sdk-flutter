@@ -4,7 +4,7 @@ import 'package:integration_test/integration_test.dart';
 
 import '../utils.dart';
 
-void main() {
+void commandServiceTest() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized(); // NEW
 
   final dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
@@ -13,12 +13,14 @@ void main() {
     await resetSDK();
   });
 
-  testWidgets('CommandService: send', (tester) async {
-    await dolbyioCommsSdkFlutterPlugin.command.send("test");
+  group('Command Service', () {
+    testWidgets('CommandService: send', (tester) async {
+      await dolbyioCommsSdkFlutterPlugin.command.send("test");
 
-    await expectNative(
+      await expectNative(
         methodChannel: commandServiceAssertsMethodChannel,
         assertLabel: "assertSendArgs",
         expected: {"message": "test"});
+    });
   });
 }
