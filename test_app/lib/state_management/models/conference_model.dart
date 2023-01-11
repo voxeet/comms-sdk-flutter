@@ -7,12 +7,16 @@ class ConferenceModel extends ChangeNotifier {
   String _username = "";
   String? _externalId = "";
   bool _isReplayConference = false;
+  String _imageSource = '';
+  int _amountOfPagesInDocument = 0;
 
   Conference get conference => _conference;
   Conference get replayedConference => _replayedConference;
   String get username => _username;
   String? get externalId => _externalId;
   bool get isReplayConference => _isReplayConference;
+  String get imageSource => _imageSource;
+  int get amountOfPagesInDocument => _amountOfPagesInDocument;
 
   set conference(Conference value) {
     _conference = value;
@@ -36,6 +40,16 @@ class ConferenceModel extends ChangeNotifier {
 
   set isReplayConference(bool value) {
     _isReplayConference = value;
+    notifyListeners();
+  }
+
+  set imageSource(String value) {
+    _imageSource = value;
+    notifyListeners();
+  }
+
+  set amountOfPagesInDocument(int value) {
+    _amountOfPagesInDocument = value;
     notifyListeners();
   }
 

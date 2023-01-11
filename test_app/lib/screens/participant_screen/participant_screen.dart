@@ -1,7 +1,9 @@
 import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/file_presentation_ui.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_extensions/participant_spatial_values.dart';
 import 'package:provider/provider.dart';
 import '../../conference_ext.dart';
+import '../../widgets/file_container.dart';
 import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '../../widgets/status_snackbar.dart';
 import '../test_buttons/test_buttons.dart';
@@ -77,10 +79,16 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   StreamSubscription<Event<RecordingServiceEventNames, RecordingStatusUpdate>>?
       _onRecordingChangeSubscription;
 
+  StreamSubscription<
+          Event<FilePresentationServiceEventNames, FilePresentation>>?
+      _onFilePresentationChangeSubscription;
+
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;
   List<ParticipantSpatialValues> participants = [];
   bool _isScreenSharing = false;
+  bool isFilePresenting = false;
+  bool isLocalPresentingFile = false;
 
   @override
   void initState() {
@@ -120,6 +128,42 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           "Recording status: ${event.body.recordingStatus} for conference: ${event.body.conferenceId}",
           const Duration(seconds: 2));
     });
+
+    _onFilePresentationChangeSubscription = _dolbyioCommsSdkFlutterPlugin
+        .filePresentation
+        .onFilePresentationChange()
+        .listen((event) async {
+      if (event.type ==
+          FilePresentationServiceEventNames.filePresentationStarted) {
+        Provider.of<ConferenceModel>(context, listen: false).imageSource =
+            await _dolbyioCommsSdkFlutterPlugin.filePresentation
+                .getImage(event.body.position);
+        var localParticipant = await _dolbyioCommsSdkFlutterPlugin.conference
+            .getLocalParticipant();
+        setState(() {
+          isFilePresenting = true;
+          if (event.body.owner.id == localParticipant.id) {
+            isLocalPresentingFile = true;
+            Provider.of<ConferenceModel>(context, listen: false)
+                .amountOfPagesInDocument = event.body.imageCount - 1;
+          }
+        });
+      } else if (event.type ==
+          FilePresentationServiceEventNames.filePresentationUpdated) {
+        var imageSource = await _dolbyioCommsSdkFlutterPlugin.filePresentation
+            .getImage(event.body.position);
+        setState(() {
+          Provider.of<ConferenceModel>(context, listen: false).imageSource =
+              imageSource;
+        });
+      } else if (event.type ==
+          FilePresentationServiceEventNames.filePresentationStopped) {
+        setState(() {
+          isFilePresenting = false;
+          isLocalPresentingFile = false;
+        });
+      }
+    });
   }
 
   @override
@@ -130,12 +174,14 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     _streamsChangeSubscription?.cancel();
     _onPermissionsChangeSubsription?.cancel();
     _onRecordingChangeSubscription?.cancel();
+    _onFilePresentationChangeSubscription?.cancel();
     super.deactivate();
   }
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<SpatialValuesModel>(context).setSpatialConferenceState(widget.isSpatialAudio);
+    Provider.of<SpatialValuesModel>(context)
+        .setSpatialConferenceState(widget.isSpatialAudio);
     Provider.of<SpatialValuesModel>(context).copyList(participants);
 
     Widget videoView = const FlutterLogo();
@@ -159,6 +205,13 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         child: Column(
           children: [
             const ConferenceTitle(),
+            isFilePresenting
+                ? isLocalPresentingFile
+                    ? const FilePresentationUI()
+                    : const SingleChildScrollView(
+                        child: FileContainer(),
+                      )
+                : const SizedBox.shrink(),
             Expanded(
               child: Stack(
                 children: [

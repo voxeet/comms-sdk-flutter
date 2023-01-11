@@ -3,7 +3,6 @@ import 'package:dolbyio_comms_sdk_flutter_example/screens/test_buttons/video_ser
 import 'package:flutter/material.dart';
 import 'command_service_test_buttons.dart';
 import 'conference_service_test_buttons.dart';
-import 'file_presentation_service_test_buttons.dart';
 import 'media_device_service_test_buttons.dart';
 import 'notification_service_test_buttons.dart';
 import 'recording_service_test_buttons.dart';
@@ -43,10 +42,6 @@ class TestButtons extends StatelessWidget {
               Text("Command service"),
               SizedBox(height: 10),
               CommandServiceTestButtons(),
-              SizedBox(height: 10),
-              Text("File presentation service"),
-              SizedBox(height: 10),
-              FilePresentationServiceTestButtons(),
               SizedBox(height: 10),
               Text("Video presentation service"),
               SizedBox(height: 10),

@@ -1,5 +1,6 @@
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/bottom_tool_bar.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,6 @@ typedef ParticipantConferenceStatus = void Function(
 class ConferenceControls extends StatefulWidget {
   final ParticipantConferenceStatus updateCloseSessionFlag;
 
-
   const ConferenceControls({Key? key, required this.updateCloseSessionFlag})
       : super(key: key);
 
@@ -24,7 +24,10 @@ class ConferenceControls extends StatefulWidget {
 
 class _ConferenceControlsState extends State<ConferenceControls> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  bool isMicOff = false, isVideoOff = false, isScreenShareOff = true;
+  bool isMicOff = false;
+  bool isVideoOff = false;
+  bool isScreenShareOff = true;
+  FileConverted? _fileConverted;
 
   @override
   Widget build(BuildContext context) {
@@ -52,16 +55,49 @@ class _ConferenceControlsState extends State<ConferenceControls> {
             ? const Icon(Icons.videocam_off)
             : const Icon(Icons.videocam),
       ),
-      ConferenceActionIconButton(
-        iconWidget: isScreenShareOff
-            ? const Icon(Icons.screen_share)
-            : const Icon(Icons.stop_screen_share_sharp),
-        backgroundIconColor: Colors.deepPurple,
-        onPressedIcon: () {
-          if (isScreenShareOff) {
-            startScreenShare();
-          } else {
-            stopScreenShare();
+      PopupMenuButton(
+        position: PopupMenuPosition.under,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: const BoxDecoration(
+              color: Colors.deepPurple,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.ios_share_rounded, color: Colors.white),
+          ),
+        ),
+        itemBuilder: (BuildContext context) {
+          return [
+            PopupMenuItem<int>(
+              value: 0,
+              child: isScreenShareOff
+                  ? const Text('Share screen')
+                  : const Text('Stop sharing'),
+            ),
+            const PopupMenuItem<int>(
+              value: 1,
+              child: Text('Share file'),
+            ),
+          ];
+        },
+        onSelected: (value) async {
+          switch (value) {
+            case 0:
+              if (isScreenShareOff) {
+                startScreenShare();
+              } else {
+                stopScreenShare();
+              }
+              break;
+            case 1:
+              await convertFile();
+              if (_fileConverted != null) {
+                startFilePresentation();
+              }
+              break;
           }
         },
       ),
@@ -192,6 +228,50 @@ class _ConferenceControlsState extends State<ConferenceControls> {
     } catch (error) {
       if (!mounted) return;
       showResultDialog(context, 'Error', error.toString());
+    }
+  }
+
+  Future<void> convertFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['doc', 'docx', 'ppt', 'pptx', 'pdf'],
+      );
+      String? path = result?.files.single.path;
+
+      if (path == null) {
+        if (!mounted) return;
+        showResultDialog(context, 'File not selected', '');
+        return;
+      }
+
+      var fileConverted = await _dolbyioCommsSdkFlutterPlugin.filePresentation
+          .convert(File(path));
+      _fileConverted = fileConverted;
+      if (!mounted) return;
+      showResultDialog(context, 'Success', 'File converted.');
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error: ', error.toString());
+    }
+  }
+
+  Future<void> startFilePresentation() async {
+    try {
+      if (_fileConverted == null) {
+        if (!mounted) return;
+        showResultDialog(context, 'You must convert file first!', '');
+        return;
+      }
+
+      await _dolbyioCommsSdkFlutterPlugin.filePresentation
+          .start(_fileConverted!);
+      if (!mounted) return;
+      showResultDialog(
+          context, 'Success', 'File presentation has been started.');
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error: ', error.toString());
     }
   }
 
