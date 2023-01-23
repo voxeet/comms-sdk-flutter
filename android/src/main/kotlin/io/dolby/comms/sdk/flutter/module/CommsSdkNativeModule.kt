@@ -6,11 +6,11 @@ import com.voxeet.VoxeetSDK
 import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
 import io.dolby.comms.sdk.flutter.extension.error
 import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.onError
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 
 class CommsSdkNativeModule(private val scope: CoroutineScope) : NativeModule {
 
@@ -31,11 +31,10 @@ class CommsSdkNativeModule(private val scope: CoroutineScope) : NativeModule {
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun initialize(call: MethodCall, result: MethodChannel.Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.initialize(
                 call.argumentOrThrow("customerKey"),
@@ -46,7 +45,7 @@ class CommsSdkNativeModule(private val scope: CoroutineScope) : NativeModule {
     )
 
     private fun initializeToken(call: MethodCall, result: MethodChannel.Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.initialize(call.argumentOrThrow("accessToken")) { _, callback ->
                 mainHandler.post {
