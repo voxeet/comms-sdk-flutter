@@ -113,7 +113,7 @@ class FilePresentationServiceModule(
         onError = result::onError,
         onSuccess = {
             getCurrentFileId()
-                .let { VoxeetSDK.filePresentation().update(it, call.argumentOrThrow("page")) }
+                .let { VoxeetSDK.filePresentation().update(it, call.argumentOrThrow("page")).await() }
                 .let { result.success(null) }
         }
     )
