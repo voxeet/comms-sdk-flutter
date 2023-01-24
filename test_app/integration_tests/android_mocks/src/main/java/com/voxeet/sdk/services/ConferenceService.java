@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class ConferenceService {
 
@@ -63,7 +64,7 @@ public class ConferenceService {
     public boolean isSpeakingReturn;
     public boolean isMutedReturn;
     public Participant speakingArgs;
-    public Pair<List<Participant>, Integer> videoForwardingArgs;
+    public VideoForwardingOptions videoForwardingArgs;
     public AudioProcessing audioProcessingArgs;
     public Conference listenReturn;
 
@@ -266,12 +267,20 @@ public class ConferenceService {
     @NotNull
     @Deprecated
     public Promise<Boolean> videoForwarding(int max, @Nullable List<Participant> participants) {
-        videoForwardingArgs = new Pair<>(participants, max);
+        List<String> pList = new ArrayList<>();
+        for (int i =0; i < participants.size(); ++i) {
+            pList.add(participants.get(i).getId());
+        }
+        videoForwardingArgs = new VideoForwardingOptions.Builder()
+                .setMaxVideoForwarding(max)
+                .setParticipants(pList)
+                .build();
         return Promise.resolve(true);
     }
 
     @NonNull
     public Promise<Boolean> videoForwarding(@NonNull VideoForwardingOptions options) {
+        videoForwardingArgs = options;
         return Promise.resolve(true);
     }
 

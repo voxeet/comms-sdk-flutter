@@ -7,11 +7,16 @@ import com.voxeet.sdk.models.Participant;
 
 public class RemoteAudio {
 
+    public Participant startArgs = null;
+    public Participant stopArgs = null;
+
     public Promise<Boolean> start(@NonNull Participant participant) {
+        startArgs = participant;
         return Promise.resolve(true);
     }
 
     public Promise<Boolean> stop(@NonNull Participant participant) {
+        stopArgs = participant;
         return Promise.resolve(true);
     }
 }

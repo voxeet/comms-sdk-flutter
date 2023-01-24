@@ -7,6 +7,10 @@ import com.voxeet.sdk.media.audio.SoundManager;
 import org.jetbrains.annotations.NotNull;
 
 public class LocalAudio {
+
+    public boolean startHasRun = false;
+    public boolean stopHasRun = false;
+    public boolean getComfortNoiseHasRun = false;
     @NotNull
     public AudioCaptureMode captureMode;
     @NotNull
@@ -14,11 +18,13 @@ public class LocalAudio {
 
     @NotNull
     public Promise<Boolean> start() {
+        startHasRun = true;
         return Promise.resolve(true);
     }
 
     @NotNull
     public Promise<Boolean> stop() {
+        stopHasRun = true;
         return Promise.resolve(true);
     }
 }

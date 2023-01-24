@@ -1,6 +1,6 @@
 package com.voxeet.asserts;
 
-import static java.lang.System.in;
+import static com.voxeet.asserts.AssertionHelper.assertParticipant;
 
 import android.util.Pair;
 
@@ -13,15 +13,14 @@ import com.voxeet.sdk.json.ConferencePermission;
 import com.voxeet.sdk.models.Conference;
 import com.voxeet.sdk.models.Participant;
 import com.voxeet.sdk.models.ParticipantPermissions;
-import com.voxeet.sdk.services.ScreenShareService;
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions;
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions;
 import com.voxeet.sdk.services.builders.ConferenceListenOptions;
+import com.voxeet.sdk.services.builders.VideoForwardingOptions;
 import com.voxeet.sdk.services.conference.AudioProcessing;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import io.dolby.asserts.AssertUtils;
 import io.dolby.asserts.MethodDelegate;
@@ -212,18 +211,20 @@ public class ConferenceServiceAsserts implements MethodDelegate {
     }
 
     private void assertSetMaxVideoForwardingArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException {
-        Pair<List<Participant>, Integer> mockArgs = VoxeetSDK.conference().videoForwardingArgs;
+        VideoForwardingOptions mockArgs = VoxeetSDK.conference().videoForwardingArgs;
         if (mockArgs == null) {
             throw new NullPointerException("videoForwardingArgs is null, probably videoForwarding method didn't call");
         }
 
         if(args.containsKey("max")) {
-            AssertUtils.compareWithExpectedValue(mockArgs.second, args.get("max"), "max is incorrect");
+            AssertUtils.compareWithExpectedValue(mockArgs.max, args.get("max"), "max is incorrect");
         }
         if (args.containsKey("prioritizedParticipants")) {
             Map<String, Object> participant = (Map<String, Object>) args.get("prioritizedParticipants");
-            Participant first = mockArgs.first.size() > 0 ? mockArgs.first.get(0) : null;
-            assertParticipant(participant, first);
+            String first = mockArgs.participants != null && mockArgs.participants.size() > 0 ? mockArgs.participants.get(0) : null;
+            if (args.containsKey("id")) {
+                AssertUtils.compareWithExpectedValue(first, args.get("id"), "Participant id is incorrect");
+            }
         }
     }
 
@@ -416,36 +417,6 @@ public class ConferenceServiceAsserts implements MethodDelegate {
     private void assertKickArgs(Map<String, Object> args) throws KeyNotFoundException, AssertionFailed {
         Participant mockArgs = VoxeetSDK.conference().kickArgs;
         assertParticipant(args, mockArgs);
-    }
-
-    public void assertParticipant(Map<String, Object> args, Participant mockArgs) throws KeyNotFoundException, AssertionFailed {
-        if (mockArgs == null) {
-            throw new NullPointerException("Participant is null");
-        }
-        if (args.containsKey("id")) {
-            AssertUtils.compareWithExpectedValue(mockArgs.getId(), args.get("id"), "Participant id is incorrect");
-        }
-        if (args.containsKey("participantInfo")) {
-            Map<String, Object> pArgs = (Map<String, Object>) args.get("participantInfo");
-            if (pArgs == null) {
-                throw new NullPointerException("Particpant info is incorect");
-            }
-            if (!pArgs.containsKey("name")) {
-                throw new KeyNotFoundException("Key: name not found");
-            } else {
-                AssertUtils.compareWithExpectedValue(mockArgs.participantInfo.getName(), args.get("id"), "Participant name is incorrect");
-            }
-            if (!args.containsKey("externalId")) {
-                throw new KeyNotFoundException("Key: externalId not found");
-            } else {
-                AssertUtils.compareWithExpectedValue(mockArgs.participantInfo.getExternalId(), args.get("externalId"), "Participant name is incorrect");
-            }
-            if (!args.containsKey("avatarURL")) {
-                throw new KeyNotFoundException("Key: externalId not found");
-            } else {
-                AssertUtils.compareWithExpectedValue(mockArgs.participantInfo.getAvatarUrl(), args.get("avatarURL"), "Participant name is incorrect");
-            }
-        }
     }
 
     private void setCurrentConference(Map<String, Object> args) throws KeyNotFoundException {
