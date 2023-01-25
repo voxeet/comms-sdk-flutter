@@ -6,7 +6,6 @@ import 'conference_service_test_buttons.dart';
 import 'media_device_service_test_buttons.dart';
 import 'notification_service_test_buttons.dart';
 import 'recording_service_test_buttons.dart';
-import 'video_presentation_service_test_buttons.dart';
 
 class TestButtons extends StatelessWidget {
   const TestButtons({Key? key}) : super(key: key);
@@ -42,10 +41,6 @@ class TestButtons extends StatelessWidget {
               Text("Command service"),
               SizedBox(height: 10),
               CommandServiceTestButtons(),
-              SizedBox(height: 10),
-              Text("Video presentation service"),
-              SizedBox(height: 10),
-              VideoPresentationServiceTestButtons(),
               SizedBox(height: 10),
               Text("Notification service"),
               SizedBox(height: 10),

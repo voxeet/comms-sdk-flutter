@@ -1,11 +1,13 @@
 import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/file_presentation_ui.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_extensions/participant_spatial_values.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/video_presentation_container.dart';
 import 'package:provider/provider.dart';
 import '../../conference_ext.dart';
 import '../../widgets/file_container.dart';
 import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '../../widgets/status_snackbar.dart';
+import '../../widgets/video_presentation_buttons.dart';
 import '../test_buttons/test_buttons.dart';
 import 'conference_controls.dart';
 import 'conference_title.dart';
@@ -15,6 +17,8 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'participant_grid.dart';
 import '/widgets/dolby_title.dart';
 import '/widgets/modal_bottom_sheet.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 class ParticipantScreen extends StatefulWidget {
   final bool isSpatialAudio;
@@ -83,12 +87,23 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           Event<FilePresentationServiceEventNames, FilePresentation>>?
       _onFilePresentationChangeSubscription;
 
+  StreamSubscription<Event<VideoPresentationEventNames, VideoPresentation>>?
+      _onVideoPresentationChangeSubscription;
+
+  StreamSubscription<Event<VideoPresentationEventNames, void>>?
+      _onVideoPresentationStopSubscription;
+
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;
   List<ParticipantSpatialValues> participants = [];
   bool _isScreenSharing = false;
   bool isFilePresenting = false;
   bool isLocalPresentingFile = false;
+  bool isLocalPresentingVideo = false;
+  bool isVideoStarted = false;
+  late VideoPlayerController? _videoPlayerController;
+  late ChewieController? _chewieController;
+  late Widget videoPlayerWidget;
 
   @override
   void initState() {
@@ -164,6 +179,52 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         });
       }
     });
+
+    _onVideoPresentationChangeSubscription = _dolbyioCommsSdkFlutterPlugin
+        .videoPresentation
+        .onVideoPresentationChange()
+        .listen((event) async {
+      if (event.type == VideoPresentationEventNames.videoPresentationStarted) {
+        String url = event.body.url;
+        await initializeVideoPlayer(url);
+        createVideoPlayerWidget();
+        checkIfLocalPresentingVideo(event);
+
+        if (!mounted) return;
+        Provider.of<ConferenceModel>(context, listen: false)
+            .isSomeonePresentingVideo = true;
+        var position = await _videoPlayerController?.position;
+        _videoPlayerController?.seekTo(position ?? Duration.zero);
+        setState(() => isVideoStarted = true);
+      } else if (event.type ==
+          VideoPresentationEventNames.videoPresentationPlayed) {
+        _videoPlayerController?.play();
+      } else if (event.type ==
+          VideoPresentationEventNames.videoPresentationPaused) {
+        _videoPlayerController?.pause();
+      } else if (event.type ==
+          VideoPresentationEventNames.videoPresentationSought) {
+        _videoPlayerController?.seekTo(Duration.zero);
+        _videoPlayerController?.play();
+      }
+    });
+
+    _onVideoPresentationStopSubscription = _dolbyioCommsSdkFlutterPlugin
+        .videoPresentation
+        .onVideoPresentationStopped()
+        .listen((event) {
+      if (!mounted) {
+        _onVideoPresentationStopSubscription?.cancel();
+      } else {
+        setState(() {
+          isLocalPresentingVideo = false;
+          isVideoStarted = false;
+          Provider.of<ConferenceModel>(context, listen: false)
+              .isSomeonePresentingVideo = isVideoStarted;
+          _videoPlayerController?.pause();
+        });
+      }
+    });
   }
 
   @override
@@ -175,6 +236,8 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     _onPermissionsChangeSubsription?.cancel();
     _onRecordingChangeSubscription?.cancel();
     _onFilePresentationChangeSubscription?.cancel();
+    _onVideoPresentationChangeSubscription?.cancel();
+    _onVideoPresentationStopSubscription?.cancel();
     super.deactivate();
   }
 
@@ -212,6 +275,21 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
                         child: FileContainer(),
                       )
                 : const SizedBox.shrink(),
+            isVideoStarted
+                ? _videoPlayerController != null
+                    ? Column(
+                        children: [
+                          VideoPresentationContainer(
+                            videoPlayerController: _videoPlayerController!,
+                            videoPlayerWidget: videoPlayerWidget,
+                          ),
+                          isLocalPresentingVideo
+                              ? const VideoPresentationButtons()
+                              : const SizedBox.shrink()
+                        ],
+                      )
+                    : const SizedBox.shrink()
+                : const SizedBox.shrink(),
             Expanded(
               child: Stack(
                 children: [
@@ -235,6 +313,36 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         ),
       ),
     );
+  }
+
+  Future<void> initializeVideoPlayer(String url) async {
+    _videoPlayerController = VideoPlayerController.network(url);
+    await Future.wait([
+      _videoPlayerController!.initialize(),
+    ]);
+  }
+
+  void createVideoPlayerWidget() {
+    if (_videoPlayerController != null) {
+      _chewieController = ChewieController(
+        videoPlayerController: _videoPlayerController!,
+        autoPlay: true,
+        looping: true,
+        showControls: false,
+      );
+      if (_chewieController != null &&
+          _chewieController!.videoPlayerController.value.isInitialized) {
+        videoPlayerWidget = Chewie(controller: _chewieController!);
+      }
+    }
+  }
+
+  void checkIfLocalPresentingVideo(Event event) async {
+    var local =
+        await _dolbyioCommsSdkFlutterPlugin.conference.getLocalParticipant();
+    if (local.id == event.body.owner.id) {
+      setState(() => isLocalPresentingVideo = true);
+    }
   }
 
   Future<void> setDefaultSpatialPosition() async {

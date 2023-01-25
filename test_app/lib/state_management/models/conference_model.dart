@@ -7,6 +7,7 @@ class ConferenceModel extends ChangeNotifier {
   String _username = "";
   String? _externalId = "";
   bool _isReplayConference = false;
+  bool _isSomeonePresentingVideo = false;
   String _imageSource = '';
   int _amountOfPagesInDocument = 0;
 
@@ -15,6 +16,7 @@ class ConferenceModel extends ChangeNotifier {
   String get username => _username;
   String? get externalId => _externalId;
   bool get isReplayConference => _isReplayConference;
+  bool get isSomeonePresentingVideo => _isSomeonePresentingVideo;
   String get imageSource => _imageSource;
   int get amountOfPagesInDocument => _amountOfPagesInDocument;
 
@@ -40,6 +42,11 @@ class ConferenceModel extends ChangeNotifier {
 
   set isReplayConference(bool value) {
     _isReplayConference = value;
+    notifyListeners();
+  }
+
+  set isSomeonePresentingVideo(bool value) {
+    _isSomeonePresentingVideo = value;
     notifyListeners();
   }
 
