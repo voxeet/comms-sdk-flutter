@@ -18,7 +18,6 @@ import 'participant_grid.dart';
 import '/widgets/dolby_title.dart';
 import '/widgets/modal_bottom_sheet.dart';
 import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 
 class ParticipantScreen extends StatefulWidget {
   final bool isSpatialAudio;
@@ -102,7 +101,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   bool isLocalPresentingVideo = false;
   bool isVideoStarted = false;
   late VideoPlayerController? _videoPlayerController;
-  late ChewieController? _chewieController;
   late Widget videoPlayerWidget;
 
   @override
@@ -193,8 +191,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         if (!mounted) return;
         Provider.of<ConferenceModel>(context, listen: false)
             .isSomeonePresentingVideo = true;
-        var position = await _videoPlayerController?.position;
-        _videoPlayerController?.seekTo(position ?? Duration.zero);
+        _videoPlayerController?.play();
         setState(() => isVideoStarted = true);
       } else if (event.type ==
           VideoPresentationEventNames.videoPresentationPlayed) {
@@ -324,16 +321,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   void createVideoPlayerWidget() {
     if (_videoPlayerController != null) {
-      _chewieController = ChewieController(
-        videoPlayerController: _videoPlayerController!,
-        autoPlay: true,
-        looping: true,
-        showControls: false,
-      );
-      if (_chewieController != null &&
-          _chewieController!.videoPlayerController.value.isInitialized) {
-        videoPlayerWidget = Chewie(controller: _chewieController!);
-      }
+      videoPlayerWidget = VideoPlayer(_videoPlayerController!);
     }
   }
 
