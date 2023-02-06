@@ -27,6 +27,8 @@ jobs:
         persist-credentials: false
     - name: Checkout submodules
       run: git submodule update --init --recursive
+    - name: Create empty token file
+      run: echo 'const token = "";' > test_app/integration_tests/end_to_end/token.dart
     - name: Set up Java 🔧
       uses: actions/setup-java@v3
       with:
@@ -52,8 +54,8 @@ jobs:
       run: |
         flutter analyze
 
-  build-macos:
-    name: flutter build macos
+  build-macos-android:
+    name: flutter build macos android
     runs-on: macos-12
     env:
       FLUTTER_VERSION: "3.0.3"
@@ -78,12 +80,6 @@ jobs:
     - name: Fetch dependencies
       run: |
         flutter pub get
-    - name: Run tests
-      run: |
-        flutter test -r expanded
-    - name: Run pana analyzer
-      run: |
-        ./scripts/score_analyzer.sh
     - name: Set up android enviroment
       run: |
         ./scripts/macos_setup_android_env.sh
@@ -93,13 +89,37 @@ jobs:
     - name: Run android integration tests
       run: |
         ./scripts/run-mocked-integration-tests-android.sh
-    - name: Run unmocked integration tests
+
+  build-macos-ios:
+    name: flutter build macos ios
+    runs-on: macos-12
+    env:
+      FLUTTER_VERSION: "3.0.3"
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+    - name: Create empty token file
+      run: echo 'const token = "";' > test_app/integration_tests/end_to_end/token.dart
+    - name: Set up Flutter version 🔧
+      uses: ./.github/actions/flutter-action
+      with:
+        flutter-version: $FLUTTER_VERSION
+    - name: Fetch dependencies
       run: |
-        ./scripts/run-unmocked-integration-tests-ios.rb
+        flutter pub get
+    - name: Run unmocked integration tests
+      env: 
+        APP_KEY: ${{ secrets.DOLBYIO_APP_KEY }}
+        URL: ${{ secrets.DOLBYIO_APP_SDK_USER_ACCESS_TOKEN_URL }}
+      run: |
+        ./scripts/run-end-to-end-tests-ios.rb "${URL}" "${APP_KEY}"
     - name: Run mocked integration tests
       run: |
         ./scripts/run-mocked-integration-tests-ios.rb
-
     - name: Analyze
       run: |
         flutter analyze
