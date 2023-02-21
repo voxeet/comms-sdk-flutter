@@ -6,6 +6,7 @@ on:
     - main
     - develop
     - release/*
+    - self-hosted-test
   pull_request:
     branches: 
     - main
@@ -113,6 +114,41 @@ jobs:
         flutter pub get
     - name: Run unmocked integration tests
       env: 
+        APP_KEY: ${{ secrets.DOLBYIO_APP_KEY }}
+        URL: ${{ secrets.DOLBYIO_APP_SDK_USER_ACCESS_TOKEN_URL }}
+      run: |
+        ./scripts/run-end-to-end-tests-ios.rb "${URL}" "${APP_KEY}"
+    - name: Run mocked integration tests
+      run: |
+        ./scripts/run-mocked-integration-tests-ios.rb
+    - name: Analyze
+      run: |
+        flutter analyze
+
+  build-self-hosted-macos-ios:
+    name: flutter build macos
+    runs-on: [self-hosted, macOS, X64]
+
+    env:
+      FLUTTER_VERSION: "3.0.3"
+    steps:
+    - name: Checkout 🛎️
+      uses: actions/checkout@v3
+      with:
+        persist-credentials: false
+    - name: Checkout submodules
+      run: git submodule update --init --recursive
+    - name: Create empty token file
+      run: echo 'const token = "";' > test_app/integration_tests/end_to_end/token.dart
+    - name: Set up Flutter version 🔧
+      uses: ./.github/actions/flutter-action
+      with:
+        flutter-version: $FLUTTER_VERSION
+    - name: Fetch dependencies
+      run: |
+        flutter pub get
+    - name: Run unmocked integration tests
+      env:
         APP_KEY: ${{ secrets.DOLBYIO_APP_KEY }}
         URL: ${{ secrets.DOLBYIO_APP_SDK_USER_ACCESS_TOKEN_URL }}
       run: |
