@@ -1,3 +1,9 @@
+## 3.8.0
+
+### Features
+
+Upgraded the WebRTC version to a recent version that contains improvements and bug fixes. The previously used version contains serious security vulnerabilities that can make your application susceptible to remote code execution, and can potentially give an attacker access to your application’s private data.
+
 ## 3.7.0
 
 ### Features
