@@ -4,13 +4,13 @@ import com.voxeet.VoxeetSDK
 import io.dolby.comms.sdk.flutter.extension.await
 import io.dolby.comms.sdk.flutter.extension.error
 import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.onError
 import io.dolby.comms.sdk.flutter.module.NativeModule
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 
 class LocalVideoNativeModule(private val scope: CoroutineScope) : NativeModule {
 
@@ -30,11 +30,10 @@ class LocalVideoNativeModule(private val scope: CoroutineScope) : NativeModule {
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun start(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.video().local.start().await()
                 ?.let { require(it) { "Could not stop audio" } }
@@ -43,7 +42,7 @@ class LocalVideoNativeModule(private val scope: CoroutineScope) : NativeModule {
     )
 
     private fun stop(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.video().local.stop().await()
                 ?.let { require(it) { "Could not stop audio" } }

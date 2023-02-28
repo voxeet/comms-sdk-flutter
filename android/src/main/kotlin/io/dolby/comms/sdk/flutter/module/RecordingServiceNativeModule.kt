@@ -2,10 +2,7 @@ package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.ParticipantInfo
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.ParticipantMapper
 import io.dolby.comms.sdk.flutter.mapper.RecordingInformationMapper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -35,16 +32,15 @@ class RecordingServiceNativeModule(private val scope: CoroutineScope) : NativeMo
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun start(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = { VoxeetSDK.recording().start().await().let { result.success(null) }  }
     )
 
     private fun stop(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = { VoxeetSDK.recording().stop().await().let { result.success(null) } }
     )
 

@@ -7,13 +7,16 @@ import com.voxeet.sdk.models.v1.ConferenceParticipantStatus;
 import com.voxeet.sdk.models.v1.RecordingStatus;
 import com.voxeet.sdk.services.SessionService;
 import com.voxeet.sdk.services.conference.information.ConferenceStatus;
+import com.voxeet.sdk.services.conference.spatialisation.SpatialAudioStyle;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class Conference {
     private List<Participant> participants = new ArrayList<>();
@@ -27,6 +30,8 @@ public class Conference {
     @androidx.annotation.Nullable
     private RecordingInformation recordingInformation;
     private boolean isNew = false;
+
+    private final HashMap<String, Object> metadata = new HashMap<>();
 
 
     public List<Participant> getParticipants() {
@@ -97,6 +102,17 @@ public class Conference {
     public Conference addParticipant(Participant participant) {
         participants.add(participant);
         return this;
+    }
+
+    public SpatialAudioStyle getSpatialAudioStyle() {
+        if (null != metadata && metadata.containsKey("spatialAudioStyle")) {
+            try {
+                String value = (String) metadata.get("spatialAudioStyle");
+                return SpatialAudioStyle.valueOf(value.toUpperCase(Locale.ROOT));
+            } catch(Throwable throwable) {
+            }
+        }
+        return null;
     }
 
     public static class RecordingInformation {

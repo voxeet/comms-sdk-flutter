@@ -32,32 +32,27 @@ PODS:
     - SwiftyGif
   - dolbyio_comms_sdk_flutter (0.0.1):
     - Flutter
-    - VoxeetSDK (~> 3.7.0)
+    - VoxeetSDK (~> 3.8.0)
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
   - Flutter (1.0.0)
-  - fluttertoast (0.0.2):
-    - Flutter
-    - Toast
   - integration_test (0.0.1):
     - Flutter
   - permission_handler_apple (9.0.4):
     - Flutter
-  - SDWebImage (5.14.0):
-    - SDWebImage/Core (= 5.14.0)
-  - SDWebImage/Core (5.14.0)
+  - SDWebImage (5.15.4):
+    - SDWebImage/Core (= 5.15.4)
+  - SDWebImage/Core (5.15.4)
   - shared_preferences_ios (0.0.1):
     - Flutter
-  - SwiftyGif (5.4.3)
-  - Toast (4.0.0)
-  - VoxeetSDK (3.7.2)
+  - SwiftyGif (5.4.4)
+  - VoxeetSDK (3.8.0)
 
 DEPENDENCIES:
   - dolbyio_comms_sdk_flutter (from `.symlinks/plugins/dolbyio_comms_sdk_flutter/ios`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - Flutter (from `Flutter`)
-  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
@@ -68,7 +63,6 @@ SPEC REPOS:
     - DKPhotoGallery
     - SDWebImage
     - SwiftyGif
-    - Toast
     - VoxeetSDK
 
 EXTERNAL SOURCES:
@@ -78,8 +72,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/file_picker/ios"
   Flutter:
     :path: Flutter
-  fluttertoast:
-    :path: ".symlinks/plugins/fluttertoast/ios"
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
   permission_handler_apple:
@@ -90,17 +82,15 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  dolbyio_comms_sdk_flutter: 3bccdf32d97d6c3a65cd2a6545bb0a911e2e1e33
+  dolbyio_comms_sdk_flutter: 133e16950e406a6f6ee4f786a835fc6e01bb9f95
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  fluttertoast: 16fbe6039d06a763f3533670197d01fc73459037
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  SDWebImage: 9e391cf38577742f501055dca17e4987f6713fe1
+  SDWebImage: 1c39de67663e5eebb2f41324d5d580eeea12dd4c
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
-  SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780
-  Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  VoxeetSDK: e93f5eae58e3eef54dd4d443398d7497e52ba23a
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
+  VoxeetSDK: b2efa65652c4070ec4474b25ab0b8e5b2a393ad2
 
 PODFILE CHECKSUM: ad35eb4c4f8efa60cf39d5ae575517a0e24a77af
 

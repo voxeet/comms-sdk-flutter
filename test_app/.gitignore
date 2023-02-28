@@ -48,3 +48,10 @@ app.*.map.json
 
 # For private use
 /lib/token_provider
+
+#token file
+/integration_tests/end_to_end/token.dart
+
+#xcuserdtata folder
+test_app/integration_tests/flutter-sdk-native-ui/flutter-sdk-native-ui.xcodeproj/project.xcworkspace/xcuserdata/
+test_app/integration_tests/flutter-sdk-native-ui/flutter-sdk-native-ui.xcodeproj/xcuserdata/

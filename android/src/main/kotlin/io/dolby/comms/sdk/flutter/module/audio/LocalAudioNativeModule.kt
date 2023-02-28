@@ -1,10 +1,7 @@
 package io.dolby.comms.sdk.flutter.module.audio
 
 import com.voxeet.VoxeetSDK
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.AudioCaptureModeMapper
 import io.dolby.comms.sdk.flutter.mapper.ComfortNoiseLevelMapper
 import io.dolby.comms.sdk.flutter.module.NativeModule
@@ -13,7 +10,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 
 class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
 
@@ -37,11 +33,10 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun getCaptureMode(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.audio().local.captureMode.let {
                 result.success(AudioCaptureModeMapper(it).convertToMap())
@@ -50,7 +45,7 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
     )
 
     private fun setCaptureMode(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.audio().local.captureMode = AudioCaptureModeMapper.fromMap(call.arguments as Map<String, Any?>)
             result.success(null)
@@ -59,7 +54,7 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
 
 
     private fun getComfortNoiseLevel(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             // TODO use local audio getComfortNoiseLevel method in next SDK version
             VoxeetSDK.mediaDevice().comfortNoiseLevel.let {
@@ -69,7 +64,7 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
     )
 
     private fun setComfortNoiseLevel(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             // TODO use local audio setComfortNoiseLevel method in next SDK version
             VoxeetSDK
@@ -80,7 +75,7 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
     )
 
     private fun start(result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.audio().local.start().await()
                 ?.let { require(it) { "Could not start audio" } }
@@ -89,7 +84,7 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
     )
 
     private fun stop(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.audio().local.stop().await()
                 ?.let { require(it) { "Could not stop audio" } }

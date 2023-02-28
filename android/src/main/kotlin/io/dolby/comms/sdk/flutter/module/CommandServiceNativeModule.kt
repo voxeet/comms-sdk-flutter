@@ -1,16 +1,12 @@
 package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
-import io.dolby.comms.sdk.flutter.extension.argumentOrThrow
-import io.dolby.comms.sdk.flutter.extension.await
-import io.dolby.comms.sdk.flutter.extension.error
-import io.dolby.comms.sdk.flutter.extension.launch
+import io.dolby.comms.sdk.flutter.extension.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancelChildren
 
 class CommandServiceNativeModule(private val scope: CoroutineScope) : NativeModule {
     private lateinit var channel: MethodChannel
@@ -28,11 +24,10 @@ class CommandServiceNativeModule(private val scope: CoroutineScope) : NativeModu
 
     override fun onDetached() {
         channel.setMethodCallHandler(null)
-        scope.coroutineContext.cancelChildren(null)
     }
 
     private fun send(call: MethodCall, result: Result) = scope.launch(
-        onError = result::error,
+        onError = result::onError,
         onSuccess = {
             VoxeetSDK.conference().conferenceId?.let { id ->
                 val message = call.argumentOrThrow<String>("message")

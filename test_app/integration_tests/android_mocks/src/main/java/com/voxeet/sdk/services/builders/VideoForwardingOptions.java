@@ -11,11 +11,11 @@ import java.util.List;
 
 public class VideoForwardingOptions {
     @Nullable
-    private Integer max = null;
+    public Integer max = null;
     @Nullable
-    private VideoForwardingStrategy strategy = null;
+    public VideoForwardingStrategy strategy = null;
     @Nullable
-    private List<String> participants = null;
+    public List<String> participants = null;
 
     public static class Builder {
         private VideoForwardingOptions options = new VideoForwardingOptions();

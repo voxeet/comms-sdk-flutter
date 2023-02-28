@@ -1,0 +1,613 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		031A7564293F3E1800931266 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A7563293F3E1800931266 /* AppDelegate.swift */; };
+		031A7566293F3E1800931266 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A7565293F3E1800931266 /* SceneDelegate.swift */; };
+		031A7568293F3E1800931266 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A7567293F3E1800931266 /* ViewController.swift */; };
+		031A756B293F3E1800931266 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 031A7569293F3E1800931266 /* Main.storyboard */; };
+		031A756D293F3E1A00931266 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 031A756C293F3E1A00931266 /* Assets.xcassets */; };
+		031A7570293F3E1A00931266 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 031A756E293F3E1A00931266 /* LaunchScreen.storyboard */; };
+		031A757B293F3E1A00931266 /* flutter_sdk_native_uiTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A757A293F3E1A00931266 /* flutter_sdk_native_uiTests.swift */; };
+		031A7585293F3E1A00931266 /* flutter_sdk_native_uiUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A7584293F3E1A00931266 /* flutter_sdk_native_uiUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		031A7577293F3E1A00931266 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 031A7558293F3E1800931266 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 031A755F293F3E1800931266;
+			remoteInfo = "flutter-sdk-native-ui";
+		};
+		031A7581293F3E1A00931266 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 031A7558293F3E1800931266 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 031A755F293F3E1800931266;
+			remoteInfo = "flutter-sdk-native-ui";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		031A7560293F3E1800931266 /* flutter-sdk-native-ui.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "flutter-sdk-native-ui.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		031A7563293F3E1800931266 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		031A7565293F3E1800931266 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		031A7567293F3E1800931266 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		031A756A293F3E1800931266 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		031A756C293F3E1A00931266 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		031A756F293F3E1A00931266 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		031A7571293F3E1A00931266 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		031A7576293F3E1A00931266 /* flutter-sdk-native-uiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "flutter-sdk-native-uiTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		031A757A293F3E1A00931266 /* flutter_sdk_native_uiTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flutter_sdk_native_uiTests.swift; sourceTree = "<group>"; };
+		031A7580293F3E1A00931266 /* flutter-sdk-native-uiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "flutter-sdk-native-uiUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		031A7584293F3E1A00931266 /* flutter_sdk_native_uiUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = flutter_sdk_native_uiUITests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		031A755D293F3E1800931266 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		031A7573293F3E1A00931266 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		031A757D293F3E1A00931266 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		031A7557293F3E1800931266 = {
+			isa = PBXGroup;
+			children = (
+				031A7562293F3E1800931266 /* flutter-sdk-native-ui */,
+				031A7579293F3E1A00931266 /* flutter-sdk-native-uiTests */,
+				031A7583293F3E1A00931266 /* flutter-sdk-native-uiUITests */,
+				031A7561293F3E1800931266 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		031A7561293F3E1800931266 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				031A7560293F3E1800931266 /* flutter-sdk-native-ui.app */,
+				031A7576293F3E1A00931266 /* flutter-sdk-native-uiTests.xctest */,
+				031A7580293F3E1A00931266 /* flutter-sdk-native-uiUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		031A7562293F3E1800931266 /* flutter-sdk-native-ui */ = {
+			isa = PBXGroup;
+			children = (
+				031A7563293F3E1800931266 /* AppDelegate.swift */,
+				031A7565293F3E1800931266 /* SceneDelegate.swift */,
+				031A7567293F3E1800931266 /* ViewController.swift */,
+				031A7569293F3E1800931266 /* Main.storyboard */,
+				031A756C293F3E1A00931266 /* Assets.xcassets */,
+				031A756E293F3E1A00931266 /* LaunchScreen.storyboard */,
+				031A7571293F3E1A00931266 /* Info.plist */,
+			);
+			path = "flutter-sdk-native-ui";
+			sourceTree = "<group>";
+		};
+		031A7579293F3E1A00931266 /* flutter-sdk-native-uiTests */ = {
+			isa = PBXGroup;
+			children = (
+				031A757A293F3E1A00931266 /* flutter_sdk_native_uiTests.swift */,
+			);
+			path = "flutter-sdk-native-uiTests";
+			sourceTree = "<group>";
+		};
+		031A7583293F3E1A00931266 /* flutter-sdk-native-uiUITests */ = {
+			isa = PBXGroup;
+			children = (
+				031A7584293F3E1A00931266 /* flutter_sdk_native_uiUITests.swift */,
+			);
+			path = "flutter-sdk-native-uiUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		031A755F293F3E1800931266 /* flutter-sdk-native-ui */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 031A758A293F3E1A00931266 /* Build configuration list for PBXNativeTarget "flutter-sdk-native-ui" */;
+			buildPhases = (
+				031A755C293F3E1800931266 /* Sources */,
+				031A755D293F3E1800931266 /* Frameworks */,
+				031A755E293F3E1800931266 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "flutter-sdk-native-ui";
+			productName = "flutter-sdk-native-ui";
+			productReference = 031A7560293F3E1800931266 /* flutter-sdk-native-ui.app */;
+			productType = "com.apple.product-type.application";
+		};
+		031A7575293F3E1A00931266 /* flutter-sdk-native-uiTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 031A758D293F3E1A00931266 /* Build configuration list for PBXNativeTarget "flutter-sdk-native-uiTests" */;
+			buildPhases = (
+				031A7572293F3E1A00931266 /* Sources */,
+				031A7573293F3E1A00931266 /* Frameworks */,
+				031A7574293F3E1A00931266 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				031A7578293F3E1A00931266 /* PBXTargetDependency */,
+			);
+			name = "flutter-sdk-native-uiTests";
+			productName = "flutter-sdk-native-uiTests";
+			productReference = 031A7576293F3E1A00931266 /* flutter-sdk-native-uiTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		031A757F293F3E1A00931266 /* flutter-sdk-native-uiUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 031A7590293F3E1A00931266 /* Build configuration list for PBXNativeTarget "flutter-sdk-native-uiUITests" */;
+			buildPhases = (
+				031A757C293F3E1A00931266 /* Sources */,
+				031A757D293F3E1A00931266 /* Frameworks */,
+				031A757E293F3E1A00931266 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				031A7582293F3E1A00931266 /* PBXTargetDependency */,
+			);
+			name = "flutter-sdk-native-uiUITests";
+			productName = "flutter-sdk-native-uiUITests";
+			productReference = 031A7580293F3E1A00931266 /* flutter-sdk-native-uiUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		031A7558293F3E1800931266 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1410;
+				LastUpgradeCheck = 1410;
+				TargetAttributes = {
+					031A755F293F3E1800931266 = {
+						CreatedOnToolsVersion = 14.1;
+					};
+					031A7575293F3E1A00931266 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 031A755F293F3E1800931266;
+					};
+					031A757F293F3E1A00931266 = {
+						CreatedOnToolsVersion = 14.1;
+						TestTargetID = 031A755F293F3E1800931266;
+					};
+				};
+			};
+			buildConfigurationList = 031A755B293F3E1800931266 /* Build configuration list for PBXProject "flutter-sdk-native-ui" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 031A7557293F3E1800931266;
+			productRefGroup = 031A7561293F3E1800931266 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				031A755F293F3E1800931266 /* flutter-sdk-native-ui */,
+				031A7575293F3E1A00931266 /* flutter-sdk-native-uiTests */,
+				031A757F293F3E1A00931266 /* flutter-sdk-native-uiUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		031A755E293F3E1800931266 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				031A7570293F3E1A00931266 /* LaunchScreen.storyboard in Resources */,
+				031A756D293F3E1A00931266 /* Assets.xcassets in Resources */,
+				031A756B293F3E1800931266 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		031A7574293F3E1A00931266 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		031A757E293F3E1A00931266 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		031A755C293F3E1800931266 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				031A7568293F3E1800931266 /* ViewController.swift in Sources */,
+				031A7564293F3E1800931266 /* AppDelegate.swift in Sources */,
+				031A7566293F3E1800931266 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		031A7572293F3E1A00931266 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				031A757B293F3E1A00931266 /* flutter_sdk_native_uiTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		031A757C293F3E1A00931266 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				031A7585293F3E1A00931266 /* flutter_sdk_native_uiUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		031A7578293F3E1A00931266 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 031A755F293F3E1800931266 /* flutter-sdk-native-ui */;
+			targetProxy = 031A7577293F3E1A00931266 /* PBXContainerItemProxy */;
+		};
+		031A7582293F3E1A00931266 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 031A755F293F3E1800931266 /* flutter-sdk-native-ui */;
+			targetProxy = 031A7581293F3E1A00931266 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		031A7569293F3E1800931266 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				031A756A293F3E1800931266 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		031A756E293F3E1A00931266 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				031A756F293F3E1A00931266 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		031A7588293F3E1A00931266 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		031A7589293F3E1A00931266 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		031A758B293F3E1A00931266 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "flutter-sdk-native-ui/Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Flutter SDK would like to access Microphone";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.dolbyioCommsSdkFlutterExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		031A758C293F3E1A00931266 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "flutter-sdk-native-ui/Info.plist";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Flutter SDK would like to access Microphone";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.dolbyioCommsSdkFlutterExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		031A758E293F3E1A00931266 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Dolby.flutter-sdk-native-uiTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/flutter-sdk-native-ui.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/flutter-sdk-native-ui";
+			};
+			name = Debug;
+		};
+		031A758F293F3E1A00931266 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "Dolby.flutter-sdk-native-uiTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/flutter-sdk-native-ui.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/flutter-sdk-native-ui";
+			};
+			name = Release;
+		};
+		031A7591293F3E1A00931266 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.dolbyioCommsSdkFlutterExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "flutter-sdk-native-ui";
+			};
+			name = Debug;
+		};
+		031A7592293F3E1A00931266 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.dolbyioCommsSdkFlutterExample;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "flutter-sdk-native-ui";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		031A755B293F3E1800931266 /* Build configuration list for PBXProject "flutter-sdk-native-ui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				031A7588293F3E1A00931266 /* Debug */,
+				031A7589293F3E1A00931266 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		031A758A293F3E1A00931266 /* Build configuration list for PBXNativeTarget "flutter-sdk-native-ui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				031A758B293F3E1A00931266 /* Debug */,
+				031A758C293F3E1A00931266 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		031A758D293F3E1A00931266 /* Build configuration list for PBXNativeTarget "flutter-sdk-native-uiTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				031A758E293F3E1A00931266 /* Debug */,
+				031A758F293F3E1A00931266 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		031A7590293F3E1A00931266 /* Build configuration list for PBXNativeTarget "flutter-sdk-native-uiUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				031A7591293F3E1A00931266 /* Debug */,
+				031A7592293F3E1A00931266 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 031A7558293F3E1800931266 /* Project object */;
+}
