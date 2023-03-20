@@ -37,9 +37,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
     implementation project(":app_utils")
-    implementation "com.voxeet.sdk:promise:2.7.1"
+    implementation "io.dolby:promise:2.8.1"
     implementation "org.greenrobot:eventbus:3.1.1"
-    implementation "com.voxeet.sdk:utils:3.6.0"
+    implementation "io.dolby:utils:3.8.1"
 //    implementation "com.voxeet.sdk:media:3.6.0"
 //    implementation "com.voxeet.sdk:push:3.6.0"
 //    implementation "org.greenrobot:eventbus:3.1.1"

@@ -11,7 +11,7 @@ void videoServiceTest() {
   setUp(() async {
     await resetSDK();
   });
-  
+
   group('Video Service', () {
     testWidgets('LocalVideoService: start', (tester) async {
       await dolbyioCommsSdkFlutterPlugin.videoService.localVideo.start();

@@ -13,7 +13,7 @@ void recordingServiceTest() {
   setUp(() async {
     await resetSDK();
   });
-  
+
   group('Recording Service', () {
     if (Platform.isIOS) {
       testWidgets('RecordingService: currentRecording', (tester) async {

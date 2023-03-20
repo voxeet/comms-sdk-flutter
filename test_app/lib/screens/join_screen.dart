@@ -410,9 +410,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     return conference;
   }
 
-  Future<Conference> createConference() {
+  Future<Conference> createConference() async {
+    var options = conferenceCreateOptions();
+    String alias = options.alias != null ? options.alias! : "";
+    var subscription = SubscriptionType.values.map((e) => Subscription(e, alias)).toList();
+    await _dolbyioCommsSdkFlutterPlugin.notification.subscribe(subscription);
     var conference = _dolbyioCommsSdkFlutterPlugin.conference
-        .create(conferenceCreateOptions());
+        .create(options);
     return conference;
   }
 
