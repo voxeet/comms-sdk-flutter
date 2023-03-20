@@ -18,9 +18,9 @@ void commandServiceTest() {
       await dolbyioCommsSdkFlutterPlugin.command.send("test");
 
       await expectNative(
-        methodChannel: commandServiceAssertsMethodChannel,
-        assertLabel: "assertSendArgs",
-        expected: {"message": "test"});
+          methodChannel: commandServiceAssertsMethodChannel,
+          assertLabel: "assertSendArgs",
+          expected: {"message": "test"});
     });
   });
 }

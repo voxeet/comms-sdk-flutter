@@ -7,6 +7,7 @@ import 'models/conference.dart';
 import 'models/enums.dart';
 import 'models/events.dart';
 import 'models/participant.dart';
+import 'models/subscription.dart';
 
 /// The NotificationService allows inviting participants to a conference.
 ///
@@ -35,6 +36,20 @@ class NotificationService {
       "participants": participants.map((e) => e.toJson()).toList()
     };
     return _methodChannel.invokeMethod<void>("invite", args);
+  }
+
+  /// Subscribes to the specified notifications.
+  /// [events] - An array of the subscribed subscription types.
+  Future<void> subscribe(List<Subscription> events) {
+    var args = {"subscriptions": events.map((e) => e.toJson()).toList()};
+    return _methodChannel.invokeMethod<void>("subscribe", args);
+  }
+
+  /// Unsubscribes from the specified notifications.
+  /// [events] An array of the subscribed subscription types.
+  Future<void> unsubscribe(List<Subscription> events) {
+    var args = {"subscriptions": events.map((e) => e.toJson()).toList()};
+    return _methodChannel.invokeMethod<void>("unsubscribe", args);
   }
 
   /// Returns a [Stream] of the [NotificationServiceEventNames.invitationReceived] events. By subscribing to the returned stream you will be notified about new conference invitations.

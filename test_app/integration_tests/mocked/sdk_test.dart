@@ -11,7 +11,7 @@ void sdkTest() {
   setUp(() async {
     await resetSDK();
   });
-  
+
   group('SDK Test', () {
     testWidgets('VoxeetSDK: initilise', (tester) async {
       await dolbyioCommsSdkFlutterPlugin.initialize(

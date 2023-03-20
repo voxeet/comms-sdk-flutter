@@ -1,8 +1,10 @@
 package io.dolby.comms.sdk.flutter.module
 
+import android.content.res.Resources.NotFoundException
 import com.voxeet.VoxeetSDK
 import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.ParticipantInvitedMapper
+import io.dolby.comms.sdk.flutter.mapper.SubscriptionMapper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -24,6 +26,9 @@ class NotificationServiceNativeModule(private val scope: CoroutineScope) : Nativ
         when (call.method) {
             ::invite.name -> invite(call, result)
             ::decline.name -> decline(call, result)
+            ::subscribe.name -> subscribe(call, result)
+            ::unsubscribe.name -> unsubscribe(call, result)
+            else -> result.error(NotFoundException("Method: ${call.method} not found on native module"))
         }
     }
 
@@ -57,6 +62,39 @@ class NotificationServiceNativeModule(private val scope: CoroutineScope) : Nativ
                 .decline(conference)
                 .await()
                 .also { result.success(null) }
+        }
+    )
+
+    private fun subscribe(call: MethodCall, result: MethodChannel.Result) = scope.launch(
+        onError = result::onError,
+        onSuccess = {
+            val subscriptions = call.argumentOrThrow<List<Map<String, Any?>>>("subscriptions")
+                .map { m ->
+                    SubscriptionMapper.fromMap(m)
+                }
+                .filterNotNull()
+            VoxeetSDK
+                .notification()
+                .subscribe(subscriptions)
+                .await()
+                .also { r -> if(r) result.success(null) else result.onError(java.lang.Exception("Cannot subscribe to given subscriptions")) }
+
+        }
+    )
+
+    private fun unsubscribe(call: MethodCall, result: MethodChannel.Result) = scope.launch(
+        onError = result::onError,
+        onSuccess = {
+            android.util.Log.d("[KB]", "unsubscribe")
+            val subscriptions = call.argumentOrThrow<List<Map<String, Any?>>>("subscriptions")
+                .map { m ->
+                    SubscriptionMapper.fromMap(m)
+                }
+                .filterNotNull()
+            VoxeetSDK.notification()
+                .unsubscribe(subscriptions)
+                .await()
+                .also { r -> if(r) result.success(null) else result.onError(java.lang.Exception("Cannot unsubscribe for given subscriptions"))  }
         }
     )
 }

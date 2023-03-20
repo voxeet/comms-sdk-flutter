@@ -7,6 +7,7 @@ import com.voxeet.promise.Promise;
 import com.voxeet.sdk.json.ParticipantInvited;
 import com.voxeet.sdk.models.Conference;
 import com.voxeet.sdk.models.Participant;
+import com.voxeet.sdk.push.center.subscription.register.BaseSubscription;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -59,6 +60,14 @@ public class NotificationService {
         String conferenceId = conference.getId();
         declineHasRun = true;
         declineArgs = conference;
+        return Promise.resolve(true);
+    }
+
+    public Promise<Boolean> subscribe(List<BaseSubscription> subscriptions) {
+        return Promise.resolve(true);
+    }
+
+    public Promise<Boolean> unsubscribe(List<BaseSubscription> subscriptions) {
         return Promise.resolve(true);
     }
 }

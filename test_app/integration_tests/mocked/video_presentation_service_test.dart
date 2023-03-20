@@ -13,7 +13,7 @@ void videoPresentationServiceTest() {
   setUp(() async {
     await resetSDK();
   });
-  
+
   group('Video Presentation Service', () {
     testWidgets('VideoPresentationService: start', (tester) async {
       await dolbyioCommsSdkFlutterPlugin.videoPresentation

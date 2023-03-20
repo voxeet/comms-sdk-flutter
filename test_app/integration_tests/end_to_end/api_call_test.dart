@@ -52,7 +52,8 @@ void main() {
     joinOptions.mixing = ConferenceMixingOptions(true);
     await dolbyioCommsSdkFlutterPlugin.conference.join(conference, joinOptions);
 
-    var participant = await dolbyioCommsSdkFlutterPlugin.conference.getParticipants(conference);
+    var participant = await dolbyioCommsSdkFlutterPlugin.conference
+        .getParticipants(conference);
 
     expect(participant[0].info?.name, "participant_1");
 
@@ -62,9 +63,11 @@ void main() {
 
     expect(isMuted, true);
 
-    await dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(participant: participant[0], position: SpatialPosition(1, 1, 1));
+    await dolbyioCommsSdkFlutterPlugin.conference.setSpatialPosition(
+        participant: participant[0], position: SpatialPosition(1, 1, 1));
 
-    await dolbyioCommsSdkFlutterPlugin.conference.setSpatialDirection(SpatialDirection(1, 1, 1));
+    await dolbyioCommsSdkFlutterPlugin.conference
+        .setSpatialDirection(SpatialDirection(1, 1, 1));
 
     var leaveOptions = ConferenceLeaveOptions(true);
     await dolbyioCommsSdkFlutterPlugin.conference.leave(options: leaveOptions);
