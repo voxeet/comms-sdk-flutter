@@ -15,6 +15,56 @@ import WebRTC
     }
 }
 
+@objcMembers public class VTSubscribeBase: NSObject {}
+
+@objcMembers public class VTSubscribeActiveParticipants : VTSubscribeBase {
+    var conferenceAlias: String
+
+    @objc public init(conferenceAlias: String) {
+        self.conferenceAlias = conferenceAlias
+    }
+}
+
+@objc @objcMembers public class VTSubscribeConferenceCreated : VTSubscribeBase {
+    var conferenceAlias: String
+
+    @objc public init(conferenceAlias: String) {
+        self.conferenceAlias = conferenceAlias
+    }
+}
+
+@objc @objcMembers public class VTSubscribeConferenceEnded : VTSubscribeBase {
+    var conferenceAlias: String
+
+    @objc public init(conferenceAlias: String) {
+        self.conferenceAlias = conferenceAlias
+    }
+}
+
+@objc @objcMembers public class VTSubscribeInvitation : VTSubscribeBase {
+    var conferenceAlias: String
+
+    @objc public init(conferenceAlias: String) {
+        self.conferenceAlias = conferenceAlias
+    }
+}
+
+@objc @objcMembers public class VTSubscribeParticipantJoined : VTSubscribeBase {
+    var conferenceAlias: String
+
+    @objc public init(conferenceAlias: String) {
+        self.conferenceAlias = conferenceAlias
+    }
+}
+
+@objc @objcMembers public class VTSubscribeParticipantLeft : VTSubscribeBase {
+    var conferenceAlias: String
+
+    @objc public init(conferenceAlias: String) {
+        self.conferenceAlias = conferenceAlias
+    }
+}
+
 @objcMembers public class VTInvitationReceivedNotification: VTBaseNotification {
     public let participant: VTParticipant = .init()
 }

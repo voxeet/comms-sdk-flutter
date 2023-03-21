@@ -16,6 +16,34 @@ public class NotificationServiceAsserts {
         )
     }
 
+    private func assertSubscribeArgs(args: [String: Any]) throws {
+        let mockHasRun = VoxeetSDK.shared.notification.declineHasRun
+        try ifKeyExists(arg: args, key: "hasRun") { (hasRun: Bool) in
+            try nativeAssertEquals(mockHasRun, hasRun)
+        }
+
+        let mockArgs = VoxeetSDK.shared.notification.declineArgs
+        try ifKeyExists(arg: args, key: "conference") { args in
+            try ConferenceServiceAssertUtils.assertConference(
+                args: args, mockConference: mockArgs
+            )
+        }
+    }
+
+    private func assertUnsubscribeArgs(args: [String: Any]) throws {
+        let mockHasRun = VoxeetSDK.shared.notification.declineHasRun
+        try ifKeyExists(arg: args, key: "hasRun") { (hasRun: Bool) in
+            try nativeAssertEquals(mockHasRun, hasRun)
+        }
+
+        let mockArgs = VoxeetSDK.shared.notification.declineArgs
+        try ifKeyExists(arg: args, key: "conference") { args in
+            try ConferenceServiceAssertUtils.assertConference(
+                args: args, mockConference: mockArgs
+            )
+        }
+    }
+
     private func assertInviteArgs(args: [String: Any]) throws {
         let mockHasRun = VoxeetSDK.shared.notification.inviteHasRun
         try ifKeyExists(arg: args, key: "hasRun") { (hasRun: Bool) in
@@ -66,6 +94,12 @@ extension NotificationServiceAsserts: SDKAsserts {
     public func runAssert(_ assert: String, args: [String: Any], result: (SDKAssertResult) -> Void) {
         do {
             switch assert {
+
+            case "assertSubscribeArgs":
+                try assertSubscribeArgs(args: args)
+
+            case "assertUnsubscribeArgs":
+                try assertUnsubscribeArgs(args: args)
 
             case "assertInviteArgs":
                 try assertInviteArgs(args: args)
