@@ -4,7 +4,21 @@ import WebRTC
 @objcMembers public class NotificationService: NSObject {
 
     public weak var delegate: VTNotificationDelegate?
-    
+
+    var subscribeHasRun: Bool = false
+    var subscribArgs: [VTSubscribeBase]?
+    public func subscribe(subscriptions:[VTSubscribeBase]) {
+        subscribeHasRun = true
+        subscribArgs = subscriptions
+    }
+
+    var unsubscribeHasRun: Bool = false
+    var unsubscribArgs: [VTSubscribeBase]?
+    public func unsubscribe(subscriptions:[VTSubscribeBase]) {
+        unsubscribeHasRun = true
+        unsubscribArgs = subscriptions
+    }
+
     var inviteHasRun: Bool = false
     var inviteArgs: (conference: VTConference, participantsInvited: [VTParticipantInvited])?
     var inviteReturn: NSError?

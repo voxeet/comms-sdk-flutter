@@ -11,7 +11,39 @@ class NotificationServiceBinding: Binding {
     override func onInit() {
         VoxeetSDK.shared.notification.delegate = self
     }
-    
+
+    /// Subscribes to the specified notifications.
+    /// - Parameters:
+    ///   - flutterArguments: Method arguments passed from Flutter.
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func subscribe(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let subscriptions = try flutterArguments.asDictionary(argKey: "subscriptions").decode(type: [DTO.Subscription].self)
+            VoxeetSDK.shared.notification.subscribe(subscriptions: subscriptions.map { $0.toSdkType() })
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
+
+    /// Unsubscribes from the specified notifications.
+    /// - Parameters:
+    ///   - flutterArguments: Method arguments passed from Flutter.
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func unsubscribe(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let subscriptions = try flutterArguments.asDictionary(argKey: "subscriptions").decode(type: [DTO.Subscription].self)
+            VoxeetSDK.shared.notification.unsubscribe(subscriptions: subscriptions.map { $0.toSdkType() })
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
+
     /// Notifies conference participants about a conference invitation.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
@@ -70,6 +102,10 @@ extension NotificationServiceBinding: FlutterBinding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         switch methodName {
+        case "subscribe":
+            subscribe(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "unsubscribe":
+            unsubscribe(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "invite":
             invite(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "decline":
