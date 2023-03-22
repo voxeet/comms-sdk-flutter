@@ -64,4 +64,16 @@ class NotificationService {
       return Event(key, InvitationReceivedNotificationMapper.fromMap(data));
     });
   }
+
+  /// Returns a [Stream] of the [NotificationServiceEventNames.conferenceStatus] events. By subscribing to the returned stream you will be notified about conference status.
+  Stream<Event<NotificationServiceEventNames, ConferenceStatusNotificationData>>
+      onConferenceStatus() {
+    return _eventStream.addListener(
+        [NotificationServiceEventNames.conferenceStatus.value]).map((map) {
+      final event = map as Map<Object?, Object?>;
+      final key = NotificationServiceEventNames.valueOf(event["key"] as String);
+      final data = event["body"] as Map<Object?, Object?>;
+      return Event(key, ConferenceStatusNotificationMapper.fromMap(data));
+    });
+  }
 }

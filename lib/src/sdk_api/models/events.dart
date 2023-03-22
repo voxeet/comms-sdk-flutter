@@ -39,6 +39,38 @@ class InvitationReceivedNotificationData {
       };
 }
 
+/// The ConferenceStatusNotificationData class gathers information about a conference status.
+///
+/// {@category Models}
+class ConferenceStatusNotificationData {
+  /// The conference alias.
+  String conferenceAlias;
+
+  /// The conference ID.
+  String conferenceId;
+
+  /// Information whether the conference is ongoing.
+  bool live;
+
+  /// The list of the conference participants.
+  List<Participant> participants;
+
+  ConferenceStatusNotificationData(
+    this.conferenceAlias,
+    this.conferenceId,
+    this.live,
+    this.participants,
+  );
+
+  /// Returns a representation of this object as a JSON object.
+  Map<Object?, Object?> toJson() => {
+        "conferenceAlias": conferenceAlias,
+        "conferenceId": conferenceId,
+        "live": live,
+        "participants": participants.map((e) => e.toJson()).toList()
+      };
+}
+
 /// The MessageReceivedData interface gathers information about a received message.
 ///
 /// {@category Models}

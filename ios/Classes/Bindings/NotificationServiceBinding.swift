@@ -4,6 +4,7 @@ import VoxeetSDK
 private enum EventKeys: String, CaseIterable {
     /// Emitted when the application user received an invitation.
     case invitationReceived = "EVENT_NOTIFICATION_INVITATION_RECEIVED"
+    case conferenceStatus = "EVENT_NOTIFICATION_CONFERENCE_STATUS"
 }
 
 class NotificationServiceBinding: Binding {
@@ -130,7 +131,17 @@ extension NotificationServiceBinding: VTNotificationDelegate {
     }
 
     public func activeParticipants(notification: VTActiveParticipantsNotification) {}
-    public func conferenceStatus(notification: VTConferenceStatusNotification) {}
+    public func conferenceStatus(notification: VTConferenceStatusNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.conferenceStatus,
+                body: DTO.ConferenceStatusNotification(conferenceStatusNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+
     public func conferenceCreated(notification: VTConferenceCreatedNotification) {}
     public func conferenceEnded(notification: VTConferenceEndedNotification) {}
     public func participantJoined(notification: VTParticipantJoinedNotification) {}
