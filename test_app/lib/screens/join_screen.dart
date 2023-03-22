@@ -85,6 +85,10 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>?
       onStatusChangeSubscription;
 
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ConferenceCreatedNotificationData>>? onConferenceCreatedSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -105,6 +109,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           'Conference Status Event: ${params.body.toJson().toString()}',
           const Duration(milliseconds: 3000));
     });
+
+    onConferenceCreatedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onConferenceCreated()
+        .listen((event) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("conference created: ${event.body.conferenceAlias}")));
+      developer.log("Conference created: ${event.body.conferenceAlias}");
+    });
   }
 
   @override
@@ -112,6 +124,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     onInvitationReceivedSubscription?.cancel();
     onConferenceStatusSubscription?.cancel();
     onStatusChangeSubscription?.cancel();
+    onConferenceCreatedSubscription?.cancel();
     super.dispose();
   }
 
@@ -219,7 +232,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                                 switchLiveRecording = value;
                               });
                             } else {
-                              setState((){
+                              setState(() {
                                 switchLiveRecording = value;
                               });
                             }
@@ -354,8 +367,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
             context: context,
             title: 'Permissions missing',
             body: 'Permissions $permissions missing, cannot continue.',
-            okText: 'Ok'
-        );
+            okText: 'Ok');
       },
     );
   }
@@ -426,10 +438,11 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   Future<Conference> createConference() async {
     var options = conferenceCreateOptions();
     String alias = options.alias != null ? options.alias! : "";
-    var subscription = SubscriptionType.values.map((e) => Subscription(e, alias)).toList();
+    var subscription =
+        SubscriptionType.values.map((e) => Subscription(e, alias)).toList();
     await _dolbyioCommsSdkFlutterPlugin.notification.subscribe(subscription);
-    var conference = _dolbyioCommsSdkFlutterPlugin.conference
-        .create(options);
+
+    var conference = _dolbyioCommsSdkFlutterPlugin.conference.create(options);
     return conference;
   }
 

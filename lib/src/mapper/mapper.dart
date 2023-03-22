@@ -118,6 +118,26 @@ class ConferenceStatusNotificationMapper {
   }
 }
 
+class ConferenceCreatedNotificationMapper {
+  static ConferenceCreatedNotificationData fromMap(
+      Map<Object?, Object?> conferenceCreatedEvent) {
+    var conferenceAlias =
+        conferenceCreatedEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = conferenceCreatedEvent["conferenceId"] as String;
+    return ConferenceCreatedNotificationData(conferenceAlias, conferenceId);
+  }
+}
+
+class ConferenceEndedNotificationMapper {
+  static ConferenceEndedNotificationData fromMap(
+      Map<Object?, Object?> conferenceEndedEvent) {
+    var conferenceAlias =
+        conferenceEndedEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = conferenceEndedEvent["conferenceId"] as String;
+    return ConferenceEndedNotificationData(conferenceAlias, conferenceId);
+  }
+}
+
 class MessageReceivedMapper {
   static MessageReceivedData fromMap(Map<Object?, Object?> data) {
     var participant =

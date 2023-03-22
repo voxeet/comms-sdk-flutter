@@ -1,5 +1,7 @@
 package com.voxeet.sdk.services;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import com.voxeet.VoxeetSDK;
@@ -11,7 +13,10 @@ import com.voxeet.sdk.push.center.subscription.register.BaseSubscription;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class NotificationService {
 
@@ -38,6 +43,7 @@ public class NotificationService {
     }
 
     private InviteArgs inviteArgs = new InviteArgs();
+    private final Set<BaseSubscription> subscriptions = new HashSet<>();
     public InviteArgs getInviteArgs() {
         return inviteArgs;
     }
@@ -64,10 +70,18 @@ public class NotificationService {
     }
 
     public Promise<Boolean> subscribe(List<BaseSubscription> subscriptions) {
+        this.subscriptions.addAll(subscriptions);
         return Promise.resolve(true);
     }
 
     public Promise<Boolean> unsubscribe(List<BaseSubscription> subscriptions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            subscriptions.forEach(this.subscriptions::remove);
+        } else {
+            for (BaseSubscription subscription : subscriptions) {
+                this.subscriptions.remove(subscription);
+            }
+        }
         return Promise.resolve(true);
     }
 }

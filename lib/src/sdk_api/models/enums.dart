@@ -74,7 +74,9 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
 enum NotificationServiceEventNames implements EnumWithStringValue {
   /// Emitted when an application user receives an invitation.
   invitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED'),
-  conferenceStatus('EVENT_NOTIFICATION_CONFERENCE_STATUS');
+  conferenceStatus('EVENT_NOTIFICATION_CONFERENCE_STATUS'),
+  conferenceCreated('EVENT_NOTIFICATION_CONFERENCE_CREATED'),
+  conferenceEnded('EVENT_NOTIFICATION_CONFERENCE_ENDED');
 
   @override
   final String value;
