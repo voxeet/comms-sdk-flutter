@@ -96,6 +96,28 @@ class InvitationReceivedNotificationMapper {
   }
 }
 
+class ConferenceStatusNotificationMapper {
+  static ConferenceStatusNotificationData fromMap(
+      Map<Object?, Object?> conferenceStatusEvent) {
+    var conferenceAlias =
+        conferenceStatusEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = conferenceStatusEvent["conferenceId"] as String;
+    var live = conferenceStatusEvent["live"] as bool;
+    var participants = conferenceStatusEvent.containsKey("participants")
+        ? prepareParticipantsList(
+            conferenceStatusEvent["participants"] as List<Object?>)
+        : List<Participant>.empty();
+    return ConferenceStatusNotificationData(
+        conferenceAlias, conferenceId, live, participants);
+  }
+
+  static List<Participant> prepareParticipantsList(List<Object?> participants) {
+    return participants
+        .map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>))
+        .toList();
+  }
+}
+
 class MessageReceivedMapper {
   static MessageReceivedData fromMap(Map<Object?, Object?> data) {
     var participant =

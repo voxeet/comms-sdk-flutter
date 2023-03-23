@@ -79,6 +79,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
       onInvitationReceivedSubscription;
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ConferenceStatusNotificationData>>? onConferenceStatusSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>?
       onStatusChangeSubscription;
 
@@ -93,11 +96,21 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       showInvitationDialog(context, params.body.toJson().toString(),
           params.body.conferenceId.toString());
     });
+
+    onConferenceStatusSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onConferenceStatus()
+        .listen((params) {
+      StatusSnackbar.buildSnackbar(
+          context,
+          'Conference Status Event: ${params.body.toJson().toString()}',
+          const Duration(milliseconds: 3000));
+    });
   }
 
   @override
   void dispose() {
     onInvitationReceivedSubscription?.cancel();
+    onConferenceStatusSubscription?.cancel();
     onStatusChangeSubscription?.cancel();
     super.dispose();
   }
