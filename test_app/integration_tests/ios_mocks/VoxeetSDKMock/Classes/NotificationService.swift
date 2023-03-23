@@ -6,17 +6,17 @@ import WebRTC
     public weak var delegate: VTNotificationDelegate?
 
     var subscribeHasRun: Bool = false
-    var subscribArgs: [VTSubscribeBase]?
+    var subscribeArgs: [VTSubscribeBase]?
     public func subscribe(subscriptions:[VTSubscribeBase]) {
         subscribeHasRun = true
-        subscribArgs = subscriptions
+        subscribeArgs = subscriptions
     }
 
     var unsubscribeHasRun: Bool = false
-    var unsubscribArgs: [VTSubscribeBase]?
+    var unsubscribeArgs: [VTSubscribeBase]?
     public func unsubscribe(subscriptions:[VTSubscribeBase]) {
         unsubscribeHasRun = true
-        unsubscribArgs = subscriptions
+        unsubscribeArgs = subscriptions
     }
 
     var inviteHasRun: Bool = false

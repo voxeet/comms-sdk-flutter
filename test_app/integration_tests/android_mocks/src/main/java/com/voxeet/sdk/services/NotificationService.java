@@ -69,11 +69,20 @@ public class NotificationService {
         return Promise.resolve(true);
     }
 
+    public boolean subscribeHasRun = false;
+    @Nullable
+    public List<BaseSubscription> subscribeArgs;
+
     public Promise<Boolean> subscribe(List<BaseSubscription> subscriptions) {
         this.subscriptions.addAll(subscriptions);
+        subscribeHasRun = true;
+        subscribeArgs = subscriptions;
         return Promise.resolve(true);
     }
 
+    public boolean unsubscribeHasRun = false;
+    @Nullable
+    public List<BaseSubscription> unsubscribeArgs;
     public Promise<Boolean> unsubscribe(List<BaseSubscription> subscriptions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             subscriptions.forEach(this.subscriptions::remove);
@@ -82,6 +91,8 @@ public class NotificationService {
                 this.subscriptions.remove(subscription);
             }
         }
+        unsubscribeHasRun = true;
+        unsubscribeArgs = subscriptions;
         return Promise.resolve(true);
     }
 }

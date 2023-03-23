@@ -17,30 +17,26 @@ public class NotificationServiceAsserts {
     }
 
     private func assertSubscribeArgs(args: [String: Any]) throws {
-        let mockHasRun = VoxeetSDK.shared.notification.declineHasRun
+        let mockHasRun = VoxeetSDK.shared.notification.subscribeHasRun
         try ifKeyExists(arg: args, key: "hasRun") { (hasRun: Bool) in
             try nativeAssertEquals(mockHasRun, hasRun)
         }
-
-        let mockArgs = VoxeetSDK.shared.notification.declineArgs
-        try ifKeyExists(arg: args, key: "conference") { args in
-            try ConferenceServiceAssertUtils.assertConference(
-                args: args, mockConference: mockArgs
-            )
+        
+        let conference = VoxeetSDK.shared.conference.current?.alias
+        try ifKeyExists(arg: args, key: "conferenceAlias") { conferenceAlias in
+            try nativeAssertEquals(conference, conferenceAlias)
         }
     }
 
     private func assertUnsubscribeArgs(args: [String: Any]) throws {
-        let mockHasRun = VoxeetSDK.shared.notification.declineHasRun
+        let mockHasRun = VoxeetSDK.shared.notification.unsubscribeHasRun
         try ifKeyExists(arg: args, key: "hasRun") { (hasRun: Bool) in
             try nativeAssertEquals(mockHasRun, hasRun)
         }
-
-        let mockArgs = VoxeetSDK.shared.notification.declineArgs
-        try ifKeyExists(arg: args, key: "conference") { args in
-            try ConferenceServiceAssertUtils.assertConference(
-                args: args, mockConference: mockArgs
-            )
+        
+        let conference = VoxeetSDK.shared.conference.current?.alias
+        try ifKeyExists(arg: args, key: "conferenceAlias") { conferenceAlias in
+            try nativeAssertEquals(conference, conferenceAlias)
         }
     }
 

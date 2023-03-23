@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:integration_test/integration_test.dart';
@@ -63,6 +64,76 @@ void notificationServiceTest() {
               "alias": "setCreateConferenceReturn_alias_1"
             }
           });
+    });
+
+    testWidgets('NotificationService: subscribe', (tester) async {
+      await runNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          label: "setCurrentConference",
+          args: {"type": 5});
+
+      var subscriptions = [
+        Subscription(SubscriptionType.activeParticipants,
+            'setCreateConferenceReturn_alias_5')
+      ];
+      await dolbyioCommsSdkFlutterPlugin.notification.subscribe(subscriptions);
+      if (Platform.isAndroid) {
+        await expectNative(
+            methodChannel: notificationServiceAssertsMethodChannel,
+            assertLabel: "assertSubscribeArgs",
+            expected: {
+              "hasRun": true,
+              "subscription": {
+                'type': 'Conference.ActiveParticipants',
+                'conferenceAlias': 'setCreateConferenceReturn_alias_5'
+              }
+            });
+      }
+      if (Platform.isIOS) {
+        await expectNative(
+            methodChannel: notificationServiceAssertsMethodChannel,
+            assertLabel: "assertSubscribeArgs",
+            expected: {
+              "hasRun": true,
+              'conferenceAlias': 'setCreateConferenceReturn_alias_5'
+            });
+      }
+    });
+
+    testWidgets('NotificationService: unsubscribe', (tester) async {
+      await runNative(
+          methodChannel: conferenceServiceAssertsMethodChannel,
+          label: "setCurrentConference",
+          args: {"type": 5});
+
+      var subscriptions = [
+        Subscription(SubscriptionType.activeParticipants,
+            'setCreateConferenceReturn_alias_5')
+      ];
+      await dolbyioCommsSdkFlutterPlugin.notification.subscribe(subscriptions);
+      await dolbyioCommsSdkFlutterPlugin.notification
+          .unsubscribe(subscriptions);
+      if (Platform.isAndroid) {
+        await expectNative(
+            methodChannel: notificationServiceAssertsMethodChannel,
+            assertLabel: "assertUnsubscribeArgs",
+            expected: {
+              "hasRun": true,
+              "subscription": {
+                'type': 'Conference.ActiveParticipants',
+                'conferenceAlias': 'setCreateConferenceReturn_alias_5'
+              }
+            });
+      }
+      if (Platform.isIOS) {
+        await expectNative(
+            methodChannel: notificationServiceAssertsMethodChannel,
+            assertLabel: "assertUnsubscribeArgs",
+            expected: {
+              "hasRun": true,
+              'conferenceAlias': 'setCreateConferenceReturn_alias_5'
+            });
+      }
     });
   });
 }
