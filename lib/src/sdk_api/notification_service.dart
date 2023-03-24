@@ -76,4 +76,29 @@ class NotificationService {
       return Event(key, ConferenceStatusNotificationMapper.fromMap(data));
     });
   }
+
+  /// Returns a [Stream] of the [NotificationServiceEventNames.conferenceCreated] events. By subscribing to the returned stream you will be notified about new conference invitations.
+  Stream<
+      Event<NotificationServiceEventNames,
+          ConferenceCreatedNotificationData>> onConferenceCreated() {
+    return _eventStream.addListener(
+        [NotificationServiceEventNames.conferenceCreated.value]).map((map) {
+      final event = map as Map<Object?, Object?>;
+      final key = NotificationServiceEventNames.valueOf(event["key"] as String);
+      final data = event["body"] as Map<Object?, Object?>;
+      return Event(key, ConferenceCreatedNotificationMapper.fromMap(data));
+    });
+  }
+
+  /// Returns a [Stream] of the [NotificationServiceEventNames.conferenceEnded] events. By subscribing to the returned stream you will be notified about new conference invitations.
+  Stream<Event<NotificationServiceEventNames, ConferenceEndedNotificationData>>
+      onConferenceEnded() {
+    return _eventStream.addListener(
+        [NotificationServiceEventNames.conferenceEnded.value]).map((map) {
+      final event = map as Map<Object?, Object?>;
+      final key = NotificationServiceEventNames.valueOf(event["key"] as String);
+      final data = event["body"] as Map<Object?, Object?>;
+      return Event(key, ConferenceEndedNotificationMapper.fromMap(data));
+    });
+  }
 }

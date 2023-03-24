@@ -71,6 +71,40 @@ class ConferenceStatusNotificationData {
       };
 }
 
+/// The ConferenceCreatedNotificationData class gathers information about a conference created.
+///
+/// {@category Models}
+class ConferenceCreatedNotificationData {
+  /// The conference alias.
+  String conferenceAlias;
+
+  /// The conference ID.
+  String conferenceId;
+
+  ConferenceCreatedNotificationData(this.conferenceAlias, this.conferenceId);
+
+  /// Returns a representation of this object as a JSON object.
+  Map<Object?, Object?> toJson() =>
+      {"conferenceAlias": conferenceAlias, "conferenceId": conferenceId};
+}
+
+/// The ConferenceEndedNotificationData class gathers information about a conference ended.
+///
+/// {@category Models}
+class ConferenceEndedNotificationData {
+  /// The conference alias.
+  String conferenceAlias;
+
+  /// The conference ID.
+  String conferenceId;
+
+  ConferenceEndedNotificationData(this.conferenceAlias, this.conferenceId);
+
+  /// Returns a representation of this object as a JSON object.
+  Map<Object?, Object?> toJson() =>
+      {"conferenceAlias": conferenceAlias, "conferenceId": conferenceId};
+}
+
 /// The MessageReceivedData interface gathers information about a received message.
 ///
 /// {@category Models}

@@ -47,6 +47,8 @@ export 'src/sdk_api/models/events.dart'
     show
         InvitationReceivedNotificationData,
         ConferenceStatusNotificationData,
+        ConferenceCreatedNotificationData,
+        ConferenceEndedNotificationData,
         MessageReceivedData,
         StreamsChangeData,
         RecordingStatusUpdate;

@@ -15,6 +15,7 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'participant_grid.dart';
 import '/widgets/dolby_title.dart';
 import '/widgets/modal_bottom_sheet.dart';
+import 'dart:developer' as dev;
 
 class ParticipantScreen extends StatefulWidget {
   final bool isSpatialAudio;
@@ -82,6 +83,11 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   StreamSubscription<
           Event<FilePresentationServiceEventNames, FilePresentation>>?
       _onFilePresentationChangeSubscription;
+
+  StreamSubscription<
+          Event<NotificationServiceEventNames,
+              ConferenceEndedNotificationData>>?
+      _onConferenceEndedNotificationSubscription;
 
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;
@@ -164,20 +170,37 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         });
       }
     });
+
+    _onConferenceEndedNotificationSubscription = _dolbyioCommsSdkFlutterPlugin
+        .notification
+        .onConferenceEnded()
+        .listen((event) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("conference ended: ${event.body.conferenceAlias}")));
+      dev.log("Conference ended: ${event.body.conferenceAlias}");
+    });
   }
 
   @override
   void deactivate() {
     _participantsChangeSubscription?.cancel();
+    Conference? conference;
     getCurrentConference().then((conf) async {
-      if (conf != null && conf.alias != null) {
-      await _dolbyioCommsSdkFlutterPlugin.notification
-          .unsubscribe(SubscriptionType.values.map((e) => Subscription(e, conf.alias!)).toList());
-      }
+      conference = conf;
     });
 
     var options = ConferenceLeaveOptions(shouldCloseSessionOnLeave);
-    _dolbyioCommsSdkFlutterPlugin.conference.leave(options: options);
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .leave(options: options)
+        .then((value) async {
+      if (conference != null && conference!.alias != null) {
+        await _dolbyioCommsSdkFlutterPlugin.notification.unsubscribe(
+            SubscriptionType.values
+                .map((e) => Subscription(e, conference!.alias!))
+                .toList());
+      }
+      _onConferenceEndedNotificationSubscription?.cancel();
+    });
     _streamsChangeSubscription?.cancel();
     _onPermissionsChangeSubsription?.cancel();
     _onRecordingChangeSubscription?.cancel();

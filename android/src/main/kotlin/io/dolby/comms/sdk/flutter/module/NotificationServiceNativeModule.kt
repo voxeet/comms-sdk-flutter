@@ -85,7 +85,6 @@ class NotificationServiceNativeModule(private val scope: CoroutineScope) : Nativ
     private fun unsubscribe(call: MethodCall, result: MethodChannel.Result) = scope.launch(
         onError = result::onError,
         onSuccess = {
-            android.util.Log.d("[KB]", "unsubscribe")
             val subscriptions = call.argumentOrThrow<List<Map<String, Any?>>>("subscriptions")
                 .map { m ->
                     SubscriptionMapper.fromMap(m)
