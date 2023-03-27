@@ -114,4 +114,28 @@ class NotificationService {
       return Event(key, ActiveParticipantsNotificationMapper.fromMap(data));
     });
   }
+
+  /// Returns a [Stream] of the [NotificationServiceEventNames.participantJoined] events. By subscribing to the returned stream you will be notified when participants join the conference.
+  Stream<Event<NotificationServiceEventNames, ParticipantJoinedNotificationData>>
+  onParticipantJoined() {
+    return _eventStream.addListener(
+        [NotificationServiceEventNames.participantJoined.value]).map((map) {
+      final event = map as Map<Object?, Object?>;
+      final key = NotificationServiceEventNames.valueOf(event["key"] as String);
+      final data = event["body"] as Map<Object?, Object?>;
+      return Event(key, ParticipantJoinedNotificationMapper.fromMap(data));
+    });
+  }
+
+  /// Returns a [Stream] of the [NotificationServiceEventNames.participantLeft] events. By subscribing to the returned stream you will be notified when participants leave the conference.
+  Stream<Event<NotificationServiceEventNames, ParticipantLeftNotificationData>>
+  onParticipantLeft() {
+    return _eventStream.addListener(
+        [NotificationServiceEventNames.participantLeft.value]).map((map) {
+      final event = map as Map<Object?, Object?>;
+      final key = NotificationServiceEventNames.valueOf(event["key"] as String);
+      final data = event["body"] as Map<Object?, Object?>;
+      return Event(key, ParticipantLeftNotificationMapper.fromMap(data));
+    });
+  }
 }

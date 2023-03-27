@@ -128,6 +128,30 @@ class ConferenceCreatedNotificationMapper {
   }
 }
 
+class ParticipantJoinedNotificationMapper {
+  static ParticipantJoinedNotificationData fromMap(
+      Map<Object?, Object?> participantJoinedEvent) {
+    var conferenceAlias =
+        participantJoinedEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = participantJoinedEvent["conferenceId"] as String;
+    var participant = ParticipantMapper.fromMap(
+        participantJoinedEvent["participant"] as Map<Object?, Object?>);
+    return ParticipantJoinedNotificationData(conferenceAlias, conferenceId, participant);
+  }
+}
+
+class ParticipantLeftNotificationMapper {
+  static ParticipantLeftNotificationData fromMap(
+      Map<Object?, Object?> participantLeftEvent) {
+    var conferenceAlias =
+        participantLeftEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = participantLeftEvent["conferenceId"] as String;
+    var participant = ParticipantMapper.fromMap(
+        participantLeftEvent["participant"] as Map<Object?, Object?>);
+    return ParticipantLeftNotificationData(conferenceAlias, conferenceId, participant);
+  }
+}
+
 class ConferenceEndedNotificationMapper {
   static ConferenceEndedNotificationData fromMap(
       Map<Object?, Object?> conferenceEndedEvent) {

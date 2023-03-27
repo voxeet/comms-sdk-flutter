@@ -89,6 +89,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       Event<NotificationServiceEventNames,
           ConferenceCreatedNotificationData>>? onConferenceCreatedSubscription;
 
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ParticipantJoinedNotificationData>>? onParticipantJoinedSubscription;
+
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ParticipantLeftNotificationData>>? onParticipantLeftSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -116,6 +124,22 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("conference created: ${event.body.conferenceAlias}")));
       developer.log("Conference created: ${event.body.conferenceAlias}");
+    });
+
+    onParticipantJoinedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onParticipantJoined()
+        .listen((event) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("participant joined: ${event.body.participant.info?.name}")));
+      developer.log("participant joined: ${event.body.toJson().toString()}");
+    });
+
+    onParticipantLeftSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onParticipantLeft()
+        .listen((event) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("participant left: ${event.body.participant.info?.name}")));
+      developer.log("participant left: ${event.body.toJson().toString()}");
     });
   }
 

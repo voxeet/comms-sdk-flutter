@@ -46,6 +46,8 @@ export 'src/sdk_api/models/subscription.dart'
 export 'src/sdk_api/models/events.dart'
     show
         InvitationReceivedNotificationData,
+        ParticipantJoinedNotificationData,
+        ParticipantLeftNotificationData,
         ConferenceStatusNotificationData,
         ConferenceCreatedNotificationData,
         ConferenceEndedNotificationData,
