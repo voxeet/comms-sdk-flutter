@@ -89,6 +89,11 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
               ConferenceEndedNotificationData>>?
       _onConferenceEndedNotificationSubscription;
 
+  StreamSubscription<
+          Event<NotificationServiceEventNames,
+              ActiveParticipantsNotificationData>>?
+      _onActiveParticipantsSubscription;
+
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;
   List<ParticipantSpatialValues> participants = [];
@@ -179,6 +184,16 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           content: Text("conference ended: ${event.body.conferenceAlias}")));
       dev.log("Conference ended: ${event.body.conferenceAlias}");
     });
+
+    _onActiveParticipantsSubscription = _dolbyioCommsSdkFlutterPlugin
+        .notification
+        .onActiveParticipants()
+        .listen((event) {
+      dev.log(
+          "Active participants: participants count: ${event.body.participantCount}");
+      dev.log(
+          "Active participants: participants count: ${event.body.participants}");
+    });
   }
 
   @override
@@ -205,6 +220,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     _onPermissionsChangeSubsription?.cancel();
     _onRecordingChangeSubscription?.cancel();
     _onFilePresentationChangeSubscription?.cancel();
+    _onActiveParticipantsSubscription?.cancel();
     super.deactivate();
   }
 

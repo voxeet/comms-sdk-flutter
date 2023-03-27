@@ -76,7 +76,8 @@ enum NotificationServiceEventNames implements EnumWithStringValue {
   invitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED'),
   conferenceStatus('EVENT_NOTIFICATION_CONFERENCE_STATUS'),
   conferenceCreated('EVENT_NOTIFICATION_CONFERENCE_CREATED'),
-  conferenceEnded('EVENT_NOTIFICATION_CONFERENCE_ENDED');
+  conferenceEnded('EVENT_NOTIFICATION_CONFERENCE_ENDED'),
+  activeParticipants('EVENT_NOTIFICATION_ACTIVE_PARTICIPANTS');
 
   @override
   final String value;

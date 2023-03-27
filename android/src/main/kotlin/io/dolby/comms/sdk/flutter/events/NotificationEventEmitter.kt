@@ -1,6 +1,7 @@
 package io.dolby.comms.sdk.flutter.events
 
 import com.voxeet.VoxeetSDK
+import com.voxeet.sdk.push.center.subscription.event.ActiveParticipantsEvent
 import com.voxeet.sdk.push.center.subscription.event.InvitationReceivedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ConferenceCreatedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ConferenceEndedNotificationEvent
@@ -51,16 +52,34 @@ class NotificationEventEmitter(eventChannelHandler: EventChannelHandler) : Nativ
     }
 
     /**
+     * Emitted when a list of active participants changes..
+     */
+    @Subscribe(threadMode = MAIN)
+    fun on(event: ActiveParticipantsEvent) {
+        mapOf(
+            KEY_CONFERENCE_ALIAS to event.conferenceAlias,
+            KEY_CONFERENCE_ID to event.conferenceId,
+            KEY_PARTICIPANT_COUNT to event.participantCount,
+            KEY_PARTICIPANTS to event.participants.map {
+                ParticipantNotificationMapper(it).convertToMap()
+            }
+        ).also { emit(NotificationEvent.ACTIVE_PARTICIPANTS, it) }
+    }
+
+    /**
      * Notification events
      */
     private object NotificationEvent {
         const val INVITATION_RECEIVED = "EVENT_NOTIFICATION_INVITATION_RECEIVED"
         const val CONFERENCE_CREATED = "EVENT_NOTIFICATION_CONFERENCE_CREATED"
         const val CONFERENCE_ENDED = "EVENT_NOTIFICATION_CONFERENCE_ENDED"
+        const val ACTIVE_PARTICIPANTS = "EVENT_NOTIFICATION_ACTIVE_PARTICIPANTS"
     }
 
     companion object {
         private const val KEY_CONFERENCE_ALIAS = "conferenceAlias"
         private const val KEY_CONFERENCE_ID = "conferenceId"
+        private const val KEY_PARTICIPANT_COUNT = "participantCount"
+        private const val KEY_PARTICIPANTS = "participants"
     }
 }

@@ -101,4 +101,17 @@ class NotificationService {
       return Event(key, ConferenceEndedNotificationMapper.fromMap(data));
     });
   }
+
+  /// Returns a [Stream] of the [NotificationServiceEventNames.activeParticipants] events. By subscribing to the returned stream you will be notified about changes of active participants.
+  Stream<
+      Event<NotificationServiceEventNames,
+          ActiveParticipantsNotificationData>> onActiveParticipants() {
+    return _eventStream.addListener(
+        [NotificationServiceEventNames.activeParticipants.value]).map((map) {
+      final event = map as Map<Object?, Object?>;
+      final key = NotificationServiceEventNames.valueOf(event["key"] as String);
+      final data = event["body"] as Map<Object?, Object?>;
+      return Event(key, ActiveParticipantsNotificationMapper.fromMap(data));
+    });
+  }
 }

@@ -105,6 +105,34 @@ class ConferenceEndedNotificationData {
       {"conferenceAlias": conferenceAlias, "conferenceId": conferenceId};
 }
 
+/// The ActiveParticipantsNotificationData class gathers information about a active participants.
+///
+/// {@category Models}
+class ActiveParticipantsNotificationData {
+  /// The conference alias.
+  String conferenceAlias;
+
+  /// The conference ID.
+  String conferenceId;
+
+  /// The participant count.
+  int participantCount;
+
+  /// The list of active participants.
+  List<Participant> participants;
+
+  ActiveParticipantsNotificationData(this.conferenceAlias, this.conferenceId,
+      this.participantCount, this.participants);
+
+  /// Returns a representation of this object as a JSON object.
+  Map<Object?, Object?> toJson() => {
+        "conferenceAlias": conferenceAlias,
+        "conferenceId": conferenceId,
+        "participantCount": participantCount,
+        "participants": participants
+      };
+}
+
 /// The MessageReceivedData interface gathers information about a received message.
 ///
 /// {@category Models}
