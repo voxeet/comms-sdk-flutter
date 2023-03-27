@@ -116,8 +116,9 @@ class NotificationService {
   }
 
   /// Returns a [Stream] of the [NotificationServiceEventNames.participantJoined] events. By subscribing to the returned stream you will be notified when participants join the conference.
-  Stream<Event<NotificationServiceEventNames, ParticipantJoinedNotificationData>>
-  onParticipantJoined() {
+  Stream<
+      Event<NotificationServiceEventNames,
+          ParticipantJoinedNotificationData>> onParticipantJoined() {
     return _eventStream.addListener(
         [NotificationServiceEventNames.participantJoined.value]).map((map) {
       final event = map as Map<Object?, Object?>;
@@ -129,7 +130,7 @@ class NotificationService {
 
   /// Returns a [Stream] of the [NotificationServiceEventNames.participantLeft] events. By subscribing to the returned stream you will be notified when participants leave the conference.
   Stream<Event<NotificationServiceEventNames, ParticipantLeftNotificationData>>
-  onParticipantLeft() {
+      onParticipantLeft() {
     return _eventStream.addListener(
         [NotificationServiceEventNames.participantLeft.value]).map((map) {
       final event = map as Map<Object?, Object?>;

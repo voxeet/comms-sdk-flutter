@@ -136,7 +136,8 @@ class ParticipantJoinedNotificationMapper {
     var conferenceId = participantJoinedEvent["conferenceId"] as String;
     var participant = ParticipantMapper.fromMap(
         participantJoinedEvent["participant"] as Map<Object?, Object?>);
-    return ParticipantJoinedNotificationData(conferenceAlias, conferenceId, participant);
+    return ParticipantJoinedNotificationData(
+        conferenceAlias, conferenceId, participant);
   }
 }
 
@@ -148,7 +149,8 @@ class ParticipantLeftNotificationMapper {
     var conferenceId = participantLeftEvent["conferenceId"] as String;
     var participant = ParticipantMapper.fromMap(
         participantLeftEvent["participant"] as Map<Object?, Object?>);
-    return ParticipantLeftNotificationData(conferenceAlias, conferenceId, participant);
+    return ParticipantLeftNotificationData(
+        conferenceAlias, conferenceId, participant);
   }
 }
 

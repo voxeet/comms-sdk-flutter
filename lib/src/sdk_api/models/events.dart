@@ -146,11 +146,15 @@ class ParticipantJoinedNotificationData {
   /// The participant who joined the conference.
   Participant participant;
 
-  ParticipantJoinedNotificationData(this.conferenceAlias, this.conferenceId, this.participant);
+  ParticipantJoinedNotificationData(
+      this.conferenceAlias, this.conferenceId, this.participant);
 
   /// Returns a representation of this object as a JSON object.
-  Map<Object?, Object?> toJson() =>
-      {"conferenceAlias": conferenceAlias, "conferenceId": conferenceId, "participant": participant};
+  Map<Object?, Object?> toJson() => {
+        "conferenceAlias": conferenceAlias,
+        "conferenceId": conferenceId,
+        "participant": participant
+      };
 }
 
 /// The ParticipantLeftNotificationData class gathers information .
@@ -166,11 +170,15 @@ class ParticipantLeftNotificationData {
   /// The participant who left the conference.
   Participant participant;
 
-  ParticipantLeftNotificationData(this.conferenceAlias, this.conferenceId, this.participant);
+  ParticipantLeftNotificationData(
+      this.conferenceAlias, this.conferenceId, this.participant);
 
   /// Returns a representation of this object as a JSON object.
-  Map<Object?, Object?> toJson() =>
-      {"conferenceAlias": conferenceAlias, "conferenceId": conferenceId, "participant": participant};
+  Map<Object?, Object?> toJson() => {
+        "conferenceAlias": conferenceAlias,
+        "conferenceId": conferenceId,
+        "participant": participant
+      };
 }
 
 /// The MessageReceivedData interface gathers information about a received message.

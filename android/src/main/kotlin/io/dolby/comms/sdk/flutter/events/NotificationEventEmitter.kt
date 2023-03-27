@@ -8,7 +8,6 @@ import com.voxeet.sdk.push.center.subscription.event.ConferenceCreatedNotificati
 import com.voxeet.sdk.push.center.subscription.event.ConferenceEndedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ParticipantJoinedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ParticipantLeftNotificationEvent
-import com.voxeet.sdk.services.notification.events.ConferenceStatusNotificationEvent
 import io.dolby.comms.sdk.flutter.mapper.ParticipantNotificationMapper
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode.MAIN
