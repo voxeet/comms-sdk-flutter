@@ -138,6 +138,22 @@ class ConferenceEndedNotificationMapper {
   }
 }
 
+class ActiveParticipantsNotificationMapper {
+  static ActiveParticipantsNotificationData fromMap(
+      Map<Object?, Object?> activeParticipantsEvent) {
+    var conferenceAlias =
+        activeParticipantsEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = activeParticipantsEvent["conferenceId"] as String;
+    var participantCount = activeParticipantsEvent["participantCount"] as int;
+    var participants =
+        (activeParticipantsEvent["participants"] as List<Object?>)
+            .map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>))
+            .toList();
+    return ActiveParticipantsNotificationData(
+        conferenceAlias, conferenceId, participantCount, participants);
+  }
+}
+
 class MessageReceivedMapper {
   static MessageReceivedData fromMap(Map<Object?, Object?> data) {
     var participant =
