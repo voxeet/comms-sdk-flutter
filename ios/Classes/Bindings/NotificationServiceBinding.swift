@@ -24,6 +24,7 @@ class NotificationServiceBinding: Binding {
         do {
             let subscriptions = try flutterArguments.asDictionary(argKey: "subscriptions").decode(type: [DTO.Subscription].self)
             VoxeetSDK.shared.notification.subscribe(subscriptions: subscriptions.map { $0.toSdkType() })
+            completionHandler.success()
         } catch {
             completionHandler.failure(error)
         }
@@ -40,6 +41,7 @@ class NotificationServiceBinding: Binding {
         do {
             let subscriptions = try flutterArguments.asDictionary(argKey: "subscriptions").decode(type: [DTO.Subscription].self)
             VoxeetSDK.shared.notification.unsubscribe(subscriptions: subscriptions.map { $0.toSdkType() })
+            completionHandler.success()
         } catch {
             completionHandler.failure(error)
         }

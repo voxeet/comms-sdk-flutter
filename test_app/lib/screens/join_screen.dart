@@ -379,12 +379,10 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       if (isValidForm) {
         Conference conference = joinAsListener ? await listen() : await join();
         saveToSharedPreferences();
-        if (conference.status == ConferenceStatus.joined) {
-          if (!mounted) return;
-          Provider.of<ConferenceModel>(context, listen: false).conference =
-              conference;
-          navigateToParticipantScreen();
-        }
+        if (!mounted) return;
+        Provider.of<ConferenceModel>(context, listen: false).conference =
+            conference;
+        navigateToParticipantScreen();
       }
     } catch (e) {
       onError('Error: ', e);
@@ -414,9 +412,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   Future<Conference> join() async {
-    Conference conference = await createConference().then((value) =>
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .join(value, conferenceJoinOptions()));
+    Conference conference = await createConference();
+    await _dolbyioCommsSdkFlutterPlugin.conference
+            .join(conference, conferenceJoinOptions());
     return conference;
   }
 
@@ -437,13 +435,13 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   Future<Conference> createConference() async {
     var options = conferenceCreateOptions();
+    
     String alias = options.alias != null ? options.alias! : "";
     var subscription =
         SubscriptionType.values.map((e) => Subscription(e, alias)).toList();
     await _dolbyioCommsSdkFlutterPlugin.notification.subscribe(subscription);
 
-    var conference = _dolbyioCommsSdkFlutterPlugin.conference.create(options);
-    return conference;
+    return await _dolbyioCommsSdkFlutterPlugin.conference.create(options);
   }
 
   ConferenceCreateOption conferenceCreateOptions() {
