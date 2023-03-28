@@ -5,6 +5,8 @@ private enum EventKeys: String, CaseIterable {
     /// Emitted when the application user received an invitation.
     case invitationReceived = "EVENT_NOTIFICATION_INVITATION_RECEIVED"
     case conferenceStatus = "EVENT_NOTIFICATION_CONFERENCE_STATUS"
+    case participantJoined = "EVENT_NOTIFICATION_PARTICIPANT_JOINED"
+    case participantLeft = "EVENT_NOTIFICATION_PARTICIPANT_LEFT"
 }
 
 class NotificationServiceBinding: Binding {
@@ -146,6 +148,26 @@ extension NotificationServiceBinding: VTNotificationDelegate {
 
     public func conferenceCreated(notification: VTConferenceCreatedNotification) {}
     public func conferenceEnded(notification: VTConferenceEndedNotification) {}
-    public func participantJoined(notification: VTParticipantJoinedNotification) {}
-    public func participantLeft(notification: VTParticipantLeftNotification) {}
+    
+    public func participantJoined(notification: VTParticipantJoinedNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.participantJoined,
+                body: DTO.ParticipantJoinedNotification(participantJoinedNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    public func participantLeft(notification: VTParticipantLeftNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.participantLeft,
+                body: DTO.ParticipantLeftNotification(participantLeftNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
 }
