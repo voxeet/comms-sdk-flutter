@@ -15,7 +15,6 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'participant_grid.dart';
 import '/widgets/dolby_title.dart';
 import '/widgets/modal_bottom_sheet.dart';
-import 'dart:developer' as dev;
 
 class ParticipantScreen extends StatefulWidget {
   final bool isSpatialAudio;
@@ -83,11 +82,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   StreamSubscription<
           Event<FilePresentationServiceEventNames, FilePresentation>>?
       _onFilePresentationChangeSubscription;
-
-  StreamSubscription<
-          Event<NotificationServiceEventNames,
-              ActiveParticipantsNotificationData>>?
-      _onActiveParticipantsSubscription;
 
   Participant? _localParticipant;
   bool shouldCloseSessionOnLeave = false;
@@ -170,16 +164,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         });
       }
     });
-
-    _onActiveParticipantsSubscription = _dolbyioCommsSdkFlutterPlugin
-        .notification
-        .onActiveParticipants()
-        .listen((event) {
-      dev.log(
-          "Active participants: participants count: ${event.body.participantCount}");
-      dev.log(
-          "Active participants: participants count: ${event.body.participants}");
-    });
   }
 
   @override
@@ -193,7 +177,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
     _onPermissionsChangeSubsription?.cancel();
     _onRecordingChangeSubscription?.cancel();
     _onFilePresentationChangeSubscription?.cancel();
-    _onActiveParticipantsSubscription?.cancel();
     super.deactivate();
   }
 
