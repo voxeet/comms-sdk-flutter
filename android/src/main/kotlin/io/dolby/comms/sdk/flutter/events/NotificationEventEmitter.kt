@@ -2,9 +2,12 @@ package io.dolby.comms.sdk.flutter.events
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.push.center.subscription.event.ActiveParticipantsEvent
+import com.voxeet.sdk.models.ParticipantNotification
 import com.voxeet.sdk.push.center.subscription.event.InvitationReceivedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ConferenceCreatedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ConferenceEndedNotificationEvent
+import com.voxeet.sdk.push.center.subscription.event.ParticipantJoinedNotificationEvent
+import com.voxeet.sdk.push.center.subscription.event.ParticipantLeftNotificationEvent
 import io.dolby.comms.sdk.flutter.mapper.ParticipantNotificationMapper
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode.MAIN
@@ -67,12 +70,38 @@ class NotificationEventEmitter(eventChannelHandler: EventChannelHandler) : Nativ
     }
 
     /**
+     * Emitted when participant joined the conference.
+     */
+    @Subscribe(threadMode = MAIN)
+    fun on(event: ParticipantJoinedNotificationEvent) {
+        mapOf(
+            KEY_CONFERENCE_ALIAS to event.conferenceAlias,
+            KEY_CONFERENCE_ID to event.conferenceId,
+            KEY_PARTICIPANT to ParticipantNotificationMapper(event.participant).convertToMap()
+        ).also { emit(NotificationEvent.PARTICIPANT_JOINED, it) }
+    }
+
+    /**
+     * Emitted when participant left the conference.
+     */
+    @Subscribe(threadMode = MAIN)
+    fun on(event: ParticipantLeftNotificationEvent) {
+        mapOf(
+            KEY_CONFERENCE_ALIAS to event.conferenceAlias,
+            KEY_CONFERENCE_ID to event.conferenceId,
+            KEY_PARTICIPANT to ParticipantNotificationMapper(event.participant).convertToMap()
+        ).also { emit(NotificationEvent.PARTICIPANT_LEFT, it) }
+    }
+
+    /**
      * Notification events
      */
     private object NotificationEvent {
         const val INVITATION_RECEIVED = "EVENT_NOTIFICATION_INVITATION_RECEIVED"
         const val CONFERENCE_CREATED = "EVENT_NOTIFICATION_CONFERENCE_CREATED"
         const val CONFERENCE_ENDED = "EVENT_NOTIFICATION_CONFERENCE_ENDED"
+        const val PARTICIPANT_JOINED = "EVENT_NOTIFICATION_PARTICIPANT_JOINED"
+        const val PARTICIPANT_LEFT = "EVENT_NOTIFICATION_PARTICIPANT_LEFT"
         const val ACTIVE_PARTICIPANTS = "EVENT_NOTIFICATION_ACTIVE_PARTICIPANTS"
     }
 
@@ -81,5 +110,6 @@ class NotificationEventEmitter(eventChannelHandler: EventChannelHandler) : Nativ
         private const val KEY_CONFERENCE_ID = "conferenceId"
         private const val KEY_PARTICIPANT_COUNT = "participantCount"
         private const val KEY_PARTICIPANTS = "participants"
+        private const val KEY_PARTICIPANT = "participant"
     }
 }
