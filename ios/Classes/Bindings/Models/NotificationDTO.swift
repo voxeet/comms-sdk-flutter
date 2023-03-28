@@ -53,6 +53,24 @@ extension DTO {
             participants = conferenceStatusNotification.participants.map {  Participant(participant: $0) }
         }
     }
+    
+    struct ConferenceCreated: Codable {
+        let conferenceId: String
+        let conferenceAlias: String
+        init(conferenceCreatedNotification: VTConferenceCreatedNotification) {
+            conferenceId = conferenceCreatedNotification.conferenceID
+            conferenceAlias = conferenceCreatedNotification.conferenceAlias
+        }
+    }
+    
+    struct ConferenceEnded: Codable {
+        let conferenceId: String
+        let conferenceAlias: String
+        init(conferenceEndedNotification: VTConferenceEndedNotification) {
+            conferenceId = conferenceEndedNotification.conferenceID
+            conferenceAlias = conferenceEndedNotification.conferenceAlias
+        }
+    }
 
     struct ParticipantJoinedNotification: Codable {
         let conferenceId: String

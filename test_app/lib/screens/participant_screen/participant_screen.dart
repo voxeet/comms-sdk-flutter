@@ -86,11 +86,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   StreamSubscription<
           Event<NotificationServiceEventNames,
-              ConferenceEndedNotificationData>>?
-      _onConferenceEndedNotificationSubscription;
-
-  StreamSubscription<
-          Event<NotificationServiceEventNames,
               ActiveParticipantsNotificationData>>?
       _onActiveParticipantsSubscription;
 
@@ -176,15 +171,6 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       }
     });
 
-    _onConferenceEndedNotificationSubscription = _dolbyioCommsSdkFlutterPlugin
-        .notification
-        .onConferenceEnded()
-        .listen((event) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("conference ended: ${event.body.conferenceAlias}")));
-      dev.log("Conference ended: ${event.body.conferenceAlias}");
-    });
-
     _onActiveParticipantsSubscription = _dolbyioCommsSdkFlutterPlugin
         .notification
         .onActiveParticipants()
@@ -199,23 +185,10 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   @override
   void deactivate() {
     _participantsChangeSubscription?.cancel();
-    Conference? conference;
-    getCurrentConference().then((conf) async {
-      conference = conf;
-    });
 
     var options = ConferenceLeaveOptions(shouldCloseSessionOnLeave);
     _dolbyioCommsSdkFlutterPlugin.conference
-        .leave(options: options)
-        .then((value) async {
-      if (conference != null && conference!.alias != null) {
-        await _dolbyioCommsSdkFlutterPlugin.notification.unsubscribe(
-            SubscriptionType.values
-                .map((e) => Subscription(e, conference!.alias!))
-                .toList());
-      }
-      _onConferenceEndedNotificationSubscription?.cancel();
-    });
+        .leave(options: options);
     _streamsChangeSubscription?.cancel();
     _onPermissionsChangeSubsription?.cancel();
     _onRecordingChangeSubscription?.cancel();
