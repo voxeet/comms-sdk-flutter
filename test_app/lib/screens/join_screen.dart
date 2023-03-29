@@ -129,16 +129,20 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     onParticipantJoinedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onParticipantJoined()
         .listen((event) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("participant joined: ${event.body.participant.info?.name}")));
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification participant joined: ${event.body.participant.info?.name}",
+          const Duration(milliseconds: 3000));
       developer.log("participant joined: ${event.body.toJson().toString()}");
     });
 
     onParticipantLeftSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onParticipantLeft()
         .listen((event) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("participant left: ${event.body.participant.info?.name}")));
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification participant left: ${event.body.participant.info?.name}",
+          const Duration(milliseconds: 3000));
       developer.log("participant left: ${event.body.toJson().toString()}");
     });
   }
