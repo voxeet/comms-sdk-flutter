@@ -9,6 +9,7 @@ private enum EventKeys: String, CaseIterable {
     case conferenceEnded = "EVENT_NOTIFICATION_CONFERENCE_ENDED"
     case participantJoined = "EVENT_NOTIFICATION_PARTICIPANT_JOINED"
     case participantLeft = "EVENT_NOTIFICATION_PARTICIPANT_LEFT"
+    case activeParticipants = "EVENT_NOTIFICATION_ACTIVE_PARTICIPANTS"
 }
 
 class NotificationServiceBinding: Binding {
@@ -136,7 +137,6 @@ extension NotificationServiceBinding: VTNotificationDelegate {
         }
     }
 
-    public func activeParticipants(notification: VTActiveParticipantsNotification) {}
     public func conferenceStatus(notification: VTConferenceStatusNotification) {
         do {
             try nativeEventEmitter.sendEvent(
@@ -186,6 +186,17 @@ extension NotificationServiceBinding: VTNotificationDelegate {
             try nativeEventEmitter.sendEvent(
                 event: EventKeys.participantLeft,
                 body: DTO.ParticipantLeftNotification(participantLeftNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    public func activeParticipants(notification: VTActiveParticipantsNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.activeParticipants,
+                body: DTO.ActiveParticipantsNotifications(activeParticipantsNotification: notification)
             )
         } catch {
             fatalError(error.localizedDescription)

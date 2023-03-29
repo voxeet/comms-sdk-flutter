@@ -101,6 +101,10 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       Event<NotificationServiceEventNames,
           ParticipantLeftNotificationData>>? onParticipantLeftSubscription;
 
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ActiveParticipantsNotificationData>>? onActiveParicipantsSubscription;
+
   List<Subscription>? _subscriptions;
 
   @override
@@ -162,6 +166,20 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           "Notification participant left: ${event.body.participant.info?.name}",
           const Duration(milliseconds: 3000));
       developer.log("participant left: ${event.body.toJson().toString()}");
+    });
+
+    onActiveParicipantsSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onActiveParticipants()
+        .listen((event) {
+      final participantNames =
+          event.body.participants.map((p) => p.info?.name ?? "__no_name__");
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification active participants: $participantNames "
+          "count: ${event.body.participantCount}",
+          const Duration(milliseconds: 3000));
+      developer.log("Notification active participants: $participantNames "
+          "count: ${event.body.participantCount}");
     });
   }
 
