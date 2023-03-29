@@ -44,13 +44,13 @@ class InvitationReceivedNotificationData {
 /// {@category Models}
 class ConferenceStatusNotificationData {
   /// The conference alias.
-  String conferenceAlias;
+  String? conferenceAlias;
 
   /// The conference ID.
-  String conferenceId;
+  String? conferenceId;
 
   /// Information whether the conference is ongoing.
-  bool live;
+  bool? live;
 
   /// The list of the conference participants.
   List<Participant> participants;

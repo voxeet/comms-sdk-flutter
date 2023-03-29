@@ -101,8 +101,8 @@ class ConferenceStatusNotificationMapper {
       Map<Object?, Object?> conferenceStatusEvent) {
     var conferenceAlias =
         conferenceStatusEvent["conferenceAlias"] as String? ?? "";
-    var conferenceId = conferenceStatusEvent["conferenceId"] as String;
-    var live = conferenceStatusEvent["live"] as bool;
+    var conferenceId = conferenceStatusEvent["conferenceId"] as String?;
+    var live = conferenceStatusEvent["live"] as bool?;
     var participants = conferenceStatusEvent.containsKey("participants")
         ? prepareParticipantsList(
             conferenceStatusEvent["participants"] as List<Object?>)
