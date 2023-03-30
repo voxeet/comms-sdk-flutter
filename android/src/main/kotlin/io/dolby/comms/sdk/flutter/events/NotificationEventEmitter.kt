@@ -1,13 +1,12 @@
 package io.dolby.comms.sdk.flutter.events
-
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.push.center.subscription.event.ActiveParticipantsEvent
-import com.voxeet.sdk.models.ParticipantNotification
 import com.voxeet.sdk.push.center.subscription.event.InvitationReceivedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ConferenceCreatedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ConferenceEndedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ParticipantJoinedNotificationEvent
 import com.voxeet.sdk.push.center.subscription.event.ParticipantLeftNotificationEvent
+import com.voxeet.sdk.services.notification.events.ConferenceStatusNotificationEvent
 import io.dolby.comms.sdk.flutter.mapper.ParticipantNotificationMapper
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode.MAIN
@@ -94,6 +93,21 @@ class NotificationEventEmitter(eventChannelHandler: EventChannelHandler) : Nativ
     }
 
     /**
+     * Emitted when conference status is updated.
+     */
+    @Subscribe(threadMode = MAIN)
+    fun on(event: ConferenceStatusNotificationEvent) {
+        mapOf(
+            KEY_CONFERENCE_ID to event.conferenceId,
+            KEY_CONFERENCE_ALIAS to event.conferenceAlias,
+            KEY_IS_LIVE to event.isLive,
+            KEY_PARTICIPANTS to event.participants.map {
+                ParticipantNotificationMapper(it).convertToMap()
+            }
+        ).also { emit(NotificationEvent.CONFERENCE_STATUS, it) }
+    }
+
+    /**
      * Notification events
      */
     private object NotificationEvent {
@@ -103,6 +117,7 @@ class NotificationEventEmitter(eventChannelHandler: EventChannelHandler) : Nativ
         const val PARTICIPANT_JOINED = "EVENT_NOTIFICATION_PARTICIPANT_JOINED"
         const val PARTICIPANT_LEFT = "EVENT_NOTIFICATION_PARTICIPANT_LEFT"
         const val ACTIVE_PARTICIPANTS = "EVENT_NOTIFICATION_ACTIVE_PARTICIPANTS"
+        const val CONFERENCE_STATUS = "EVENT_NOTIFICATION_CONFERENCE_STATUS"
     }
 
     companion object {
@@ -111,5 +126,6 @@ class NotificationEventEmitter(eventChannelHandler: EventChannelHandler) : Nativ
         private const val KEY_PARTICIPANT_COUNT = "participantCount"
         private const val KEY_PARTICIPANTS = "participants"
         private const val KEY_PARTICIPANT = "participant"
+        private const val KEY_IS_LIVE = "live"
     }
 }
