@@ -10,7 +10,12 @@ public class SwiftDolbyioCommsSdkFlutterPlugin: NSObject, FlutterPlugin {
         let channel = FlutterMethodChannel(name: "dolbyio_comms_sdk_flutter", binaryMessenger: registrar.messenger())
         let instance = SwiftDolbyioCommsSdkFlutterPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
-        
+
+        VoxeetSDK.shared._registerComponentVersion(
+            name: PluginInfo.componentName, 
+            version: PluginInfo.sdkVersion
+        )
+
 		bindings = [
 			SdkBinding(name: "sdk", registrar: registrar),
 			ConferenceServiceBinding(name: "conference_service", registrar: registrar),
