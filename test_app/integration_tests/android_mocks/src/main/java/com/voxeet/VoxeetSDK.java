@@ -133,6 +133,8 @@ public class VoxeetSDK {
         return currentInstance;
     }
 
+    public static void registerComponentVersion(String name, String version) {}
+
     public boolean register(@Nullable Object subscriber) {
         try {
             EventBus eventBus = EventBus.getDefault();
