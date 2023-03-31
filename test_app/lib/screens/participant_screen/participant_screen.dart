@@ -169,8 +169,10 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   @override
   void deactivate() {
     _participantsChangeSubscription?.cancel();
+
     var options = ConferenceLeaveOptions(shouldCloseSessionOnLeave);
-    _dolbyioCommsSdkFlutterPlugin.conference.leave(options: options);
+    _dolbyioCommsSdkFlutterPlugin.conference
+        .leave(options: options);
     _streamsChangeSubscription?.cancel();
     _onPermissionsChangeSubsription?.cancel();
     _onRecordingChangeSubscription?.cancel();

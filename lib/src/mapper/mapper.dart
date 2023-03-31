@@ -96,6 +96,90 @@ class InvitationReceivedNotificationMapper {
   }
 }
 
+class ConferenceStatusNotificationMapper {
+  static ConferenceStatusNotificationData fromMap(
+      Map<Object?, Object?> conferenceStatusEvent) {
+    var conferenceAlias =
+        conferenceStatusEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = conferenceStatusEvent["conferenceId"] as String?;
+    var live = conferenceStatusEvent["live"] as bool?;
+    var participants = conferenceStatusEvent.containsKey("participants")
+        ? prepareParticipantsList(
+            conferenceStatusEvent["participants"] as List<Object?>)
+        : List<Participant>.empty();
+    return ConferenceStatusNotificationData(
+        conferenceAlias, conferenceId, live, participants);
+  }
+
+  static List<Participant> prepareParticipantsList(List<Object?> participants) {
+    return participants
+        .map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>))
+        .toList();
+  }
+}
+
+class ConferenceCreatedNotificationMapper {
+  static ConferenceCreatedNotificationData fromMap(
+      Map<Object?, Object?> conferenceCreatedEvent) {
+    var conferenceAlias =
+        conferenceCreatedEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = conferenceCreatedEvent["conferenceId"] as String;
+    return ConferenceCreatedNotificationData(conferenceAlias, conferenceId);
+  }
+}
+
+class ParticipantJoinedNotificationMapper {
+  static ParticipantJoinedNotificationData fromMap(
+      Map<Object?, Object?> participantJoinedEvent) {
+    var conferenceAlias =
+        participantJoinedEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = participantJoinedEvent["conferenceId"] as String;
+    var participant = ParticipantMapper.fromMap(
+        participantJoinedEvent["participant"] as Map<Object?, Object?>);
+    return ParticipantJoinedNotificationData(
+        conferenceAlias, conferenceId, participant);
+  }
+}
+
+class ParticipantLeftNotificationMapper {
+  static ParticipantLeftNotificationData fromMap(
+      Map<Object?, Object?> participantLeftEvent) {
+    var conferenceAlias =
+        participantLeftEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = participantLeftEvent["conferenceId"] as String;
+    var participant = ParticipantMapper.fromMap(
+        participantLeftEvent["participant"] as Map<Object?, Object?>);
+    return ParticipantLeftNotificationData(
+        conferenceAlias, conferenceId, participant);
+  }
+}
+
+class ConferenceEndedNotificationMapper {
+  static ConferenceEndedNotificationData fromMap(
+      Map<Object?, Object?> conferenceEndedEvent) {
+    var conferenceAlias =
+        conferenceEndedEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = conferenceEndedEvent["conferenceId"] as String;
+    return ConferenceEndedNotificationData(conferenceAlias, conferenceId);
+  }
+}
+
+class ActiveParticipantsNotificationMapper {
+  static ActiveParticipantsNotificationData fromMap(
+      Map<Object?, Object?> activeParticipantsEvent) {
+    var conferenceAlias =
+        activeParticipantsEvent["conferenceAlias"] as String? ?? "";
+    var conferenceId = activeParticipantsEvent["conferenceId"] as String;
+    var participantCount = activeParticipantsEvent["participantCount"] as int;
+    var participants =
+        (activeParticipantsEvent["participants"] as List<Object?>)
+            .map((e) => ParticipantMapper.fromMap(e as Map<Object?, Object?>))
+            .toList();
+    return ActiveParticipantsNotificationData(
+        conferenceAlias, conferenceId, participantCount, participants);
+  }
+}
+
 class MessageReceivedMapper {
   static MessageReceivedData fromMap(Map<Object?, Object?> data) {
     var participant =

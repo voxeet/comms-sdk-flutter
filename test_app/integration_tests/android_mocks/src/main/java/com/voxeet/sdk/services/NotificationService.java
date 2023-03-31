@@ -1,5 +1,7 @@
 package com.voxeet.sdk.services;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import com.voxeet.VoxeetSDK;
@@ -7,10 +9,14 @@ import com.voxeet.promise.Promise;
 import com.voxeet.sdk.json.ParticipantInvited;
 import com.voxeet.sdk.models.Conference;
 import com.voxeet.sdk.models.Participant;
+import com.voxeet.sdk.push.center.subscription.register.BaseSubscription;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class NotificationService {
 
@@ -37,6 +43,7 @@ public class NotificationService {
     }
 
     private InviteArgs inviteArgs = new InviteArgs();
+    private final Set<BaseSubscription> subscriptions = new HashSet<>();
     public InviteArgs getInviteArgs() {
         return inviteArgs;
     }
@@ -59,6 +66,33 @@ public class NotificationService {
         String conferenceId = conference.getId();
         declineHasRun = true;
         declineArgs = conference;
+        return Promise.resolve(true);
+    }
+
+    public boolean subscribeHasRun = false;
+    @Nullable
+    public List<BaseSubscription> subscribeArgs;
+
+    public Promise<Boolean> subscribe(List<BaseSubscription> subscriptions) {
+        this.subscriptions.addAll(subscriptions);
+        subscribeHasRun = true;
+        subscribeArgs = subscriptions;
+        return Promise.resolve(true);
+    }
+
+    public boolean unsubscribeHasRun = false;
+    @Nullable
+    public List<BaseSubscription> unsubscribeArgs;
+    public Promise<Boolean> unsubscribe(List<BaseSubscription> subscriptions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            subscriptions.forEach(this.subscriptions::remove);
+        } else {
+            for (BaseSubscription subscription : subscriptions) {
+                this.subscriptions.remove(subscription);
+            }
+        }
+        unsubscribeHasRun = true;
+        unsubscribeArgs = subscriptions;
         return Promise.resolve(true);
     }
 }

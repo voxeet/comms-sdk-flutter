@@ -1,14 +1,19 @@
 package com.voxeet.asserts;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.voxeet.VoxeetSDK;
 import com.voxeet.sdk.json.ParticipantInvited;
 import com.voxeet.sdk.models.Conference;
+import com.voxeet.sdk.push.center.subscription.register.BaseSubscription;
 import com.voxeet.sdk.services.ConferenceService;
 import com.voxeet.sdk.services.NotificationService;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -26,6 +31,12 @@ public class NotificationServiceAsserts implements MethodDelegate {
                     break;
                 case "assertDeclineArgs":
                     assertDeclineArgs(args);
+                    break;
+                case "assertSubscribeArgs":
+                    assertSubscribeArgs(args);
+                    break;
+                case "assertUnsubscribeArgs":
+                    assertUnsubscribeArgs(args);
                     break;
                 default:
                     result.error(new NoSuchMethodError());
@@ -94,6 +105,60 @@ public class NotificationServiceAsserts implements MethodDelegate {
             throw new KeyNotFoundException("Key: conference not found");
         } else {
             ConferenceServiceAsserts.assertConference((Map<String, Object>) args.get("conference"), mockArgs);
+        }
+    }
+
+    private void assertSubscribeArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException{
+        boolean mockHasRun = VoxeetSDK.notification().subscribeHasRun;
+        if (!args.containsKey("hasRun")) {
+            throw new KeyNotFoundException("Key: hasRun not found");
+        } else {
+            AssertUtils.compareWithExpectedValue(mockHasRun, (boolean) args.get("hasRun"), "hasRun is incorrect");
+        }
+
+        List<BaseSubscription> mockArgs = VoxeetSDK.notification().subscribeArgs;
+        String conferenceAlias = VoxeetSDK.conference().getConference().getAlias();
+        if (!args.containsKey("subscription")) {
+            throw new KeyNotFoundException("Key: subscriptions not found");
+        } else {
+            Map<String, Object> subscription = (Map<String, Object>) args.get("subscription");
+            if (!subscription.containsKey("type")) {
+                throw new KeyNotFoundException("Key: type not found");
+            } else {
+                AssertUtils.compareWithExpectedValue(mockArgs.get(0).type, subscription.get("type") , "type is incorrect");
+            }
+            if (!subscription.containsKey("conferenceAlias")) {
+                throw new KeyNotFoundException("Key: conferenceAlias not found");
+            } else {
+                AssertUtils.compareWithExpectedValue(conferenceAlias, subscription.get("conferenceAlias") , "conferenceAlias is incorrect");
+            }
+        }
+    }
+
+    private void assertUnsubscribeArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException{
+        Object mockHasRun = VoxeetSDK.notification().unsubscribeHasRun;
+        if (!args.containsKey("hasRun")) {
+            throw new KeyNotFoundException("Key: hasRun not found");
+        } else {
+            AssertUtils.compareWithExpectedValue(mockHasRun, args.get("hasRun"), "hasRun is incorrect");
+        }
+
+        List<BaseSubscription> mockArgs = VoxeetSDK.notification().unsubscribeArgs;
+        String conferenceAlias = VoxeetSDK.conference().getConference().getAlias();
+        if (!args.containsKey("subscription")) {
+            throw new KeyNotFoundException("Key: subscriptions not found");
+        } else {
+            Map<String, Object> subscription = (Map<String, Object>) args.get("subscription");
+            if (!subscription.containsKey("type")) {
+                throw new KeyNotFoundException("Key: type not found");
+            } else {
+                AssertUtils.compareWithExpectedValue(mockArgs.get(0).type, subscription.get("type") , "type is incorrect");
+            }
+            if (!subscription.containsKey("conferenceAlias")) {
+                throw new KeyNotFoundException("Key: conferenceAlias not found");
+            } else {
+                AssertUtils.compareWithExpectedValue(conferenceAlias, subscription.get("conferenceAlias") , "conferenceAlias is incorrect");
+            }
         }
     }
 }

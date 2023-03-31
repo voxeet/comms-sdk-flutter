@@ -79,8 +79,33 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           Event<NotificationServiceEventNames,
               InvitationReceivedNotificationData>>?
       onInvitationReceivedSubscription;
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ConferenceStatusNotificationData>>? onConferenceStatusSubscription;
   StreamSubscription<Event<ConferenceServiceEventNames, ConferenceStatus>>?
       onStatusChangeSubscription;
+
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ConferenceCreatedNotificationData>>? onConferenceCreatedSubscription;
+
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ConferenceEndedNotificationData>>? onConferenceEndedSubscription;
+
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ParticipantJoinedNotificationData>>? onParticipantJoinedSubscription;
+
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ParticipantLeftNotificationData>>? onParticipantLeftSubscription;
+
+  StreamSubscription<
+      Event<NotificationServiceEventNames,
+          ActiveParticipantsNotificationData>>? onActiveParicipantsSubscription;
+
+  List<Subscription>? _subscriptions;
 
   @override
   void initState() {
@@ -93,12 +118,77 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       showInvitationDialog(context, params.body.toJson().toString(),
           params.body.conferenceId.toString());
     });
+
+    onConferenceStatusSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onConferenceStatus()
+        .listen((params) {
+      StatusSnackbar.buildSnackbar(
+          context,
+          'Conference Status Event: ${params.body.toJson().toString()}',
+          const Duration(milliseconds: 3000));
+    });
+
+    onConferenceCreatedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onConferenceCreated()
+        .listen((event) {
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification conference created: ${event.body.conferenceAlias}",
+          const Duration(milliseconds: 3000));
+      developer.log("Conference created: ${event.body.conferenceAlias}");
+    });
+
+    onConferenceEndedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onConferenceEnded()
+        .listen((event) {
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification conference ended: ${event.body.conferenceAlias}",
+          const Duration(milliseconds: 3000));
+      developer.log("Conference ended: ${event.body.conferenceAlias}");
+    });
+
+    onParticipantJoinedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onParticipantJoined()
+        .listen((event) {
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification participant joined: ${event.body.participant.info?.name}",
+          const Duration(milliseconds: 3000));
+      developer.log("participant joined: ${event.body.toJson().toString()}");
+    });
+
+    onParticipantLeftSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onParticipantLeft()
+        .listen((event) {
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification participant left: ${event.body.participant.info?.name}",
+          const Duration(milliseconds: 3000));
+      developer.log("participant left: ${event.body.toJson().toString()}");
+    });
+
+    onActiveParicipantsSubscription = _dolbyioCommsSdkFlutterPlugin.notification
+        .onActiveParticipants()
+        .listen((event) {
+      final participantNames =
+          event.body.participants.map((p) => p.info?.name ?? "__no_name__");
+      StatusSnackbar.buildSnackbar(
+          context,
+          "Notification active participants: $participantNames "
+          "count: ${event.body.participantCount}",
+          const Duration(milliseconds: 3000));
+      developer.log("Notification active participants: $participantNames "
+          "count: ${event.body.participantCount}");
+    });
   }
 
   @override
   void dispose() {
     onInvitationReceivedSubscription?.cancel();
+    onConferenceStatusSubscription?.cancel();
     onStatusChangeSubscription?.cancel();
+    onConferenceCreatedSubscription?.cancel();
     super.dispose();
   }
 
@@ -206,7 +296,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                                 switchLiveRecording = value;
                               });
                             } else {
-                              setState((){
+                              setState(() {
                                 switchLiveRecording = value;
                               });
                             }
@@ -341,8 +431,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
             context: context,
             title: 'Permissions missing',
             body: 'Permissions $permissions missing, cannot continue.',
-            okText: 'Ok'
-        );
+            okText: 'Ok');
       },
     );
   }
@@ -354,12 +443,10 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       if (isValidForm) {
         Conference conference = joinAsListener ? await listen() : await join();
         saveToSharedPreferences();
-        if (conference.status == ConferenceStatus.joined) {
-          if (!mounted) return;
-          Provider.of<ConferenceModel>(context, listen: false).conference =
-              conference;
-          navigateToParticipantScreen();
-        }
+        if (!mounted) return;
+        Provider.of<ConferenceModel>(context, listen: false).conference =
+            conference;
+        navigateToParticipantScreen();
       }
     } catch (e) {
       onError('Error: ', e);
@@ -389,9 +476,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   }
 
   Future<Conference> join() async {
-    Conference conference = await createConference().then((value) =>
-        _dolbyioCommsSdkFlutterPlugin.conference
-            .join(value, conferenceJoinOptions()));
+    Conference conference = await createConference();
+    await _dolbyioCommsSdkFlutterPlugin.conference
+            .join(conference, conferenceJoinOptions());
     return conference;
   }
 
@@ -410,10 +497,18 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     return conference;
   }
 
-  Future<Conference> createConference() {
-    var conference = _dolbyioCommsSdkFlutterPlugin.conference
-        .create(conferenceCreateOptions());
-    return conference;
+  Future<Conference> createConference() async {
+    var options = conferenceCreateOptions();
+    
+    String alias = options.alias != null ? options.alias! : "";
+    if (_subscriptions != null) {
+      await _dolbyioCommsSdkFlutterPlugin.notification.unsubscribe(_subscriptions!);
+    }
+    _subscriptions =
+        SubscriptionType.values.map((e) => Subscription(e, alias)).toList();
+    await _dolbyioCommsSdkFlutterPlugin.notification.subscribe(_subscriptions!);
+
+    return await _dolbyioCommsSdkFlutterPlugin.conference.create(options);
   }
 
   ConferenceCreateOption conferenceCreateOptions() {
@@ -421,6 +516,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     var params = ConferenceCreateParameters();
     params.dolbyVoice = switchDolbyVoice;
     params.liveRecording = switchLiveRecording;
+    params.ttl = 1;
     var createOptions =
         ConferenceCreateOption(_conferenceAlias, params, 0, spatialAudioStyle);
     createOptions.spatialAudioStyle = spatialAudioStyle;

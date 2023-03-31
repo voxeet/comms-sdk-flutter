@@ -4,6 +4,12 @@ import VoxeetSDK
 private enum EventKeys: String, CaseIterable {
     /// Emitted when the application user received an invitation.
     case invitationReceived = "EVENT_NOTIFICATION_INVITATION_RECEIVED"
+    case conferenceStatus = "EVENT_NOTIFICATION_CONFERENCE_STATUS"
+    case conferenceCraeted = "EVENT_NOTIFICATION_CONFERENCE_CREATED"
+    case conferenceEnded = "EVENT_NOTIFICATION_CONFERENCE_ENDED"
+    case participantJoined = "EVENT_NOTIFICATION_PARTICIPANT_JOINED"
+    case participantLeft = "EVENT_NOTIFICATION_PARTICIPANT_LEFT"
+    case activeParticipants = "EVENT_NOTIFICATION_ACTIVE_PARTICIPANTS"
 }
 
 class NotificationServiceBinding: Binding {
@@ -11,7 +17,41 @@ class NotificationServiceBinding: Binding {
     override func onInit() {
         VoxeetSDK.shared.notification.delegate = self
     }
-    
+
+    /// Subscribes to the specified notifications.
+    /// - Parameters:
+    ///   - flutterArguments: Method arguments passed from Flutter.
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func subscribe(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let subscriptions = try flutterArguments.asDictionary(argKey: "subscriptions").decode(type: [DTO.Subscription].self)
+            VoxeetSDK.shared.notification.subscribe(subscriptions: subscriptions.map { $0.toSdkType() })
+            completionHandler.success()
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
+
+    /// Unsubscribes from the specified notifications.
+    /// - Parameters:
+    ///   - flutterArguments: Method arguments passed from Flutter.
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func unsubscribe(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let subscriptions = try flutterArguments.asDictionary(argKey: "subscriptions").decode(type: [DTO.Subscription].self)
+            VoxeetSDK.shared.notification.unsubscribe(subscriptions: subscriptions.map { $0.toSdkType() })
+            completionHandler.success()
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
+
     /// Notifies conference participants about a conference invitation.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
@@ -70,6 +110,10 @@ extension NotificationServiceBinding: FlutterBinding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         switch methodName {
+        case "subscribe":
+            subscribe(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "unsubscribe":
+            unsubscribe(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "invite":
             invite(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "decline":
@@ -93,10 +137,69 @@ extension NotificationServiceBinding: VTNotificationDelegate {
         }
     }
 
-    public func activeParticipants(notification: VTActiveParticipantsNotification) {}
-    public func conferenceStatus(notification: VTConferenceStatusNotification) {}
-    public func conferenceCreated(notification: VTConferenceCreatedNotification) {}
-    public func conferenceEnded(notification: VTConferenceEndedNotification) {}
-    public func participantJoined(notification: VTParticipantJoinedNotification) {}
-    public func participantLeft(notification: VTParticipantLeftNotification) {}
+    public func conferenceStatus(notification: VTConferenceStatusNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.conferenceStatus,
+                body: DTO.ConferenceStatusNotification(conferenceStatusNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+
+    public func conferenceCreated(notification: VTConferenceCreatedNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.conferenceCraeted,
+                body: DTO.ConferenceCreated(conferenceCreatedNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    public func conferenceEnded(notification: VTConferenceEndedNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.conferenceEnded,
+                body: DTO.ConferenceEnded(conferenceEndedNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    public func participantJoined(notification: VTParticipantJoinedNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.participantJoined,
+                body: DTO.ParticipantJoinedNotification(participantJoinedNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    public func participantLeft(notification: VTParticipantLeftNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.participantLeft,
+                body: DTO.ParticipantLeftNotification(participantLeftNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
+    
+    public func activeParticipants(notification: VTActiveParticipantsNotification) {
+        do {
+            try nativeEventEmitter.sendEvent(
+                event: EventKeys.activeParticipants,
+                body: DTO.ActiveParticipantsNotifications(activeParticipantsNotification: notification)
+            )
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+    }
 }

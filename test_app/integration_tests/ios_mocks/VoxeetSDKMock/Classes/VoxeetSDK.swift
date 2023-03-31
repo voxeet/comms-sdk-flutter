@@ -17,6 +17,11 @@ public typealias RefreshTokenHandlerWithParam = ((_ closure: (@escaping (_ token
     public let audio = AudioService()
     public let video = VideoService()
     
+    public var registerComponentVersion: (name: String, version: String)?
+    public func _registerComponentVersion(name: String, version: String) {
+        registerComponentVersion = (name, version)
+    }
+
     public var initializeArgs: (consumerKey: String, consumerSecret: String)?
     public func initialize(consumerKey: String, consumerSecret: String) {
         initializeArgs = (consumerKey, consumerSecret)
