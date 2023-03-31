@@ -74,22 +74,22 @@ enum FilePresentationServiceEventNames implements EnumWithStringValue {
 enum NotificationServiceEventNames implements EnumWithStringValue {
   /// Emitted when an application user receives an invitation.
   invitationReceived('EVENT_NOTIFICATION_INVITATION_RECEIVED'),
-  
+
   /// Emitted when the application user subscribed to any notification.
   conferenceStatus('EVENT_NOTIFICATION_CONFERENCE_STATUS'),
-  
+
   /// Emitted to notify an application user, who subscribed to conferenceCreated, that a new conference was created.
   conferenceCreated('EVENT_NOTIFICATION_CONFERENCE_CREATED'),
-  
+
   /// Emitted to notify an application user, who subscribed to conferenceEnded, that a conference was ended.
   conferenceEnded('EVENT_NOTIFICATION_CONFERENCE_ENDED'),
-  
+
   /// Emitted to notify an application user, who subscribed to activeParticipants, that a list of active participants is updated. The event informs how many participants joined a conference.
   activeParticipants('EVENT_NOTIFICATION_ACTIVE_PARTICIPANTS'),
-  
+
   /// Emitted to notify an application user, who subscribed to participantJoined, that a new participant joined a conference.
   participantJoined("EVENT_NOTIFICATION_PARTICIPANT_JOINED"),
-  
+
   /// Emitted to notify an application user, who subscribed to participantLeft, that a participant left a conference.
   participantLeft("EVENT_NOTIFICATION_PARTICIPANT_LEFT");
 
