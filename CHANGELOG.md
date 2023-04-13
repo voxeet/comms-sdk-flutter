@@ -1,3 +1,9 @@
+## 3.8.1
+
+### Features
+
+Introduced new methods and event handlers to the [NotificationService](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/NotificationService-class.html) that allow participants to [subscribe](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/NotificationService/subscribe.html) to and [unsubscribe](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/NotificationService/unsubscribe.html) from the preferred notifications.
+
 ## 3.8.1-beta.1
 
 ### Features
