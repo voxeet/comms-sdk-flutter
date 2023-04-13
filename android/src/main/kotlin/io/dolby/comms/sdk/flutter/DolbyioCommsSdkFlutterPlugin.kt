@@ -2,6 +2,7 @@ package io.dolby.comms.sdk.flutter
 
 import androidx.annotation.NonNull
 import com.voxeet.VoxeetSDK
+import io.dolby.comms.sdk.flutter.dolbyio_comms_sdk_flutter.BuildConfig
 import io.dolby.comms.sdk.flutter.events.*
 import io.dolby.comms.sdk.flutter.module.CommandServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.CommsSdkNativeModule
@@ -72,7 +73,7 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
             MediaDeviceServiceNativeModule(scope)
         )
 
-        VoxeetSDK.registerComponentVersion(PluginInfo.COMPONENT_NAME, PluginInfo.SDK_VERSION)
+        VoxeetSDK.registerComponentVersion(BuildConfig.COMPONENT_NAME, BuildConfig.SDK_VERSION)
 
         nativeModules.forEach { it.onAttached(flutterPluginBinding) }
         nativeEventEmitters.forEach { it.onAttached(flutterPluginBinding) }
