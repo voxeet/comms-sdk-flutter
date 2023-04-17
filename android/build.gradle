@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.7.10'
-    ext.voxeet_sdk_version = "3.8.1"
+    ext.voxeet_sdk_version = "3.8.+"
     ext.dagger_version = "2.40.5"
     repositories {
         google()
@@ -59,6 +59,19 @@ android {
     defaultConfig {
         minSdkVersion 21
         consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            buildConfigField "String", "SDK_VERSION", COMMS_SDK_VERSION
+            buildConfigField "String", "COMPONENT_NAME", COMPONENT_NAME
+        }
+
+        debug {
+            buildConfigField "String", "SDK_VERSION", COMMS_SDK_VERSION
+            buildConfigField "String", "COMPONENT_NAME", COMPONENT_NAME
+        }
     }
 }
 
