@@ -2,7 +2,7 @@
 
 ### Bug Fixes
 
-Introduced improvements that help the [VideoViewController](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoViewController-class.html) to correctly access an unmounted [VideoView](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoView-class.html) widget.
+Introduced improvements that prevent the [VideoViewController](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoViewController-class.html) from accessing unmounted [VideoView](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoView-class.html) widgets.
 
 ## 3.8.1
 
