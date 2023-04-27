@@ -23,6 +23,8 @@ class VideoViewController {
   Participant? _participant;
   MediaStream? _mediaStream;
 
+  VideoViewController();
+
   /// Attaches a [Participant] and a [MediaStream] to the [VideoView]. This allows the
   /// [VideoView] to display the provided [MediaStream] if the media stream object belongs
   /// to the provided [Participant].
@@ -31,8 +33,6 @@ class VideoViewController {
     _mediaStream = mediaStream;
     _state?._attach(participant, mediaStream);
   }
-
-  VideoViewController();
 
   /// Detaches a [MediaStream] and a [Participant] from the [VideoView] to stop displaying
   /// the [MediaStream].
@@ -65,7 +65,7 @@ class VideoViewController {
     return Future.error("The VideoView has not been instantiated yet.");
   }
 
-  void _updateState(_VideoViewState state) {
+  void _updateState(_VideoViewState? state) {
     _state = state;
   }
 }
@@ -138,6 +138,12 @@ class _VideoViewState extends State<VideoView> {
     widget.videoViewController?._updateState(this);
     _updateParticipantAndStream();
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    widget.videoViewController?._updateState(null);
+    super.dispose();
   }
 
   @override
