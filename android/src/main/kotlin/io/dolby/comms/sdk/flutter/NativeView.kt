@@ -2,10 +2,7 @@ package io.dolby.comms.sdk.flutter
 
 import com.voxeet.sdk.views.VideoView
 import android.content.Context
-import android.view.View
 import com.voxeet.VoxeetSDK
-import io.dolby.comms.sdk.flutter.mapper.MediaStreamMapper
-import io.dolby.comms.sdk.flutter.mapper.ParticipantMapper
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -49,6 +46,9 @@ class NativeView(context: Context, id: Int, messenger: BinaryMessenger): Platfor
 
             val participantId = arguments?.get("participant_id") as String?
             val mediaStreamLabel = arguments?.get("media_stream_label") as String?
+            val scaleType = arguments?.get("scale_type") as String?
+
+            setScaleType(scaleType)
 
             if (participantId != null && mediaStreamLabel != null) {
                 VoxeetSDK.conference()
@@ -68,6 +68,16 @@ class NativeView(context: Context, id: Int, messenger: BinaryMessenger): Platfor
     fun detach(result: MethodChannel.Result) {
         videoView.unAttach()
         result.success(null)
+    }
+
+    fun setScaleType(scaleType: String?) {
+        if (scaleType != null && scaleType == "SCALE_TYPE_FIT") {
+            videoView.setVideoFit()
+        }
+
+        if (scaleType == null || scaleType == "SCALE_TYPE_FILL") {
+            videoView.setVideoFill()
+        }
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

@@ -61,4 +61,12 @@ public class VideoView extends View {
         this.peerId = participantId;
         this.stream = mediaStream;
     }
+
+    public void setVideoFill() {
+
+    }
+
+    public void setVideoFit() {
+
+    }
 }
