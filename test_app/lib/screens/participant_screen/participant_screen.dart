@@ -306,8 +306,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         }
       }
       if (stream != null) {
-        _localParticipantVideoViewController.attach(
-            localParticipant, stream, ScaleType.fill);
+        _localParticipantVideoViewController.attach(localParticipant, stream);
       } else {
         _localParticipantVideoViewController.detach();
       }
@@ -350,7 +349,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       if (mediaStream != null && streamingParticipant != null) {
         if (!mounted) return;
         _shareScreenVideoViewController.attach(
-            streamingParticipant, mediaStream, ScaleType.fill);
+            streamingParticipant, mediaStream);
       } else {
         if (!mounted) return;
         _shareScreenVideoViewController.detach();
