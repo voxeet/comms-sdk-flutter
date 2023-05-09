@@ -22,16 +22,19 @@ class VideoViewController {
 
   Participant? _participant;
   MediaStream? _mediaStream;
+  ScaleType? _scaleType;
 
   VideoViewController();
 
   /// Attaches a [Participant] and a [MediaStream] to the [VideoView]. This allows the
   /// [VideoView] to display the provided [MediaStream] if the media stream object belongs
   /// to the provided [Participant].
-  void attach(Participant participant, MediaStream? mediaStream) {
+  void attach(
+      Participant participant, MediaStream? mediaStream, ScaleType? scaleType) {
     _participant = participant;
     _mediaStream = mediaStream;
-    _state?._attach(participant, mediaStream);
+    _scaleType = scaleType;
+    _state?._attach(participant, mediaStream, scaleType);
   }
 
   /// Detaches a [MediaStream] and a [Participant] from the [VideoView] to stop displaying
@@ -39,6 +42,7 @@ class VideoViewController {
   void detach() async {
     _participant = null;
     _mediaStream = null;
+    _scaleType = null;
     _state?._detach();
   }
 
@@ -91,12 +95,18 @@ class VideoView extends StatefulWidget {
   /// @internal
   final VideoViewController? videoViewController;
 
+  /// @internal
+  final ScaleType? scaleType;
+
   /// A constructor that should be used when the [VideoView] is an element in a collection
   /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the
   /// [Participant] for whom the [MediaStream] should be displayed, the [MediaStream], and an
   /// optional [Key].
   const VideoView.withMediaStream(
-      {required this.participant, required this.mediaStream, Key? key})
+      {required this.participant,
+      required this.mediaStream,
+      this.scaleType,
+      Key? key})
       : videoViewController = null,
         super(key: key);
 
@@ -106,6 +116,7 @@ class VideoView extends StatefulWidget {
   const VideoView({required this.videoViewController, Key? key})
       : participant = null,
         mediaStream = null,
+        scaleType = null,
         super(key: key);
 
   @override
@@ -122,6 +133,7 @@ class _VideoViewState extends State<VideoView> {
   Participant? _participant;
   MediaStream? _mediaStream;
   int viewNumber;
+  ScaleType? _scaleType;
   MethodChannel? _methodChannel;
 
   _VideoViewState() : viewNumber = _getNextViewNubmer();
@@ -163,6 +175,11 @@ class _VideoViewState extends State<VideoView> {
     final mediaStreamLabel = _mediaStream?.label;
     if (mediaStreamLabel != null && mediaStreamLabel != "") {
       creationParams["media_stream_label"] = mediaStreamLabel;
+    }
+
+    final scaleType = _scaleType?._value;
+    if (scaleType != null) {
+      creationParams["scale_type"] = scaleType;
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -224,16 +241,20 @@ class _VideoViewState extends State<VideoView> {
     if (widget.videoViewController != null) {
       _participant = widget.videoViewController?._participant;
       _mediaStream = widget.videoViewController?._mediaStream;
+      _scaleType = widget.videoViewController?._scaleType;
     } else {
       _participant = widget.participant;
       _mediaStream = widget.mediaStream;
+      _scaleType = widget.scaleType;
     }
   }
 
-  void _attach(Participant participant, MediaStream? mediaStream) {
+  void _attach(
+      Participant participant, MediaStream? mediaStream, ScaleType? scaleType) {
     setState(() {
       _participant = participant;
       _mediaStream = mediaStream;
+      _scaleType = scaleType;
     });
   }
 
@@ -241,6 +262,7 @@ class _VideoViewState extends State<VideoView> {
     setState(() {
       _participant = null;
       _mediaStream = null;
+      _scaleType = null;
     });
   }
 
@@ -263,4 +285,14 @@ class _VideoViewState extends State<VideoView> {
     }
     return Future.error("The VideoView has not been instantiated yet.");
   }
+}
+
+enum ScaleType {
+  fill('SCALE_TYPE_FILL'),
+
+  fit('SCALE_TYPE_FIT');
+
+  final String _value;
+
+  const ScaleType(this._value);
 }
