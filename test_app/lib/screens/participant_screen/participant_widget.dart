@@ -22,7 +22,6 @@ class ParticipantWidget extends StatelessWidget {
             mediaStream: participant.streams?.firstWhereOrNull(
               (s) => s.type == MediaStreamType.camera,
             ),
-            scaleType: ScaleType.fill,
             key: ValueKey('video_view_tile_${participant.id}'),
           ),
         ),

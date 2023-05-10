@@ -48,8 +48,6 @@ class NativeView(context: Context, id: Int, messenger: BinaryMessenger): Platfor
             val mediaStreamLabel = arguments?.get("media_stream_label") as String?
             val scaleType = arguments?.get("scale_type") as String?
 
-            setScaleType(scaleType)
-
             if (participantId != null && mediaStreamLabel != null) {
                 VoxeetSDK.conference()
                     .findParticipantById(participantId)
@@ -59,6 +57,8 @@ class NativeView(context: Context, id: Int, messenger: BinaryMessenger): Platfor
             } else {
                 videoView.unAttach()
             }
+
+            setScaleType(scaleType)
 
             result.success(null)
 
@@ -71,12 +71,10 @@ class NativeView(context: Context, id: Int, messenger: BinaryMessenger): Platfor
     }
 
     fun setScaleType(scaleType: String?) {
-        if (scaleType != null && scaleType == "SCALE_TYPE_FIT") {
-            videoView.setVideoFit()
-        }
-
-        if (scaleType == null || scaleType == "SCALE_TYPE_FILL") {
-            videoView.setVideoFill()
+        when (scaleType) {
+            "SCALE_TYPE_FIT" -> videoView.setVideoFit()
+            "SCALE_TYPE_FILL" -> videoView.setVideoFill()
+            else -> videoView.setVideoFill()
         }
     }
 
