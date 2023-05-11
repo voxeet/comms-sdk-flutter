@@ -286,6 +286,7 @@ class _VideoViewState extends State<VideoView> {
 enum ScaleType {
   /// Modifies the hight and width of a video stream to match the VideoView area.
   fill('SCALE_TYPE_FILL'),
+
   /// Scales a video stream to fit the VideoView area but keeping the video aspect ratio.
   fit('SCALE_TYPE_FIT');
 
