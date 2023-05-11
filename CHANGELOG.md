@@ -1,3 +1,15 @@
+## 3.8.2-beta.2
+
+### Features
+
+Added a new [ScaleType](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/ScaleType.html) argument to [VideoView](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoView-class.html). The argument lets you select how you want to display a video stream in the VideoView area. You can either use the `fill` or `fit` value.
+
+## 3.8.2-beta.1
+
+### Bug Fixes
+
+Introduced improvements that prevent the [VideoViewController](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoViewController-class.html) from accessing unmounted [VideoView](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoView-class.html) widgets.
+
 ## 3.8.1
 
 ### Features
