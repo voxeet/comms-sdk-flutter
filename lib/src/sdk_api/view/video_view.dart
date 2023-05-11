@@ -96,7 +96,7 @@ class VideoView extends StatefulWidget {
 
   /// A constructor that should be used when the [VideoView] is an element in a collection
   /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the
-  /// [Participant] for whom the [MediaStream] should be displayed, the [MediaStream], and an
+  /// [Participant] for whom the [MediaStream] should be displayed, the [MediaStream], the [ScaleType], and an
   /// optional [Key].
   const VideoView.withMediaStream(
       {required this.participant,
@@ -106,9 +106,9 @@ class VideoView extends StatefulWidget {
       : videoViewController = null,
         super(key: key);
 
-  /// A constructor that shuold be used when the [VideoView] is used as a stand-alone widget
+  /// A constructor that should be used when the [VideoView] is used as a stand-alone widget
   /// outside of collection widgets such as [GridView] or [ListView]. The constructor requires
-  /// providing the [VideoViewController] and, optionally, a [Key].
+  /// providing the [VideoViewController], the [ScaleType], and an optional [Key].
   const VideoView(
       {required this.videoViewController,
       this.scaleType = ScaleType.fill,
@@ -282,9 +282,12 @@ class _VideoViewState extends State<VideoView> {
   }
 }
 
+/// The ScaleType enum lets you select how you want to display a video stream in the VideoView area.
 enum ScaleType {
+  /// Modifies the hight and width of a video stream to match the VideoView area.
   fill('SCALE_TYPE_FILL'),
 
+  /// Scales a video stream to fit the VideoView area but keeping the video aspect ratio.
   fit('SCALE_TYPE_FIT');
 
   final String _value;
