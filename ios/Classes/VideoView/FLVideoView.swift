@@ -40,7 +40,8 @@ class FLVideoView: NSObject, FlutterPlatformView {
         do {
             let participantId: String? = try flutterArguments.asDictionary(argKey: "participant_id").decode()
             let mediaStreamId: String? = try flutterArguments.asDictionary(argKey: "media_stream_id").decode()
-            try attach(participantId: participantId, mediaStreamId: mediaStreamId)
+            let scaleType: String? = try flutterArguments.asDictionary(argKey: "scale_type").decode()
+            try attach(participantId: participantId, mediaStreamId: mediaStreamId, scaleType: scaleType)
         } catch {
             completionHandler.failure(error)
         }
@@ -65,7 +66,7 @@ class FLVideoView: NSObject, FlutterPlatformView {
         completionHandler.success(flutterConvertible: false) // TODO: Implement this properly
     }
     
-    private func attach(participantId: String?, mediaStreamId: String?) throws {
+    private func attach(participantId: String?, mediaStreamId: String?, scaleType: String?) throws {
         guard
             let participantId = participantId, participantId != "",
             let mediaStreamId = mediaStreamId, mediaStreamId != "",
@@ -78,7 +79,19 @@ class FLVideoView: NSObject, FlutterPlatformView {
             _view.unattach()
             return
         }
+        updateScaleType(view: _view, scaleType: scaleType)
         _view.attach(participant: participantObject, stream: mediaStreamObject)
+    }
+
+    private func updateScaleType(view: VTVideoView, scaleType: String?, animated: Bool = false) {
+        switch scaleType {
+        case "SCALE_TYPE_FILL":
+            view.contentFill(true, animated: animated)
+        case "SCALE_TYPE_FIT":
+            view.contentFill(false, animated: animated)
+        default:
+            break
+        }
     }
 }
 
