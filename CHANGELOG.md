@@ -1,3 +1,9 @@
+## 3.8.2-beta.1
+
+### Bug Fixes
+
+Introduced improvements that prevent the [VideoViewController](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoViewController-class.html) from accessing unmounted [VideoView](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/VideoView-class.html) widgets.
+
 ## 3.8.1
 
 ### Features
