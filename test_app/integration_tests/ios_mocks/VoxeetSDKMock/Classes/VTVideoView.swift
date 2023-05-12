@@ -16,4 +16,8 @@ open class VTVideoView: UIView {
     public func unattach() {
         fatalError("UnImplemented")
     }
+
+    public func contentFill(_ fill: Bool, animated: Bool) {
+        fatalError("UnImplemented")
+    }
 }

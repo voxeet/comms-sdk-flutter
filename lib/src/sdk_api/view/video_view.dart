@@ -91,19 +91,28 @@ class VideoView extends StatefulWidget {
   /// @internal
   final VideoViewController? videoViewController;
 
+  /// @internal
+  final ScaleType? scaleType;
+
   /// A constructor that should be used when the [VideoView] is an element in a collection
   /// widget, such as a [GridView] or a [ListView]. The constructor requires providing the
-  /// [Participant] for whom the [MediaStream] should be displayed, the [MediaStream], and an
+  /// [Participant] for whom the [MediaStream] should be displayed, the [MediaStream], the [ScaleType], and an
   /// optional [Key].
   const VideoView.withMediaStream(
-      {required this.participant, required this.mediaStream, Key? key})
+      {required this.participant,
+      required this.mediaStream,
+      this.scaleType = ScaleType.fill,
+      Key? key})
       : videoViewController = null,
         super(key: key);
 
-  /// A constructor that shuold be used when the [VideoView] is used as a stand-alone widget
+  /// A constructor that should be used when the [VideoView] is used as a stand-alone widget
   /// outside of collection widgets such as [GridView] or [ListView]. The constructor requires
-  /// providing the [VideoViewController] and, optionally, a [Key].
-  const VideoView({required this.videoViewController, Key? key})
+  /// providing the [VideoViewController], the [ScaleType], and an optional [Key].
+  const VideoView(
+      {required this.videoViewController,
+      this.scaleType = ScaleType.fill,
+      Key? key})
       : participant = null,
         mediaStream = null,
         super(key: key);
@@ -122,6 +131,7 @@ class _VideoViewState extends State<VideoView> {
   Participant? _participant;
   MediaStream? _mediaStream;
   int viewNumber;
+  ScaleType? _scaleType;
   MethodChannel? _methodChannel;
 
   _VideoViewState() : viewNumber = _getNextViewNubmer();
@@ -130,6 +140,7 @@ class _VideoViewState extends State<VideoView> {
   void initState() {
     widget.videoViewController?._updateState(this);
     _updateParticipantAndStream();
+    _scaleType = widget.scaleType;
     super.initState();
   }
 
@@ -137,6 +148,7 @@ class _VideoViewState extends State<VideoView> {
   void didUpdateWidget(covariant VideoView oldWidget) {
     widget.videoViewController?._updateState(this);
     _updateParticipantAndStream();
+    _scaleType = widget.scaleType;
     super.didUpdateWidget(oldWidget);
   }
 
@@ -163,6 +175,11 @@ class _VideoViewState extends State<VideoView> {
     final mediaStreamLabel = _mediaStream?.label;
     if (mediaStreamLabel != null && mediaStreamLabel != "") {
       creationParams["media_stream_label"] = mediaStreamLabel;
+    }
+
+    final scaleType = _scaleType?._value;
+    if (scaleType != null) {
+      creationParams["scale_type"] = scaleType;
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -263,4 +280,17 @@ class _VideoViewState extends State<VideoView> {
     }
     return Future.error("The VideoView has not been instantiated yet.");
   }
+}
+
+/// The ScaleType enum lets you select how you want to display a video stream in the VideoView area.
+enum ScaleType {
+  /// Modifies the hight and width of a video stream to match the VideoView area.
+  fill('SCALE_TYPE_FILL'),
+
+  /// Scales a video stream to fit the VideoView area but keeping the video aspect ratio.
+  fit('SCALE_TYPE_FIT');
+
+  final String _value;
+
+  const ScaleType(this._value);
 }
