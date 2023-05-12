@@ -12,10 +12,14 @@ class AudioCaptureOptions {
 
   VoiceFont voiceFont;
 
-  AudioCaptureOptions(this.mode, this.noiseReduction, {this.voiceFont = VoiceFont.none });
+  AudioCaptureOptions(this.mode, this.noiseReduction,
+      {this.voiceFont = VoiceFont.none});
 
-  Map<String, Object?> toJson() =>
-      {"mode": mode.encode(), "noiseReduction": noiseReduction?.encode(), "voiceFont": voiceFont.encode()};
+  Map<String, Object?> toJson() => {
+        "mode": mode.encode(),
+        "noiseReduction": noiseReduction?.encode(),
+        "voiceFont": voiceFont.encode()
+      };
 }
 
 /// The AudioCaptureMode model allows selecting the preferred mode for capturing the local participant's audio.
@@ -102,7 +106,7 @@ enum VoiceFont {
   static VoiceFont decode(String? value) {
     final lowerCaseValue = value?.toLowerCase();
     return VoiceFont.values.firstWhere(
-          (element) => element._value == lowerCaseValue,
+      (element) => element._value == lowerCaseValue,
       orElse: () => throw Exception("Invalid enum name"),
     );
   }

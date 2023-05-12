@@ -1,7 +1,6 @@
 package io.dolby.comms.sdk.flutter.module.audio
 
 import com.voxeet.VoxeetSDK
-import com.voxeet.android.media.capture.audio.VoiceFont
 import io.dolby.comms.sdk.flutter.extension.*
 import io.dolby.comms.sdk.flutter.mapper.AudioCaptureModeMapper
 import io.dolby.comms.sdk.flutter.mapper.ComfortNoiseLevelMapper
@@ -49,7 +48,6 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
         onError = result::onError,
         onSuccess = {
             VoxeetSDK.audio().local.captureMode = AudioCaptureModeMapper.fromMap(call.arguments as Map<String, Any?>)
-            android.util.Log.d("[KB]", "audio capture mode: ${VoxeetSDK.audio().local.captureMode.voiceFont}")
             result.success(null)
         }
     )

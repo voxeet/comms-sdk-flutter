@@ -43,7 +43,6 @@ class AudioCaptureModeMapper(private val audioCaptureMode: AudioCaptureMode) : M
     companion object {
         fun fromMap(map: Map<String, Any?>): AudioCaptureMode {
             val voiceFont = toVoiceFont(map["voiceFont"] as String?)
-            android.util.Log.d("[KB]", "voiceFont: $voiceFont")
             return when (toMode(map["mode"] as String?)) {
                 Mode.STANDARD -> AudioCaptureMode.standard(toNoiseReduction(map["noiseReduction"] as String?), voiceFont)
                 Mode.UNPROCESSED -> AudioCaptureMode.unprocessed()
