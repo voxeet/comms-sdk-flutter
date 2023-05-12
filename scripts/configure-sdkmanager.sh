@@ -2,7 +2,7 @@
 
 build_tools_version="build-tools;32.0.0"
 platform_version="platforms;android-32"
-system_image="system-images;androidsdk-29;default;x86"
+system_image="system-images;android-29;default;x86"
 
 sudo apt-get install qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils
 sudo systemctl enable libvirt-bin
