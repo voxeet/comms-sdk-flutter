@@ -18,6 +18,7 @@ class FLVideoView: NSObject, FlutterPlatformView {
         }
         methodChannel = FlutterMethodChannel(name: "video_view_\(viewId)_method_channel", binaryMessenger: messenger)
         _view = VTVideoView()
+        _view.clipsToBounds = true;
         super.init()
 
         methodChannel.setMethodCallHandler { [weak self] (call, result) in
