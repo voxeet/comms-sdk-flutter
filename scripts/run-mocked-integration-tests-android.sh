@@ -21,7 +21,7 @@ avdmanager list avd
 echo "Create system image: $system_image"
 
 echo "no" | avdmanager --verbose create avd --force --name $device_name --abi "default/x86" --package "$system_image"
-echo "disk.dataPartition.size=1024MB" >> ~/.android/avd/$device_name.avd/config.ini
+echo "disk.dataPartition.size=3072MB" >> ~/.android/avd/$device_name.avd/config.ini
 touch ~/.android/emu-update-last-check.ini
 
 ls -la ~/.android/
