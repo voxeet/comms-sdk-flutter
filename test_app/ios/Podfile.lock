@@ -32,7 +32,7 @@ PODS:
     - SwiftyGif
   - dolbyio_comms_sdk_flutter (0.0.1):
     - Flutter
-    - VoxeetSDK (~> 3.8.0)
+    - VoxeetSDK (~> 3.9.0-beta)
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
@@ -41,14 +41,13 @@ PODS:
     - Flutter
   - permission_handler_apple (9.0.4):
     - Flutter
-  - SDWebImage (5.15.7):
-    - SDWebImage/Core (= 5.15.7)
-  - SDWebImage/Core (5.15.7)
-  - shared_preferences_foundation (0.0.1):
+  - SDWebImage (5.15.8):
+    - SDWebImage/Core (= 5.15.8)
+  - SDWebImage/Core (5.15.8)
+  - shared_preferences_ios (0.0.1):
     - Flutter
-    - FlutterMacOS
   - SwiftyGif (5.4.4)
-  - VoxeetSDK (3.8.3)
+  - VoxeetSDK (3.9.0-beta.1)
 
 DEPENDENCIES:
   - dolbyio_comms_sdk_flutter (from `.symlinks/plugins/dolbyio_comms_sdk_flutter/ios`)
@@ -56,7 +55,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -77,21 +76,21 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/integration_test/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
-  shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
 SPEC CHECKSUMS:
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  dolbyio_comms_sdk_flutter: 133e16950e406a6f6ee4f786a835fc6e01bb9f95
-  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
+  dolbyio_comms_sdk_flutter: 2a614af3f4098c5e5640376ed97cc6b5cb15d0e6
+  file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  SDWebImage: 25bac438318faf37e35650619ebc288a9061d292
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
+  SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  VoxeetSDK: 164aa55773192104d4a57a6952507722330d15f1
+  VoxeetSDK: cf910689d335ddb2337e4fb1a1850e486aa7ff17
 
 PODFILE CHECKSUM: ad35eb4c4f8efa60cf39d5ae575517a0e24a77af
 

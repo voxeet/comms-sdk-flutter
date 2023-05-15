@@ -7,6 +7,22 @@ public enum ComfortNoiseLevel: NSInteger {
     case off = 3
 };
 
+public enum VoiceFont : String {
+    case none
+    case masculine
+    case feminine
+    case helium
+    case darkModulation
+    case brokenRobot
+    case interference
+    case abyss
+    case wobble
+    case starshipCaptain
+    case nervousRobot
+    case swarm
+    case amRadio
+};
+
 @objcMembers public class AudioService: NSObject {
 
     public var local: LocalAudio = .init()
@@ -73,9 +89,11 @@ public enum ComfortNoiseLevel: NSInteger {
     }
 
     public let noiseReduction: NoiseReduction
+    public let voiceFont: VoiceFont
 
-    init(noiseReduction: NoiseReduction) {
+    init(noiseReduction: NoiseReduction, voiceFont: VoiceFont) {
         self.noiseReduction = noiseReduction
+        self.voiceFont = voiceFont
     }
 }
 
@@ -83,8 +101,8 @@ public enum ComfortNoiseLevel: NSInteger {
 
 @objcMembers public class AudioCaptureMode: NSObject {
 
-    public static func standard(noiseReduction: StandardAudioCaptureMode.NoiseReduction) -> StandardAudioCaptureMode {
-        return .init(noiseReduction: noiseReduction)
+    public static func standard(noiseReduction: StandardAudioCaptureMode.NoiseReduction, voiceFont: VoiceFont = .none) -> StandardAudioCaptureMode {
+        return .init(noiseReduction: noiseReduction, voiceFont: voiceFont)
     }
 
     public static func unprocessed() -> UnprocessedAudioCaptureMode {
