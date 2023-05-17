@@ -79,4 +79,4 @@ export 'src/dolbyio_comms_sdk_native_events.dart' show Event;
 export 'src/sdk_api/view/video_view.dart'
     show VideoView, VideoViewController, ScaleType;
 export 'src/sdk_api/models/audio.dart'
-    show AudioCaptureOptions, AudioCaptureMode, NoiseReduction;
+    show AudioCaptureOptions, AudioCaptureMode, NoiseReduction, VoiceFont;

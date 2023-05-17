@@ -10,10 +10,16 @@ class AudioCaptureOptions {
   /// The preferred level of noise reduction.
   NoiseReduction? noiseReduction;
 
-  AudioCaptureOptions(this.mode, this.noiseReduction);
+  VoiceFont voiceFont;
 
-  Map<String, Object?> toJson() =>
-      {"mode": mode.encode(), "noiseReduction": noiseReduction?.encode()};
+  AudioCaptureOptions(this.mode, this.noiseReduction,
+      {this.voiceFont = VoiceFont.none});
+
+  Map<String, Object?> toJson() => {
+        "mode": mode.encode(),
+        "noiseReduction": noiseReduction?.encode(),
+        "voiceFont": voiceFont.encode()
+      };
 }
 
 /// The AudioCaptureMode model allows selecting the preferred mode for capturing the local participant's audio.
@@ -71,5 +77,37 @@ enum NoiseReduction {
 
   String encode() {
     return _value;
+  }
+}
+
+enum VoiceFont {
+  none("none"),
+  masculine("masculine"),
+  feminine("feminine"),
+  helium("helium"),
+  darkModulation("dark_modulation"),
+  brokenRobot("broken_robot"),
+  interference("interference"),
+  abyss("abyss"),
+  wobble("wobble"),
+  starshipCaptain("starship_captain"),
+  nervousRobot("nervous_robot"),
+  swarm("swarm"),
+  amRadio("am_radio");
+
+  final String _value;
+
+  const VoiceFont(this._value);
+
+  String encode() {
+    return _value;
+  }
+
+  static VoiceFont decode(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
+    return VoiceFont.values.firstWhere(
+      (element) => element._value == lowerCaseValue,
+      orElse: () => throw Exception("Invalid enum name"),
+    );
   }
 }
