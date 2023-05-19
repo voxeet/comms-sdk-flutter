@@ -3,29 +3,35 @@ import VoxeetSDK
 import WebRTC
 
 typealias VTAudioCaptureMode = AudioCaptureMode
+typealias VTVoiceFont = VoiceFont
 
 extension DTO {
 
     struct AudioCaptureOptions: Codable {
         let mode: AudioCaptureMode
         let noiseReduction: NoiseReduction?
+        let voiceFont: VoiceFont?
 
         init(audioCaptureMode: VTAudioCaptureMode) throws {
             self.mode = try .init(audioCaptureMode: audioCaptureMode)
             if let audioCaptureMode = audioCaptureMode as? StandardAudioCaptureMode {
                 self.noiseReduction = .init(noiseReduction: audioCaptureMode.noiseReduction)
+                self.voiceFont = .init(voiceFont: audioCaptureMode.voiceFont)
             } else {
                 self.noiseReduction = nil
+                self.voiceFont = nil
             }
         }
 
         func toSdk() throws -> VTAudioCaptureMode?  {
             switch mode.mode {
             case .standard:
-                guard let noiseReduction = noiseReduction?.noiseReduction else {
+                guard let noiseReduction = noiseReduction?.noiseReduction,
+                      let voiceFont = voiceFont?.voiceFont
+                else {
                     throw EncoderError.notExist()
                 }
-                return .standard(noiseReduction: noiseReduction)
+                return .standard(noiseReduction: noiseReduction, voiceFont: voiceFont)
             case .unprocessed:
                 return .unprocessed()
             }
@@ -95,6 +101,57 @@ extension DTO {
             switch noiseReduction {
             case .low: try container.encode("low")
             case .high: try container.encode("high")
+            }
+        }
+    }
+
+    struct VoiceFont: Codable {
+
+        let voiceFont: VTVoiceFont
+
+        init(voiceFont: VTVoiceFont) {
+            self.voiceFont = voiceFont
+        }
+
+        init(from decoder: Decoder) throws {
+
+            let container = try decoder.singleValueContainer()
+
+            switch try container.decode(String.self) {
+            case "masculine": voiceFont = .masculine
+            case "feminine": voiceFont = .feminine
+            case "helium": voiceFont = .helium
+            case "dark_modulation": voiceFont = .darkModulation
+            case "broken_robot": voiceFont = .brokenRobot
+            case "interference": voiceFont = .interference
+            case "abyss": voiceFont = .abyss
+            case "wobble": voiceFont = .wobble
+            case "starship_captain": voiceFont = .starshipCaptain
+            case "nervous_robot": voiceFont = .nervousRobot
+            case "swarm": voiceFont = .swarm
+            case "am_radio": voiceFont = .amRadio
+            case "none": voiceFont = .none
+
+            default: throw EncoderError.decoderFailed()
+            }
+        }
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch voiceFont {
+            case .masculine: try container.encode("masculine")
+            case .feminine: try container.encode("feminine")
+            case .helium: try container.encode("helium")
+            case .darkModulation: try container.encode("dark_modulation")
+            case .brokenRobot: try container.encode("broken_robot")
+            case .interference: try container.encode("interference")
+            case .abyss: try container.encode("abyss")
+            case .wobble: try container.encode("wobble")
+            case .starshipCaptain: try container.encode("starship_captain")
+            case .nervousRobot: try container.encode("nervous_robot")
+            case .swarm: try container.encode("swarm")
+            case .amRadio: try container.encode("am_radio")
+            case .none: try container.encode("none")
             }
         }
     }

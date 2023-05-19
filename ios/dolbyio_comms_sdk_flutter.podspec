@@ -19,7 +19,7 @@ DESC
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.dependency 'VoxeetSDK', '~> 3.8.0'
+  s.dependency 'VoxeetSDK', '~> 3.9.0-beta'
   s.platforms = {
     :ios => "12.0"
   }
