@@ -3,6 +3,7 @@ import 'package:dolbyio_comms_sdk_flutter_example/widgets/file_presentation_ui.d
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/spatial_extensions/participant_spatial_values.dart';
 import 'package:provider/provider.dart';
 import '../../conference_ext.dart';
+import '../../logger/logger_view.dart';
 import '../../widgets/file_container.dart';
 import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '../../widgets/status_snackbar.dart';
@@ -89,6 +90,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   bool _isScreenSharing = false;
   bool isFilePresenting = false;
   bool isLocalPresentingFile = false;
+  LoggerWidget _loggerWidget = LoggerWidget.getLoggerView();
 
   @override
   void initState() {
@@ -100,10 +102,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
       _updateLocalView();
       _updateShareScreenView();
       updateDefaultSpatialPosition(event.body);
-      StatusSnackbar.buildSnackbar(
-          context,
-          "${event.body.info?.name}: ${event.body.status?.encode()}",
-          const Duration(seconds: 1));
+      _loggerWidget.log("[PARTICIPANT_CHANGED]", "${event.body.info?.name}: ${event.body.status?.encode()}");
     });
 
     _streamsChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
@@ -118,6 +117,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
         .listen((event) {
       StatusSnackbar.buildSnackbar(
           context, event.body.toString(), const Duration(seconds: 2));
+      _loggerWidget.log("[PERMISSIONS_CHANGED]", event.body.toString());
     });
 
     _onRecordingChangeSubscription = _dolbyioCommsSdkFlutterPlugin.recording
@@ -127,6 +127,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
           context,
           "Recording status: ${event.body.recordingStatus} for conference: ${event.body.conferenceId}",
           const Duration(seconds: 2));
+      _loggerWidget.log("[RECORDING_STATUS_CHANGE]", "Recording status: ${event.body.recordingStatus} for conference: ${event.body.conferenceId}");
     });
 
     _onFilePresentationChangeSubscription = _dolbyioCommsSdkFlutterPlugin
@@ -182,6 +183,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
 
   @override
   Widget build(BuildContext context) {
+    _loggerWidget.showOverlay(Navigator.of(context).overlay);
     Provider.of<SpatialValuesModel>(context)
         .setSpatialConferenceState(widget.isSpatialAudio);
     Provider.of<SpatialValuesModel>(context).copyList(participants);
