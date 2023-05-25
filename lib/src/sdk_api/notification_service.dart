@@ -77,7 +77,7 @@ class NotificationService {
     });
   }
 
-  /// Returns a [Stream] of the [NotificationServiceEventNames.conferenceCreated] events. By subscribing to the returned stream you will be notified about new conference invitations.
+  /// Returns a [Stream] of the [NotificationServiceEventNames.conferenceCreated] events. By subscribing to the returned stream you will be notified when new conference is created.
   Stream<
       Event<NotificationServiceEventNames,
           ConferenceCreatedNotificationData>> onConferenceCreated() {
@@ -90,7 +90,7 @@ class NotificationService {
     });
   }
 
-  /// Returns a [Stream] of the [NotificationServiceEventNames.conferenceEnded] events. By subscribing to the returned stream you will be notified about new conference invitations.
+  /// Returns a [Stream] of the [NotificationServiceEventNames.conferenceEnded] events. By subscribing to the returned stream you will be notified when the conference ended.
   Stream<Event<NotificationServiceEventNames, ConferenceEndedNotificationData>>
       onConferenceEnded() {
     return _eventStream.addListener(
