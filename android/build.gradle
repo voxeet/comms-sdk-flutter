@@ -78,7 +78,7 @@ android {
 dependencies {
     // uncomment this to gradle sync for android plugin in android studio, comment again before build
 //    implementation files("$flutterRoot/bin/cache/artifacts/engine/android-arm64-release/flutter.jar")
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     def useMockSDK = project.properties.containsKey("useMockSDK") ? project.properties.get("useMockSDK") : false
     if (useMockSDK) {
         implementation project(":dolbyMock")

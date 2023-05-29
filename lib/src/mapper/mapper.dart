@@ -267,10 +267,10 @@ class AudioCaptureOptionsMapper {
   static AudioCaptureOptions fromMap(Map<Object?, Object?> stream) {
     var mode = stream["mode"] as String;
     var noiseReduction = stream["noiseReduction"] as String?;
+    var voiceFont = stream["voiceFont"] as String?;
     return AudioCaptureOptions(
-      AudioCaptureMode.decode(mode),
-      NoiseReduction.decode(noiseReduction),
-    );
+        AudioCaptureMode.decode(mode), NoiseReduction.decode(noiseReduction),
+        voiceFont: VoiceFont.decode(voiceFont));
   }
 }
 

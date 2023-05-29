@@ -1,5 +1,6 @@
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/material.dart';
+import '/widgets/voice_font_dialog_content.dart';
 import '/widgets/dialogs.dart';
 import '/widgets/secondary_button.dart';
 
@@ -33,12 +34,19 @@ class _AudioServiceTestButtonsState extends State<AudioServiceTestButtons> {
         SecondaryButton(
             text: 'Get capture mode', onPressed: () => getCaptureMode()),
         SecondaryButton(
-            text: 'Set capture mode', onPressed: () => setCaptureMode())
+            text: 'Set capture mode - standard',
+            onPressed: () => setCaptureMode(AudioCaptureMode.standard)),
+        SecondaryButton(
+            text: 'Set capture mode - unprocessed',
+            onPressed: () => setCaptureMode(AudioCaptureMode.unprocessed)),
+        SecondaryButton(
+            text: 'Set voice font',
+            onPressed: () => setVoiceFontDialog(context)),
       ],
     );
   }
 
-  Future<void> showDialog(
+  Future<void> _showDialog(
       BuildContext context, String title, String text) async {
     await ViewDialogs.dialog(
       context: context,
@@ -53,10 +61,10 @@ class _AudioServiceTestButtonsState extends State<AudioServiceTestButtons> {
           .audioService.localAudio
           .getComfortNoiseLevel();
       if (!mounted) return;
-      showDialog(context, 'Success', comfortNoiseLevel.toString());
+      _showDialog(context, 'Success', comfortNoiseLevel.toString());
     } catch (error) {
       if (!mounted) return;
-      showDialog(context, 'Error', error.toString());
+      _showDialog(context, 'Error', error.toString());
     }
   }
 
@@ -65,10 +73,10 @@ class _AudioServiceTestButtonsState extends State<AudioServiceTestButtons> {
       await _dolbyioCommsSdkFlutterPlugin.audioService.localAudio
           .setComfortNoiseLevel(ComfortNoiseLevel.medium);
       if (!mounted) return;
-      showDialog(context, 'Success', 'OK');
+      _showDialog(context, 'Success', 'OK');
     } catch (error) {
       if (!mounted) return;
-      showDialog(context, 'Error', error.toString());
+      _showDialog(context, 'Error', error.toString());
     }
   }
 
@@ -76,10 +84,10 @@ class _AudioServiceTestButtonsState extends State<AudioServiceTestButtons> {
     try {
       await _dolbyioCommsSdkFlutterPlugin.audioService.localAudio.start();
       if (!mounted) return;
-      showDialog(context, 'Success', 'OK');
+      _showDialog(context, 'Success', 'OK');
     } catch (error) {
       if (!mounted) return;
-      showDialog(context, 'Error', error.toString());
+      _showDialog(context, 'Error', error.toString());
     }
   }
 
@@ -87,10 +95,10 @@ class _AudioServiceTestButtonsState extends State<AudioServiceTestButtons> {
     try {
       await _dolbyioCommsSdkFlutterPlugin.audioService.localAudio.stop();
       if (!mounted) return;
-      showDialog(context, 'Success', 'OK');
+      _showDialog(context, 'Success', 'OK');
     } catch (error) {
       if (!mounted) return;
-      showDialog(context, 'Error', error.toString());
+      _showDialog(context, 'Error', error.toString());
     }
   }
 
@@ -100,25 +108,37 @@ class _AudioServiceTestButtonsState extends State<AudioServiceTestButtons> {
           .audioService.localAudio
           .getCaptureMode();
       if (!mounted) return;
-      showDialog(context, 'Success', audioCaptureOptions.toJson().toString());
+      _showDialog(context, 'Success', audioCaptureOptions.toJson().toString());
     } catch (error) {
       if (!mounted) return;
-      showDialog(context, 'Error', error.toString());
+      _showDialog(context, 'Error', error.toString());
     }
   }
 
-  Future<void> setCaptureMode() async {
+  Future<void> setCaptureMode(AudioCaptureMode mode) async {
     try {
-      var mode = AudioCaptureMode.standard;
-      var noiseReduction = NoiseReduction.low;
+      var noiseReduction = NoiseReduction.high;
       var options = AudioCaptureOptions(mode, noiseReduction);
       await _dolbyioCommsSdkFlutterPlugin.audioService.localAudio
           .setCaptureMode(options);
       if (!mounted) return;
-      showDialog(context, 'Success', 'OK');
+      _showDialog(context, 'Success', 'OK');
     } catch (error) {
       if (!mounted) return;
-      showDialog(context, 'Error', error.toString());
+      _showDialog(context, 'Error', error.toString());
     }
+  }
+
+  Future<void> setVoiceFontDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text('Set Capture mode'),
+          content: VoiceFontDialogContent()
+        );
+      },
+    );
   }
 }
