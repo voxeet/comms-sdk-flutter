@@ -1,9 +1,8 @@
-import 'package:dolbyio_comms_sdk_flutter/src/sdk_api/models/enums.dart';
-
 import 'conference.dart';
 import 'file_presentation.dart';
 import 'participant.dart';
 import 'streams.dart';
+import 'recording.dart';
 
 typedef FileConvertedType = FileConverted;
 
@@ -234,12 +233,16 @@ class RecordingStatusUpdate {
       this.participantId, this.timeStamp);
 
   static RecordingStatusUpdate fromMap(Map<Object?, Object?> data) {
-    RecordingStatus recordingStatus =
-        RecordingStatus.valueOf(data["recordingStatus"] as String);
+    RecordingStatus? recordingStatus =
+        RecordingStatus.decode(data["recordingStatus"] as String?);
     String? conferenceId = data["conferenceId"] as String?;
     String? participantId = data["participantId"] as String?;
     int? timeStamp = data["timeStamp"] as int?;
-    return RecordingStatusUpdate(
-        recordingStatus, conferenceId, participantId, timeStamp);
+    if (recordingStatus != null) {
+      return RecordingStatusUpdate(
+          recordingStatus, conferenceId, participantId, timeStamp);
+    } else {
+      throw Exception("Invalid recording status");
+    }
   }
 }

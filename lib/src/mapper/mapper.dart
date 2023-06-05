@@ -62,7 +62,9 @@ class ParticipantMapper {
 
 class ParticipantInfoMapper {
   static ParticipantInfo fromMap(Map<Object?, Object?> info) {
-    var name = info.containsKey("name") ? info["name"] as String : "";
+    String name = info.containsKey("name") && info["name"] != null
+        ? info["name"] as String
+        : "";
     var avatarUrl =
         info.containsKey("avatarUrl") ? info["avatarUrl"] as String? : null;
     var externalId =

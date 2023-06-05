@@ -1,3 +1,11 @@
+## 3.8.3
+
+### Bug Fixes
+
+- Fixed an issue where a wrong recording status was reported by recording events.
+- Fixed an issue where a conference invitation could not be accepted on Android devices.
+- Corrected documentation for events in the notification service.
+
 ## 3.8.2
 
 ### Features
