@@ -90,7 +90,7 @@ class _ParticipantScreenContentState extends State<ParticipantScreenContent> {
   bool _isScreenSharing = false;
   bool isFilePresenting = false;
   bool isLocalPresentingFile = false;
-  LoggerWidget _loggerWidget = LoggerWidget.getLoggerView();
+  final LoggerWidget _loggerWidget = LoggerWidget.getLoggerView();
 
   @override
   void initState() {

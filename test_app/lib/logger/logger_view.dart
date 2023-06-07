@@ -6,7 +6,7 @@ class LoggerWidget {
   var isVisible = false;
   static LoggerWidget? _instance;
 
-  LoggerWidget._() {}
+  LoggerWidget._();
 
   ButtonOverlayWidget? _buttonOverlay;
 
@@ -28,7 +28,7 @@ class LoggerWidget {
   void hideOverlay() {}
 
   void log(String tag, String msg) {
-    var message = "${DateTime.now()} : ${tag} : ${msg}";
+    var message = "${DateTime.now()} : $tag : $msg";
     _loggerWidget.putMsg(message);
   }
 

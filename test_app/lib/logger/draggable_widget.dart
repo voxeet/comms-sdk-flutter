@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DraggableWidgt extends StatelessWidget {
+class DraggableWidget extends StatelessWidget {
   final Function(DragUpdateDetails)? onTap;
   final Widget child;
 
-  DraggableWidgt({
+  const DraggableWidget({
     Key? key,
     this.onTap,
     required this.child
@@ -17,8 +16,8 @@ class DraggableWidgt extends StatelessWidget {
     return GestureDetector(
       onPanUpdate: onTap,
       child: Card(
-        color: Color.fromRGBO(0, 0, 0, 0),
-        shadowColor: Color.fromRGBO(0, 0, 0, 0),
+        color: const Color.fromRGBO(0, 0, 0, 0),
+        shadowColor: const Color.fromRGBO(0, 0, 0, 0),
         borderOnForeground: false,
         child: child,
       ),

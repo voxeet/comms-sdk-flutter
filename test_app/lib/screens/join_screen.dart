@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:dolbyio_comms_sdk_flutter_example/logger/logger_view.dart';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -76,7 +75,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
   bool joinAsListener = false;
   String _conferenceAlias = '';
-  LoggerWidget _loggerWidget = LoggerWidget.getLoggerView();
+  final LoggerWidget _loggerWidget = LoggerWidget.getLoggerView();
 
   StreamSubscription<
           Event<NotificationServiceEventNames,
