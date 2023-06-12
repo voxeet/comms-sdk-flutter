@@ -23,19 +23,19 @@ class ButtonOverlayWidget extends OverlayBaseWidget {
 
   void _showOverlay(OverlayState? overlayState, DragUpdateDetails? d) async {
     if (_overlayEntry == null) {
-      var overlayEntry = _createOverlay((context) => FloatingButtonOverlay(
-          onTap: (d) {
-            _widgetUpdateController.updatePosition(Offset(d.delta.dx, d.delta.dy));
-          },
-         onPressed: onPressed,
-        controller: _widgetUpdateController,
-      ));
+      var overlayEntry = _createOverlay((context) =>
+          FloatingButtonOverlay(
+            onTap: (d) {
+              _widgetUpdateController.updatePosition(
+                  Offset(d.delta.dx, d.delta.dy));
+            },
+            onPressed: onPressed,
+            controller: _widgetUpdateController,
+          ));
       _overlayEntry = overlayEntry;
-      _overlayEntry.markNeedsBuild()
-      // overlayEntry.markNeedsBuild();
-
       overlayState?.insert(overlayEntry);
-
+    } else {
+      _overlayEntry?.markNeedsBuild();
     }
   }
 
@@ -48,6 +48,7 @@ class LoggerOverlayWidget extends OverlayBaseWidget {
   OverlayEntry? _overlayEntry;
   bool isVisible = false;
   List<String> loggs = [];
+  double height = 240.0;
 
   @override
   void showOverlay(OverlayState? overlayState, { OverlayEntry? above, OverlayEntry? below}) {
@@ -73,22 +74,23 @@ class LoggerOverlayWidget extends OverlayBaseWidget {
               right: 0,
               bottom: 0,
               child: Container(
-                  height: 240.0,
-                  color: Colors.yellow,
-                  child: ListView.builder(
-                    itemCount: loggs.length,
-                    itemBuilder: (context, index) {
-                      return Text(
-                          loggs[index], style: _getLogTextStyle(context));
-                    },
+                      height: height,
+                      color: Colors.yellow,
+                      child: ListView.builder(
+                        itemCount: loggs.length,
+                        itemBuilder: (context, index) {
+                          return Text(
+                              loggs[index], style: _getLogTextStyle(context));
+                        },
+                      )
                   )
-              )
           )
       );
-      overlayEntry.markNeedsBuild();
 
       overlayState?.insert(overlayEntry, above: above, below: below);
       _overlayEntry = overlayEntry;
+    } else {
+      _overlayEntry?.markNeedsBuild();
     }
   }
 
@@ -127,19 +129,18 @@ class FloatingButtonOverlay extends StatefulWidget {
   const FloatingButtonOverlay({Key? key, this.onTap, this.onPressed, required this.controller}): super(key: key);
 
   @override
-  State<StatefulWidget> createState() {
-    return FloatingButtonOverlayState(onTap, onPressed, controller);
-  }
+  State<StatefulWidget> createState() => _FloatingButtonOverlayState();
 }
 
-class FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
+class _FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
   Offset _offset = Offset.zero + const Offset(0, 20);
-  final Function(DragUpdateDetails)? _onTap;
-  final VoidCallback? _onPressed;
-  final FloatingButtonUpdateController _controller;
 
-  FloatingButtonOverlayState(this._onTap, this._onPressed, this._controller) {
-    _controller.state = this;
+  _FloatingButtonOverlayState();
+
+  @override
+  void initState() {
+    super.initState();
+    widget.controller.state = this;
   }
 
   @override
@@ -149,9 +150,9 @@ class FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
         top: _offset.dy,
         child:
         DraggableWidget(
-          onTap: _onTap,
+          onTap: widget.onTap,
           child: FloatingActionButton(
-            onPressed: _onPressed,
+            onPressed: widget.onPressed,
             backgroundColor: Colors.black,
             child: const Icon(Icons.logo_dev),
           ),
@@ -167,13 +168,9 @@ class FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
 }
 
 class FloatingButtonUpdateController {
-  FloatingButtonOverlayState? state;
+  _FloatingButtonOverlayState? state;
   void updatePosition(Offset offset) {
     state?._updatePosition(offset);
-  }
-
-  void setState(FloatingButtonOverlayState state) {
-    this.state = state;
   }
 
   void dispose() {

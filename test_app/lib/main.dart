@@ -31,7 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  final LoggerWidget _loggerWidget = LoggerWidget.getLoggerView();
+  final LoggerView _loggerView = LoggerView.getLoggerView();
 
   @override
   void initState() {
@@ -44,8 +44,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    _loggerWidget.showOverlay(Navigator.of(context).overlay);
-    _loggerWidget.log("[KB]", "test log");
+    _loggerView.showOverlay(Navigator.of(context).overlay);
+    _loggerView.log("[KB]", "test log");
 
     return MaterialApp(
       home: Scaffold(

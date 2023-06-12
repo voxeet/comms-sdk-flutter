@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'overlay_widget.dart';
+import 'dart:developer' as dev;
 
-class LoggerWidget {
+class LoggerView {
   var isVisible = false;
-  static LoggerWidget? _instance;
+  static LoggerView? _instance;
 
-  LoggerWidget._();
+  LoggerView._();
 
   ButtonOverlayWidget? _buttonOverlay;
 
@@ -29,11 +30,12 @@ class LoggerWidget {
 
   void log(String tag, String msg) {
     var message = "${DateTime.now()} : $tag : $msg";
+    dev.log(message);
     _loggerWidget.putMsg(message);
   }
 
-  static LoggerWidget getLoggerView() {
-    _instance ??= LoggerWidget._();
+  static LoggerView getLoggerView() {
+    _instance ??= LoggerView._();
     return _instance!;
   }
 }

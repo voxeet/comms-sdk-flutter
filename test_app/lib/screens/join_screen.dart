@@ -75,7 +75,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
   bool joinAsListener = false;
   String _conferenceAlias = '';
-  final LoggerWidget _loggerWidget = LoggerWidget.getLoggerView();
+  final LoggerView _loggerView = LoggerView.getLoggerView();
 
   StreamSubscription<
           Event<NotificationServiceEventNames,
@@ -124,35 +124,35 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     onConferenceStatusSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onConferenceStatus()
         .listen((params) {
-      _loggerWidget.log("[CONFERENCE_STATUS]", "Conference Status Event: ${params.body.toJson().toString()}");
+      _loggerView.log("[CONFERENCE_STATUS]", "Conference Status Event: ${params.body.toJson().toString()}");
     });
 
     onConferenceCreatedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onConferenceCreated()
         .listen((event) {
       developer.log("Conference created: ${event.body.conferenceAlias}");
-      _loggerWidget.log("[CONFERENCE_CREATED]", "Notification conference created: ${event.body.conferenceAlias}");
+      _loggerView.log("[CONFERENCE_CREATED]", "Notification conference created: ${event.body.conferenceAlias}");
     });
 
     onConferenceEndedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onConferenceEnded()
         .listen((event) {
       developer.log("Conference ended: ${event.body.conferenceAlias}");
-      _loggerWidget.log("[CONFERENCE_ENDED]", "Notification conference ended: ${event.body.conferenceAlias}");
+      _loggerView.log("[CONFERENCE_ENDED]", "Notification conference ended: ${event.body.conferenceAlias}");
     });
 
     onParticipantJoinedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onParticipantJoined()
         .listen((event) {
       developer.log("participant joined: ${event.body.toJson().toString()}");
-      _loggerWidget.log("[PARTICIPANT_JOINED]", "Notification participant joined: ${event.body.participant.info?.name}");
+      _loggerView.log("[PARTICIPANT_JOINED]", "Notification participant joined: ${event.body.participant.info?.name}");
     });
 
     onParticipantLeftSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onParticipantLeft()
         .listen((event) {
       developer.log("participant left: ${event.body.toJson().toString()}");
-      _loggerWidget.log("[PARTICIPANT_LEFT]", "Notification participant left: ${event.body.participant.info?.name}");
+      _loggerView.log("[PARTICIPANT_LEFT]", "Notification participant left: ${event.body.participant.info?.name}");
     });
 
     onActiveParicipantsSubscription = _dolbyioCommsSdkFlutterPlugin.notification
@@ -162,7 +162,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
           event.body.participants.map((p) => p.info?.name ?? "__no_name__");
       developer.log("Notification active participants: $participantNames "
           "count: ${event.body.participantCount}");
-      _loggerWidget.log("[ACTIVE_PARTICIPANT]", "Notification active participants: $participantNames "
+      _loggerView.log("[ACTIVE_PARTICIPANT]", "Notification active participants: $participantNames "
           "count: ${event.body.participantCount}");
     });
   }
@@ -207,7 +207,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   @override
   Widget build(BuildContext context) {
-    _loggerWidget.showOverlay(Navigator.of(context).overlay);
+    _loggerView.showOverlay(Navigator.of(context).overlay);
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
@@ -557,7 +557,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
           .onStatusChange()
           .listen((params) {
-        _loggerWidget.log("[CONFERENCE_STATUS]", params.body.name.toString());
+        _loggerView.log("[CONFERENCE_STATUS]", params.body.name.toString());
       });
     } else {
       onStatusChangeSubscription?.cancel();
