@@ -63,7 +63,7 @@ class LoggerOverlayWidget extends OverlayBaseWidget {
   }
 
   TextStyle _getLogTextStyle(BuildContext context) {
-    return DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.3);
+    return DefaultTextStyle.of(context).style.apply(fontSizeFactor: 0.25);
   }
 
   void _showOverlay(OverlayState? overlayState, DragUpdateDetails? d, OverlayEntry? above, OverlayEntry? below) {
@@ -73,9 +73,10 @@ class LoggerOverlayWidget extends OverlayBaseWidget {
               left: 0,
               right: 0,
               bottom: 0,
-              child: Container(
+              child: IgnorePointer(
+                  child: Container(
                       height: height,
-                      color: Colors.yellow,
+                      color: const Color.fromARGB(125, 140, 160, 140),
                       child: ListView.builder(
                         itemCount: loggs.length,
                         itemBuilder: (context, index) {
@@ -84,6 +85,7 @@ class LoggerOverlayWidget extends OverlayBaseWidget {
                         },
                       )
                   )
+              )
           )
       );
 
@@ -140,7 +142,7 @@ class _FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
   @override
   void initState() {
     super.initState();
-    widget.controller.state = this;
+    widget.controller._state = this;
   }
 
   @override
@@ -168,12 +170,12 @@ class _FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
 }
 
 class FloatingButtonUpdateController {
-  _FloatingButtonOverlayState? state;
+  _FloatingButtonOverlayState? _state;
   void updatePosition(Offset offset) {
-    state?._updatePosition(offset);
+    _state?._updatePosition(offset);
   }
 
   void dispose() {
-    state = null;
+    _state = null;
   }
 }
