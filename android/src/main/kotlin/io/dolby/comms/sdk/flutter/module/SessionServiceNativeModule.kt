@@ -18,6 +18,7 @@ class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModu
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
             ::open.name -> open(call, result)
+            ::updateParticipantInfo.name -> updateParticipantInfo(call, result)
             ::close.name -> close(result)
             ::isOpen.name -> isOpen(result)
             ::getParticipant.name -> getParticipant(result)
@@ -42,6 +43,17 @@ class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModu
                 call.argument("avatarUrl"),
             )
             VoxeetSDK.session().open(participantInfo).await().let { result.success(it) }
+        }
+    )
+
+    private fun updateParticipantInfo(call: MethodCall, result: Result) = scope.launch(
+        onError = result::onError,
+        onSuccess = {
+            android.util.Log.d("[KB]", "updateParticipantInfo: ${call.argument<String?>("name")}")
+            VoxeetSDK.session().update(
+                call.argumentOrThrow<String>("name"),
+                call.argument<String>("avatarUrl")
+            ).await().let { result.success(it) }
         }
     )
 
