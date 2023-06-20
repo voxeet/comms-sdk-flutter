@@ -49,7 +49,6 @@ class SessionServiceNativeModule(private val scope: CoroutineScope) : NativeModu
     private fun updateParticipantInfo(call: MethodCall, result: Result) = scope.launch(
         onError = result::onError,
         onSuccess = {
-            android.util.Log.d("[KB]", "updateParticipantInfo: ${call.argument<String?>("name")}")
             VoxeetSDK.session().update(
                 call.argumentOrThrow<String>("name"),
                 call.argument<String>("avatarUrl")
