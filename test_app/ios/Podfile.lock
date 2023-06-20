@@ -32,7 +32,7 @@ PODS:
     - SwiftyGif
   - dolbyio_comms_sdk_flutter (0.0.1):
     - Flutter
-    - VoxeetSDK (~> 3.9.0-beta)
+    - VoxeetSDK (~> 3.9.0)
   - file_picker (0.0.1):
     - DKImagePickerController/PhotoGallery
     - Flutter
@@ -41,13 +41,13 @@ PODS:
     - Flutter
   - permission_handler_apple (9.0.4):
     - Flutter
-  - SDWebImage (5.15.8):
-    - SDWebImage/Core (= 5.15.8)
-  - SDWebImage/Core (5.15.8)
+  - SDWebImage (5.16.0):
+    - SDWebImage/Core (= 5.16.0)
+  - SDWebImage/Core (5.16.0)
   - shared_preferences_ios (0.0.1):
     - Flutter
   - SwiftyGif (5.4.4)
-  - VoxeetSDK (3.9.0-beta.1)
+  - VoxeetSDK (3.9.0)
 
 DEPENDENCIES:
   - dolbyio_comms_sdk_flutter (from `.symlinks/plugins/dolbyio_comms_sdk_flutter/ios`)
@@ -82,16 +82,16 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
-  dolbyio_comms_sdk_flutter: 2a614af3f4098c5e5640376ed97cc6b5cb15d0e6
+  dolbyio_comms_sdk_flutter: 072707064eb1eb05cf860ed84f1cd7c9347c17c5
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  integration_test: 13825b8a9334a850581300559b8839134b124670
   permission_handler_apple: 44366e37eaf29454a1e7b1b7d736c2cceaeb17ce
-  SDWebImage: cb032eba469c54e0000e78bcb0a13cdde0a52798
+  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
-  VoxeetSDK: cf910689d335ddb2337e4fb1a1850e486aa7ff17
+  VoxeetSDK: 45b7fc7f3596e2e756647f206444d47402cf7f44
 
 PODFILE CHECKSUM: ad35eb4c4f8efa60cf39d5ae575517a0e24a77af
 
-COCOAPODS: 1.12.0
+COCOAPODS: 1.12.1
