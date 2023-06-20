@@ -23,6 +23,13 @@ class SessionService {
     return Future.value();
   }
 
+  /// Update actual participant name and avatarUrl
+  Future<void> updateParticipantInfo(String name, String avatarUrl) async {
+    var params = {"name": name, "avatarUrl": avatarUrl};
+    await _methodChannel.invokeMethod<void>('updateParticipantInfo', params);
+    return Future.value();
+  }
+
   /// Checks whether there is an open session that connects SDK with the backend.
   Future<bool> isOpen() async {
     final result = await _methodChannel.invokeMethod<bool>('isOpen');
