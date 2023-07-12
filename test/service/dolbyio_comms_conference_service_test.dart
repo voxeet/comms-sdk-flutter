@@ -144,7 +144,8 @@ void main() {
         "conferenceAccessToken": joinOptions.conferenceAccessToken,
         "maxVideoForwarding": joinOptions.maxVideoForwarding,
         "mixing": joinOptions.mixing?.toJson(),
-        "videoForwardingStrategy": joinOptions.videoForwardingStrategy?.encode(),
+        "videoForwardingStrategy":
+            joinOptions.videoForwardingStrategy?.encode(),
         "simulcast": joinOptions.simulcast,
         "spatialAudio": joinOptions.spatialAudio,
       }
@@ -171,7 +172,8 @@ void main() {
       "options": {
         "conferenceAccessToken": joinOptions.conferenceAccessToken,
         "maxVideoForwarding": joinOptions.maxVideoForwarding,
-        "videoForwardingStrategy": joinOptions.videoForwardingStrategy?.encode(),
+        "videoForwardingStrategy":
+            joinOptions.videoForwardingStrategy?.encode(),
         "spatialAudio": joinOptions.spatialAudio,
       }
     })).called(1);

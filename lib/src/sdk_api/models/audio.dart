@@ -80,12 +80,13 @@ enum NoiseReduction {
     return _value;
   }
 }
+
 /// The VoiceFont model gathers the possible voice modification effects that you can use to change the local participant's voice in real time. The model is supported only in SDK 3.9 and later.
 /// <br><br>
 /// The following table lists audio samples for each available voice font:
 ///
 /// <table>
-///     <tbody>    
+///     <tbody>
 ///         <tr style="height:60px">
 ///             <th align='center' width=20%><b>Voice font</b></th>
 ///             <th align='center' width=40%><b>Example 1</b></th>
