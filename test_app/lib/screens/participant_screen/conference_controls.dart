@@ -1,4 +1,5 @@
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/widgets/bottom_tool_bar.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/dialogs.dart';
 import '../../widgets/spatial_extensions/spatial_values_model.dart';
+import '../../widgets/text_form_field.dart';
 import '/widgets/conference_action_icon_button.dart';
 import 'dart:developer' as developer;
 
@@ -27,10 +29,17 @@ class _ConferenceControlsState extends State<ConferenceControls> {
   bool isMicOff = false;
   bool isVideoOff = false;
   bool isScreenShareOff = true;
+  bool isDialogCanceled = false;
   FileConverted? _fileConverted;
+  TextEditingController urlTextController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final testVideoUrl =
+      'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
   @override
   Widget build(BuildContext context) {
+    urlTextController.text = testVideoUrl;
+
     return BottomToolBar(children: [
       ConferenceActionIconButton(
         onPressedIcon: () {
@@ -81,6 +90,10 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               value: 1,
               child: Text('Share file'),
             ),
+            const PopupMenuItem<int>(
+              value: 2,
+              child: Text('Share video'),
+            ),
           ];
         },
         onSelected: (value) async {
@@ -97,6 +110,9 @@ class _ConferenceControlsState extends State<ConferenceControls> {
               if (_fileConverted != null) {
                 startFilePresentation();
               }
+              break;
+            case 2:
+              startVideoPresentation();
               break;
           }
         },
@@ -152,6 +168,52 @@ class _ConferenceControlsState extends State<ConferenceControls> {
         );
       },
     );
+  }
+
+  Future<void> enterUrlDialog(BuildContext context) async {
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Column(
+              children: const [
+                Text('Enter url'),
+                Text(
+                  'Should start with https://',
+                  style: TextStyle(color: Colors.black38, fontSize: 12),
+                ),
+              ],
+            ),
+            content: Form(
+              key: formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              child: InputTextFormField(
+                labelText: 'Url',
+                controller: urlTextController,
+                focusColor: Colors.deepPurple,
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  isDialogCanceled = true;
+                  Navigator.pop(context);
+                },
+              ),
+              TextButton(
+                child: const Text('Done'),
+                onPressed: () {
+                  final isValidForm = formKey.currentState!.validate();
+                  if (isValidForm) {
+                    Navigator.pop(context);
+                  }
+                },
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> showResultDialog(
@@ -272,6 +334,30 @@ class _ConferenceControlsState extends State<ConferenceControls> {
     } catch (error) {
       if (!mounted) return;
       showResultDialog(context, 'Error: ', error.toString());
+    }
+  }
+
+  Future<void> startVideoPresentation() async {
+    try {
+      var isSomeonePresentingVideo =
+          Provider.of<ConferenceModel>(context, listen: false)
+              .isSomeonePresentingVideo;
+      if (isSomeonePresentingVideo) {
+        if (!mounted) return;
+        showResultDialog(
+            context, 'Error', 'Someone is already sharing the video');
+      } else {
+        await enterUrlDialog(context);
+        if (!isDialogCanceled) {
+          _dolbyioCommsSdkFlutterPlugin.videoPresentation
+              .start(urlTextController.text);
+        }
+      }
+    } catch (error) {
+      if (!mounted) return;
+      showResultDialog(context, 'Error', error.toString());
+    } finally {
+      isDialogCanceled = false;
     }
   }
 
