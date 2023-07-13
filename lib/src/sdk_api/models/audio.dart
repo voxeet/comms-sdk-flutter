@@ -190,3 +190,38 @@ enum VoiceFont {
     );
   }
 }
+
+/// The RecorderStatus model gathers all possible statuses of audio samples recording for audio preview.
+///
+/// This model is available in SDK 3.10 and later.
+enum RecorderStatus {
+  /// There is no recording available.
+  noRecordingAvailable("NoRecordingAvailable"),
+
+  /// The recording is available.
+  recordingAvailable("RecordingAvailable"),
+
+  /// Recording is in progress.
+  recording('Recording'),
+
+  /// The recording is played.
+  playing('Playing'),
+
+  /// The audio session configuration is restarted; there are no recording in the memory.
+  released('Released');
+
+  final String _value;
+
+  const RecorderStatus(this._value);
+
+  String encode() {
+    return _value;
+  }
+
+  static RecorderStatus decode(String? value) {
+    return RecorderStatus.values.firstWhere(
+      (element) => element._value == value,
+      orElse: () => throw Exception("Invalid enum name"),
+    );
+  }
+}

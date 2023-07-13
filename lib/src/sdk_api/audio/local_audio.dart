@@ -14,6 +14,9 @@ class LocalAudio {
     "local_audio",
   );
 
+  /// Audio preview module to test participant audio settings.
+  final preview = AudioPreview();
+
   /// Sets the local participant's audio capture mode in Dolby Voice conferences.
   Future<void> setCaptureMode(AudioCaptureOptions options) async {
     return await _methodChannel.invokeMethod<void>(
