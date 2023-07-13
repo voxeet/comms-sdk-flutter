@@ -15,6 +15,7 @@ import '/widgets/dialogs.dart';
 import '/widgets/circular_progress_indicator.dart';
 import '/widgets/switch_option.dart';
 import '/permission_helper.dart';
+import 'audio_preview_screen.dart';
 import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
 import 'replay_screen.dart';
@@ -399,6 +400,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                   },
                   color: Colors.deepPurple,
                 ),
+                const SizedBox(height: 16),
+                PrimaryButton(
+                  widgetText: const Text('Audio preview'),
+                  onPressed: () {
+                    navigateToAudioPreviewScreen();
+                  },
+                  color: Colors.deepPurple,
+                ),
               ],
             ),
           ),
@@ -585,6 +594,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ParticipantScreen(isSpatialAudio: spatialAudio),
+      ),
+    );
+  }
+
+  void navigateToAudioPreviewScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AudioPreviewScreen(),
       ),
     );
   }
