@@ -16,4 +16,13 @@ import Foundation
         closeHasRun = true
         completion?(closeReturn)
     }
+
+    var updateParticipantInfoHasRun: Bool = false
+    var updateParticipantInfoArgs: (name: String, avatarUrl: String)?
+    var updateParticipantInfoReturn: NSError?
+    public func updateParticipantInfo(name: String, avatarUrl: String, completion: ((_ error: NSError?) -> Void)? = nil) {
+        updateParticipantInfoHasRun = true
+        updateParticipantInfoArgs = (name: name, avatarUrl: avatarUrl)
+        completion?(updateParticipantInfoReturn)
+    }
 }

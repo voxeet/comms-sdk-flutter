@@ -22,6 +22,26 @@ class SessionServiceBinding: Binding {
         }
 	}
 
+    /// Updates the local participant's name and avatar URL.
+    /// - Parameters:
+    ///   - flutterArguments: Method arguments passed from Flutter.
+    ///   - completionHandler: Call methods on this instance when execution has finished.
+    func updateParticipantInfo(
+        flutterArguments: FlutterMethodCallArguments,
+        completionHandler: FlutterMethodCallCompletionHandler
+    ) {
+        do {
+            let name: String = try flutterArguments.asDictionary(argKey: "name").decode()
+            let avatarUrl: String = try flutterArguments.asDictionary(argKey: "avatarUrl").decode()
+
+            VoxeetSDK.shared.session.updateParticipantInfo(name: name, avatarUrl: avatarUrl) { error in
+                completionHandler.handleError(error)?.orSuccess()
+            }
+        } catch {
+            completionHandler.failure(error)
+        }
+    }
+
 	/// Closes the current session.
 	/// Close a session is like a logout, it will stop the socket and stop sending VoIP push notification.
 	/// - Parameters:
@@ -66,6 +86,8 @@ extension SessionServiceBinding: FlutterBinding {
         switch methodName {
         case "open":
             open(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "updateParticipantInfo":
+            updateParticipantInfo(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "close":
             close(completionHandler: completionHandler)
         case "getParticipant":

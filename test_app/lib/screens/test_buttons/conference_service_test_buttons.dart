@@ -1,4 +1,5 @@
 import 'package:dolbyio_comms_sdk_flutter_example/conference_ext.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/widgets/update_participant_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import '../../widgets/spatial_extensions/spatial_values_model.dart';
 import '/widgets/secondary_button.dart';
 import '/widgets/dialogs.dart';
 import 'dart:convert';
+import "dart:developer" as dev;
 
 class ConferenceServiceTestButtons extends StatefulWidget {
   const ConferenceServiceTestButtons({Key? key}) : super(key: key);
@@ -36,6 +38,9 @@ class _ConferenceServiceTestButtonsState
             text: 'Get participant', onPressed: () => getParticipant()),
         SecondaryButton(
             text: 'Get participants', onPressed: () => getParticipants()),
+        SecondaryButton(
+            text: 'Update participant',
+            onPressed: () => updateParticipant(context)),
         SecondaryButton(
             text: 'Fetch conference', onPressed: () => fetchConference()),
         SecondaryButton(text: 'Current conference', onPressed: () => current()),
@@ -103,6 +108,35 @@ class _ConferenceServiceTestButtonsState
       if (!mounted) return;
       showResultDialog(context, 'Error', error.toString());
     }
+  }
+
+  void updateParticipant(BuildContext dialogContext) {
+    showDialog(
+        context: dialogContext,
+        builder: (ctx) => AlertDialog(
+            title: const Text('Update participant dialog'),
+            content: UpdateParticipantWidget(
+              onUpdateConfirm: (participantName, avatarUrl) {
+                _dolbyioCommsSdkFlutterPlugin.session
+                    .updateParticipantInfo(participantName, avatarUrl)
+                    .then((value) {
+                  dev.log("Success");
+                  if (mounted) {
+                    showResultDialog(context, "Success",
+                        "Participant updated: new name: $participantName, avatarUrl: $avatarUrl");
+                  }
+                }).onError((error, stackTrace) {
+                  dev.log("Error: $error");
+                  if (mounted) {
+                    showResultDialog(context, "Error", error.toString());
+                  }
+                });
+                Navigator.of(ctx).pop();
+              },
+              onCancel: () {
+                Navigator.of(ctx).pop();
+              },
+            )));
   }
 
   Future<void> fetchConference() async {
