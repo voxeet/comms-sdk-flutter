@@ -3,11 +3,13 @@ import 'draggable_widget.dart';
 
 class ButtonOverlayWidget extends OverlayBaseWidget {
   void Function() onPressed;
+  void Function()? onLongPressed;
   OverlayEntry? _overlayEntry;
   final FloatingButtonUpdateController _widgetUpdateController = FloatingButtonUpdateController();
 
   ButtonOverlayWidget({
-    required this.onPressed
+    required this.onPressed,
+    this.onLongPressed,
   });
 
   @override
@@ -30,6 +32,7 @@ class ButtonOverlayWidget extends OverlayBaseWidget {
                   Offset(d.delta.dx, d.delta.dy));
             },
             onPressed: onPressed,
+            onLongPressed: onLongPressed,
             controller: _widgetUpdateController,
           ));
       _overlayEntry = overlayEntry;
@@ -51,6 +54,7 @@ class LoggerOverlayWidget extends OverlayBaseWidget {
   List<String> logs = [];
   final double dragButtonOffset = 25;
   double height = 240;
+  bool _isScrollMode = true;
 
   @override
   void showOverlay(OverlayState? overlayState, { OverlayEntry? above, OverlayEntry? below}) {
@@ -115,8 +119,17 @@ class LoggerOverlayWidget extends OverlayBaseWidget {
   }
 
   void putMsg(String msg) {
-    logs.add(msg);
+    logs.insert(0, msg);
     _logsListController.updateLogs(logs);
+  }
+
+  void changeMode() {
+    _isScrollMode = !_isScrollMode;
+    if (_isScrollMode) {
+      _logsListController.changeToScrollingMode();
+    } else {
+      _logsListController.changeToTransparentMode();
+    }
   }
 }
 
@@ -135,6 +148,7 @@ abstract class OverlayBaseWidget {
 class FloatingButtonOverlay extends StatefulWidget {
   final Function(DragUpdateDetails)? onTap;
   final VoidCallback? onPressed;
+  final Function()? onLongPressed;
   final FloatingButtonUpdateController controller;
   final FloatingPosition startPosition;
   final IconData buttonIcon;
@@ -145,6 +159,7 @@ class FloatingButtonOverlay extends StatefulWidget {
     Key? key,
     this.onTap,
     this.onPressed,
+    this.onLongPressed,
     required this.controller,
     this.startPosition = const FloatingPosition(left: 0, top: 20),
     this.buttonIcon = Icons.logo_dev,
@@ -153,7 +168,7 @@ class FloatingButtonOverlay extends StatefulWidget {
   }): super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _FloatingButtonOverlayState();
+  State<StatefulWidget> createState() => FloatingButtonOverlayState();
 }
 
 enum FloatingButtonSize {
@@ -162,10 +177,10 @@ enum FloatingButtonSize {
   large
 }
 
-class _FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
+class FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
   late FloatingPosition _position;
 
-  _FloatingButtonOverlayState();
+  FloatingButtonOverlayState();
 
   @override
   void initState() {
@@ -190,26 +205,34 @@ class _FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
   }
 
   Widget _createButton(BuildContext context) {
+    FloatingActionButton floatingActionButton;
     switch(widget.buttonSize) {
       case FloatingButtonSize.small:
-        return FloatingActionButton.small(
+        floatingActionButton = FloatingActionButton.small(
           onPressed: widget.onPressed,
           backgroundColor: widget.backgroundColor,
           child: Icon(widget.buttonIcon),
         );
+        break;
       case FloatingButtonSize.large:
-        return FloatingActionButton.large(
+        floatingActionButton = FloatingActionButton.large(
           onPressed: widget.onPressed,
           backgroundColor: widget.backgroundColor,
           child: Icon(widget.buttonIcon),
         );
+        break;
       default:
-        return FloatingActionButton(
+        floatingActionButton = FloatingActionButton(
           onPressed: widget.onPressed,
           backgroundColor: widget.backgroundColor,
           child: Icon(widget.buttonIcon),
+
         );
     }
+    return InkWell(
+      onLongPress: widget.onLongPressed,
+      child: floatingActionButton,
+    );
   }
 
   void _updatePosition(Offset offset) {
@@ -231,10 +254,16 @@ class _FloatingButtonOverlayState extends State<FloatingButtonOverlay> {
       _position = FloatingPosition(left: left, right: right, top: top, bottom: bottom);
     });
   }
+
+  void update(Function() action) {
+    setState(() {
+      action.call();
+    });
+  }
 }
 
 class FloatingButtonUpdateController {
-  _FloatingButtonOverlayState? _state;
+  FloatingButtonOverlayState? _state;
   void updatePosition(Offset offset) {
     _state?._updatePosition(offset);
   }
@@ -280,7 +309,9 @@ class LogsListWidget extends StatefulWidget {
 
 class _LogsListWidgetState extends State<LogsListWidget> {
   late List<String> _logs;
+  bool _ignorePointers = false;
   double _height = 0;
+  Color _backgroundColor = const Color(0x992979FF);
 
   @override
   void initState() {
@@ -296,15 +327,18 @@ class _LogsListWidgetState extends State<LogsListWidget> {
         left: 0,
         right: 0,
         bottom: 0,
-        child: Container(
-            height: _height,
-            color: const Color.fromARGB(200, 150, 160, 140),
-            child: ListView.builder(
-              itemCount: _logs.length,
-              itemBuilder: (context, index) {
-                return Text(
-                    _logs[index], style: _getLogTextStyle(context));
-              },
+        child: IgnorePointer(
+            ignoring: _ignorePointers,
+            child: Container(
+                height: _height,
+                color: _backgroundColor,
+                child: ListView.builder(
+                  itemCount: _logs.length,
+                  itemBuilder: (context, index) {
+                    return Text(
+                        _logs[index], style: _getLogTextStyle(context));
+                  },
+                )
             )
         )
     );
@@ -314,7 +348,7 @@ class _LogsListWidgetState extends State<LogsListWidget> {
     return DefaultTextStyle
         .of(context)
         .style
-        .apply(fontSizeFactor: 0.25);
+        .apply(fontSizeFactor: 0.25, color: Colors.black, decorationColor: null);
   }
 
   void _updateLogs(List<String> logs) {
@@ -326,6 +360,20 @@ class _LogsListWidgetState extends State<LogsListWidget> {
   void _changeHeight(double newHeight) {
     setState(() {
       _height = newHeight >= 0 ? newHeight : 0;
+    });
+  }
+
+  void changeToScrollingMode() {
+    setState(() {
+      _backgroundColor = const Color(0x992979FF);
+      _ignorePointers = false;
+    });
+  }
+
+  void changeToTransparentMode() {
+    setState(() {
+      _backgroundColor = const Color(0x222979FF);
+      _ignorePointers = true;
     });
   }
 }
@@ -343,5 +391,13 @@ class LogsListController {
 
   void changeHeight(double newHeight) {
     _state?._changeHeight(newHeight);
+  }
+
+  void changeToScrollingMode() {
+    _state?.changeToScrollingMode();
+  }
+
+  void changeToTransparentMode() {
+    _state?.changeToTransparentMode();
   }
 }

@@ -12,7 +12,6 @@ class DraggableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return GestureDetector(
       onPanUpdate: onTap,
       child: Card(

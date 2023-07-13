@@ -15,14 +15,18 @@ class LoggerView {
 
   void showOverlay(OverlayState? overlayState) {
     _buttonOverlay ??= ButtonOverlayWidget(
-          onPressed: () {
-            isVisible = !isVisible;
-            if (isVisible) {
-              _loggerWidget.showOverlay(overlayState, below: _buttonOverlay?.getEntry());
-            } else {
-              _loggerWidget.hideOverlay();
-            }
-          });
+      onPressed: () {
+        isVisible = !isVisible;
+        if (isVisible) {
+          _loggerWidget.showOverlay(
+              overlayState, below: _buttonOverlay?.getEntry());
+        } else {
+          _loggerWidget.hideOverlay();
+        }
+      },
+      onLongPressed: () {
+        _loggerWidget.changeMode();
+      },);
     _buttonOverlay?.showOverlay(overlayState);
   }
 
