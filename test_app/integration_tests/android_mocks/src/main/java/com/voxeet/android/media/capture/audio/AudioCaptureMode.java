@@ -27,7 +27,7 @@ public class AudioCaptureMode {
 
     @NotNull
     public static AudioCaptureMode standard(StandardNoiseReduction noiseReduction, VoiceFont voiceFont) {
-        return new AudioCaptureMode(Mode.STANDARD, noiseReduction.transform());
+        return new AudioCaptureMode(Mode.STANDARD, noiseReduction.transform(), voiceFont);
     }
 
     @NotNull

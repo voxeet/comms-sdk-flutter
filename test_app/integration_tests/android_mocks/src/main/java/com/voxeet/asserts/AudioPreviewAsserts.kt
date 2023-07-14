@@ -42,91 +42,78 @@ class AudioPreviewAsserts : MethodDelegate {
 
     private fun assertStatusArgs(args: Map<String, Any>?) {
         val mockHasRun = VoxeetSDK.audio().local.preview().statusHasRun
-        if (args!!.containsKey("hasRun")) {
-            AssertUtils.compareWithExpectedValue(
-                mockHasRun,
-                args!!["hasRun"],
-                "audio preview status not run"
-            )
-        } else {
-            throw KeyNotFoundException("hasRun key not found")
-        }
+        val hasRun = args?.get("hasRun") ?: throw KeyNotFoundException("hasRun key not found")
+
+        AssertUtils.compareWithExpectedValue(
+            mockHasRun,
+            hasRun,
+            "audio preview status not run"
+        )
     }
 
     private fun assertGetCaptureModeArgs(args: Map<String, Any>?) {
         val mockHasRun = VoxeetSDK.audio().local.preview().statusHasRun
-        if (args!!.containsKey("hasRun")) {
-            AssertUtils.compareWithExpectedValue(
-                mockHasRun,
-                args!!["hasRun"],
-                "audio preview get capture mode not run"
-            )
-        } else {
-            throw KeyNotFoundException("hasRun key not found")
-        }
+        val hasRun = args?.get("hasRun") ?: throw KeyNotFoundException("hasRun key not found")
+        AssertUtils.compareWithExpectedValue(
+            mockHasRun,
+            hasRun,
+            "audio preview get capture mode not run"
+        )
     }
 
     private fun assertSetCaptureModeArgs(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
         val calledArgs: Map<String, Any> =
-            preview.setCaptureModeArgs ?: throw NullPointerException("setCaptureModeArgs is null");
-        if (args?.containsKey("mode") == true) {
-            throw KeyNotFoundException("Key: mode not found")
-        } else {
-            AssertUtils.compareWithExpectedValue<Any?>(
-                calledArgs["mode"],
-                args?.get("mode"),
-                "Mode is incorrect"
-            )
-        }
-        if (args?.containsKey("noiseReduction") == true) {
-            throw KeyNotFoundException("Key: noiseReduction not found")
-        } else {
-            AssertUtils.compareWithExpectedValue<Any?>(
-                calledArgs["noiseReduction"],
-                args?.get("noiseReduction"),
-                "NoiseReduction is incorrect"
-            )
-        }
-        if (args?.containsKey("voiceFont") == true) {
-            throw KeyNotFoundException("Key: voiceFont not found")
-        } else {
-            AssertUtils.compareWithExpectedValue<Any?>(
-                calledArgs["voiceFont"],
-                args?.get("voiceFont"),
-                "VoiceFont is incorrect"
-            )
-        }
+            preview.setCaptureModeArgs ?: throw NullPointerException("setCaptureModeArgs is null")
+        val mode = args?.get("mode") ?: throw KeyNotFoundException("Key: mode not found")
+        val noiseReduction = args["noiseReduction"]
+            ?: throw KeyNotFoundException("Key: noiseReduction not found")
+        val voiceFont =
+            args["voiceFont"] ?: throw KeyNotFoundException("Key: voiceFont not found")
+
+        AssertUtils.compareWithExpectedValue<Any?>(
+            calledArgs["mode"],
+            mode,
+            "Mode is incorrect"
+        )
+
+        AssertUtils.compareWithExpectedValue<Any?>(
+            calledArgs["noiseReduction"],
+            noiseReduction,
+            "NoiseReduction is incorrect"
+        )
+
+        AssertUtils.compareWithExpectedValue<Any?>(
+            calledArgs["voiceFont"],
+            voiceFont,
+            "VoiceFont is incorrect"
+        )
     }
 
     private fun assertRecordArgs(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
         val calledArgs: Map<String, Any> =
             preview.recordArgs ?: throw NullPointerException("recordArgs is null");
-        if (args?.containsKey("duration") == true) {
-            throw KeyNotFoundException("Key: duration not found")
-        } else {
-            AssertUtils.compareWithExpectedValue<Any?>(
-                calledArgs["duration"],
-                args?.get("duration"),
-                "Duration is incorrect"
-            )
-        }
+        val duration = args?.get("duration") ?: throw KeyNotFoundException("Key: duration not found")
+
+        AssertUtils.compareWithExpectedValue<Any?>(
+            calledArgs["duration"],
+            duration,
+            "Duration is incorrect"
+        )
     }
 
     private fun assertPlayArgs(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
         val calledArgs: Map<String, Any> =
-            preview.playArgs ?: throw NullPointerException("playArgs is null");
-        if (args?.containsKey("loop") == true) {
-            throw KeyNotFoundException("Key: loop not found")
-        } else {
-            AssertUtils.compareWithExpectedValue<Any?>(
-                calledArgs["loop"],
-                args?.get("loop"),
-                "Loop is incorrect"
-            )
-        }
+            preview.playArgs ?: throw NullPointerException("playArgs is null")
+        val loop = args?.get("loop") ?: throw KeyNotFoundException("Key: loop not found")
+        AssertUtils.compareWithExpectedValue<Any?>(
+            calledArgs["loop"],
+            loop,
+            "Loop is incorrect"
+        )
+
     }
 
     private fun assertCancelArgs(args: Map<String, Any>?) {

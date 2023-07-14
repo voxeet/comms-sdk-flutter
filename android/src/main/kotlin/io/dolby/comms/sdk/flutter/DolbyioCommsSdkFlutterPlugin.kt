@@ -41,7 +41,6 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
     private lateinit var videoViewFactory: NativeViewFactory
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        CodecDescriptorFactory.activateOMXGoogle(true)
         val videoPresentationHolder = VideoPresentationHolder()
         val filePresentationHolder = FilePresentationHolder()
         val filePresentationEventEmitter = FilePresentationEventEmitter(EventChannelHandler(FILE_PRESENTATION), filePresentationHolder)

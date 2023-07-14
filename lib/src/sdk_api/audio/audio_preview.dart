@@ -21,7 +21,8 @@ class AudioPreview {
   /// Gets the recording status.
   /// Returns RecorderStatus enum
   Future<RecorderStatus> status() async {
-    return await _methodChannel.invokeMethod("status");
+    var status = await _methodChannel.invokeMethod("status");
+    return Future(() => RecorderStatus.decode(status));
   }
 
   /// Gets an audio capture mode for the audio preview.

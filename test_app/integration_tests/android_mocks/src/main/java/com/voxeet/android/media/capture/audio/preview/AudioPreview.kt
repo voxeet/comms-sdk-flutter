@@ -18,9 +18,6 @@ class AudioPreview {
     var playArgs: Map<String, Any>? = null
 
     var captureMode: AudioCaptureMode = AudioCaptureMode.unprocessed()
-        set(value) {
-            field = value
-        }
 
     var status: RecorderStatus = RecorderStatus.NoRecordingAvailable
         private set(value) {
