@@ -4,6 +4,7 @@ import WebRTC
 
 typealias VTAudioCaptureMode = AudioCaptureMode
 typealias VTVoiceFont = VoiceFont
+typealias VTRecorderStatus = RecorderStatus
 
 extension DTO {
 
@@ -23,7 +24,7 @@ extension DTO {
             }
         }
 
-        func toSdk() throws -> VTAudioCaptureMode?  {
+        func toSdk() throws -> VTAudioCaptureMode  {
             switch mode.mode {
             case .standard:
                 guard let noiseReduction = noiseReduction?.noiseReduction,
@@ -152,6 +153,39 @@ extension DTO {
             case .swarm: try container.encode("swarm")
             case .amRadio: try container.encode("am_radio")
             case .none: try container.encode("none")
+            }
+        }
+    }
+    
+    struct RecorderStatus: Codable {
+        
+        let recorderStatus: VTRecorderStatus
+        
+        init(recorderStatus: VTRecorderStatus) {
+            self.recorderStatus = recorderStatus
+        }
+        
+        init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+            switch try container.decode(String.self) {
+            case "NoRecordingAvailable": recorderStatus = .noRecordingAvailable
+            case "RecordingAvailable": recorderStatus = .recordingAvailable
+            case "Recording": recorderStatus = .recording
+            case "Playing": recorderStatus = .playing
+            case "Released": recorderStatus = .released
+            default: throw EncoderError.decoderFailed()
+            }
+        }
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            switch recorderStatus {
+            case .noRecordingAvailable: try container.encode("NoRecordingAvailable")
+            case .recordingAvailable: try container.encode("RecordingAvailable")
+            case .recording: try container.encode("Recording")
+            case .playing: try container.encode("Playing")
+            case .released: try container.encode("Released")
+            @unknown default: throw EncoderError.encoderFailed()
             }
         }
     }
