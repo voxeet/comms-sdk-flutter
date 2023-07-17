@@ -139,6 +139,26 @@ void audioPreviewTest() {
           assertLabel: "assertReleaseArgs",
           expected: {"hasRun": true});
     });
+
+    testWidgets('AudioPreview: onStatusChange', (tester) async {
+
+      await runNative(
+        methodChannel: audioPreviewAssertsMethodChannel,
+        label: "emitStatusChangedEvents",
+        args: { });
+
+      List<Event<AudioPreviewEventNames, RecorderStatus>> receivedEvents = [];
+      await for (final event in dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.onStatusChanged()) {
+        receivedEvents.add(event);
+        if (receivedEvents.length >= recorderStatuses.length) {
+          break;
+        }
+      }
+
+      for (var i = 0; i < recorderStatuses.length; i++) {
+        expect(recorderStatuses[i], receivedEvents[i].body);
+      }
+    });
   });
 }
 

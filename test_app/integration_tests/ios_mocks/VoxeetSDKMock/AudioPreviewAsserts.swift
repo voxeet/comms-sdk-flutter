@@ -17,9 +17,7 @@ public class AudioPreviewAsserts {
     }
 
     private func getStatus(args: [String: Any]) throws {
-        VoxeetSDK.shared.audio.local.preview.statusReturn = [
-            .noRecordingAvailable, .recordingAvailable, .recording, .playing, .released
-        ].reversed()
+        VoxeetSDK.shared.audio.local.preview.statusReturn = recorderStatuses.reversed()
     }
 
     private func assertStatusArgs(args: [String: Any]) throws {
@@ -124,6 +122,30 @@ public class AudioPreviewAsserts {
             try nativeAssertEquals(mockArgs, hasRun)
         }
     }
+    
+    
+    private func emitStatusChangedEvents(args: [String: Any]) throws {
+        let onStatusChangedClosure = VoxeetSDK.shared.audio.local.preview.onStatusChanged
+        let conference = try ConferenceServiceAssertUtils.createVTConference(type: 6)
+        let queue = DispatchQueue(label: "conference.asserts.test.queue")
+        
+        var statuses = recorderStatuses
+        statuses.reverse()
+        var sendStatusAfterHalfSecond: (() -> Void)?
+        sendStatusAfterHalfSecond = {
+            queue.asyncAfter(deadline: .now() + 0.5) {
+                guard let status = statuses.popLast() else {
+                    return
+                }
+                onStatusChangedClosure?(status)
+                sendStatusAfterHalfSecond?()
+            }
+        }
+        
+        queue.asyncAfter(deadline: .now() + 1) {
+            sendStatusAfterHalfSecond?()
+        }
+    }
 }
 
 extension AudioPreviewAsserts: SDKAsserts {
@@ -152,6 +174,8 @@ extension AudioPreviewAsserts: SDKAsserts {
                 
             case "release": try release(args: args)
             case "assertReleaseArgs": try assertReleaseArgs(args: args)
+                
+            case "emitStatusChangedEvents": try emitStatusChangedEvents(args: args)
 
             default: throw SDKAssertError.unknownAssert
             }
@@ -161,6 +185,10 @@ extension AudioPreviewAsserts: SDKAsserts {
         }
     }
 }
+
+private let recorderStatuses: [RecorderStatus] = [
+    .noRecordingAvailable, .recordingAvailable, .recording, .playing, .released
+]
 
 private let voiceFonts: [VoiceFont] = [
     .none,

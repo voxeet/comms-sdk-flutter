@@ -219,11 +219,11 @@ enum RecordingServiceEventNames implements EnumWithStringValue {
   }
 }
 
-/// The NotificationServiceEventNames enum gathers the NotificationService events.
+/// The AudioPreviewEventNames enum gathers the AudioPreview events.
 ///
 /// {@category Models}
 enum AudioPreviewEventNames implements EnumWithStringValue {
-  /// Emitted when an application user receives an invitation.
+  /// Emitted when the status of the audio preview changes.
   onStatusChanged('EVENT_AUDIO_PREVIEW_STATUS_CHANGED');
 
   @override

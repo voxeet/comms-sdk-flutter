@@ -2,6 +2,20 @@ import Foundation
 import VoxeetSDK
 
 class AudioPreviewServiceBinding: Binding {
+    
+    override init(name: String, registrar: FlutterPluginRegistrar) {
+        super.init(name: name, registrar: registrar)
+        VoxeetSDK.shared.audio.local.preview.onStatusChanged = { [weak self] (status) -> Void in
+            do {
+                try self?.nativeEventEmitter.sendEvent(
+                    event: EventKeys.statusChanged,
+                    body: DTO.RecorderStatus(recorderStatus: status)
+                )
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
+    }
 
     /// Retrieves the status.
     /// - Parameters:
@@ -138,6 +152,11 @@ extension AudioPreviewServiceBinding: FlutterBinding {
             completionHandler.methodNotImplemented()
         }
     }
+}
+
+private enum EventKeys: String, CaseIterable {
+    /// Emitted when the status changes.
+    case statusChanged = "EVENT_AUDIO_PREVIEW_STATUS_CHANGED"
 }
 
 private func audioPreview() -> AudioPreview {
