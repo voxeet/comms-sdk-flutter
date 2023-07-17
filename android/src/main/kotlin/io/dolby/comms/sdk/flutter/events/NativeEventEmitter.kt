@@ -11,16 +11,24 @@ abstract class NativeEventEmitter(private val eventChannel: EventChannelHandler)
 
     fun onAttached(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         eventChannel.onAttached(flutterPluginBinding)
-        VoxeetSDK.instance().register(this)
+        registerEventEmitter()
     }
 
     fun onDetached() {
-        VoxeetSDK.instance().unregister(this)
+        unregisterEventEmitter()
         eventChannel.onDetached()
     }
 
     // Event needs to be emitted on main thread
     fun emit(key: String, data: Any?) = mainHandler.post {
         eventChannel.emitEvent(key, data)
+    }
+
+    protected open fun registerEventEmitter() {
+        VoxeetSDK.instance().register(this)
+    }
+
+    protected open fun unregisterEventEmitter() {
+        VoxeetSDK.instance().unregister(this)
     }
 }

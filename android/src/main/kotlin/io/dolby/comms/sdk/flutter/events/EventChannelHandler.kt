@@ -22,6 +22,7 @@ class EventChannelHandler(private val channelName: String) : EventChannel.Stream
     }
 
     override fun onListen(arguments: Any?, callback: EventChannel.EventSink?) {
+        android.util.Log.d("[KB]", "arguments: ${arguments}")
         eventCallback = callback
     }
 

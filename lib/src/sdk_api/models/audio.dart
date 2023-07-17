@@ -68,12 +68,13 @@ enum NoiseReduction {
 
   const NoiseReduction(this._value);
 
-  static NoiseReduction decode(String? value) {
-    final lowerCaseValue = value?.toLowerCase();
-    return NoiseReduction.values.firstWhere(
-      (element) => element._value == lowerCaseValue,
-      orElse: () => throw Exception("Invalid enum name"),
-    );
+  static NoiseReduction? decode(String? value) {
+    return value != null
+        ? NoiseReduction.values.firstWhere(
+            (element) => element._value == value.toLowerCase(),
+            orElse: () => throw Exception("Invalid enum name"),
+          )
+        : null;
   }
 
   String encode() {
@@ -183,11 +184,12 @@ enum VoiceFont {
   }
 
   static VoiceFont decode(String? value) {
-    final lowerCaseValue = value?.toLowerCase();
-    return VoiceFont.values.firstWhere(
-      (element) => element._value == lowerCaseValue,
-      orElse: () => throw Exception("Invalid enum name"),
-    );
+    return value != null
+        ? VoiceFont.values.firstWhere(
+            (element) => element._value == value.toLowerCase(),
+            orElse: () => throw Exception("Invalid enum name"),
+          )
+        : VoiceFont.none;
   }
 }
 
