@@ -1154,26 +1154,23 @@ void conferenceServiceTest() {
     });
   });
 
-  // Commented out because is not working yet
-  // testWidgets('ConferenceService: onParticipantsChange', (tester) async {
+  testWidgets('ConferenceService: onParticipantsChange', (tester) async {
 
-  //   await runNative(
-  //     methodChannel: conferenceServiceAssertsMethodChannel,
-  //     label: "emitParticipantUpdatedEvents",
-  //     args: { });
+    await runNative(
+      methodChannel: conferenceServiceAssertsMethodChannel,
+      label: "emitParticipantUpdatedEvents",
+      args: { });
 
-  //   // print("entering loop");
-  //   List<Event<ConferenceServiceEventNames, Participant>> receivedEvents = [];
-  //   await for (final event in dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange()) {
-  //     print("receiving event");
-  //     receivedEvents.add(event);
-  //     if (receivedEvents.length > 2) {
-  //       break;
-  //     }
-  //   }
+    List<Event<ConferenceServiceEventNames, Participant>> receivedEvents = [];
+    await for (final event in dolbyioCommsSdkFlutterPlugin.conference.onParticipantsChange()) {
+      receivedEvents.add(event);
+      if (receivedEvents.length > 2) {
+        break;
+      }
+    }
 
-  //   expect(receivedEvents[0].body.id, "participant_id_6_1");
-  //   expect(receivedEvents[1].body.id, "participant_id_6_2");
-  //   expect(receivedEvents[2].body.id, "participant_id_6_1");
-  // });
+    expect(receivedEvents[0].body.id, "participant_id_6_1");
+    expect(receivedEvents[1].body.id, "participant_id_6_2");
+    expect(receivedEvents[2].body.id, "participant_id_6_1");
+  });
 }
