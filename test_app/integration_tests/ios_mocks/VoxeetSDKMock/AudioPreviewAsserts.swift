@@ -131,19 +131,19 @@ public class AudioPreviewAsserts {
         
         var statuses = recorderStatuses
         statuses.reverse()
-        var sendStatusAfterHalfSecond: (() -> Void)?
-        sendStatusAfterHalfSecond = {
-            queue.asyncAfter(deadline: .now() + 0.5) {
+        var sendStatusWithDelay: (() -> Void)?
+        sendStatusWithDelay = {
+            queue.asyncAfter(deadline: .now() + 0.1) {
                 guard let status = statuses.popLast() else {
                     return
                 }
                 onStatusChangedClosure?(status)
-                sendStatusAfterHalfSecond?()
+                sendStatusWithDelay?()
             }
         }
         
-        queue.asyncAfter(deadline: .now() + 1) {
-            sendStatusAfterHalfSecond?()
+        queue.asyncAfter(deadline: .now() + 1.5) {
+            sendStatusWithDelay?()
         }
     }
 }
