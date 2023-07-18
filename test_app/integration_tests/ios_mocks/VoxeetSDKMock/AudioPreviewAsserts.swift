@@ -126,7 +126,6 @@ public class AudioPreviewAsserts {
     
     private func emitStatusChangedEvents(args: [String: Any]) throws {
         let onStatusChangedClosure = VoxeetSDK.shared.audio.local.preview.onStatusChanged
-        let conference = try ConferenceServiceAssertUtils.createVTConference(type: 6)
         let queue = DispatchQueue(label: "conference.asserts.test.queue")
         
         var statuses = recorderStatuses

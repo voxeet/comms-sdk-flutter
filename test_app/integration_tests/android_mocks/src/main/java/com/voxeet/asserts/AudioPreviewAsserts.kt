@@ -1,9 +1,16 @@
 package com.voxeet.asserts
 
 import com.voxeet.VoxeetSDK
+import com.voxeet.android.media.capture.audio.AudioCaptureMode
+import com.voxeet.android.media.capture.audio.VoiceFont
+import com.voxeet.android.media.capture.audio.noise.StandardNoiseReduction
+import com.voxeet.android.media.capture.audio.preview.RecorderStatus
 import io.dolby.asserts.AssertUtils
 import io.dolby.asserts.MethodDelegate
 import io.dolby.asserts.MethodDelegate.AssertionFailed
+import java.util.concurrent.Callable
+import java.util.concurrent.Executors
+
 
 class AudioPreviewAsserts : MethodDelegate {
     override fun onAction(
@@ -20,6 +27,7 @@ class AudioPreviewAsserts : MethodDelegate {
                 ::play.name -> play(args)
                 ::cancel.name -> cancel()
                 ::release.name -> release()
+                ::emitStatusChangedEvents.name -> emitStatusChangedEvents()
                 ::assertStatusArgs.name -> assertStatusArgs(args)
                 ::assertGetCaptureModeArgs.name -> assertGetCaptureModeArgs(args)
                 ::assertSetCaptureModeArgs.name -> assertSetCaptureModeArgs(args)
@@ -41,146 +49,186 @@ class AudioPreviewAsserts : MethodDelegate {
     }
 
     private fun assertStatusArgs(args: Map<String, Any>?) {
-        val mockHasRun = VoxeetSDK.audio().local.preview().statusHasRun
+        val mockRunCount = VoxeetSDK.audio().local.preview().statusRunCount
         val hasRun = args?.get("hasRun") ?: throw KeyNotFoundException("hasRun key not found")
-
-        AssertUtils.compareWithExpectedValue(
-            mockHasRun,
-            hasRun,
-            "audio preview status not run"
-        )
+        AssertUtils.compareWithExpectedValue(hasRun, mockRunCount > 0, "audio preview status not run")
     }
 
     private fun assertGetCaptureModeArgs(args: Map<String, Any>?) {
-        val mockHasRun = VoxeetSDK.audio().local.preview().statusHasRun
+        val mockReturn = VoxeetSDK.audio().local.preview().captureModeReturn
         val hasRun = args?.get("hasRun") ?: throw KeyNotFoundException("hasRun key not found")
         AssertUtils.compareWithExpectedValue(
-            mockHasRun,
-            hasRun,
-            "audio preview get capture mode not run"
-        )
+                hasRun, mockReturn.size < 1, "audio preview get capture mode not run")
     }
 
     private fun assertSetCaptureModeArgs(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
-        val calledArgs: Map<String, Any> =
-            preview.setCaptureModeArgs ?: throw NullPointerException("setCaptureModeArgs is null")
-        val mode = args?.get("mode") ?: throw KeyNotFoundException("Key: mode not found")
-        val noiseReduction = args["noiseReduction"]
-            ?: throw KeyNotFoundException("Key: noiseReduction not found")
-        val voiceFont =
-            args["voiceFont"] ?: throw KeyNotFoundException("Key: voiceFont not found")
 
-        AssertUtils.compareWithExpectedValue<Any?>(
-            calledArgs["mode"],
-            mode,
-            "Mode is incorrect"
-        )
+        var actualCM = preview.captureModeArgs.removeFirst()
+        var expectedCM = AudioCaptureMode.unprocessed()
+        AssertUtils.compareWithExpectedValue(actualCM.mode, expectedCM.mode, "Mode is incorrect")
+        AssertUtils.compareWithExpectedValue(actualCM.noiseReduction, expectedCM.noiseReduction, "Mode is incorrect")
+        AssertUtils.compareWithExpectedValue(actualCM.voiceFont, expectedCM.voiceFont, "Mode is incorrect")
 
-        AssertUtils.compareWithExpectedValue<Any?>(
-            calledArgs["noiseReduction"],
-            noiseReduction,
-            "NoiseReduction is incorrect"
-        )
-
-        AssertUtils.compareWithExpectedValue<Any?>(
-            calledArgs["voiceFont"],
-            voiceFont,
-            "VoiceFont is incorrect"
-        )
+        for (voiceFont in voiceFonts) {
+            for (noiseReduction in noiseReductions) {
+                actualCM = preview.captureModeArgs.removeFirst()
+                expectedCM = AudioCaptureMode.standard(noiseReduction, voiceFont)
+                AssertUtils.compareWithExpectedValue(actualCM.mode, expectedCM.mode, "Mode is incorrect")
+                AssertUtils.compareWithExpectedValue(actualCM.noiseReduction, expectedCM.noiseReduction, "Mode is incorrect")
+                AssertUtils.compareWithExpectedValue(actualCM.voiceFont, expectedCM.voiceFont, "Mode is incorrect")
+            }
+        }
     }
 
     private fun assertRecordArgs(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
-        val calledArgs: Map<String, Any> =
-            preview.recordArgs ?: throw NullPointerException("recordArgs is null");
-        val duration = args?.get("duration") ?: throw KeyNotFoundException("Key: duration not found")
 
         AssertUtils.compareWithExpectedValue<Any?>(
-            calledArgs["duration"],
-            duration,
+            preview.recordArgs.removeFirst(),
+            1,
             "Duration is incorrect"
+        )
+        AssertUtils.compareWithExpectedValue<Any?>(
+                preview.recordArgs.removeFirst(),
+                10,
+                "Duration is incorrect"
         )
     }
 
     private fun assertPlayArgs(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
-        val calledArgs: Map<String, Any> =
-            preview.playArgs ?: throw NullPointerException("playArgs is null")
-        val loop = args?.get("loop") ?: throw KeyNotFoundException("Key: loop not found")
         AssertUtils.compareWithExpectedValue<Any?>(
-            calledArgs["loop"],
-            loop,
-            "Loop is incorrect"
+                preview.playModeArgs.removeFirst(),
+                true,
+                "Loop is incorrect"
         )
-
+        AssertUtils.compareWithExpectedValue<Any?>(
+                preview.playModeArgs.removeFirst(),
+                false,
+                "Loop is incorrect"
+        )
     }
 
     private fun assertCancelArgs(args: Map<String, Any>?) {
-        val mockHasRun = VoxeetSDK.audio().local.preview().cancelHasRun
-        if (args!!.containsKey("hasRun")) {
-            AssertUtils.compareWithExpectedValue(
-                mockHasRun,
-                args!!["hasRun"],
+        val preview = VoxeetSDK.audio().local.preview()
+        AssertUtils.compareWithExpectedValue(
+                preview.cancelRunCount > 0,
+                true,
                 "audio preview cancel not run"
-            )
-        } else {
-            throw KeyNotFoundException("hasRun key not found")
-        }
+        )
     }
 
     private fun assertReleaseArgs(args: Map<String, Any>?) {
-        val mockHasRun = VoxeetSDK.audio().local.preview().releaseHasRun
-        if (args!!.containsKey("hasRun")) {
-            AssertUtils.compareWithExpectedValue(
-                mockHasRun,
-                args!!["hasRun"],
+        val preview = VoxeetSDK.audio().local.preview()
+        AssertUtils.compareWithExpectedValue(
+                preview.releaseRunCount > 0,
+                true,
                 "audio preview release not run"
-            )
-        } else {
-            throw KeyNotFoundException("hasRun key not found")
-        }
+        )
     }
 
     private fun getStatus() {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.statusHasRun = true;
+        preview.statusRunCount = 0;
+        preview.statusReturn = recorderStatuses.toMutableList()
     }
 
     private fun getCaptureMode() {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.getCaptureModeHasRun = true;
+        preview.captureModeReturn.add(AudioCaptureMode.unprocessed());
+        for (voiceFont in voiceFonts) {
+            for (noiseReduction in noiseReductions) {
+                preview.captureModeReturn.add(AudioCaptureMode.standard(noiseReduction, voiceFont));
+            }
+        }
     }
 
     private fun setCaptureMode(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.setCaptureModeHasRun = true
-        preview.setCaptureModeArgs = args
+        preview.captureModeArgs.clear()
     }
 
     private fun record(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.recordHasRun = true
-        preview.recordArgs = args
+        preview.recordArgs.clear()
+        preview.recordReturn = mutableListOf(true, true)
     }
 
     private fun play(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.playHasRun = true
-        preview.playArgs = args
+        preview.playModeArgs.clear()
+        preview.playModeReturn = mutableListOf(true, true)
     }
 
     private fun cancel() {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.cancelHasRun = true
+        preview.cancelRunCount = 0
+        preview.cancelReturn = mutableListOf(true)
     }
 
     private fun release() {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.releaseHasRun = true
+        preview.releaseRunCount = 0
+        preview.releaseReturn = mutableListOf(true)
+    }
+
+    private fun emitStatusChangedEvents() {
+        val executorService = Executors.newSingleThreadExecutor()
+        val statuses = recorderStatuses.toMutableList()
+        var sendStatusWithDelay = { -> }
+        sendStatusWithDelay = { ->
+            val preview = VoxeetSDK.audio().local.preview()
+            executorService.submit(Callable<Void?> {
+                Thread.sleep(100)
+                val status = statuses.removeFirstOrNull()
+                status?.let { s ->
+                    preview.callback?.let {
+                        cb -> cb(s)
+                        sendStatusWithDelay()
+                    }
+                }
+                null
+            })
+
+        }
+        executorService.submit(Callable<Void?> {
+            Thread.sleep(1000)
+            sendStatusWithDelay()
+            null
+        })
     }
 
     override fun getName(): String {
         return "IntegrationTesting.AudioPreviewAsserts"
     }
 }
+
+private val recorderStatuses = listOf(
+    RecorderStatus.NoRecordingAvailable,
+    RecorderStatus.RecordingAvailable,
+    RecorderStatus.Recording,
+    RecorderStatus.Playing,
+    RecorderStatus.Released
+);
+
+private val voiceFonts = listOf(
+    VoiceFont.NONE,
+    VoiceFont.MASCULINE,
+    VoiceFont.FEMININE,
+    VoiceFont.HELIUM,
+    VoiceFont.DARK_MODULATION,
+    VoiceFont.BROKEN_ROBOT,
+    VoiceFont.INTERFERENCE,
+    VoiceFont.ABYSS,
+    VoiceFont.WOBBLE,
+    VoiceFont.STARSHIP_CAPTAIN,
+    VoiceFont.NERVOUS_ROBOT,
+    VoiceFont.SWARM,
+    VoiceFont.AM_RADIO,
+);
+
+private val noiseReductions = listOf(
+    StandardNoiseReduction.HIGH, 
+    StandardNoiseReduction.LOW
+);

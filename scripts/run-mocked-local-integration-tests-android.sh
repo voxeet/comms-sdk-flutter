@@ -26,7 +26,7 @@ currentFolder=`pwd`
 
 cd test_app
 
-USE_SDK_MOCK=true flutter test integration_tests/mocked/master_test.dart
+USE_SDK_MOCK=true flutter test integration_tests/mocked/master_test.dart -r expanded
 test_exit_code=$?
 
 cd $currentFolder
