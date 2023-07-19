@@ -9,6 +9,7 @@ import 'recording_service_test.dart';
 import 'sdk_test.dart';
 import 'video_presentation_service_test.dart';
 import 'video_service_test.dart';
+import 'audio_preview_test.dart';
 
 void main() {
   conferenceServiceTest();
@@ -21,5 +22,5 @@ void main() {
   sdkTest();
   videoPresentationServiceTest();
   videoServiceTest();
-  // audioPreviewTest();
+  audioPreviewTest();
 }

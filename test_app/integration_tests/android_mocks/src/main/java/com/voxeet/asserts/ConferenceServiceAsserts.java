@@ -9,6 +9,8 @@ import com.voxeet.android.media.spatialisation.SpatialDirection;
 import com.voxeet.android.media.spatialisation.SpatialEnvironment;
 import com.voxeet.android.media.spatialisation.SpatialPosition;
 import com.voxeet.android.media.spatialisation.SpatialScale;
+import com.voxeet.sdk.events.v2.ParticipantAddedEvent;
+import com.voxeet.sdk.events.v2.ParticipantUpdatedEvent;
 import com.voxeet.sdk.json.ConferencePermission;
 import com.voxeet.sdk.models.Conference;
 import com.voxeet.sdk.models.Participant;
@@ -19,8 +21,14 @@ import com.voxeet.sdk.services.builders.ConferenceListenOptions;
 import com.voxeet.sdk.services.builders.VideoForwardingOptions;
 import com.voxeet.sdk.services.conference.AudioProcessing;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 import java.util.Map;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 
 import io.dolby.asserts.AssertUtils;
 import io.dolby.asserts.MethodDelegate;
@@ -128,6 +136,9 @@ public class ConferenceServiceAsserts implements MethodDelegate {
                     break;
                 case "assertListenConfrenceArgs":
                     assertListenConfrenceArgs(args);
+                    break;
+                case "emitParticipantUpdatedEvents":
+                    emitParticipantUpdatedEvents(args);
                     break;
                 default:
                     result.error(new NoSuchMethodError("Method: " + methodName + " not found in " + getName() + " method channel"));
@@ -569,5 +580,45 @@ public class ConferenceServiceAsserts implements MethodDelegate {
         } else {
             AssertUtils.compareWithExpectedValue(fetchArgs, args.get("conferenceId"), "ConferenceId is incorrect");
         }
+    }
+
+    private void emitParticipantUpdatedEvents(Map<String, Object> args) {
+        Conference conference = ConferenceServiceAssertUtils.createConference(6);
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                Thread.sleep(1000);
+                EventBus.getDefault().post(
+                        new ParticipantAddedEvent(conference, conference.getParticipants().get(0))
+                );
+                executorService.submit(new Callable<Void>() {
+                    @Override
+                    public Void call() throws Exception {
+                        Thread.sleep(100);
+                        EventBus.getDefault().post(
+                                new ParticipantAddedEvent(
+                                        conference,
+                                        conference.getParticipants().get(1)
+                                )
+                        );
+                        executorService.submit(new Callable<Void>() {
+                            @Override
+                            public Void call() throws Exception {
+                                EventBus.getDefault().post(
+                                        new ParticipantUpdatedEvent(
+                                                conference,
+                                                conference.getParticipants().get(0)
+                                        )
+                                );
+                                return null;
+                            }
+                        });
+                        return null;
+                    }
+                });
+                return null;
+            }
+        });
     }
 }

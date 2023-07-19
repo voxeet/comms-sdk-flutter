@@ -241,7 +241,7 @@ public class ConferenceServiceAsserts {
         let delegate = VoxeetSDK.shared.conference.delegate
         let conference = try ConferenceServiceAssertUtils.createVTConference(type: 6)
         let queue = DispatchQueue(label: "conference.asserts.test.queue")
-        queue.asyncAfter(deadline: .now() + 10) {
+        queue.asyncAfter(deadline: .now() + 2) {
             delegate?.participantAdded(participant: conference.participants[0])
             queue.asyncAfter(deadline: .now() + 0.5) {
                 delegate?.participantAdded(participant: conference.participants[1])

@@ -5,66 +5,59 @@ import com.voxeet.android.media.capture.audio.AudioCaptureMode
 import com.voxeet.promise.Promise
 
 class AudioPreview {
-    var statusHasRun = false;
-    var setCaptureModeHasRun = false;
-    var getCaptureModeHasRun = false;
-    var recordHasRun = false;
-    var playHasRun = false;
-    var cancelHasRun = false;
-    var releaseHasRun = false;
 
-    var setCaptureModeArgs: Map<String, Any>? = null
-    var recordArgs: Map<String, Any>? = null
-    var playArgs: Map<String, Any>? = null
-
-    var captureMode: AudioCaptureMode = AudioCaptureMode.unprocessed()
-
-    var status: RecorderStatus = RecorderStatus.NoRecordingAvailable
-        private set(value) {
-            val oldStatus = field
-            field = value
-
-            if (oldStatus != value) {
-                callback?.let { it(value) }
-            }
+    var captureModeArgs = mutableListOf<AudioCaptureMode>()
+    var captureModeReturn = mutableListOf<AudioCaptureMode>()
+    var captureMode: AudioCaptureMode
+        get() {
+            return captureModeReturn.removeFirst()
         }
+        set(newValue: AudioCaptureMode) {
+            captureModeArgs.add(newValue)
+        }
+
+    var statusRunCount: Int = 0
+    var statusReturn = mutableListOf<RecorderStatus>()
+    var status: RecorderStatus
+        get() {
+            statusRunCount++
+            return statusReturn.removeAt(0)
+        }
+        private set(newValue: RecorderStatus) { }
+
 
     var callback: ((status: RecorderStatus) -> Unit)? = null
 
-    /**
-     * Start recording if no record or playout is pending
-     */
-    @Suppress("MagicNumber")
+
+    var recordArgs = mutableListOf<Int>()
+    var recordReturn = mutableListOf<Boolean>()
     fun record(@IntRange(0, 5) duration: Int): Promise<Boolean> {
+        recordArgs.add(duration)
         return Promise { solver ->
-            status = RecorderStatus.Recording
-            solver.resolve(true)
+            solver.resolve(recordReturn.removeFirst())
         }
     }
 
-    /**
-     * Start playing the audio if no other playout or record is pending
-     */
+    var playModeArgs = mutableListOf<Boolean>()
+    var playModeReturn = mutableListOf<Boolean>()
     fun play(loop: Boolean): Promise<Boolean> {
+        playModeArgs.add(loop)
         return Promise { solver ->
-            status = RecorderStatus.Playing
-            solver.resolve(true)
+            solver.resolve(playModeReturn.removeFirst())
         }
     }
 
-    /**
-     * Cancel any record or play that may be pending
-     */
+    var cancelRunCount: Int = 0
+    var cancelReturn = mutableListOf<Boolean>()
     fun cancel(): Boolean {
-        status = RecorderStatus.NoRecordingAvailable
-        return true
+        cancelRunCount++
+        return cancelReturn.removeFirst()
     }
 
-    /**
-     * Release the internal memory used by the JNI interface
-     */
+    var releaseRunCount: Int = 0
+    var releaseReturn = mutableListOf<Boolean>()
     fun release(): Boolean {
-        status = RecorderStatus.Released
-        return true
+        releaseRunCount++
+        return releaseReturn.removeFirst()
     }
 }

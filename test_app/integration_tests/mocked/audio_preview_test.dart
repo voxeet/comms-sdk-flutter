@@ -4,7 +4,7 @@ import 'package:integration_test/integration_test.dart';
 import '../utils.dart';
 
 void audioPreviewTest() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized(); // NEW
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   final dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
 
@@ -13,19 +13,23 @@ void audioPreviewTest() {
   });
 
   group('Audio Preview', () {
+
     testWidgets('AudioPreview: status', (tester) async {
       runNative(
           methodChannel: audioPreviewAssertsMethodChannel,
-          label: "getStatus"
-      );
+          label: "getStatus");
 
-      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.status();
-
+      for (final nativieStatus in recorderStatuses) {
+        final status = await dolbyioCommsSdkFlutterPlugin
+            .audioService.localAudio.preview
+            .status();
+        expect(status, equals(nativieStatus));
+      }
       await expectNative(
           methodChannel: audioPreviewAssertsMethodChannel,
           assertLabel: "assertStatusArgs",
           expected: {"hasRun": true});
-    });
+    });      
 
     testWidgets('AudioPreview: getCaptureMode', (tester) async {
       runNative(
@@ -33,7 +37,17 @@ void audioPreviewTest() {
           label: "getCaptureMode"
       );
 
-      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.getCaptureMode();
+      var captureMode = await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.getCaptureMode();
+      expect(captureMode.mode, equals(AudioCaptureMode.unprocessed));
+
+      for (final voiceFont in voiceFonts) {
+        for (final noiseReduction in noiseReductions) {
+          captureMode = await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.getCaptureMode();
+          expect(captureMode.mode, equals(AudioCaptureMode.standard));
+          expect(captureMode.noiseReduction, equals(noiseReduction));
+          expect(captureMode.voiceFont, equals(voiceFont));
+        }
+      }
 
       await expectNative(
           methodChannel: audioPreviewAssertsMethodChannel,
@@ -42,51 +56,60 @@ void audioPreviewTest() {
     });
 
     testWidgets('AudioPreview: setCaptureMode', (tester) async {
-      var testCaptureMode = AudioCaptureOptions(AudioCaptureMode.standard, NoiseReduction.high, voiceFont: VoiceFont.brokenRobot);
       runNative(
           methodChannel: audioPreviewAssertsMethodChannel,
           label: "setCaptureMode",
-          args: testCaptureMode.toJson()
       );
 
-      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.setCaptureMode(testCaptureMode);
+      var testCaptureMode =
+          AudioCaptureOptions(AudioCaptureMode.unprocessed, null);
+      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview
+          .setCaptureMode(testCaptureMode);
+
+      for (final voiceFont in voiceFonts) {
+        for (final noiseReduction in noiseReductions) {
+          testCaptureMode = AudioCaptureOptions(
+              AudioCaptureMode.standard, noiseReduction,
+              voiceFont: voiceFont);
+          await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview
+              .setCaptureMode(testCaptureMode);
+        }
+      }
 
       await expectNative(
           methodChannel: audioPreviewAssertsMethodChannel,
           assertLabel: "assertSetCaptureModeArgs",
-          expected: testCaptureMode.toJson());
+          expected: {});
     });
 
     testWidgets('AudioPreview: record', (tester) async {
-      var duration = 5;
       runNative(
           methodChannel: audioPreviewAssertsMethodChannel,
-          label: "record",
-          args: { "duration": duration }
+          label: "record"
       );
 
-      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.record(duration);
+      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.record(1);
+      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.record(10);
 
       await expectNative(
           methodChannel: audioPreviewAssertsMethodChannel,
           assertLabel: "assertRecordArgs",
-          expected: {"duration": duration});
+          expected: {});
     });
 
     testWidgets('AudioPreview: play', (tester) async {
-      var loop = false;
       runNative(
           methodChannel: audioPreviewAssertsMethodChannel,
           label: "play",
-          args: { "loop": loop }
       );
 
-      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.play(loop);
+      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.play(true);
+      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.play(false);
 
       await expectNative(
           methodChannel: audioPreviewAssertsMethodChannel,
           assertLabel: "assertPlayArgs",
-          expected: {"loop": loop});
+          expected: {});
     });
 
     testWidgets('AudioPreview: cancel', (tester) async {
@@ -116,5 +139,51 @@ void audioPreviewTest() {
           assertLabel: "assertReleaseArgs",
           expected: {"hasRun": true});
     });
+
+    testWidgets('AudioPreview: onStatusChange', (tester) async {
+
+      await runNative(
+        methodChannel: audioPreviewAssertsMethodChannel,
+        label: "emitStatusChangedEvents",
+        args: { });
+
+      List<Event<AudioPreviewEventNames, RecorderStatus>> receivedEvents = [];
+      await for (final event in dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.onStatusChanged()) {
+        receivedEvents.add(event);
+        if (receivedEvents.length >= recorderStatuses.length) {
+          break;
+        }
+      }
+
+      for (var i = 0; i < recorderStatuses.length; i++) {
+        expect(recorderStatuses[i], receivedEvents[i].body);
+      }
+    });
   });
 }
+
+const recorderStatuses = [
+  RecorderStatus.noRecordingAvailable,
+  RecorderStatus.recordingAvailable,
+  RecorderStatus.recording,
+  RecorderStatus.playing,
+  RecorderStatus.released
+];
+
+final voiceFonts = [
+  VoiceFont.none,
+  VoiceFont.masculine,
+  VoiceFont.feminine,
+  VoiceFont.helium,
+  VoiceFont.darkModulation,
+  VoiceFont.brokenRobot,
+  VoiceFont.interference,
+  VoiceFont.abyss,
+  VoiceFont.wobble,
+  VoiceFont.starshipCaptain,
+  VoiceFont.nervousRobot,
+  VoiceFont.swarm,
+  VoiceFont.amRadio,
+];
+
+final noiseReductions = [NoiseReduction.high, NoiseReduction.low];

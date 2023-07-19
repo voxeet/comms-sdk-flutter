@@ -29,7 +29,8 @@ public class SwiftDolbyioCommsSdkFlutterPlugin: NSObject, FlutterPlugin {
 			LocalAudioServiceBinding(name: "local_audio", registrar: registrar),
 			RemoteAudioServiceBinding(name: "remote_audio", registrar: registrar),
 			LocalVideoServiceBinding(name: "local_video", registrar: registrar),
-			RemoteVideoServiceBinding(name: "remote_video", registrar: registrar)
+			RemoteVideoServiceBinding(name: "remote_video", registrar: registrar),
+            AudioPreviewServiceBinding(name: "audio_preview", registrar: registrar)
 		]
         
         let factory = FLVideoViewFactory(messenger: registrar.messenger())

@@ -34,6 +34,8 @@ public enum VoiceFont : String {
 
     public var captureMode: AudioCaptureMode?
     public var noiseLevel: ComfortNoiseLevel = .default
+    
+    public let preview = AudioPreview()
 
     var startHasRun: Bool = false
     var startReturn: NSError?
