@@ -2,5 +2,5 @@ import Foundation
 
 enum PluginInfo {
     static let componentName = "flutter-sdk"
-    static let sdkVersion = "3.8.3"
+    static let sdkVersion = "3.10.0-beta.1"
 }
