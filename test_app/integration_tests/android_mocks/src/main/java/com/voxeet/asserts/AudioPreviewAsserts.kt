@@ -176,7 +176,7 @@ class AudioPreviewAsserts : MethodDelegate {
     private fun emitStatusChangedEvents() {
         val executorService = Executors.newSingleThreadExecutor()
         val statuses = recorderStatuses.toMutableList()
-        var sendStatusWithDelay = { -> }
+        lateinit var sendStatusWithDelay: () -> Unit
         sendStatusWithDelay = { ->
             val preview = VoxeetSDK.audio().local.preview()
             executorService.submit(Callable<Void?> {
