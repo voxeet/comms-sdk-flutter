@@ -183,8 +183,8 @@ class AudioPreviewAsserts : MethodDelegate {
                 Thread.sleep(100)
                 val status = statuses.removeFirstOrNull()
                 status?.let { s ->
-                    preview.callback?.let {
-                        cb -> cb(s)
+                    preview.callback?.let { cb -> 
+                        cb(s)
                         sendStatusWithDelay()
                     }
                 }
