@@ -1,16 +1,16 @@
-/// The AudioCaptureModeOptions model allows selecting the preferred audio capture mode and the preferred noise reduction level.
+/// The AudioCaptureModeOptions model allows selecting the preferred audio capture mode and additional options for the preferred mode.
 ///
 /// This model is available in SDK 3.7 and later.
 ///
 /// {@category Models}
 class AudioCaptureOptions {
-  /// The preferred audio mode that allows enabling and disabling audio processing.
+  /// The preferred audio mode for capturing the local participant's audio.
   AudioCaptureMode mode;
 
-  /// The preferred level of noise reduction.
+  /// The preferred level of noise reduction. This property is supported only in the Standard mode.
   NoiseReduction? noiseReduction;
 
-  /// The preferred voice modification effect that you can use to change the local participant's voice in real time.
+  /// The preferred voice modification effect that you can use to change the local participant's voice in real time. This property is supported only in the Standard mode in SDK 3.10 and later.
   VoiceFont voiceFont;
 
   AudioCaptureOptions(this.mode, this.noiseReduction,
@@ -29,7 +29,7 @@ class AudioCaptureOptions {
 ///
 /// {@category Models}
 enum AudioCaptureMode {
-  /// Optimizes captured audio for speech by aggressively removing non-speech content, such as background noise. This mode additionally enhances speech perceptibility to create a conversation-focused conference environment.
+  /// The default mode aimed at enhancing speech to create a conversation-focused conference environment. This mode optimizes captured audio for speech by aggressively removing non-speech content, such as background noise.
   standard('standard'),
 
   /// Disables audio processing to allow transmitting non-voice audio to a conference.
@@ -58,7 +58,7 @@ enum AudioCaptureMode {
 ///
 /// {@category Models}
 enum NoiseReduction {
-  /// Removes all background sounds to improve voice quality. Use this mode if you want to send only voice to a conference.
+  /// The default level that removes all background sounds to improve voice quality. Use this mode if you want to send only voice to a conference.
   high('high'),
 
   /// Removes stationary background sounds, such as the sound of a computer fan, air conditioning, or microphone hum, from audio transmitted to a conference. In this mode, non-stationary sounds are transmitted to give participants full context of other participants' environments and create a more realistic audio experience. If you want to send only voice to a conference, use the [High](#high) level.
