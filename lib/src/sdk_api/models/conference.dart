@@ -132,7 +132,7 @@ class ConferenceCreateOption {
 /// {@category Models}
 class ConferenceCreateParameters {
   /// A boolean that indicates whether an application wishes to create a conference with Dolby Voice enabled. For more information about Dolby Voice, see the [Dolby Voice](https://docs.dolby.io/communications-apis/docs/guides-dolby-voice) article. By default, the parameter is set to true.
-  bool dolbyVoice = false;
+  bool dolbyVoice = true;
 
   /// A boolean that enables and disables live recording. Specify this parameter during the conference creation:
   /// - When set to true, the recorded file is available at the end of the call and can be downloaded immediately.
