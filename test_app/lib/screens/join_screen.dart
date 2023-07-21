@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:dolbyio_comms_sdk_flutter_example/widgets/status_snackbar.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/logger/logger_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,6 +15,7 @@ import '/widgets/dialogs.dart';
 import '/widgets/circular_progress_indicator.dart';
 import '/widgets/switch_option.dart';
 import '/permission_helper.dart';
+import 'audio_preview_screen.dart';
 import 'participant_screen/participant_screen.dart';
 import 'dart:developer' as developer;
 import 'replay_screen.dart';
@@ -74,6 +75,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
   bool joinAsListener = false;
   String _conferenceAlias = '';
+  final LoggerView _loggerView = LoggerView.getLoggerView();
 
   StreamSubscription<
           Event<NotificationServiceEventNames,
@@ -122,50 +124,35 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     onConferenceStatusSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onConferenceStatus()
         .listen((params) {
-      StatusSnackbar.buildSnackbar(
-          context,
-          'Conference Status Event: ${params.body.toJson().toString()}',
-          const Duration(milliseconds: 3000));
+      _loggerView.log("[CONFERENCE_STATUS]", "Conference Status Event: ${params.body.toJson().toString()}");
     });
 
     onConferenceCreatedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onConferenceCreated()
         .listen((event) {
-      StatusSnackbar.buildSnackbar(
-          context,
-          "Notification conference created: ${event.body.conferenceAlias}",
-          const Duration(milliseconds: 3000));
       developer.log("Conference created: ${event.body.conferenceAlias}");
+      _loggerView.log("[CONFERENCE_CREATED]", "Notification conference created: ${event.body.conferenceAlias}");
     });
 
     onConferenceEndedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onConferenceEnded()
         .listen((event) {
-      StatusSnackbar.buildSnackbar(
-          context,
-          "Notification conference ended: ${event.body.conferenceAlias}",
-          const Duration(milliseconds: 3000));
       developer.log("Conference ended: ${event.body.conferenceAlias}");
+      _loggerView.log("[CONFERENCE_ENDED]", "Notification conference ended: ${event.body.conferenceAlias}");
     });
 
     onParticipantJoinedSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onParticipantJoined()
         .listen((event) {
-      StatusSnackbar.buildSnackbar(
-          context,
-          "Notification participant joined: ${event.body.participant.info?.name}",
-          const Duration(milliseconds: 3000));
       developer.log("participant joined: ${event.body.toJson().toString()}");
+      _loggerView.log("[PARTICIPANT_JOINED]", "Notification participant joined: ${event.body.participant.info?.name}");
     });
 
     onParticipantLeftSubscription = _dolbyioCommsSdkFlutterPlugin.notification
         .onParticipantLeft()
         .listen((event) {
-      StatusSnackbar.buildSnackbar(
-          context,
-          "Notification participant left: ${event.body.participant.info?.name}",
-          const Duration(milliseconds: 3000));
       developer.log("participant left: ${event.body.toJson().toString()}");
+      _loggerView.log("[PARTICIPANT_LEFT]", "Notification participant left: ${event.body.participant.info?.name}");
     });
 
     onActiveParicipantsSubscription = _dolbyioCommsSdkFlutterPlugin.notification
@@ -173,12 +160,9 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
         .listen((event) {
       final participantNames =
           event.body.participants.map((p) => p.info?.name ?? "__no_name__");
-      StatusSnackbar.buildSnackbar(
-          context,
-          "Notification active participants: $participantNames "
-          "count: ${event.body.participantCount}",
-          const Duration(milliseconds: 3000));
       developer.log("Notification active participants: $participantNames "
+          "count: ${event.body.participantCount}");
+      _loggerView.log("[ACTIVE_PARTICIPANT]", "Notification active participants: $participantNames "
           "count: ${event.body.participantCount}");
     });
   }
@@ -223,6 +207,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   @override
   Widget build(BuildContext context) {
+    _loggerView.showOverlay(Navigator.of(context).overlay);
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
@@ -399,6 +384,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                   },
                   color: Colors.deepPurple,
                 ),
+                const SizedBox(height: 16),
+                PrimaryButton(
+                  widgetText: const Text('Audio preview'),
+                  onPressed: () {
+                    navigateToAudioPreviewScreen();
+                  },
+                  color: Colors.deepPurple,
+                ),
               ],
             ),
           ),
@@ -564,8 +557,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       onStatusChangeSubscription = _dolbyioCommsSdkFlutterPlugin.conference
           .onStatusChange()
           .listen((params) {
-        StatusSnackbar.buildSnackbar(context, params.body.name.toString(),
-            const Duration(milliseconds: 700));
+        _loggerView.log("[CONFERENCE_STATUS]", params.body.name.toString());
       });
     } else {
       onStatusChangeSubscription?.cancel();
@@ -585,6 +577,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ParticipantScreen(isSpatialAudio: spatialAudio),
+      ),
+    );
+  }
+
+  void navigateToAudioPreviewScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AudioPreviewScreen(),
       ),
     );
   }

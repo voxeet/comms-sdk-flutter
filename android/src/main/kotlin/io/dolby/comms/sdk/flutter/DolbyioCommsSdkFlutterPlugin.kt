@@ -14,6 +14,7 @@ import io.dolby.comms.sdk.flutter.module.NotificationServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.RecordingServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.SessionServiceNativeModule
 import io.dolby.comms.sdk.flutter.module.VideoPresentationServiceModule
+import io.dolby.comms.sdk.flutter.module.audio.AudioPreviewNativeModule
 import io.dolby.comms.sdk.flutter.module.audio.LocalAudioNativeModule
 import io.dolby.comms.sdk.flutter.module.audio.RemoteAudioNativeModule
 import io.dolby.comms.sdk.flutter.module.video.LocalVideoNativeModule
@@ -28,6 +29,7 @@ import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import org.webrtc.CodecDescriptorFactory
 
 class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
 
@@ -49,7 +51,8 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
             NotificationEventEmitter(EventChannelHandler(NOTIFICATION)),
             RecordingEventEmitter(EventChannelHandler(RECORDING)),
             VideoPresentationEventEmitter(EventChannelHandler(VIDEO_PRESENTATION), videoPresentationHolder),
-            filePresentationEventEmitter
+            filePresentationEventEmitter,
+            AudioPreviewEventEmitter(EventChannelHandler(AUDIO_PREVIEW))
         )
 
         nativeModules = listOf(
@@ -70,7 +73,8 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
                 filePresentationEventEmitter,
                 filePresentationHolder
             ),
-            MediaDeviceServiceNativeModule(scope)
+            MediaDeviceServiceNativeModule(scope),
+            AudioPreviewNativeModule(scope)
         )
 
         VoxeetSDK.registerComponentVersion(BuildConfig.COMPONENT_NAME, BuildConfig.SDK_VERSION)
@@ -97,6 +101,7 @@ class DolbyioCommsSdkFlutterPlugin : FlutterPlugin, ActivityAware {
         const val RECORDING = "dolbyio_recording_service_event_channel"
         const val VIDEO_PRESENTATION = "dolbyio_video_presentation_service_event_channel"
         const val FILE_PRESENTATION = "dolbyio_file_presentation_service_event_channel"
+        const val AUDIO_PREVIEW = "dolbyio_audio_preview_event_channel"
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {

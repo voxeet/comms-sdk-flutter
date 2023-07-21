@@ -47,8 +47,10 @@ class LocalAudioNativeModule(private val scope: CoroutineScope) : NativeModule {
     private fun setCaptureMode(call: MethodCall, result: Result) = scope.launch(
         onError = result::onError,
         onSuccess = {
-            VoxeetSDK.audio().local.captureMode = AudioCaptureModeMapper.fromMap(call.arguments as Map<String, Any?>)
-            result.success(null)
+            AudioCaptureModeMapper
+                .fromMap(call.arguments as Map<String, Any?>)
+                .let { VoxeetSDK.audio().local.captureMode = it }
+                .also { result.success(null) }
         }
     )
 

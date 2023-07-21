@@ -40,7 +40,8 @@ export 'src/sdk_api/models/enums.dart'
         CommandServiceEventNames,
         VideoPresentationState,
         VideoPresentationEventNames,
-        RecordingServiceEventNames;
+        RecordingServiceEventNames,
+        AudioPreviewEventNames;
 export 'src/sdk_api/models/subscription.dart'
     show Subscription, SubscriptionType;
 export 'src/sdk_api/models/events.dart'
@@ -61,6 +62,7 @@ export 'src/sdk_api/audio/local_audio.dart' show LocalAudio;
 export 'src/sdk_api/video/local_video.dart' show LocalVideo;
 export 'src/sdk_api/audio/remote_audio.dart' show RemoteAudio;
 export 'src/sdk_api/video/remote_video.dart' show RemoteVideo;
+export 'src/sdk_api/audio/audio_preview.dart' show AudioPreview;
 export 'src/sdk_api/models/participant_info.dart' show ParticipantInfo;
 export 'src/sdk_api/models/participant.dart'
     show
@@ -79,4 +81,9 @@ export 'src/dolbyio_comms_sdk_native_events.dart' show Event;
 export 'src/sdk_api/view/video_view.dart'
     show VideoView, VideoViewController, ScaleType;
 export 'src/sdk_api/models/audio.dart'
-    show AudioCaptureOptions, AudioCaptureMode, NoiseReduction;
+    show
+        AudioCaptureOptions,
+        AudioCaptureMode,
+        NoiseReduction,
+        VoiceFont,
+        RecorderStatus;

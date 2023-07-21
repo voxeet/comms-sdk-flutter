@@ -19,7 +19,10 @@ public class VoxeetSDKAsserts {
     private func resetVoxeetSDK() {
         let oldSDK = VoxeetSDK.shared
         VoxeetSDK.shared = VoxeetSDK()
+        VoxeetSDK.shared.conference.delegate = oldSDK.conference.delegate
         VoxeetSDK.shared.recording.delegate = oldSDK.recording.delegate
+        VoxeetSDK.shared.audio.local.preview.onStatusChanged
+            = oldSDK.audio.local.preview.onStatusChanged
     }
     
     private func assertInitializeConsumerKeyAndSecret(args: [String: Any]) throws {

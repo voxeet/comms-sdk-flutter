@@ -1,3 +1,4 @@
+import 'package:dolbyio_comms_sdk_flutter_example/logger/logger_view.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
+  final LoggerView _loggerView = LoggerView.getLoggerView();
 
   @override
   void initState() {
@@ -42,6 +44,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    _loggerView.showOverlay(Navigator.of(context).overlay);
+    _loggerView.log("[KB]", "test log");
+
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
@@ -69,6 +74,8 @@ class _MyAppState extends State<MyApp> {
           )),
     );
   }
+
+
 
   void runPlayground(DolbyioCommsSdk dolbyioCommsSdkFlutterPlugin) async {
     // Add code to play with here

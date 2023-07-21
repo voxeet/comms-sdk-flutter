@@ -24,6 +24,8 @@ const videoServiceAssertsMethodChannel =
     MethodChannel('IntegrationTesting.VideoServiceAsserts');
 const audioServiceAssertsMethodChannel =
     MethodChannel('IntegrationTesting.AudioServiceAsserts');
+const audioPreviewAssertsMethodChannel =
+    MethodChannel('IntegrationTesting.AudioPreviewAsserts');
 
 void _handleNativeResult(
     List<dynamic> invokeMethodResult, String messagePrefix, String label) {

@@ -33,6 +33,7 @@ import VoxeetSDK
         FilePresentationServiceAsserts.create()
         VideoServiceAsserts.create()
         AudioServiceAsserts.create()
+        AudioPreviewAsserts.create()
 #endif
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)

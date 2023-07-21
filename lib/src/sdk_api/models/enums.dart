@@ -218,3 +218,27 @@ enum RecordingServiceEventNames implements EnumWithStringValue {
     );
   }
 }
+
+/// The AudioPreviewEventNames enum gathers the AudioPreview events.
+///
+/// {@category Models}
+enum AudioPreviewEventNames implements EnumWithStringValue {
+  /// Emitted when the status of the audio preview changes.
+  onStatusChanged('EVENT_AUDIO_PREVIEW_STATUS_CHANGED');
+
+  @override
+  final String value;
+
+  const AudioPreviewEventNames(this.value);
+
+  static AudioPreviewEventNames valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
+    return AudioPreviewEventNames.values.firstWhere(
+      (element) {
+        return element.value == value ||
+            element.name.toLowerCase() == lowerCaseValue;
+      },
+      orElse: () => throw Exception("Invalid enum name"),
+    );
+  }
+}
