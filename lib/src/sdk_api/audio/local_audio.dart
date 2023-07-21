@@ -14,7 +14,7 @@ class LocalAudio {
     "local_audio",
   );
 
-  /// Audio preview module to test participant audio settings.
+  /// Allows the local participant to test different capture modes and voice fonts before a conference. The method sets a preview recorder that records the participant's audio and plays it back. Before playing the recorded audio, set the [captureMode](#setCaptureMode) to a preferred setting that you wish to try. The method is supported only in SDK 3.10 and later.
   final preview = AudioPreview();
 
   /// Sets the local participant's audio capture mode in Dolby Voice conferences.
