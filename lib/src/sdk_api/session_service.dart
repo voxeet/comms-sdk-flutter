@@ -23,7 +23,7 @@ class SessionService {
     return Future.value();
   }
 
-  /// Update actual participant name and avatarUrl
+  /// Updates the local participant's name and avatar URL. This method is supported in SDK 3.10 and later.
   Future<void> updateParticipantInfo(String name, String avatarUrl) async {
     var params = {"name": name, "avatarUrl": avatarUrl};
     await _methodChannel.invokeMethod<void>('updateParticipantInfo', params);
