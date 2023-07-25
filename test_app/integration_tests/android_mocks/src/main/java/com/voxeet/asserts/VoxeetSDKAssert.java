@@ -3,6 +3,7 @@ package com.voxeet.asserts;
 import android.util.Pair;
 
 import com.voxeet.VoxeetSDK;
+import com.voxeet.android.media.capture.audio.preview.RecorderStatus;
 import com.voxeet.sdk.authent.token.RefreshTokenCallback;
 import com.voxeet.sdk.models.Conference;
 
@@ -10,6 +11,8 @@ import java.util.Map;
 
 import io.dolby.asserts.AssertUtils;
 import io.dolby.asserts.MethodDelegate;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
 
 public class VoxeetSDKAssert implements MethodDelegate {
     Conference lastCreateResult = null;
@@ -71,11 +74,9 @@ public class VoxeetSDKAssert implements MethodDelegate {
     }
 
     private void clearConferenceService() {
-        VoxeetSDK.conference().joinArgs = null;
-        VoxeetSDK.conference().kickArgs = null;
-        VoxeetSDK.conference().createArgs = null;
-        VoxeetSDK.conference().createReturn = null;
-        VoxeetSDK.conference().leaveHasRun = false;
-        VoxeetSDK.session().closeHasRun = false;
+        Function1<RecorderStatus, Unit> recorderStatusClosure
+                =  VoxeetSDK.audio().local.preview().getCallback();
+        VoxeetSDK.currentInstance = new VoxeetSDK();
+        VoxeetSDK.audio().local.preview().setCallback(recorderStatusClosure);
     }
 }

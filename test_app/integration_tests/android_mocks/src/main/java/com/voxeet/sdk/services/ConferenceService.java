@@ -40,9 +40,11 @@ import java.util.function.Function;
 public class ConferenceService {
 
     public Conference joinReturn = null;
+    public ArrayList<Boolean> isInConferenceReturn = new ArrayList<>();
+    public boolean getConferenceUseList = false;
+    public ArrayList<Conference> getConferenceReturn = new ArrayList<>();
     @Nullable
     public Conference current = new Conference().setConferenceId("conference_id").setConferenceAlias("conference_alias");
-
     public Conference fetchReturn = null;
     public String fetchArgs = null;
     public Conference createReturn = null;
@@ -89,8 +91,15 @@ public class ConferenceService {
         });
     }
 
+    public boolean isInConference() {
+        return isInConferenceReturn.remove(0);
+    }
+
     @Nullable
     public Conference getConference() {
+        if (getConferenceUseList) {
+            return getConferenceReturn.remove(0);
+        }
         return current;
     }
 

@@ -34,14 +34,11 @@ class ConferenceServiceBinding: Binding {
     }
     
     func currentConference(completionHandler: FlutterMethodCallCompletionHandler) {
-        do {
-            guard let conference = VoxeetSDK.shared.conference.current else {
-                throw BindingError.noCurrentConference
-            }
-            completionHandler.success(encodable: DTO.Confrence(conference: conference))
-        } catch {
-            completionHandler.failure(error)
+        guard let conference = VoxeetSDK.shared.conference.current else {
+            completionHandler.success()
+            return
         }
+        completionHandler.success(encodable: DTO.Confrence(conference: conference))
     }
     
     // MARK: - Methods

@@ -369,12 +369,32 @@ void conferenceServiceTest() {
       await runNative(
           methodChannel: conferenceServiceAssertsMethodChannel,
           label: "setCurrentConference",
-          args: {"type": 5});
+          args: {"for_current": true});
 
       var conference = await dolbyioCommsSdkFlutterPlugin.conference.current();
+      expect(conference, isNull);
 
-      expect(conference.id, "setCreateConferenceReturn_id_5");
-      expect(conference.alias, "setCreateConferenceReturn_alias_5");
+      var iterration = 1;
+      for (final alias in ["alias_1", "alias_2"]) {
+        for (final confId in ["conf_id_1", "conf_id_2"]) {
+          for (final isNew in [false, true]) {
+            for (final status in _conferenceStatusList) {
+              for (final spatialAudioStyle in _spatialAudioStyleList) {
+                conference =
+                    await dolbyioCommsSdkFlutterPlugin.conference.current();
+                expect(conference, isNotNull, reason: "In itterration: $iterration");
+                expect(conference?.alias, equals(alias));
+                expect(conference?.id, equals(confId));
+                expect(conference?.isNew, equals(isNew));
+                expect(conference?.status, equals(status));
+                expect(
+                    conference!.spatialAudioStyle, equals(spatialAudioStyle));
+                iterration++;
+              }
+            }
+          }
+        }
+      }
     });
 
     testWidgets('ConferenceService: getAudioLevel', (tester) async {
@@ -1174,3 +1194,23 @@ void conferenceServiceTest() {
     expect(receivedEvents[2].body.id, "participant_id_6_1");
   });
 }
+
+
+const _conferenceStatusList = [
+  ConferenceStatus.created,
+  ConferenceStatus.creating,
+  ConferenceStatus.destroyed,
+  ConferenceStatus.ended,
+  ConferenceStatus.error,
+  ConferenceStatus.joined,
+  ConferenceStatus.joining,
+  ConferenceStatus.leaving,
+  ConferenceStatus.left,
+];
+
+const _spatialAudioStyleList = [
+  null,
+  SpatialAudioStyle.individual,
+  SpatialAudioStyle.shared,
+  SpatialAudioStyle.disabled
+];

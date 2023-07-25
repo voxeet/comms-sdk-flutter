@@ -2,6 +2,7 @@ package io.dolby.comms.sdk.flutter.module
 
 import com.voxeet.VoxeetSDK
 import com.voxeet.sdk.json.internal.ParamsHolder
+import com.voxeet.sdk.models.Conference
 import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions
 import com.voxeet.sdk.services.builders.VideoForwardingOptions
@@ -98,12 +99,14 @@ class ConferenceServiceNativeModule(private val scope: CoroutineScope) : NativeM
     private fun current(result: Result) = scope.launch(
         onError = result::onError,
         onSuccess = {
-            VoxeetSDK
-                .conference()
-                .conference
-                ?.let { conf -> ConferenceMapper(conf).convertToMap() }
-                ?.let { result.success(it) }
-                ?: throw IllegalStateException("Could not get current conference")
+            val conference = VoxeetSDK
+                    .conference()
+                    .conference
+            if (conference != null && VoxeetSDK.conference().isInConference) {
+                result.success(ConferenceMapper(conference).convertToMap())
+            } else {
+                result.success(null)
+            }
         }
     )
 
