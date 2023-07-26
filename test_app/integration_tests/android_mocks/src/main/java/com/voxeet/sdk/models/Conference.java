@@ -31,8 +31,7 @@ public class Conference {
     private RecordingInformation recordingInformation;
     private boolean isNew = false;
 
-    private final HashMap<String, Object> metadata = new HashMap<>();
-
+    private SpatialAudioStyle spatialAudioStyle = null;
 
     public List<Participant> getParticipants() {
         return participants;
@@ -105,14 +104,11 @@ public class Conference {
     }
 
     public SpatialAudioStyle getSpatialAudioStyle() {
-        if (null != metadata && metadata.containsKey("spatialAudioStyle")) {
-            try {
-                String value = (String) metadata.get("spatialAudioStyle");
-                return SpatialAudioStyle.valueOf(value.toUpperCase(Locale.ROOT));
-            } catch(Throwable throwable) {
-            }
-        }
-        return null;
+        return spatialAudioStyle;
+    }
+
+    public void setSpatialAudioStyle(SpatialAudioStyle spatialAudioStyle) {
+        this.spatialAudioStyle = spatialAudioStyle;
     }
 
     public static class RecordingInformation {

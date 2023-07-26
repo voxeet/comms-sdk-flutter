@@ -7,7 +7,24 @@ import WebRTC
     
     public var defaultVideo: Bool = false
     
-    public internal(set) var current: VTConference?
+    var currentUseList = false
+    var currentArgs: [VTConference?] = []
+    var currentReturn: [VTConference?] = []
+    var currentValue: VTConference?
+    public internal(set) var current: VTConference? {
+        get {
+            if currentUseList {
+                return currentReturn.remove(at: 0)
+            }
+            return currentValue
+        }
+        set {
+            if currentUseList {
+                currentArgs.append(newValue)
+            }
+            currentValue = newValue
+        }
+    }
     
     var maxVideoForwardingReturn: Int?
     public var maxVideoForwarding: Int {

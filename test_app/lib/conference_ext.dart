@@ -5,7 +5,10 @@ extension ConferenceServiceExt on ConferenceService {
     var conf = await DolbyioCommsSdk.instance.conference.current();
     var sessionParticipant =
         await DolbyioCommsSdk.instance.session.getParticipant();
-    return conf.participants
-        .firstWhere((element) => element.id == sessionParticipant!.id);
+    if (sessionParticipant == null) {
+      throw Exception("ConferenceServiceExt.getLocalParticipant(): Could not find a session participant");
+    }
+    return conf?.participants
+        .firstWhere((element) => element.id == sessionParticipant.id) ?? sessionParticipant;
   }
 }

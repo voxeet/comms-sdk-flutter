@@ -68,6 +68,9 @@ class _NotificationServiceTestButtonsState
   Future<void> invite() async {
     try {
       var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      if (conference == null) {
+        throw Exception("Could not find a current conference.");
+      } 
       var participants = await getInvitedParticipants();
       await _dolbyioCommsSdkFlutterPlugin.notification
           .invite(conference, participants);

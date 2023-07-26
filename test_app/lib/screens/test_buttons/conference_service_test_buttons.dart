@@ -100,6 +100,10 @@ class _ConferenceServiceTestButtonsState
   Future<void> getParticipants() async {
     try {
       var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      if (conference == null) {
+        throw Exception(
+            "_ConferenceServiceTestButtonsState.getParticipants(): Could not find a current conference");
+      }
       var participants = await _dolbyioCommsSdkFlutterPlugin.conference
           .getParticipants(conference);
       if (!mounted) return;
@@ -142,6 +146,9 @@ class _ConferenceServiceTestButtonsState
   Future<void> fetchConference() async {
     try {
       var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      if (conference == null) {
+        throw Exception("_ConferenceServiceTestButtonsState.fetchConference(): Could not find a current conference");
+      }
       var fetchedConference =
           await _dolbyioCommsSdkFlutterPlugin.conference.fetch(conference.id);
       if (!mounted) return;
@@ -156,6 +163,10 @@ class _ConferenceServiceTestButtonsState
   Future<void> current() async {
     try {
       var conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+      if (conference == null) {
+        throw Exception("_ConferenceServiceTestButtonsState.current(): Could not find a current conference");
+      }
+
       if (!mounted) return;
       showResultDialog(context, 'Success', conference.toJson().toString());
     } catch (error) {
