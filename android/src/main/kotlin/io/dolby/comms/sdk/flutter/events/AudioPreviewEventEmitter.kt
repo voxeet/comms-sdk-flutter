@@ -9,7 +9,6 @@ class AudioPreviewEventEmitter(eventChannelHandler: EventChannelHandler) : Nativ
      * Emitted when the application user received an audio preview status changed.
      */
     private val previewCallback: (RecorderStatus) -> Unit = { status ->
-        android.util.Log.d("[KB]", "status changed: $status")
         emit(OnStatusChanged, status.name)
     }
 
