@@ -19,7 +19,7 @@ void audioPreviewTest() {
           methodChannel: audioPreviewAssertsMethodChannel,
           label: "getStatus");
 
-      for (final nativieStatus in recorderStatuses) {
+      for (final nativieStatus in audioPreviewStatuses) {
         final status = await dolbyioCommsSdkFlutterPlugin
             .audioService.localAudio.preview
             .status();
@@ -112,17 +112,17 @@ void audioPreviewTest() {
           expected: {});
     });
 
-    testWidgets('AudioPreview: cancel', (tester) async {
+    testWidgets('AudioPreview: stop', (tester) async {
       runNative(
           methodChannel: audioPreviewAssertsMethodChannel,
-          label: "cancel"
+          label: "stop"
       );
 
-      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.cancel();
+      await dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.stop();
 
       await expectNative(
           methodChannel: audioPreviewAssertsMethodChannel,
-          assertLabel: "assertCancelArgs",
+          assertLabel: "assertStopArgs",
           expected: {"hasRun": true});
     });
 
@@ -147,27 +147,27 @@ void audioPreviewTest() {
         label: "emitStatusChangedEvents",
         args: { });
 
-      List<Event<AudioPreviewEventNames, RecorderStatus>> receivedEvents = [];
+      List<Event<AudioPreviewEventNames, AudioPreviewStatus>> receivedEvents = [];
       await for (final event in dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview.onStatusChanged()) {
         receivedEvents.add(event);
-        if (receivedEvents.length >= recorderStatuses.length) {
+        if (receivedEvents.length >= audioPreviewStatuses.length) {
           break;
         }
       }
 
-      for (var i = 0; i < recorderStatuses.length; i++) {
-        expect(recorderStatuses[i], receivedEvents[i].body);
+      for (var i = 0; i < audioPreviewStatuses.length; i++) {
+        expect(audioPreviewStatuses[i], receivedEvents[i].body);
       }
     });
   });
 }
 
-const recorderStatuses = [
-  RecorderStatus.noRecordingAvailable,
-  RecorderStatus.recordingAvailable,
-  RecorderStatus.recording,
-  RecorderStatus.playing,
-  RecorderStatus.released
+const audioPreviewStatuses = [
+  AudioPreviewStatus.noRecordingAvailable,
+  AudioPreviewStatus.recordingAvailable,
+  AudioPreviewStatus.recording,
+  AudioPreviewStatus.playing,
+  AudioPreviewStatus.released
 ];
 
 final voiceFonts = [

@@ -3,7 +3,7 @@ package com.voxeet.asserts;
 import android.util.Pair;
 
 import com.voxeet.VoxeetSDK;
-import com.voxeet.android.media.capture.audio.preview.RecorderStatus;
+import com.voxeet.android.media.capture.audio.preview.AudioPreviewStatus;
 import com.voxeet.sdk.authent.token.RefreshTokenCallback;
 import com.voxeet.sdk.models.Conference;
 
@@ -74,9 +74,9 @@ public class VoxeetSDKAssert implements MethodDelegate {
     }
 
     private void clearConferenceService() {
-        Function1<RecorderStatus, Unit> recorderStatusClosure
-                =  VoxeetSDK.audio().local.preview().getCallback();
+        Function1<AudioPreviewStatus, Unit> audioPreviewStatusClosure
+                =  VoxeetSDK.audio().local.preview().getOnStatusChangedFunction();
         VoxeetSDK.currentInstance = new VoxeetSDK();
-        VoxeetSDK.audio().local.preview().setCallback(recorderStatusClosure);
+        VoxeetSDK.audio().local.preview().setOnStatusChangedFunction(audioPreviewStatusClosure);
     }
 }

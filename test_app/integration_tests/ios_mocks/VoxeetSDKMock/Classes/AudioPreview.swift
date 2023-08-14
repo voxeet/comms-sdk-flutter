@@ -1,6 +1,6 @@
 import Foundation
 
-public enum RecorderStatus {
+public enum AudioPreviewStatus {
     case noRecordingAvailable
     case recordingAvailable
     case recording
@@ -23,14 +23,14 @@ public class AudioPreview {
         }
     }
     
-    public var statusReturn: [RecorderStatus] = []
+    public var statusReturn: [AudioPreviewStatus] = []
     public var statusHasRunCounter = 0
-    public var status: RecorderStatus {
+    public var status: AudioPreviewStatus {
         statusHasRunCounter += 1
         return statusReturn.popLast()!
     }
     
-    public var onStatusChanged: ((_ status: RecorderStatus) -> Void)?
+    public var onStatusChanged: ((_ status: AudioPreviewStatus) -> Void)?
 
     public var recordArgs: [Int] = []
     public var recordReturnError: [Error?] = []
@@ -58,10 +58,10 @@ public class AudioPreview {
         fatalError("Play without the loop argument should not be used.")
     }
     
-    public var cancelHasRun: Bool = false
+    public var stopHasRun: Bool = false
     @discardableResult
-    public func cancel() -> Bool {
-        cancelHasRun = true
+    public func stop() -> Bool {
+        stopHasRun = true
         return true
     }
     

@@ -17,17 +17,23 @@ class AudioPreview {
         }
 
     var statusRunCount: Int = 0
-    var statusReturn = mutableListOf<RecorderStatus>()
-    var status: RecorderStatus
+    var statusReturn = mutableListOf<AudioPreviewStatus>()
+    var status: AudioPreviewStatus
         get() {
             statusRunCount++
             return statusReturn.removeAt(0)
         }
-        private set(newValue: RecorderStatus) { }
+        private set(newValue: AudioPreviewStatus) { }
 
+    fun getOnStatusChangedFunction(): Function1<AudioPreviewStatus, Unit>? {
+        return onStatusChanged
+    }
 
-    var callback: ((status: RecorderStatus) -> Unit)? = null
+    fun setOnStatusChangedFunction(status: Function1<AudioPreviewStatus, Unit>?) {
+        onStatusChanged = status
+    }
 
+    var onStatusChanged: ((status: AudioPreviewStatus) -> Unit)? = null
 
     var recordArgs = mutableListOf<Int>()
     var recordReturn = mutableListOf<Boolean>()
@@ -47,11 +53,11 @@ class AudioPreview {
         }
     }
 
-    var cancelRunCount: Int = 0
-    var cancelReturn = mutableListOf<Boolean>()
-    fun cancel(): Boolean {
-        cancelRunCount++
-        return cancelReturn.removeFirst()
+    var stopRunCount: Int = 0
+    var stopReturn = mutableListOf<Boolean>()
+    fun stop(): Boolean {
+        stopRunCount++
+        return stopReturn.removeFirst()
     }
 
     var releaseRunCount: Int = 0

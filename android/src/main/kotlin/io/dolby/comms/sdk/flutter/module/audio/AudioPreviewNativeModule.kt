@@ -32,7 +32,7 @@ class AudioPreviewNativeModule(private val scope: CoroutineScope) : NativeModule
             ::setCaptureMode.name -> setCaptureMode(call, result)
             ::record.name -> record(call, result)
             ::play.name -> play(call, result)
-            ::cancel.name -> cancel(result)
+            ::stop.name -> stop(result)
             ::release.name -> release(result)
         }
     }
@@ -83,10 +83,10 @@ class AudioPreviewNativeModule(private val scope: CoroutineScope) : NativeModule
         }
     )
 
-    private fun cancel(result: MethodChannel.Result) = scope.launch(
+    private fun stop(result: MethodChannel.Result) = scope.launch(
         onError = result::onError,
         onSuccess = {
-            result.success(VoxeetSDK.audio().local.preview().cancel())
+            result.success(VoxeetSDK.audio().local.preview().stop())
         }
     )
 

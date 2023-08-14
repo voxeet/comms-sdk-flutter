@@ -86,4 +86,4 @@ export 'src/sdk_api/models/audio.dart'
         AudioCaptureMode,
         NoiseReduction,
         VoiceFont,
-        RecorderStatus;
+        AudioPreviewStatus;

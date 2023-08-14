@@ -17,7 +17,7 @@ public class AudioPreviewAsserts {
     }
 
     private func getStatus(args: [String: Any]) throws {
-        VoxeetSDK.shared.audio.local.preview.statusReturn = recorderStatuses.reversed()
+        VoxeetSDK.shared.audio.local.preview.statusReturn = audioStatuses.reversed()
     }
 
     private func assertStatusArgs(args: [String: Any]) throws {
@@ -101,12 +101,12 @@ public class AudioPreviewAsserts {
         try nativeAssertEquals(loop, false)
     }
 
-    private func cancel(args: [String: Any]) throws {
-        VoxeetSDK.shared.audio.local.preview.cancelHasRun = false
+    private func stop(args: [String: Any]) throws {
+        VoxeetSDK.shared.audio.local.preview.stopHasRun = false
     }
 
-    private func assertCancelArgs(args: [String: Any]) throws {
-        var mockArgs = VoxeetSDK.shared.audio.local.preview.cancelHasRun
+    private func assertStopArgs(args: [String: Any]) throws {
+        var mockArgs = VoxeetSDK.shared.audio.local.preview.stopHasRun
         try ifKeyExists(arg: args, key: "hasRun") { (hasRun: Bool) in
             try nativeAssertEquals(mockArgs, hasRun)
         }
@@ -128,7 +128,7 @@ public class AudioPreviewAsserts {
         let onStatusChangedClosure = VoxeetSDK.shared.audio.local.preview.onStatusChanged
         let queue = DispatchQueue(label: "conference.asserts.test.queue")
         
-        var statuses = recorderStatuses
+        var statuses = audioPreviewStatuses
         statuses.reverse()
         var sendStatusWithDelay: (() -> Void)?
         sendStatusWithDelay = {
@@ -168,8 +168,8 @@ extension AudioPreviewAsserts: SDKAsserts {
             case "play": try play(args: args)
             case "assertPlayArgs": try assertPlayArgs(args: args)
                 
-            case "cancel": try cancel(args: args)
-            case "assertCancelArgs": try assertCancelArgs(args: args)
+            case "stop": try stop(args: args)
+            case "assertStopArgs": try assertStopArgs(args: args)
                 
             case "release": try release(args: args)
             case "assertReleaseArgs": try assertReleaseArgs(args: args)
@@ -185,7 +185,7 @@ extension AudioPreviewAsserts: SDKAsserts {
     }
 }
 
-private let recorderStatuses: [RecorderStatus] = [
+private let audioPreviewStatuses: [AudioPreviewStatus] = [
     .noRecordingAvailable, .recordingAvailable, .recording, .playing, .released
 ]
 

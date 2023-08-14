@@ -4,7 +4,7 @@ import WebRTC
 
 typealias VTAudioCaptureMode = AudioCaptureMode
 typealias VTVoiceFont = VoiceFont
-typealias VTRecorderStatus = RecorderStatus
+typealias VTAudioPreviewStatus = AudioPreviewStatus
 
 extension DTO {
 
@@ -157,29 +157,29 @@ extension DTO {
         }
     }
     
-    struct RecorderStatus: Codable {
+    struct AudioPreviewStatus: Codable {
         
-        let recorderStatus: VTRecorderStatus
+        let audioPreviewStatus: VTAudioPreviewStatus
         
-        init(recorderStatus: VTRecorderStatus) {
-            self.recorderStatus = recorderStatus
+        init(audioPreviewStatus: VTAudioPreviewStatus) {
+            self.audioPreviewStatus = audioPreviewStatus
         }
         
         init(from decoder: Decoder) throws {
             let container = try decoder.singleValueContainer()
             switch try container.decode(String.self) {
-            case "NoRecordingAvailable": recorderStatus = .noRecordingAvailable
-            case "RecordingAvailable": recorderStatus = .recordingAvailable
-            case "Recording": recorderStatus = .recording
-            case "Playing": recorderStatus = .playing
-            case "Released": recorderStatus = .released
+            case "NoRecordingAvailable": audioPreviewStatus = .noRecordingAvailable
+            case "RecordingAvailable": audioPreviewStatus = .recordingAvailable
+            case "Recording": audioPreviewStatus = .recording
+            case "Playing": audioPreviewStatus = .playing
+            case "Released": audioPreviewStatus = .released
             default: throw EncoderError.decoderFailed()
             }
         }
         
         func encode(to encoder: Encoder) throws {
             var container = encoder.singleValueContainer()
-            switch recorderStatus {
+            switch audioPreviewStatus {
             case .noRecordingAvailable: try container.encode("NoRecordingAvailable")
             case .recordingAvailable: try container.encode("RecordingAvailable")
             case .recording: try container.encode("Recording")

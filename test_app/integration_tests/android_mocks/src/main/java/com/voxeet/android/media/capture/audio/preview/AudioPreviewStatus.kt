@@ -1,6 +1,6 @@
 package com.voxeet.android.media.capture.audio.preview;
 
-enum class RecorderStatus {
+enum class AudioPreviewStatus {
     NoRecordingAvailable,
     RecordingAvailable,
     Recording,

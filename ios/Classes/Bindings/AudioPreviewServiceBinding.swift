@@ -9,7 +9,7 @@ class AudioPreviewServiceBinding: Binding {
             do {
                 try self?.nativeEventEmitter.sendEvent(
                     event: EventKeys.statusChanged,
-                    body: DTO.RecorderStatus(recorderStatus: status)
+                    body: DTO.AudioPreviewStatus(audioPreviewStatus: status)
                 )
             } catch {
                 fatalError(error.localizedDescription)
@@ -26,7 +26,7 @@ class AudioPreviewServiceBinding: Binding {
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
         let status = audioPreview().status
-        completionHandler.success(encodable: DTO.RecorderStatus(recorderStatus: status))
+        completionHandler.success(encodable: DTO.AudioPreviewStatus(audioPreviewStatus: status))
     }
     
     /// Retrieves the comfort noise level setting for output devices in Dolby Voice conferences.
@@ -101,15 +101,15 @@ class AudioPreviewServiceBinding: Binding {
         }
     }
 
-    /// If playing or recording is underway calling this method will cancel the ongoing activity.
+    /// If playing or recording is underway calling this method will stop the ongoing activity.
     /// - Parameters:
     ///   - flutterArguments: Method arguments passed from Flutter.
     ///   - completionHandler: Call methods on this instance when execution has finished.
-    public func cancel(
+    public func stop(
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
-        audioPreview().cancel()
+        audioPreview().stop()
         completionHandler.success(flutterConvertible: true)
     }
 
@@ -144,8 +144,8 @@ extension AudioPreviewServiceBinding: FlutterBinding {
             play(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "record":
             record(flutterArguments: flutterArguments, completionHandler: completionHandler)
-        case "cancel":
-            cancel(flutterArguments: flutterArguments, completionHandler: completionHandler)
+        case "stop":
+            stop(flutterArguments: flutterArguments, completionHandler: completionHandler)
         case "release":
             release(flutterArguments: flutterArguments, completionHandler: completionHandler)
         default:
