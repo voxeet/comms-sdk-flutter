@@ -109,8 +109,7 @@ class AudioPreviewServiceBinding: Binding {
         flutterArguments: FlutterMethodCallArguments,
         completionHandler: FlutterMethodCallCompletionHandler
     ) {
-        audioPreview().stop()
-        completionHandler.success(flutterConvertible: true)
+       completionHandler.success(flutterConvertible: audioPreview().stop())
     }
 
     /// Release the internal memory and restart the audio session configuration.
