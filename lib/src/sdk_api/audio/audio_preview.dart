@@ -48,7 +48,7 @@ class AudioPreview {
   }
 
   /// Stops recording or playing an audio sample.
-  Future<void> stop() async {
+  Future<bool> stop() async {
     return await _methodChannel.invokeMethod("stop");
   }
 
