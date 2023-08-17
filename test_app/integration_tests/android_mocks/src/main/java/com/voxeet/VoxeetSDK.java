@@ -39,7 +39,7 @@ public class VoxeetSDK {
     private final AudioService audioService;
     private final VideoService videoService;
 
-    private static final VoxeetSDK currentInstance = new VoxeetSDK();
+    public static VoxeetSDK currentInstance = new VoxeetSDK();
 
 
     @Deprecated
@@ -113,7 +113,7 @@ public class VoxeetSDK {
         return instance().localStatsService;
     }
 
-    private VoxeetSDK() {
+    public VoxeetSDK() {
         sessionService = new SessionService();
         conferenceService = new ConferenceService();
         commandService = new CommandService();

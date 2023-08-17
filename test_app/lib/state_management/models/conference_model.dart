@@ -55,6 +55,10 @@ class ConferenceModel extends ChangeNotifier {
 
   void updateConference() async {
     final dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-    _conference = await dolbyioCommsSdkFlutterPlugin.conference.current();
+    final currentConference = await dolbyioCommsSdkFlutterPlugin.conference.current();
+    if (currentConference == null) {
+      throw Exception("ConferenceModel.updateConference(): Could not find a current conference.");
+    }
+    _conference = currentConference;
   }
 }

@@ -15,11 +15,14 @@ import com.voxeet.sdk.json.ConferencePermission;
 import com.voxeet.sdk.models.Conference;
 import com.voxeet.sdk.models.Participant;
 import com.voxeet.sdk.models.ParticipantPermissions;
+import com.voxeet.sdk.services.ConferenceService;
 import com.voxeet.sdk.services.builders.ConferenceCreateOptions;
 import com.voxeet.sdk.services.builders.ConferenceJoinOptions;
 import com.voxeet.sdk.services.builders.ConferenceListenOptions;
 import com.voxeet.sdk.services.builders.VideoForwardingOptions;
 import com.voxeet.sdk.services.conference.AudioProcessing;
+import com.voxeet.sdk.services.conference.information.ConferenceStatus;
+import com.voxeet.sdk.services.conference.spatialisation.SpatialAudioStyle;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -431,10 +434,43 @@ public class ConferenceServiceAsserts implements MethodDelegate {
     }
 
     private void setCurrentConference(Map<String, Object> args) throws KeyNotFoundException {
-        if (!args.containsKey("type")) {
-            throw new KeyNotFoundException("Missing key: type");
+        if (args.containsKey("type")) {
+            VoxeetSDK.conference().current
+                    = ConferenceServiceAssertUtils.createConference((Integer)args.get("type"));
+            return;
         }
-        VoxeetSDK.conference().current = ConferenceServiceAssertUtils.createConference((Integer)args.get("type"));
+        if (args.containsKey("for_current") && (Boolean)args.get("for_current")) {
+
+            ConferenceService conferenceService = VoxeetSDK.conference();
+
+            conferenceService.getConferenceUseList = true;
+            conferenceService.getConferenceReturn.add(null);
+
+            final String[] aliases = {"alias_1", "alias_2"};
+            for (String alias : aliases) {
+                final String[] confIds = {"conf_id_1", "conf_id_2"};
+                for (String confId : confIds) {
+                    final boolean[] isNewValues = {false, true};
+                    for (boolean isNew : isNewValues) {
+                        for (ConferenceStatus status : conferenceStatusList) {
+                            for (SpatialAudioStyle spatialAudioStyle : spatialAudioStyleList) {
+                                Conference conference = new Conference();
+                                conference.setConferenceAlias(alias);
+                                conference.setConferenceId(confId);
+                                conference.setIsNew(isNew);
+                                conference.setState(status);
+                                conference.setSpatialAudioStyle(spatialAudioStyle);
+                                conferenceService.getConferenceReturn.add(conference);
+                                conferenceService.isInConferenceReturn.add(true);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return;
+        }
+        throw new KeyNotFoundException("Missing key: type");
     }
 
     private void assertJoinConfrenceArgs(Map<String, Object> args) throws KeyNotFoundException, AssertionFailed {
@@ -621,4 +657,24 @@ public class ConferenceServiceAsserts implements MethodDelegate {
             }
         });
     }
+
+    static final ConferenceStatus[] conferenceStatusList = {
+            ConferenceStatus.CREATED,
+            ConferenceStatus.CREATING,
+            ConferenceStatus.DESTROYED,
+            ConferenceStatus.ENDED,
+            ConferenceStatus.ERROR,
+            ConferenceStatus.JOINED,
+            ConferenceStatus.JOINING,
+            ConferenceStatus.LEAVING,
+            ConferenceStatus.LEFT,
+    };
+
+    static final SpatialAudioStyle[] spatialAudioStyleList = {
+            null,
+            SpatialAudioStyle.INDIVIDUAL,
+            SpatialAudioStyle.SHARED,
+            SpatialAudioStyle.DISABLED
+
+    };
 }

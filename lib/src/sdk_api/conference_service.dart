@@ -34,11 +34,13 @@ class ConferenceService {
   }
 
   /// Returns the Conference object for the current conference.
-  Future<Conference> current() async {
-    var result =
-        await _methodChannel.invokeMethod<Map<Object?, Object?>>("current") ??
-            <String, Object?>{};
-    return ConferenceMapper.fromMap(result);
+  Future<Conference?> current() async {
+    final result =
+        await _methodChannel.invokeMethod<Map<Object?, Object?>>("current");
+    if (result != null) {
+      return ConferenceMapper.fromMap(result);
+    }
+    return null;
   }
 
   /// Returns the Conference object that you can use to join the conference. If the [conferenceId] parameter is not provided, the method returns the current Conference object.

@@ -62,7 +62,7 @@ public class VideoPresentationServiceAsserts implements MethodDelegate {
     }
 
     public void assertStopArgs(Map<String, Object> args) throws AssertionFailed, KeyNotFoundException {
-        boolean mockHasRun = VoxeetSDK.videoPresentation().startHasRun;
+        boolean mockHasRun = VoxeetSDK.videoPresentation().stopHasRun;
         if(args.containsKey("hasRun")) {
             AssertUtils.compareWithExpectedValue(mockHasRun, args.get("hasRun"), "stopHasRun is incorrect");
         }

@@ -130,9 +130,9 @@ class _AudioPreviewScreenState extends State<AudioPreviewScreen> {
                                   color: Colors.deepPurple,
                                 ),
                                 SecondaryButton(
-                                  text: 'Cancel',
+                                  text: 'Stop',
                                   onPressed: () {
-                                    cancel();
+                                    stop();
                                   },
                                   color: Colors.deepPurple,
                                 ),
@@ -211,13 +211,13 @@ class _AudioPreviewScreenState extends State<AudioPreviewScreen> {
     }
   }
 
-  Future<void> cancel() async {
+  Future<void> stop() async {
     try {
       await _dolbyioCommsSdkFlutterPlugin.audioService.localAudio.preview
-          .cancel();
-      developer.log("cancel success");
+          .stop();
+      developer.log("stop success");
     } catch (error) {
-      developer.log("Error during cancel $error");
+      developer.log("Error during stop $error");
     }
   }
 

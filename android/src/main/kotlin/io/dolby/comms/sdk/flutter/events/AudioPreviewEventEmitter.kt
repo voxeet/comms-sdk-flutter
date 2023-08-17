@@ -1,24 +1,23 @@
 package io.dolby.comms.sdk.flutter.events
 
 import com.voxeet.VoxeetSDK
-import com.voxeet.android.media.capture.audio.preview.RecorderStatus
+import com.voxeet.android.media.capture.audio.preview.AudioPreviewStatus
 
 class AudioPreviewEventEmitter(eventChannelHandler: EventChannelHandler) : NativeEventEmitter(eventChannelHandler) {
 
     /**
      * Emitted when the application user received an audio preview status changed.
      */
-    private val previewCallback: (RecorderStatus) -> Unit = { status ->
-        android.util.Log.d("[KB]", "status changed: $status")
+    private val previewCallback: (AudioPreviewStatus) -> Unit = { status ->
         emit(OnStatusChanged, status.name)
     }
 
     override fun registerEventEmitter() {
-        VoxeetSDK.audio().local.preview().callback = previewCallback
+        VoxeetSDK.audio().local.preview().onStatusChanged = previewCallback
     }
 
     override fun unregisterEventEmitter() {
-        VoxeetSDK.audio().local.preview().callback = null
+        VoxeetSDK.audio().local.preview().onStatusChanged = null
     }
 
     companion object {

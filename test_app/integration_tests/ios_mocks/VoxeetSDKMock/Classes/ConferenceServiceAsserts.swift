@@ -102,8 +102,33 @@ public class ConferenceServiceAsserts {
     }
     
     private func setCurrentConference(args: [String: Any]) throws {
-        VoxeetSDK.shared.conference.current
-            = try ConferenceServiceAssertUtils.createVTConference(type: args["type"] as? Int)
+        if let type = args["type"] as? Int {
+            VoxeetSDK.shared.conference.current
+                = try ConferenceServiceAssertUtils.createVTConference(type: type)
+            return
+        }
+        if let for_current = args["for_current"] as? Bool, for_current {
+            let conferenceService = VoxeetSDK.shared.conference
+            conferenceService.currentUseList = true
+            conferenceService.currentReturn.append(nil)
+            for alias in ["alias_1", "alias_2"] {
+                for confId in ["conf_id_1", "conf_id_2"] {
+                    for isNew in [false, true] {
+                        for status in confereceStatusList {
+                            for spatialAudioStyle in spatialAudioStyleList {
+                                let conference = VTConference()
+                                conference.mockAliasValue = alias
+                                conference.mockIdValue = confId
+                                conference.isNew = isNew
+                                conference.status = status
+                                conference.spatialAudioStyle = spatialAudioStyle
+                                conferenceService.currentReturn.append(conference)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     private func assertLeaveArgs(args: [String: Any]) throws {
@@ -496,3 +521,9 @@ extension ConferenceServiceAsserts: SDKAsserts {
         }
     }
 }
+
+private let confereceStatusList: [VTConferenceStatus] = [
+    .created, .creating, .destroyed, .ended, .error, .joined, .joining, .leaving, .left,
+];
+
+private let spatialAudioStyleList: [SpatialAudioStyle?] = [nil, .individual, .shared, .disabled]

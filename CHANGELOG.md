@@ -1,3 +1,23 @@
+## 3.10.0
+
+### Features
+
+- Introduced the ability to change the [capture mode](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/LocalAudio/setCaptureMode.html) in non-Dolby Voice conferences and use either the [Standard](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureMode.html#standard) or [Unprocessed](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureMode.html#unprocessed) mode.
+
+- Introduced a new [voiceFont](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureOptions/voiceFont.html) property to [AudioCaptureOptions](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureOptions-class.html) that is supported in the [Standard](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureMode.html#standard) audio capture mode. [Voice fonts](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureOptions/voiceFont.html) allow participants to modify their voices in real time to improve social interaction in entertainment scenarios. For more information about this feature, see the [Using Voice Fonts](https://docs.dolby.io/interactivity/docs/guides-using-voice-fonts) guide.
+
+- Introduced a new [preview](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/LocalAudio/preview.html) service that allows the local participant to test different capture modes and voice fonts before a conference. The service sets a preview recorder that records the participant's audio and plays it back. Before playing the recorded audio, set the [captureMode](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/LocalAudio/setCaptureMode.html) to a preferred setting that you wish to try.
+
+- Introduced a new [updateParticipantInfo](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/SessionService/updateParticipantInfo.html) method that lets participants modify their names and avatars while they are in a conference.
+
+- The SDK now supports receiving two shared screens in one conference.
+
+### Changes
+
+- Changed the default value of the audio capture mode in non-Dolby Voice conferences to [Standard](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureMode.html#standard) with [high](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/NoiseReduction.html#high) noise reduction. This setting optimizes captured audio for speech by aggressively removing non-speech content. If you want to transmit non-stationary background sounds to a conference and create a more natural audio experience, you can set noise reduction to [low](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/NoiseReduction.html#low), which offers a similar experience as the default setting in previous releases. If you wish to transmit non-voice audio to a conference as well and use input device setting without any processing, use the [Unprocessed](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/AudioCaptureMode.html#unprocessed) mode.
+
+- The [current](https://api-references.dolby.io/comms-sdk-flutter/dolbyio_comms_sdk_flutter/ConferenceService/current.html) method now returns null when the user is not in a conference.
+
 ## 3.10.0-beta.1
 
 ### Features

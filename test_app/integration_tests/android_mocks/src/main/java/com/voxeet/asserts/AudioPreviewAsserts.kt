@@ -4,7 +4,7 @@ import com.voxeet.VoxeetSDK
 import com.voxeet.android.media.capture.audio.AudioCaptureMode
 import com.voxeet.android.media.capture.audio.VoiceFont
 import com.voxeet.android.media.capture.audio.noise.StandardNoiseReduction
-import com.voxeet.android.media.capture.audio.preview.RecorderStatus
+import com.voxeet.android.media.capture.audio.preview.AudioPreviewStatus
 import io.dolby.asserts.AssertUtils
 import io.dolby.asserts.MethodDelegate
 import io.dolby.asserts.MethodDelegate.AssertionFailed
@@ -25,7 +25,7 @@ class AudioPreviewAsserts : MethodDelegate {
                 ::setCaptureMode.name -> setCaptureMode(args)
                 ::record.name -> record(args)
                 ::play.name -> play(args)
-                ::cancel.name -> cancel()
+                ::stop.name -> stop()
                 ::release.name -> release()
                 ::emitStatusChangedEvents.name -> emitStatusChangedEvents()
                 ::assertStatusArgs.name -> assertStatusArgs(args)
@@ -33,7 +33,7 @@ class AudioPreviewAsserts : MethodDelegate {
                 ::assertSetCaptureModeArgs.name -> assertSetCaptureModeArgs(args)
                 ::assertRecordArgs.name -> assertRecordArgs(args)
                 ::assertPlayArgs.name -> assertPlayArgs(args)
-                ::assertCancelArgs.name -> assertCancelArgs(args)
+                ::assertStopArgs.name -> assertStopArgs(args)
                 ::assertReleaseArgs.name -> assertReleaseArgs(args)
                 else -> {
                     result!!.error(NoSuchMethodError("Method: $methodName not found in $name method channel"))
@@ -110,12 +110,12 @@ class AudioPreviewAsserts : MethodDelegate {
         )
     }
 
-    private fun assertCancelArgs(args: Map<String, Any>?) {
+    private fun assertStopArgs(args: Map<String, Any>?) {
         val preview = VoxeetSDK.audio().local.preview()
         AssertUtils.compareWithExpectedValue(
-                preview.cancelRunCount > 0,
+                preview.stopRunCount > 0,
                 true,
-                "audio preview cancel not run"
+                "audio preview stop not run"
         )
     }
 
@@ -131,7 +131,7 @@ class AudioPreviewAsserts : MethodDelegate {
     private fun getStatus() {
         val preview = VoxeetSDK.audio().local.preview()
         preview.statusRunCount = 0;
-        preview.statusReturn = recorderStatuses.toMutableList()
+        preview.statusReturn = audioPreviewStatuses.toMutableList()
     }
 
     private fun getCaptureMode() {
@@ -161,10 +161,10 @@ class AudioPreviewAsserts : MethodDelegate {
         preview.playModeReturn = mutableListOf(true, true)
     }
 
-    private fun cancel() {
+    private fun stop() {
         val preview = VoxeetSDK.audio().local.preview()
-        preview.cancelRunCount = 0
-        preview.cancelReturn = mutableListOf(true)
+        preview.stopRunCount = 0
+        preview.stopReturn = mutableListOf(true)
     }
 
     private fun release() {
@@ -175,7 +175,7 @@ class AudioPreviewAsserts : MethodDelegate {
 
     private fun emitStatusChangedEvents() {
         val executorService = Executors.newSingleThreadExecutor()
-        val statuses = recorderStatuses.toMutableList()
+        val statuses = audioPreviewStatuses.toMutableList()
         lateinit var sendStatusWithDelay: () -> Unit
         sendStatusWithDelay = { ->
             val preview = VoxeetSDK.audio().local.preview()
@@ -183,7 +183,7 @@ class AudioPreviewAsserts : MethodDelegate {
                 Thread.sleep(100)
                 val status = statuses.removeFirstOrNull()
                 status?.let { s ->
-                    preview.callback?.let { cb -> 
+                    preview.onStatusChanged?.let { cb ->
                         cb(s)
                         sendStatusWithDelay()
                     }
@@ -204,12 +204,12 @@ class AudioPreviewAsserts : MethodDelegate {
     }
 }
 
-private val recorderStatuses = listOf(
-    RecorderStatus.NoRecordingAvailable,
-    RecorderStatus.RecordingAvailable,
-    RecorderStatus.Recording,
-    RecorderStatus.Playing,
-    RecorderStatus.Released
+private val audioPreviewStatuses = listOf(
+    AudioPreviewStatus.NoRecordingAvailable,
+    AudioPreviewStatus.RecordingAvailable,
+    AudioPreviewStatus.Recording,
+    AudioPreviewStatus.Playing,
+    AudioPreviewStatus.Released
 );
 
 private val voiceFonts = listOf(

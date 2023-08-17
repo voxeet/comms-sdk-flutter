@@ -277,6 +277,10 @@ class _ConferenceControlsState extends State<ConferenceControls> {
 
   Future<bool> isSomeoneScreenSharing() async {
     final conference = await _dolbyioCommsSdkFlutterPlugin.conference.current();
+    if (conference == null) {
+      throw Exception(
+          "_ConferenceControlsState.isSomeoneScreenSharing(): Could not find a current conference");
+    }
     final participants = await _dolbyioCommsSdkFlutterPlugin.conference
         .getParticipants(conference);
     final availableParticipants = participants
