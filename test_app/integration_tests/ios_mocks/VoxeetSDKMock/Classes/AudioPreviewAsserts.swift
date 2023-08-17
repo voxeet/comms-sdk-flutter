@@ -17,7 +17,7 @@ public class AudioPreviewAsserts {
     }
 
     private func getStatus(args: [String: Any]) throws {
-        VoxeetSDK.shared.audio.local.preview.statusReturn = audioStatuses.reversed()
+        VoxeetSDK.shared.audio.local.preview.statusReturn = audioPreviewStatuses.reversed()
     }
 
     private func assertStatusArgs(args: [String: Any]) throws {
