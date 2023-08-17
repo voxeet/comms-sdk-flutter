@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - release/*
+  pull_request:
+    branches:
+      - main
+      - develop
+      - release/*
+
+  workflow_dispatch:
+
+jobs:
+  build-macos-android-23:
+    name: Flutter Run test on android 23
+    runs-on: macos-12
+    env:
+      FLUTTER_VERSION: "3.0.3"
+      ANDROID_SDK_ROOT: "/Users/runner/android-sdk"
+      ANDROID_HOME: "~/.android"
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'zulu'
+      - name: Set up Flutter version 🔧
+        uses: ./.github/actions/flutter-action
+        with:
+          flutter-version: $FLUTTER_VERSION
+      - name: Fetch dependencies
+        run: |
+          flutter pub get
+      - name: Set up android enviroment
+        run: |
+          ./scripts/macos_setup_android_env.sh
+      - name: Configure sdkmanager
+        run: |
+          ./scripts/macos_configure-sdkmanager.sh 32 32.0.0 "android-23;default;x86"
+      - name: Run android integration tests
+        run: |
+          ./scripts/run-mocked-integration-tests-android.sh "android-23;default;x86"
+
+  build-macos-android-27:
+    name: Flutter Run test on android 27
+    runs-on: macos-12
+    env:
+      FLUTTER_VERSION: "3.0.3"
+      ANDROID_SDK_ROOT: "/Users/runner/android-sdk"
+      ANDROID_HOME: "~/.android"
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'zulu'
+      - name: Set up Flutter version 🔧
+        uses: ./.github/actions/flutter-action
+        with:
+          flutter-version: $FLUTTER_VERSION
+      - name: Fetch dependencies
+        run: |
+          flutter pub get
+      - name: Set up android enviroment
+        run: |
+          ./scripts/macos_setup_android_env.sh
+      - name: Configure sdkmanager
+        run: |
+          ./scripts/macos_configure-sdkmanager.sh 32 32.0.0 "android-23;default;x86"
+      - name: Run android integration tests
+        run: |
+          ./scripts/run-mocked-integration-tests-android.sh "android-23;default;x86"
