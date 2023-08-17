@@ -386,6 +386,40 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                 ),
                 const SizedBox(height: 16),
                 PrimaryButton(
+                  widgetText: const Text('Current conference'),
+                  onPressed: () async {
+                    try {
+                      var conference = await _dolbyioCommsSdkFlutterPlugin
+                          .conference
+                          .current();
+                      if (!mounted) return;
+
+                      if (conference == null) {
+                        ViewDialogs.dialog(
+                          context: context,
+                          title: "Conference",
+                          body: "Conference is null",
+                        );
+                      } else {
+                        ViewDialogs.dialog(
+                          context: context,
+                          title: "Conference",
+                          body: conference.toJson().toString(),
+                        );
+                      }
+                    } catch (error) {
+                      if (!mounted) return;
+                      ViewDialogs.dialog(
+                        context: context,
+                        title: "Error",
+                        body: error.toString(),
+                      );
+                    }
+                  },
+                  color: Colors.deepPurple,
+                ),
+                const SizedBox(height: 16),
+                PrimaryButton(
                   widgetText: const Text('Audio preview'),
                   onPressed: () {
                     navigateToAudioPreviewScreen();
