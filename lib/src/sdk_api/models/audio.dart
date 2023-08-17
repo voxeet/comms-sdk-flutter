@@ -193,10 +193,10 @@ enum VoiceFont {
   }
 }
 
-/// The RecorderStatus model gathers all possible statuses of audio samples recording for audio preview.
+/// The AudioPreviewStatus model gathers all possible statuses of audio samples recording for audio preview.
 ///
 /// This model is available in SDK 3.10 and later.
-enum RecorderStatus {
+enum AudioPreviewStatus {
   /// There is no recording available.
   noRecordingAvailable("NoRecordingAvailable"),
 
@@ -214,14 +214,14 @@ enum RecorderStatus {
 
   final String _value;
 
-  const RecorderStatus(this._value);
+  const AudioPreviewStatus(this._value);
 
   String encode() {
     return _value;
   }
 
-  static RecorderStatus decode(String? value) {
-    return RecorderStatus.values.firstWhere(
+  static AudioPreviewStatus decode(String? value) {
+    return AudioPreviewStatus.values.firstWhere(
       (element) => element._value == value,
       orElse: () => throw Exception("Invalid enum name"),
     );

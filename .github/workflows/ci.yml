@@ -111,6 +111,8 @@ jobs:
     - name: Fetch dependencies
       run: |
         flutter pub get
+    - name: Update Cocoapods repo
+      run: pod repo update
     - name: Run unmocked integration tests
       env: 
         APP_KEY: ${{ secrets.DOLBYIO_APP_KEY }}

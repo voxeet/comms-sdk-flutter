@@ -17,9 +17,9 @@ class AudioPreview {
           .receiveBroadcastStream();
 
   /// Gets the recording status.
-  Future<RecorderStatus> status() async {
+  Future<AudioPreviewStatus> status() async {
     var status = await _methodChannel.invokeMethod("status");
-    return Future(() => RecorderStatus.decode(status));
+    return Future(() => AudioPreviewStatus.decode(status));
   }
 
   /// Gets an audio capture mode for the audio preview.
@@ -47,9 +47,9 @@ class AudioPreview {
     return await _methodChannel.invokeMethod("record", {"duration": duration});
   }
 
-  /// Cancels recording or playing an audio sample.
-  Future<bool> cancel() async {
-    return await _methodChannel.invokeMethod("cancel");
+  /// Stops recording or playing an audio sample.
+  Future<void> stop() async {
+    return await _methodChannel.invokeMethod("stop");
   }
 
   /// Release the internal memory and restart the audio session configuration.
@@ -58,13 +58,13 @@ class AudioPreview {
   }
 
   /// Returns a [Stream] of the [AudioPreviewEventNames.onStatusChanged] events. By subscribing to the returned stream you will be notified about new conference invitations.
-  Stream<Event<AudioPreviewEventNames, RecorderStatus>> onStatusChanged() {
+  Stream<Event<AudioPreviewEventNames, AudioPreviewStatus>> onStatusChanged() {
     return _eventStream
         .addListener([AudioPreviewEventNames.onStatusChanged.value]).map((map) {
       final event = map as Map<Object?, Object?>;
       final key = AudioPreviewEventNames.valueOf(event["key"] as String);
       final data = event["body"] as String;
-      return Event(key, RecorderStatus.decode(data));
+      return Event(key, AudioPreviewStatus.decode(data));
     });
   }
 }
