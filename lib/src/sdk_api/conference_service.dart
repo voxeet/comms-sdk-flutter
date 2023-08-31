@@ -309,8 +309,8 @@ class ConferenceService {
   ///transmitted to the local participant. There are two possible values; the selection can be either
   ///based on the participants' audio volume or the distance from the local participant
   /// - [max]: The maximum number of video streams that may be transmitted to the local
-  ///participant. The valid values are between 0 and 25. The default value is 4.
-  ///In the case of providing a value smaller than 0 or greater than 25, SDK triggers
+  ///participant. The valid values are between 0 and 49. The default value is 4.
+  ///In the case of providing a value smaller than 0 or greater than 49, SDK triggers
   ///an error.
   /// - [prioritizedParticipants]: The list of participants' objects. Allows prioritizing specific participant's
   ///video streams and display their videos even when these participants do not talk.
