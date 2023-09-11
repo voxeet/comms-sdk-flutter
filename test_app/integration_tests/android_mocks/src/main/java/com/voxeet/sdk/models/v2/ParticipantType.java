@@ -4,6 +4,7 @@ public enum ParticipantType {
     USER,
     SPEAKER,
     LISTENER,
+    MIXER_MIX,
     PSTN,
     MIXER,
     NONE,

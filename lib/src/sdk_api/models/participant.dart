@@ -114,6 +114,11 @@ enum ParticipantType {
   /// A participant who can send and receive audio and video during the conference.
   user("user"),
 
+  /// A special participant responsible for mixing video and sending one mixed
+  /// video stream from a conference to each participant who joined the conference
+  /// as a mixed listener. This type is available in SDK 3.11 and later.
+  mixerMix("mixer_mix"),
+
   /// A participant whos type is not known.
   unknown("unknown");
 

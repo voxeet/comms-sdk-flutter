@@ -3,7 +3,7 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.7.10'
-    ext.voxeet_sdk_version = "[3.10.1,3.11)"
+    ext.voxeet_sdk_version = "[3.11.0, 3.12)"
     ext.dagger_version = "2.40.5"
     repositories {
         google()
