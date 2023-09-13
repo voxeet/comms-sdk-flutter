@@ -54,8 +54,8 @@ jobs:
       run: |
         flutter analyze
 
-  build-macos-android:
-    name: flutter build macos android
+  build-macos-android-21:
+    name: flutter build macos android 21
     runs-on: macos-12
     env:
       FLUTTER_VERSION: "3.0.3"
@@ -71,7 +71,7 @@ jobs:
     - name: Set up Java
       uses: actions/setup-java@v2
       with:
-        java-version: 15
+        java-version: 17
         distribution: 'zulu'
     - name: Set up Flutter version 🔧
       uses: ./.github/actions/flutter-action
@@ -85,10 +85,10 @@ jobs:
         ./scripts/macos_setup_android_env.sh
     - name: Configure sdkmanager
       run: |
-        ./scripts/macos_configure-sdkmanager.sh
+        ./scripts/macos_configure-sdkmanager.sh 32 32.0.0 "android-21;default;x86"
     - name: Run android integration tests
       run: |
-        ./scripts/run-mocked-integration-tests-android.sh
+        ./scripts/run-mocked-integration-tests-android.sh "android-21;default;x86"
 
   build-macos-ios:
     name: flutter build macos ios

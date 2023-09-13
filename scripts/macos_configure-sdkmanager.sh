@@ -1,8 +1,29 @@
 #! /usr/bin/env bash
 
-build_tools_version="build-tools;32.0.0"
-platform_version="platforms;android-32"
-system_image="system-images;android-29;default;x86"
+ANDROID_VERSION="32"
+if [ "$2" ]
+  then ANDROID_TOOLS=$1
+fi
+
+ANDROID_TOOLS="$ANDROID_VERSION"
+if [ "$2" ]
+  then ANDROID_TOOLS=$2
+fi
+
+ANDROID_IMAGE="android-29;default;x86"
+if [ "$3" ]
+  then ANDROID_IMAGE=$3
+fi
+
+echo $ANDROID_VERSION
+
+build_tools_version="build-tools;$ANDROID_TOOLS"
+platform_version="platforms;android-$ANDROID_VERSION"
+system_image="system-images;$ANDROID_IMAGE"
+
+echo $platform_version
+echo $build_tools_version
+echo $system_image
 
 export ANDROID_SDK_ROOT=~/android-sdk
 
