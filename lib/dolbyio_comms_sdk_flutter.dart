@@ -41,7 +41,8 @@ export 'src/sdk_api/models/enums.dart'
         VideoPresentationState,
         VideoPresentationEventNames,
         RecordingServiceEventNames,
-        AudioPreviewEventNames;
+        AudioPreviewEventNames,
+        ListenType;
 export 'src/sdk_api/models/subscription.dart'
     show Subscription, SubscriptionType;
 export 'src/sdk_api/models/events.dart'

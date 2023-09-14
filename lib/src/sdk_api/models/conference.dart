@@ -584,11 +584,14 @@ class ConferenceListenOptions {
   /// Enables spatial audio for the local participant who joins a Dolby Voice conference. By default, this parameter is set to false. When set to true in a conference that uses the individual [SpatialAudioStyle], the application must place remote participants in a 3D space using the [ConferenceService.setSpatialPosition] method.
   bool? spatialAudio;
 
+  ListenType listenType = ListenType.regular;
+
   /// Returns a representation of this object as a JSON object.
   Map<String, Object?> toJson() => {
         "conferenceAccessToken": conferenceAccessToken,
         "maxVideoForwarding": maxVideoForwarding,
         "videoForwardingStrategy": videoForwardingStrategy?.encode(),
         "spatialAudio": spatialAudio,
+        "listenType": listenType
       };
 }

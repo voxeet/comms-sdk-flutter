@@ -1,4 +1,5 @@
 import 'package:dolbyio_comms_sdk_flutter_example/logger/logger_view.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/screens/init_sdk_screen.dart';
 import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
@@ -61,8 +62,8 @@ class _MyAppState extends State<MyApp> {
                     widgetText: const Text('Open example app'),
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          settings: const RouteSettings(name: "LoginScreen"),
-                          builder: (context) => const LoginScreen()));
+                          settings: const RouteSettings(name: "InitSdkScreen"),
+                          builder: (context) => const InitSdkScreen()));
                     }),
                 PrimaryButton(
                     widgetText: const Text('Run playground'),

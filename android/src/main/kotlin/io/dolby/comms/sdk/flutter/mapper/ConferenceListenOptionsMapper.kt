@@ -1,6 +1,7 @@
 package io.dolby.comms.sdk.flutter.mapper
 
 import com.voxeet.VoxeetSDK
+import com.voxeet.sdk.models.ListenType
 import com.voxeet.sdk.models.VideoForwardingStrategy
 import com.voxeet.sdk.services.builders.ConferenceListenOptions
 
@@ -24,6 +25,9 @@ class ConferenceListenOptionsMapper {
                 }
                 (options?.get("videoForwardingStrategy") as? String)?.let {
                     builder.setVideoForwardingStrategy(VideoForwardingStrategy.valueOf(it))
+                }
+                (options?.get("listenType") as? String)?.let { listenType ->
+                    builder.setListenType(ListenTypeMapper.fromValue(listenType))
                 }
                 builder
                     .setSpatialAudio(options?.get("spatialAudio") as? Boolean ?: false)

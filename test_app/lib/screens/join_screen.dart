@@ -74,6 +74,7 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
       "Spatial Audio with Shared Scene";
   static const String spatialAudioDisabled = "Spatial Audio Disabled";
   bool joinAsListener = false;
+  bool isRtsViewer = false;
   String _conferenceAlias = '';
   final LoggerView _loggerView = LoggerView.getLoggerView();
 
@@ -287,15 +288,12 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
                             }
                           }),
                       SwitchOption(
-                          title: 'Join as listener',
-                          value: joinAsListener,
+                          title: 'Is rts viewer',
+                          value: isRtsViewer,
                           onChanged: (value) {
-                            if (value == false) {
-                              setState(() => joinAsListener = value);
-                            } else {
-                              setState(() => joinAsListener = value);
-                            }
+                            setState(() => isRtsViewer = value);
                           }),
+                    ]),
                       DropdownButton<String>(
                         focusColor: Colors.white,
                         value: switchDolbyVoice
@@ -560,8 +558,14 @@ class _JoinConferenceContentState extends State<JoinConferenceContent> {
 
   ConferenceListenOptions conferenceListenOptions() {
     var listenOptions = ConferenceListenOptions();
+
     listenOptions.maxVideoForwarding = 4;
     listenOptions.spatialAudio = spatialAudio;
+    if (isRtsViewer) {
+      listenOptions.listenType = ListenType.mixerMix;
+    } else {
+      listenOptions.listenType = ListenType.regular;
+    }
     return listenOptions;
   }
 

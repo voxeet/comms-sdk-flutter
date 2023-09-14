@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
-import 'package:dolbyio_comms_sdk_flutter_example/state_management/models/conference_model.dart';
-import 'package:provider/provider.dart';
+import 'package:dolbyio_comms_sdk_flutter_example/screens/login_screen.dart';
+
 import 'join_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dolbyio_comms_sdk_flutter/dolbyio_comms_sdk_flutter.dart';
@@ -11,8 +11,8 @@ import '/widgets/primary_button.dart';
 import '/widgets/text_form_field.dart';
 import '../shared_preferences_helper.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class InitSdkScreen extends StatelessWidget {
+  const InitSdkScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               DolbyTitle(title: 'Dolby.io', subtitle: 'Flutter SDK'),
-              LoginScreenContent()
+              InitSdkScreenContent()
             ],
           ),
         ),
@@ -36,27 +36,24 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class LoginScreenContent extends StatefulWidget {
-  const LoginScreenContent({Key? key}) : super(key: key);
+class InitSdkScreenContent extends StatefulWidget {
+  const InitSdkScreenContent({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreenContent> createState() => _LoginScreenContentState();
+  State<InitSdkScreenContent> createState() => _InitSdkScreenContentState();
 }
 
-class _LoginScreenContentState extends State<LoginScreenContent> {
+class _InitSdkScreenContentState extends State<InitSdkScreenContent> {
   final formKey = GlobalKey<FormState>();
   final _dolbyioCommsSdkFlutterPlugin = DolbyioCommsSdk.instance;
-  TextEditingController usernameTextController = TextEditingController();
-  TextEditingController externalIdTextController = TextEditingController();
-  late String _username;
-  late String? _externalId;
+  TextEditingController accessTokenTextController = TextEditingController();
+  late String _accessToken;
   bool isSessionOpen = false, loginInProgress = false;
 
   @override
   void initState() {
     super.initState();
     initSharedPreferences();
-    initSessionStatus();
   }
 
   Future<void> initSessionStatus() async {
@@ -87,24 +84,19 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
                     autovalidateMode: AutovalidateMode.disabled,
                     child: Column(
                       children: [
-                        const SizedBox(height: 16),
                         InputTextFormField(
-                            labelText: 'Username',
-                            controller: usernameTextController,
+                            labelText: 'Access token',
+                            controller: accessTokenTextController,
                             focusColor: Colors.deepPurple),
+                        const SizedBox(height: 16),
                       ],
                     )),
-                const SizedBox(height: 16),
-                InputTextField(
-                  labelText: 'External ID (optional)',
-                  controller: externalIdTextController,
-                ),
                 const SizedBox(height: 16),
                 PrimaryButton(
                   color: Colors.deepPurple,
                   widgetText: loginInProgress
                       ? const WhiteCircularProgressIndicator()
-                      : const Text('Login'),
+                      : const Text('Initialize'),
                   onPressed: () {
                     onLoginButtonPressed();
                   },
@@ -122,12 +114,9 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     try {
       final isValidForm = formKey.currentState!.validate();
       if (isValidForm) {
-        await openSession();
-        await initSessionStatus();
+        await initializeSdk();
         saveToSharedPreferences();
-        if (isSessionOpen) {
-          navigateToJoinConference();
-        }
+          navigateToLoginScreen();
       }
     } catch (e) {
       onError('Error: ', e);
@@ -136,36 +125,31 @@ class _LoginScreenContentState extends State<LoginScreenContent> {
     }
   }
 
-  Future<void> openSession() async {
-    _username = usernameTextController.text;
-    _externalId = externalIdTextController.text;
-    if (_externalId?.isEmpty == true) {
-      _externalId = null;
-    }
-
-    Provider.of<ConferenceModel>(context, listen: false).username = _username;
-    Provider.of<ConferenceModel>(context, listen: false).externalId =
-        _externalId;
-
-    var participantInfo = ParticipantInfo(_username, null, _externalId);
-    await _dolbyioCommsSdkFlutterPlugin.session.open(participantInfo);
+  Future<void> initializeSdk() async {
+    _accessToken = accessTokenTextController.text;
+    await _dolbyioCommsSdkFlutterPlugin.initializeToken(
+        _accessToken, () => getRefreshToken());
   }
 
-  void navigateToJoinConference() {
+  void navigateToLoginScreen() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        settings: const RouteSettings(name: "JoinConferenceScreen"),
-        builder: (context) => const JoinConference(),
+        settings: const RouteSettings(name: "LoginScreen"),
+        builder: (context) => const LoginScreen(),
       ),
     );
   }
 
+  Future<String?> getRefreshToken() async {
+    return _accessToken;
+  }
+
   void initSharedPreferences() {
-    usernameTextController.text = SharedPreferencesHelper().username;
+    accessTokenTextController.text = SharedPreferencesHelper().accessToken;
   }
 
   void saveToSharedPreferences() {
-    SharedPreferencesHelper().username = _username;
+    SharedPreferencesHelper().accessToken = _accessToken;
   }
 
   void onError(String message, Object? error) {

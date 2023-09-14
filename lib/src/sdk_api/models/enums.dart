@@ -242,3 +242,24 @@ enum AudioPreviewEventNames implements EnumWithStringValue {
     );
   }
 }
+
+enum ListenType implements EnumWithStringValue {
+  regular("REGULAR"),
+  mixerMix("MIXER_MIX");
+
+  @override
+  final String value;
+
+  const ListenType(this.value);
+
+  static ListenType valueOf(String? value) {
+    final lowerCaseValue = value?.toLowerCase();
+    return ListenType.values.firstWhere(
+          (element) {
+        return element.value == value ||
+            element.name.toLowerCase() == lowerCaseValue;
+      },
+      orElse: () => throw Exception("Invalid enum name"),
+    );
+  }
+}
